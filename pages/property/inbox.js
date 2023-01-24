@@ -10,6 +10,8 @@ import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar";
 import Title from '../../components/title';
 const logger = require("../../services/logger");
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 var language;
 var currentLogged;
 let colorToggle;
@@ -18,27 +20,28 @@ let currentProperty;
 function Inbox() {
     const router = useRouter();
     const [color, setColor] = useState({})
-    const[mode,setMode] = useState()
+    const [mode, setMode] = useState()
     const [inboxDetails, setInboxDetails] = useState([]);
 
     useEffect(() => {
         firstfun();
     }, [])
-  
+
+    // function on page load
     const firstfun = () => {
         if (typeof window !== 'undefined') {
             var locale = localStorage.getItem("Language");
             colorToggle = localStorage.getItem("colorToggle");
-           
+
             if (colorToggle === "" || colorToggle === undefined || colorToggle === null || colorToggle === "system") {
                 window.matchMedia("(prefers-color-scheme:dark)").matches === true ?
-                 setColor(colorFile?.dark) : setColor(colorFile?.light);
-                 setMode(window.matchMedia("(prefers-color-scheme:dark)").matches === true ? true : false);
+                    setColor(colorFile?.dark) : setColor(colorFile?.light);
+                setMode(window.matchMedia("(prefers-color-scheme:dark)").matches === true ? true : false);
             }
             else if (colorToggle === "true" || colorToggle === "false") {
                 setColor(colorToggle === "true" ? colorFile?.dark : colorFile?.light);
                 setMode(colorToggle === "true" ? true : false)
-                
+
             }
             {
                 if (locale === "ar") {
@@ -58,56 +61,91 @@ function Inbox() {
         }
     }
 
-      /* Function call to fetch Current Property Details when page loads */
-      useEffect(() => {
+    /* Function call to fetch Current Property Details when page loads */
+    useEffect(() => {
         if (JSON.stringify(currentLogged) === 'null') {
-          router?.push(window.location.origin)
+            router?.push(window.location.origin)
         }
         else {
-          fetchInboxDetails();
+            fetchInboxDetails();
         }
-    
-      }, []);
-    
+
+    }, []);
+
+    // get inbox messages of current property
     const fetchInboxDetails = async () => {
         const url = `/api/inbox/${currentProperty.property_id}`;
         axios.get(url)
-          .then((response) => {
-            setInboxDetails(response?.data);
-            logger.info("url  to fetch property details hitted successfully")
-            setVisible(1)
-          })
-          .catch((error) => { logger.error("url to fetch property details, failed") });
-      }
-    
+            .then((response) => {
+                setInboxDetails(response?.data);
+                logger.info("url  to fetch property details hitted successfully")
+                setVisible(1)
+            })
+            .catch((error) => { logger.error("url to fetch property details, failed") });
+    }
 
+    // color toggle function
     const colorToggler = (newColor) => {
         if (newColor === 'system') {
-          window.matchMedia("(prefers-color-scheme:dark)").matches === true ? setColor(colorFile?.dark)
-          : setColor(colorFile?.light)
-          localStorage.setItem("colorToggle", newColor)
+            window.matchMedia("(prefers-color-scheme:dark)").matches === true ? setColor(colorFile?.dark)
+                : setColor(colorFile?.light)
+            localStorage.setItem("colorToggle", newColor)
         }
         else if (newColor === 'light') {
-          setColor(colorFile?.light)
-          localStorage.setItem("colorToggle", false)
+            setColor(colorFile?.light)
+            localStorage.setItem("colorToggle", false)
         }
         else if (newColor === 'dark') {
-          setColor(colorFile?.dark)
-          localStorage.setItem("colorToggle", true)
+            setColor(colorFile?.dark)
+            localStorage.setItem("colorToggle", true)
         }
-       firstfun();
-       router.push('./inbox')
-      }
-
-    const readMessage = () => {
-        router.push("./inbox/readmessage")
+        firstfun();
+        router.push('./inbox')
     }
+
+    // function read message
+    const readMessage = (props) => {
+        const final_data = {
+            "message_id": props.message_id,
+            "is_read": true,
+        }
+       alert(JSON.stringify(final_data))
+        const url = '/api/inbox'
+        alert(url)
+        axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
+            ((response) => {
+                toast.success("API: Reply sent successfully!", {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+                localStorage.setItem("MessageId", (props.message_id));
+                router.push("./inbox/readmessage") 
+            })
+            .catch((error) => {
+                toast.error("API: Reply sent error!", {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            })
+        
+    }
+
 
     return (
         <>
             <Title name={`Engage |  ${language?.inbox}`} />
 
-            <Header color={color} Primary={english?.Side} Type={currentLogged?.user_type} Sec={colorToggler} mode={mode} setMode={setMode}/>
+            <Header color={color} Primary={english?.Side} Type={currentLogged?.user_type} Sec={colorToggler} mode={mode} setMode={setMode} />
             <Sidebar color={color} Primary={english?.Side} Type={currentLogged?.user_type} />
 
             <div id="main-content" className={`${color?.whitebackground} min-h-screen pt-20  relative overflow-y-auto lg:ml-64`}>
@@ -131,12 +169,12 @@ function Inbox() {
                         <span className={`${color?.textgray} hover:${color?.text}  mr-2 cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}>
                             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg>
                         </span>
-                        <div className="border-l mx-4  border-gray-200">
+                        {/* <div className="border-l mx-4  border-gray-200">
                             <button type="button" data-modal-toggle="add-user-modal" className="mx-4 w-1/2  text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium inline-flex items-center justify-center rounded-lg text-sm px-4 py-2 text-center sm:w-auto">
                                 <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
                                 <Link href="./inbox/composemessage"> Compose </Link>
                             </button>
-                        </div>
+                        </div> */}
                     </div>
 
                     <div className="flex items-center mr-2 mb-4 sm:mb-0">
@@ -159,41 +197,52 @@ function Inbox() {
                             <div className="shadow overflow-hidden">
                                 <table className="table-fixed min-w-full divide-y divide-gray-200">
                                     <tbody className="divide-y divide-gray-200 ">
-                                    {inboxDetails?.map((item, idx) => (
-                                        <>
-                                        <tr  className={`hover:${color?.tableheader}`}>
-                                            <td className="px-4 py-3 w-4">
-                                                <div className="flex items-center">
-                                                    <input id="checkbox-all" aria-describedby="checkbox-1" type="checkbox" name="allSelect" className=" w-4 h-4 rounded text-cyan-600 bg-gray-100  border-gray-300 focus:ring-cyan-500 dark:focus:ring-blue-600 
+                                        {inboxDetails?.map((item, idx) => (
+                                            <>
+                                                <tr className={`hover:${color?.tableheader}`}>
+                                                    <td className="px-4 py-3 w-4">
+                                                        <div className="flex items-center">
+                                                            <input id="checkbox-all" aria-describedby="checkbox-1" type="checkbox" name="allSelect" className=" w-4 h-4 rounded text-cyan-600 bg-gray-100  border-gray-300 focus:ring-cyan-500 dark:focus:ring-blue-600 
                                                       dark:ring-offset-gray-800 focus:ring-2 mx-3  dark:bg-gray-700 dark:border-gray-600"/>
-                                                    <label htmlFor="checkbox-all" className="sr-only">checkbox</label>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" className={`w-6 h-6 mx-1  cursor-pointer hover:text-yellow-400 ${color?.textgray} flex-shrink-0  ${color?.iconhover} transition duration-75`}
-                                                        fill="currentColor" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none" /><path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z" /></svg>
-                                                </div>
-                                            </td>
-                                            <td onClick={() => readMessage()} className="px-2 py-3 flex items-center cursor-pointer whitespace-nowrap space-x-4  lg:mr-0">
-                                                <div className="flex-shrink-0 whitespace-nowrap">
-                                                    <img className="h-6 w-6 rounded" src="https://demo.themesberg.com/windster/images/users/neil-sims.png" alt="Neil image" />
-                                                </div>
+                                                            <label htmlFor="checkbox-all" className="sr-only">checkbox</label>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" className={`w-6 h-6 mx-1  cursor-pointer hover:text-yellow-400 ${color?.textgray} flex-shrink-0  ${color?.iconhover} transition duration-75`}
+                                                                fill="currentColor" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none" /><path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z" /></svg>
+                                                        </div>
+                                                    </td>
+                                                    <td onClick={() => readMessage(item)} className="px-2 py-3 flex items-center cursor-pointer whitespace-nowrap space-x-4  lg:mr-0">
+                                                        <div className="flex-shrink-0 whitespace-nowrap">
+                                                            <img className="h-6 w-6 rounded" src="https://demo.themesberg.com/windster/images/users/neil-sims.png" alt="Neil image" />
+                                                        </div>
 
-                                                <div onClick={() => readMessage()} className={`text-md pr-6 font-semibold cursor-pointer whitespace-nowrap ${color?.tabletext} `}>
-                                                   {item?.sender_name}
-                                                </div>
+                                                        <div onClick={() => readMessage(item)} className={`text-md pr-6 font-semibold cursor-pointer whitespace-nowrap ${color?.tabletext} `}>
+                                                            {item?.sender_name}
+                                                        </div>
 
-                                            </td>
-                                            <td onClick={() => readMessage()} className={`${color?.tabletext} px-4 py-3 font-semibold space-x-2 cursor-pointer whitespace-nowrap`}> {item?.message}</td>
-                                            <td className={`${color?.tabletext} px-4 py-3 font-semibold whitespace-nowrap space-x-2 cursor-pointer`}>
-                                            {item?.created_on}
-                                            </td>
-                                        </tr>
-                                      </>
-                                    ))}
+                                                    </td>
+                                                    <td onClick={() => readMessage(item)} className={`${color?.tabletext} px-4 py-3 font-semibold space-x-2 cursor-pointer whitespace-nowrap`}> {item?.message.slice(0, 100)}...</td>
+                                                    <td className={`${color?.tabletext} px-4 py-3 font-semibold whitespace-nowrap space-x-2 cursor-pointer`}>
+                                                        {item?.created_on}
+                                                    </td>
+                                                </tr>
+                                            </>
+                                        ))}
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
                 </div>
+                {/* Toast Container */}
+                <ToastContainer position="top-center"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover />
+
             </div>
 
         </>

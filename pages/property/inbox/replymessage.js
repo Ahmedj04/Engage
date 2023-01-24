@@ -10,10 +10,12 @@ import arabic from "../../../components/Languages/ar";
 import Title from '../../../components/title';
 var language;
 var currentLogged;
+let currentMessage;
 
 function ReplyMessage() {
     const [darkModeSwitcher, setDarkModeSwitcher] = useState()
     const [color, setColor] = useState({})
+    const [messageDetails, setMessageDetails] = useState([]);
 
     useEffect(() => {
         firstfun();
@@ -36,6 +38,7 @@ function ReplyMessage() {
                 language = french;
             }
             currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
+            currentMessage=localStorage.getItem("MessageId")
         }
     }
 
@@ -47,6 +50,25 @@ function ReplyMessage() {
         Router.push("../inbox")
     }
    
+    /* Function call to fetch Current Property Details when page loads */
+    useEffect(() => {
+          fetchInboxDetails();
+      }, []);
+    
+    // get inbox messages of current property
+    const fetchInboxDetails = async () => {
+        alert(`/api/inbox/${currentMessage}`)
+        const url = `/api/inbox/${currentMessage}`;
+        alert(url)
+        axios.get(url)
+          .then((response) => {
+            alert(JSON.stringify(response.data))
+            setMessageDetails(response?.data);
+            logger.info("url  to fetch property details hitted successfully")
+            
+          })
+          .catch((error) => { logger.error("url to fetch property details, failed") });
+      }
    
     return (
         <>
