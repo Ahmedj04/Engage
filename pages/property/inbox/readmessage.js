@@ -97,11 +97,10 @@ function ReadMessage() {
         const url = `/api/inbox/${currentMessage}`;
         axios.get(url)
             .then((response) => {
-                setMessageDetails(response?.data?.messages?.[i]);
-                logger.info("url  to fetch message details hitted successfully")
-
+                setMessageDetails(response?.data?.messages);
+                logger.info("url  to fetch message details hitted success.")
             })
-            .catch((error) => { logger.error("url to fetch message details, failed") });
+            .catch((error) => { logger.error("url to fetch message details, failed.") });
     }
 
     /*   Function */
@@ -217,25 +216,29 @@ function ReadMessage() {
 
                 </div>
 
-                <div className='hover:bg-gray-100 divide-y mt-2  border-t border-gray-200'>
-
-                </div>
+                <div className='hover:bg-gray-100 divide-y mt-2  border-t border-gray-200'></div>
+               
                 <div className={`${color?.greybackground}  px-4 `} >
+                <h1 className={`text-xl py-6 sm:text-2xl font-semibold ${color?.tabletext}`}>{messageDetails?.[i]?.message_subject}</h1>
+                {messageDetails?.map((item, idx) => (
+                  <>
                     <div className='p-4 flex items-center whitespace-nowrap space-x-6 mr-12 lg:mr-0'>
+                  
                         <img className="h-10 w-10 rounded-full" src="https://demo.themesberg.com/windster/images/users/neil-sims.png" alt="Neil Sims avatar" />
-                        <div className="text-sm font-normal text-gray-500">
-                            <div className={`text-base  ${color?.tabletext} font-semibold`}>{messageDetails?.sender_name}</div>
-                            <div className="text-sm font-normal text-gray-500">{messageDetails?.sender_email}</div>
+                       
+                        <div className="text-sm font-normal text-gray-500" key={idx}>
+                            <div className={`text-base  ${color?.tabletext} font-semibold`}>{item?.sender_name}</div>
+                            <div className="text-sm font-normal text-gray-500">{item?.sender_email}</div>
                         </div>
 
                     </div>
-                    <h1 className={`text-xl sm:text-2xl font-semibold ${color?.tabletext}`}>{messageDetails?.message_subject}</h1>
-                    <p className="text-md sm:text-md font-normal text-gray-400 pb-2">
-                        {messageDetails?.message}
+                   
+                    <p className="text-md sm:text-md font-normal text-gray-400 pb-6">
+                        {item?.message}
 
                     </p>
 
-
+</>))}
                 </div>
                 <div className='hover:bg-gray-100 divide-y  border-t border-gray-200'></div>
                 <div className='flex space-x-3 items-center px-4 my-3'>

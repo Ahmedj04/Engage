@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import colorFile from '../../components/color';
 import { useRouter } from "next/router";
-import Link from "next/link";
+// import Link from "next/link";
 import axios from 'axios';
 import Sidebar from "../../components/Sidebar";
 import Header from "../../components/Header";
@@ -11,17 +11,21 @@ import arabic from "../../components/Languages/ar";
 import Title from '../../components/title';
 const logger = require("../../services/logger");
 import { ToastContainer, toast } from "react-toastify";
+import Button from "../../components/Button";
 import "react-toastify/dist/ReactToastify.css";
 var language;
 var currentLogged;
 let colorToggle;
 let currentProperty;
+var checked = [];
 
 function Inbox() {
     const router = useRouter();
     const [color, setColor] = useState({})
     const [mode, setMode] = useState()
     const [inboxDetails, setInboxDetails] = useState([]);
+    const [deleteMultiple, setDeleteMultiple] = useState(0);
+    const [spinner, setSpinner] = useState(0)
 
     useEffect(() => {
         firstfun();
@@ -70,7 +74,8 @@ function Inbox() {
             fetchInboxDetails();
         }
 
-    }, []);
+    }, []
+    );
 
     // get inbox messages of current property
     const fetchInboxDetails = async () => {
@@ -78,10 +83,10 @@ function Inbox() {
         axios.get(url)
             .then((response) => {
                 setInboxDetails(response?.data);
-                logger.info("url  to fetch property details hitted successfully")
+                logger.info("url  to fetch property details hitted success.");
                 setVisible(1)
             })
-            .catch((error) => { logger.error("url to fetch property details, failed") });
+            .catch((error) => { logger.error("url to fetch property details, failed.") });
     }
 
     // color toggle function
@@ -105,13 +110,12 @@ function Inbox() {
 
     // function read message
     const readMessage = (props) => {
+        if(props?.is_read === false){
         const final_data = {
             "message_id": props.message_id,
-            "is_read": true,
+            "is_read": !props?.is_read
         }
-       alert(JSON.stringify(final_data))
         const url = '/api/inbox'
-        alert(url)
         axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
             ((response) => {
                 toast.success("API: Reply sent successfully!", {
@@ -123,8 +127,6 @@ function Inbox() {
                     draggable: true,
                     progress: undefined,
                 });
-                localStorage.setItem("MessageId", (props.message_id));
-                router.push("./inbox/readmessage") 
             })
             .catch((error) => {
                 toast.error("API: Reply sent error!", {
@@ -137,9 +139,123 @@ function Inbox() {
                     progress: undefined,
                 });
             })
-        
+        }
+        localStorage.setItem("MessageId", (props.message_id));
+        router.push("./inbox/readmessage")
     }
 
+    // function star message
+    const starMessage = (props) => {
+        const final_data = {
+            "message_id": props.message_id,
+            "is_starred": !props?.is_starred
+        }
+        const url = '/api/inbox'
+        axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
+            ((response) => {
+                toast.success("API: Message starred success,", {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+
+            })
+            .catch((error) => {
+                toast.error("API:  Message starred error.", {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            })
+    }
+
+    // Checkboxes logic for single or multi delete
+    const handlecheckbox = (e) => {
+        console.log(e.target)
+        const { name, checked } = e.target;
+        if (name === "allSelect") {
+            let tempCon = inboxDetails.map((item) => {
+                return { ...item, isChecked: checked }
+            });
+            setInboxDetails(tempCon)
+        }
+        else {
+            let tempCon = inboxDetails.map((item) =>
+                item.message_id === name ? { ...item, isChecked: checked } : item
+            );
+            setInboxDetails(tempCon)
+        }
+
+    }
+
+    // Multi delete
+    const allDelete = async () => {
+        checked = [];
+        checked = inboxDetails.filter(i => i.isChecked === true).map(j => { return (j.message_id) })
+        if (checked?.length > 0) {
+            setDeleteMultiple(1);
+        }
+        else {
+            toast.warn("No contact selected", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }
+    }
+
+/* Function Add Messages */
+ function deleteAll() {
+   const data = checked?.map((item)=>{return ({message_id:item})})
+    setSpinner(1);
+       const finalContact = { messages: data };
+       axios
+         .post(`/api/deleteall/messages`,finalContact, {
+           headers: { "content-type": "application/json" },
+         })
+         .then((response) => {
+           setSpinner(0)
+           toast.success("API: Message delete success.", {
+             position: "top-center",
+             autoClose: 5000,
+             hideProgressBar: false,
+             closeOnClick: true,
+             pauseOnHover: true,
+             draggable: true,
+             progress: undefined,
+           });
+          
+           setDeleteMultiple(0);
+         })
+         .catch((error) => {
+           setSpinner(0)
+           toast.error("API: Messages add error.", {
+             position: "top-center",
+             autoClose: 5000,
+             hideProgressBar: false,
+             closeOnClick: true,
+             pauseOnHover: true,
+             draggable: true,
+             progress: undefined,
+           });
+           setDeleteMultiple(0);
+          
+         });
+     
+   
+   }
 
     return (
         <>
@@ -153,11 +269,13 @@ function Inbox() {
 
                     <div className="flex space-x-1 pl-0 sm:pl-4  sm:mt-0">
                         <div className="border-r   border-gray-200">
-                            <input id="checkbox-all" aria-describedby="checkbox-1" type="checkbox" name="allSelect" className=" mr-4 -ml-1 w-4 h-4 rounded text-cyan-600 bg-gray-100  border-gray-300 focus:ring-cyan-500 dark:focus:ring-blue-600 
+                            <input id="checkbox-all"  checked={inboxDetails?.filter(item => item?.isChecked !== true).length < 1}
+                                                        onChange={(e) => { handlecheckbox(e); }}
+                            aria-describedby="checkbox-1" type="checkbox" name="allSelect" className=" mr-4 -ml-1 w-4 h-4 rounded text-cyan-600 bg-gray-100  border-gray-300 focus:ring-cyan-500 dark:focus:ring-blue-600 
                           dark:ring-offset-gray-800 focus:ring-2 mt-2  dark:bg-gray-700 dark:border-gray-600"/>
                             <label htmlFor="checkbox-all" className="sr-only">checkbox</label>
                         </div>
-                        <button data-tooltip="Delete" aria-label="Delete" className={`${color?.textgray} hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}>
+                        <button data-tooltip="Delete" aria-label="Delete" onClick={allDelete} className={`${color?.textgray} hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}>
                             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd"></path></svg>
                         </button>
                         <span className={`${color?.textgray} hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}>
@@ -202,10 +320,14 @@ function Inbox() {
                                                 <tr className={`hover:${color?.tableheader}`}>
                                                     <td className="px-4 py-3 w-4">
                                                         <div className="flex items-center">
-                                                            <input id="checkbox-all" aria-describedby="checkbox-1" type="checkbox" name="allSelect" className=" w-4 h-4 rounded text-cyan-600 bg-gray-100  border-gray-300 focus:ring-cyan-500 dark:focus:ring-blue-600 
+                                                            <input id="checkbox-all" aria-describedby="checkbox-1" type="checkbox"
+                                                            name={item?.message_id} checked={item.isChecked || false}
+                                                                        onChange={(e) => { handlecheckbox(e); }}
+                                                           className=" w-4 h-4 rounded text-cyan-600 bg-gray-100  border-gray-300 focus:ring-cyan-500 dark:focus:ring-blue-600 
                                                       dark:ring-offset-gray-800 focus:ring-2 mx-3  dark:bg-gray-700 dark:border-gray-600"/>
                                                             <label htmlFor="checkbox-all" className="sr-only">checkbox</label>
-                                                            <svg xmlns="http://www.w3.org/2000/svg" className={`w-6 h-6 mx-1  cursor-pointer hover:text-yellow-400 ${color?.textgray} flex-shrink-0  ${color?.iconhover} transition duration-75`}
+                                                            <svg onClick={() => starMessage(item)} xmlns="http://www.w3.org/2000/svg"
+                                                                className={`w-6 h-6 mx-1 cursor-pointer hover:text-yellow-400 ${color?.textgray} flex-shrink-0  ${color?.iconhover} transition duration-75`}
                                                                 fill="currentColor" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none" /><path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z" /></svg>
                                                         </div>
                                                     </td>
@@ -219,7 +341,7 @@ function Inbox() {
                                                         </div>
 
                                                     </td>
-                                                    <td onClick={() => readMessage(item)} className={`${color?.tabletext} px-4 py-3 font-semibold space-x-2 cursor-pointer whitespace-nowrap`}> {item?.message.slice(0, 100)}...</td>
+                                                    <td onClick={() => readMessage(item)} className={`${color?.tabletext} px-4 py-3 font-semibold space-x-2 cursor-pointer whitespace-nowrap`}> {item?.message_subject}...</td>
                                                     <td className={`${color?.tabletext} px-4 py-3 font-semibold whitespace-nowrap space-x-2 cursor-pointer`}>
                                                         {item?.created_on}
                                                     </td>
@@ -232,6 +354,37 @@ function Inbox() {
                         </div>
                     </div>
                 </div>
+                <div className={deleteMultiple === 1 ? 'block' : 'hidden'}>
+                <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
+                    <div className="relative w-full max-w-md px-4 h-full md:h-auto">
+                        <div className={`rounded-lg shadow relative ${color?.whitebackground}`}>
+                            <div className="flex justify-end p-2">
+                                <button
+                                    onClick={() => setDeleteMultiple(0)}
+                                    type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="delete-user-modal">
+                                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
+                                </button>
+                            </div>
+
+                            <div className="p-6 pt-0 text-center">
+                                <svg className="w-20 h-20 text-red-600 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <h3 className={`text-base font-normal ${color?.deltext} mt-5 mb-6`}>
+                                    {language?.areyousureyouwanttodelete}
+                                </h3>
+
+                                {spinner === 0 ?
+                                    <>
+                                        <Button Primary={language?.Delete} onClick={() => { deleteAll() }} />
+                                        <Button Primary={language?.Cancel} onClick={() => setDeleteMultiple(0)} />
+                                    </>
+                                    :
+                                    <Button Primary={language?.SpinnerDelete} />}
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
                 {/* Toast Container */}
                 <ToastContainer position="top-center"
                     autoClose={5000}
@@ -242,7 +395,6 @@ function Inbox() {
                     pauseOnFocusLoss
                     draggable
                     pauseOnHover />
-
             </div>
 
         </>
