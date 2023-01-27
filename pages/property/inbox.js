@@ -316,7 +316,9 @@ function Inbox() {
                                 <table className="table-fixed min-w-full divide-y divide-gray-200">
                                     <tbody className="divide-y divide-gray-200 ">
                                         {inboxDetails?.map((item, idx) => (
+                                          
                                             <>
+                                              {item?.parent_message_id === "" ?
                                                 <tr className={`hover:${color?.tableheader}`}>
                                                     <td className="px-4 py-3 w-4">
                                                         <div className="flex items-center">
@@ -345,7 +347,7 @@ function Inbox() {
                                                     <td className={`${color?.tabletext} px-4 py-3 font-semibold whitespace-nowrap space-x-2 cursor-pointer`}>
                                                         {item?.created_on}
                                                     </td>
-                                                </tr>
+                                                </tr>:<></>}
                                             </>
                                         ))}
                                     </tbody>
@@ -354,6 +356,8 @@ function Inbox() {
                         </div>
                     </div>
                 </div>
+
+                {/* npm i emoji-picker-react */}
                 <div className={deleteMultiple === 1 ? 'block' : 'hidden'}>
                 <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
                     <div className="relative w-full max-w-md px-4 h-full md:h-auto">
