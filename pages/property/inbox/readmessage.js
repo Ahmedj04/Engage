@@ -120,20 +120,20 @@ function ReadMessage() {
             var sec = k.getSeconds()
             var msec = k.getMilliseconds()
             var currentDateTime = `${year}-${month}-${day} ${hr}:${min}:${sec}.${msec}`;
+
             const final_data = {
                 "property_id": currentProperty?.property_id,
                 "sender_name": currentUser?.user_name,
                 "sender_email": currentUser?.user_email,
-                "message_subject": messageDetails?.message_subject,
+                "message_subject": messageDetails?.[i]?.message_subject,
                 "message": replyMessage?.message,
-                "parent_message_id":messageDetails?.message_id,
+                "parent_message_id":messageDetails?.[i]?.message_id,
                 "created_on": currentDateTime,
                 "is_read": false,
                 "is_starred": false,
                 "is_deleted": false
             }
-            
-            const url = '/api/inbox'
+           const url = '/api/inbox'
             axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
                 ((response) => {
                     toast.success("API: Reply sent successfully!", {
@@ -148,6 +148,9 @@ function ReadMessage() {
                     router.push("./readmessage");
                     setReplyMessage([])
                     setFlag([]);
+                    fetchInboxDetails();
+                    router.push('./readmessage');
+                    setReply(false)
                 })
                 .catch((error) => {
                     toast.error("API: Reply sent error!", {
@@ -204,7 +207,7 @@ function ReadMessage() {
                         <div className="border-r   pr-2 border-gray-200">
                             <span className={`${color?.textgray} hover:${color?.text} ${color?.hover} cursor-pointer mr-1 p-1  rounded inline-flex justify-center`}>
 
-                                <button onClick={inbox}>
+                                <button type='button' onClick={inbox}>
                                     <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6   mr-2  flex-shrink-0  transition duration-75" enableBackground="new 0 0 24 24" viewBox="0 0 24 24" fill="currentColor">
                                         <rect fill="none" height="24" width="24" />
                                         <path d="M9,19l1.41-1.41L5.83,13H22V11H5.83l4.59-4.59L9,5l-7,7L9,19z" />
@@ -234,7 +237,7 @@ function ReadMessage() {
                     <div className="flex items-center  mb-4 sm:mb-0">
                         <div className="border-r  border-gray-200">
                             <span className={`${color?.textgray} hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}>
-                                <button data-tooltip="Delete" aria-label="Delete" className="w-6 h-6 mr-4   flex-shrink-0  transition duration-75">
+                                <button type='button' data-tooltip="Delete" aria-label="Delete" className="w-6 h-6 mr-4   flex-shrink-0  transition duration-75">
                                     <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd"></path></svg>
                                 </button>
                             </span></div>
@@ -275,7 +278,7 @@ function ReadMessage() {
                 <div className='hover:bg-gray-100 divide-y  border-t border-gray-200'></div>
                 <div className='flex space-x-3 items-center px-4 my-3'>
                     <a href="#replymessage">
-                        <button onClick={() => { setReply(true) }} className="sm:inline-flex  text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg text-sm px-5 py-2.5 text-center items-center mr-3">
+                        <button type="button" data-testid="test-reply-button" onClick={() => { setReply(true) }} className="sm:inline-flex  text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg text-sm px-5 py-2.5 text-center items-center mr-3">
                             <span className='mr-3'>
                                 Reply</span>
                             <svg xmlns="http://www.w3.org/2000/svg"  className="w-5 h-5 text-white flex-shrink-0 transition duration-75" viewBox="0 0 24 24" fill="currentColor">
@@ -283,13 +286,7 @@ function ReadMessage() {
                                 <path d="M4.01 6.03l7.51 3.22-7.52-1 .01-2.22m7.5 8.72L4 17.97v-2.22l7.51-1M2.01 3L2 10l15 2-15 2 .01 7L23 12 2.01 3z" /></svg>
                         </button></a>
                     {reply === true ?
-                        // <button onClick={() => setReply(false)} className="sm:inline-flex  text-gray-900 bg-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-200 
-                        //   font-semibold rounded-lg text-sm px-5 py-2.5 text-center items-center ml-3">
-                        //     <svg className="w-5 h-5  mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd">
-                        //     </path></svg>
-                        //     <span className='mr-3'>
-                        //         Cancel</span>
-                        // </button> 
+                      
                         <button type="button" onClick={() => {setReply(false);setEmojiState(false)}} data-modal-toggle="delete-user-modal" className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-3 py-2 text-center">
                            <svg className="w-5 h-5  mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd">
                             </path></svg>
@@ -302,12 +299,12 @@ function ReadMessage() {
 
                     <div id="replymessage">
                         <div className='px-6 my-5'>
-                            <input type="text" className={`shadow-sm ${color?.greybackground}  border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                            <input type="text" data-testid="test_email" required className={`shadow-sm ${color?.greybackground}  border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                                 defaultValue={messageDetails?.[i]?.sender_email} />
                         </div>
 
                         <div className='px-6 my-5'>
-                            <textarea rows="6" columns="50"
+                            <textarea data-testid="test_message" rows="6" columns="50" defaultValue="" required
                                 onChange={
                                     (e) => (
                                         setReplyMessage({ ...replyMessage, message: e.target.value }, setFlag(1))
@@ -318,7 +315,7 @@ function ReadMessage() {
                         </div>
 
                         <div className='flex space-x-3 items-center px-6 my-3'>
-                            <button href="#" onClick={submitReply}
+                            <button type="button" onClick={submitReply}
                             className="sm:inline-flex  text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg text-sm px-5 py-2.5 text-center items-center mr-3">
                                 <span className='mr-3'>
                                     Send</span>

@@ -500,7 +500,8 @@ const Table = (args) => {
 
                     <span className={`text-sm font-normal ${args?.color?.textgray}`}>{args?.common?.Showing}
 
-                        <span className={`${args?.color?.text} font-semibold ml-1`}>{page}</span> {args?.common?.Of} <span className={`${args?.color?.text} font-semibold`}>{Math.ceil(args?.gen?.length / itemsPerPage)}</span></span>
+                        <span className={`${args?.color?.text} font-semibold ml-1`}>{page}</span> {args?.common?.Of} <span className={`${args?.color?.text} font-semibold`}>
+                            {Math.ceil(args?.gen?.length / itemsPerPage)}</span></span>
 
                 </div>
 
