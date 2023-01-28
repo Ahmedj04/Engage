@@ -213,16 +213,16 @@ function Inbox() {
         console.log(e.target)
         const { name, checked } = e.target;
         if (name === "allSelect") {
-            let tempCon = inboxDetails.map((item) => {
+            let tempCon = messagesFiltered.map((item) => {
                 return { ...item, isChecked: checked }
             });
-            setInboxDetails(tempCon)
+            setMessagesFiltered(tempCon)
         }
         else {
-            let tempCon = inboxDetails.map((item) =>
+            let tempCon = messagesFiltered.map((item) =>
                 item.message_id === name ? { ...item, isChecked: checked } : item
             );
-            setInboxDetails(tempCon)
+            setMessagesFiltered(tempCon)
         }
 
     }
@@ -230,7 +230,7 @@ function Inbox() {
     // Multi delete
     const allDelete = async () => {
         checked = [];
-        checked = inboxDetails.filter(i => i.isChecked === true).map(j => { return (j.message_id) })
+        checked = messagesFiltered.filter(i => i.isChecked === true).map(j => { return (j.message_id) })
         if (checked?.length > 0) {
             setDeleteMultiple(1);
         }
@@ -269,6 +269,8 @@ function Inbox() {
            });
           
            setDeleteMultiple(0);
+           fetchInboxDetails();
+           router.push('./inbox')
          })
          .catch((error) => {
            setSpinner(0)
@@ -300,7 +302,7 @@ function Inbox() {
 
                     <div className="flex space-x-1 pl-0 sm:pl-4  sm:mt-0">
                         <div className="border-r   border-gray-200">
-                            <input id="checkbox-all"  checked={inboxDetails?.filter(item => item?.isChecked !== true).length < 1}
+                            <input id="checkbox-all"  checked={messagesFiltered?.filter(item => item?.isChecked !== true).length < 1}
                                                         onChange={(e) => { handlecheckbox(e); }}
                             aria-describedby="checkbox-1" type="checkbox" name="allSelect" className=" mr-4 -ml-1 w-4 h-4 rounded text-cyan-600 bg-gray-100  border-gray-300 focus:ring-cyan-500 dark:focus:ring-blue-600 
                           dark:ring-offset-gray-800 focus:ring-2 mt-2  dark:bg-gray-700 dark:border-gray-600"/>
