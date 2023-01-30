@@ -123,8 +123,8 @@ function ReadMessage() {
 
             const final_data = {
                 "property_id": currentProperty?.property_id,
-                "sender_name": currentUser?.user_name,
-                "sender_email": currentUser?.user_email,
+                "sender_name": currentLogged?.name,
+                "sender_email":currentLogged?.email,
                 "message_subject": messageDetails?.[i]?.message_subject,
                 "message": replyMessage?.message,
                 "parent_message_id": messageDetails?.[i]?.message_id,
@@ -133,7 +133,6 @@ function ReadMessage() {
                 "is_starred": false,
                 "is_deleted": false
             }
-            alert(JSON.stringify(final_data))
             const url = '/api/inbox'
             axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
                 ((response) => {
