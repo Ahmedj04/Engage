@@ -394,7 +394,7 @@ function Inbox() {
                                                             }
                                                                 </div>
                                                     </td>
-                                                    {item?.is_read == false ?
+                                                    {item?.is_read == false?
                                                     <>
                                                     <td onClick={() => readMessage(item)} className="px-2 py-3 flex items-center cursor-pointer whitespace-nowrap space-x-4  lg:mr-0">
                                                         <div className="flex-shrink-0 whitespace-nowrap">
@@ -418,14 +418,14 @@ function Inbox() {
                                                          <img className="h-6 w-6 rounded" src="https://demo.themesberg.com/windster/images/users/neil-sims.png" alt="Neil image" />
                                                      </div>
                                                      
-                                                     <div  className={` 
+                                                     <div  onClick={() => readMessage(item)} className={` 
                                                      text-md pr-6 font-normal cursor-pointer whitespace-nowrap ${color?.tabletext} `}>
                                                          {item?.sender_name}
                                                      </div>
 
                                                  </td>
-                                                 <td className={`${color?.tabletext} px-4 py-3 font-normal space-x-2 cursor-pointer whitespace-nowrap`}> {item?.message_subject}...</td>
-                                                 <td className={`${color?.tabletext} px-4 py-3 font-normal whitespace-nowrap space-x-2 cursor-pointer`}>
+                                                 <td onClick={() => readMessage(item)} className={`${color?.tabletext} px-4 py-3 font-normal space-x-2 cursor-pointer whitespace-nowrap`}> {item?.message_subject}...</td>
+                                                 <td  onClick={() => readMessage(item)} className={`${color?.tabletext} px-4 py-3 font-normal whitespace-nowrap space-x-2 cursor-pointer`}>
                                                      {item?.created_on}
                                                  </td></>}
                                                 </tr>
