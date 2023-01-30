@@ -345,12 +345,7 @@ export default function BasicDetails() {
           <div className="pt-6">
             <div className=" md:px-4 mx-auto w-full">
               <div className="flex flex-wrap">
-               
-                <div className="w-full lg:w-6/12 px-4">
-                  <img src={imageLogo} width="164px" height="40px" />
-                </div>
-
-               
+              
                 <div className="w-full lg:w-6/12  px-4">
                   <div className="relative w-full mb-3">
                     <label
@@ -374,6 +369,10 @@ export default function BasicDetails() {
                         {error?.property_name}</p>
                     </div>
                   </div>
+                </div>
+
+                <div className="w-full lg:w-6/12 px-4">
+                  <img src={imageLogo} width="164px" height="40px" />
                 </div>
                 <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
