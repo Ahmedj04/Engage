@@ -20,6 +20,7 @@ let currentMessage;
 let currentProperty;
 let currentUser;
 let i = 0;
+let mulImages =[];
 
 function ReadMessage() {
     const router = useRouter();
@@ -31,6 +32,7 @@ function ReadMessage() {
     const [emojiState, setEmojiState] = useState(false);
     const [flag, setFlag] = useState([]);
     const [image, setImage] = useState();
+    const [multipleImages, setMultipleImages] = useState([]);
 
 
     useEffect(() => {
@@ -176,21 +178,22 @@ function ReadMessage() {
   const [imageData, setImageData] = useState([imageTemplate]?.map((i, id) => { return { ...i, index: id } }))
 
   /* Function to upload logo to cloud*/
-   const uploadImage = (index) => {
-        const imageDetails = imageData?.find(i => i.index === index)?.imageFile
+   const uploadImage = (imageDetails,index) => {
+       // const imageDetails = imageData?.find(i => i.index === index)?.imageFile
         const formData = new FormData();
         formData.append("file", imageDetails);
         formData.append("upload_preset", "Travel2Kashmir")
-        axios.post("https://api.cloudinary.com/v1_1/dvczoayyw/image/upload", formData)
+        const att_link = axios.post("https://api.cloudinary.com/v1_1/dvczoayyw/image/upload", formData)
           .then(response => {
-            const newData = imageData?.map((i) => {
-              if (i.index === index) {
-                i.image_link = response?.data?.secure_url
-              }
-              return i
+            // const newData = imageData?.map((i) => {
+            //   if (i.index === index) {
+            //     i.image_link = response?.data?.secure_url
+            //   }
+            //   return i
+              return response?.data?.secure_url
             })
-            setImageData(newData)
-          })
+            //setImageData(newData)
+        //   })
           .catch(error => {
             toast.error("Error uploading photo.", {
               position: "top-center",
@@ -202,16 +205,34 @@ function ReadMessage() {
               progress: undefined,
             });
           });
-    
+          return att_link;
       }
 
-      const onChangePhoto = (e, index, i) => {
+      const onChangePhoto =async (e, index, i) => {
+        console.log(e.target.files[0])
+       const link= await  uploadImage(e.target.files[0],"na");
+        console.log(link)
         setImageData(imageData?.map((item, id) => {
-          if (item.index === index) {
-            item[i] = e.target.files[0]
-          }
-          return item
+            console.log(item.index === index)
+            console.log(index)
+          
+        //   if (item.index === index) {
+            const data={
+                "image_title" : e.target.files[0].name, //verify this
+                "image_link": link
+            }
+            console.log(data)
+            mulImages.push(data)
+            return data
+         
+        //   }
+        
         }))
+       
+      }
+
+      const addPhotos = () => {
+        setImageData([...imageData, imageTemplate]?.map((i, id) => { return { ...i, index: id } }))
       }
 
     return (
@@ -337,10 +358,15 @@ function ReadMessage() {
                                 className={`shadow-sm ${color?.greybackground}  border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                                 placeholder="Write text here..." />
                         </div>
-                        {imageData?.map((imageData, index) => (
-                        <div className="p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert" key={index}>
-                         <span className="font-medium">Info alert!{index}</span> Change a few things up and try submitting again.
-                        </div>))}
+                     
+                        {mulImages?.map((item, index) => (
+                            <>
+                            {imageData?.image_title != "" ?
+                            
+                        <div className="p-4 mx-6 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert" key={index}>
+                         <span className="font-medium">{item?.image_title}</span>
+                        </div>:<></>}
+                        </>))}
                         <div className='flex space-x-3 items-center px-6 my-3'>
                             <button type="button" onClick={submitReply}
                                 className="sm:inline-flex  text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg text-sm px-5 py-2.5 text-center items-center mr-3">
@@ -364,8 +390,10 @@ function ReadMessage() {
                                 </span></label>
                             <label> <span className={`${color?.textgray}  hover:${color?.text}  mr-1 cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}>
                                 <input type="file" className='absolute w-4 hidden' accept="image/png, image/gif, image/jpeg, image/jpg"
-                                    onChange={e => {
-                                        onChangePhoto(e, imageData?.index, 'imageFile')
+                                    onChange={e => { 
+                                        // if(imageData?.length >1){
+                                        // addPhotos();}
+                                        onChangePhoto(e, imageData?.length-1, 'imageFile')
                                       }} />
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 h-6  flex-shrink-0   transition duration-75" fill="currentColor"
                                 ><path d="M0 0h24v24H0V0z" fill="none" /><path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-4.86 8.86l-3 3.87L9 13.14 6 17h12l-3.86-5.14z" /></svg>
