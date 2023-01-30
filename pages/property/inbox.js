@@ -132,7 +132,6 @@ function Inbox() {
 
     // function read message
     const readMessage = (props) => {
-        alert(JSON.stringify(props))
       if(props?.is_read == false){
         const final_data = {
             "message_id": props.message_id,
