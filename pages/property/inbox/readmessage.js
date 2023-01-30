@@ -133,6 +133,7 @@ function ReadMessage() {
                 "is_starred": false,
                 "is_deleted": false
             }
+            alert(JSON.stringify(final_data))
             const url = '/api/inbox'
             axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
                 ((response) => {
@@ -213,7 +214,7 @@ function ReadMessage() {
           return item
         }))
       }
-      
+
     return (
         <>
             <Title name={`Engage |  ${language?.inbox}`} />
