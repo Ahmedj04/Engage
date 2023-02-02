@@ -120,7 +120,11 @@ function Page() {
   },[router.query.page]);
 
 
-  return (<>{disp === 0?<h1 id='datanotfound' className="text-blue-900 text-4xl  h-96 grid content-center mx-24">LOADING.....</h1>:
+  return (<>{disp === 0?<div className="h-screen bg-white">
+        <div className="flex justify-center items-center h-full">
+          <img className="h-32 w-32" src="https://icons8.com/preloaders/preloaders/1488/Iphone-spinner-2.gif" alt="" />
+        </div>
+      </div>:
     <div>
     {/* Classic Theme */}
     { theme === "Classic" ?
