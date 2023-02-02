@@ -369,7 +369,8 @@ function Room() {
         image_link: actionImage?.image_link,
         image_title: actionImage?.image_title,
         image_description: actionImage?.image_description,
-        image_category: "room"
+        image_category: "room",
+        room_id:currentroom
       }]
       const finalImage = { "images": imagedata }
       setSpinner(1);
@@ -388,7 +389,7 @@ function Room() {
           setActionImage([])
           setError({});
           setFlag([])
-          submitImageLink(response?.data?.image_id);
+         // submitImageLink(response?.data?.image_id);
         })
         .catch(error => {
           setSpinner(0);
@@ -406,48 +407,48 @@ function Room() {
     }
   }
 
-  const submitImageLink = (props) => {
-    const imagedata = [{
-      image_id: props,
-      room_id: currentroom
-    }]
-    const finalImage = { "room_images": imagedata }
-    setSpinner(1)
-    axios.post('/api/room-images', finalImage, { header: { "content-type": "application/json" } }).then
-      ((response) => {
-        setSpinner(0);
-        toast.success("App: Room details update success.", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        fetchImages();
-        fetchDetails();
-        setError({})
-        setActionImage([]);
-        setAddImage(0);
-        Router.push("./editroom");
-        setDisp(2);
-      })
-      .catch((error) => {
-        setSpinner(0);
-        setError({});
-        toast.error("App: Room description update error. ", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      })
+  // const submitImageLink = (props) => {
+  //   const imagedata = [{
+  //     image_id: props,
+  //     room_id: currentroom
+  //   }]
+  //   const finalImage = { "room_images": imagedata }
+  //   setSpinner(1)
+  //   axios.post('/api/room-images', finalImage, { header: { "content-type": "application/json" } }).then
+  //     ((response) => {
+  //       setSpinner(0);
+  //       toast.success("App: Room details update success.", {
+  //         position: "top-center",
+  //         autoClose: 5000,
+  //         hideProgressBar: false,
+  //         closeOnClick: true,
+  //         pauseOnHover: true,
+  //         draggable: true,
+  //         progress: undefined,
+  //       });
+  //       fetchImages();
+  //       fetchDetails();
+  //       setError({})
+  //       setActionImage([]);
+  //       setAddImage(0);
+  //       Router.push("./editroom");
+  //       setDisp(2);
+  //     })
+  //     .catch((error) => {
+  //       setSpinner(0);
+  //       setError({});
+  //       toast.error("App: Room description update error. ", {
+  //         position: "top-center",
+  //         autoClose: 5000,
+  //         hideProgressBar: false,
+  //         closeOnClick: true,
+  //         pauseOnHover: true,
+  //         draggable: true,
+  //         progress: undefined,
+  //       });
+  //     })
 
-  }
+  // }
 
   /* Function for Update Room Description*/
   const submitRoomDescriptionEdit = () => {
