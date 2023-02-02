@@ -1129,14 +1129,22 @@ function Room() {
                         </label>
                         <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                         <div className={visible === 1 ? 'block' : 'hidden'}>
-                        
+                        {(allRoomDetails?.room_type==='Capsule' || allRoomDetails?.room_type==='Suite')?
                         <input
                         disabled
                             type="text"
                             defaultValue={allRoomDetails?.room_type?.replaceAll("_", " ")}
 
                             className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          />
+                          />:
+                            <select
+                            defaultValue={roomDetails?.room_type}
+                            onClick={(e) => setAllRoomDetails({ ...allRoomDetails, room_type_id: e.target.value }, setFlag(1))}
+                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} >
+                            <option  disabled selected value={roomDetails?.room_type}>{roomDetails?.room_type}</option>
+                           {roomtypes.filter(i=>i.room_type_name != 'Capsule' && i.room_type_name != 'Suite').map((i)=><option key={i.room_type_id} value={i?.room_type_id}>{i?.room_type_name.replaceAll('_',' ')}</option>)}
+                          </select>
+                           }
                         </div>
                       </div>
                     </div>
