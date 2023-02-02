@@ -114,12 +114,11 @@ function Room() {
         if (response.data?.room_type == 'Single') {
           setBedDetails(response.data.beds?.[i])
         }
-        setAllRoomRates(response.data?.unconditional_rates?.[i]);
         filterCurrency(response.data?.unconditional_rates?.[i]);
         if (response.data.room_facilities !== undefined) {
           setServices(response.data.room_facilities);
         }
-
+          
         setRoomDetails(response.data);
         if (response.data.room_facilities == undefined) {
           fetchServices();
@@ -136,21 +135,34 @@ function Room() {
               }
               genData.push(temp)
             })
-            setGen(genData);
+            setGen(genData);;
           }
         }
         logger.info("url  to fetch room hitted successfully");
         setVisible(1)
       })
-      .catch((error) => { logger.error("url to fetch room, failed") });
+      .catch((error) => { logger.error("url to fetch room, failed");  });
   }
 
-  const filterCurrency = (props) => {
+  const filterCurrency = (props) => 
+  {
+    if(props != undefined)
+  {
     currency = lang?.CurrencyData.filter(el => {
       return props.baserate_currency.toUpperCase() === el.currency_code;
     });
-    setAllRoomRates({ ...allRoomRates, currency: currency?.[i]?.currency_name })
-  }
+    const rate={
+      "currency":currency?.[i]?.currency_name,
+      "baserate_amount": props.baserate_amount,
+      "tax_amount":props.tax_amount,
+      "otherfees_amount":props.otherfees_amount,
+      "room_id":props.room_id,
+      "un_rate_id":props.un_rate_id
+      }
+    //setAllRoomRates({ props., currency: currency?.[i]?.currency_name })
+    setAllRoomRates(rate)
+
+  }}
 
   // Room Services
   const fetchServices = async () => {
@@ -505,8 +517,11 @@ function Room() {
         "un_rate_id": roomDetails?.unconditional_rates?.[0]?.un_rate_id
       }
       setSpinner(1);
-      const url = '/api/unconditional_rates'
-      axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
+      
+      //const method=final_data?.un_rate_id? `put`:`post`
+      if(final_data.un_rate_id!= undefined){
+        const url = '/api/unconditional_rates'
+        axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
         ((response) => {
           setSpinner(0)
           toast.success("Room rates update Success.", {
@@ -539,6 +554,43 @@ function Room() {
             progress: undefined,
           });
         })
+      }
+      else{const url = '/api/room_unconditional_rates'
+        axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
+        ((response) => {
+          setSpinner(0)
+          toast.success("Room rates update Success.", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          setFlag([])
+          fetchDetails();
+          setError({});
+          setAllRoomRates([]);
+          Router.push("./editroom");
+
+
+        })
+        .catch((error) => {
+          setSpinner(0);
+          setError({});
+          toast.error("Room rates update error.", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        })
+      }
+      
     }
   }
 
@@ -943,7 +995,7 @@ function Room() {
 
   // Validate Rates
   const validationRates = () => {
-    var result = validateRoomRates(allRoomRates)
+   var result = validateRoomRates(allRoomRates)
     if (result === true) {
       submitRoomRatesEdit()
     }
@@ -1077,7 +1129,9 @@ function Room() {
                         </label>
                         <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                         <div className={visible === 1 ? 'block' : 'hidden'}>
-                          <input
+                        
+                        <input
+                        disabled
                             type="text"
                             defaultValue={allRoomDetails?.room_type?.replaceAll("_", " ")}
 
