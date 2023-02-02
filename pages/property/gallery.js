@@ -26,9 +26,6 @@ let checked;
 let check = [];
 let colorToggle;
 import Router from 'next/router';
-import { data } from 'jquery';
-
-
 function Gallery() {
     const [visible, setVisible] = useState(0)
     const [color, setColor] = useState({})
