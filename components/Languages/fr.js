@@ -241,16 +241,9 @@ export default {
     
   },
   "BedsCols":{
-  
-    col1 : "Bed Length",
-    col2 : "Bed Width", 
+    col1 :"Longueur du Lit (en cm)",
+    col2 : "Largeur du Lit (en cm)", 
    },
-   
-   "BedsCols":{
-    col1 :"Longueur du Lit",
-    col2 : "Largeur du Lit", 
-   },
-
   "UpdateDisabled" :{
     label: "Éditer",
      color: "bg-cyan-600 hover:bg-cyan-700 mx-2 text-white opacity-60 cursor-not-allowed"    
