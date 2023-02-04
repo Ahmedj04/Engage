@@ -1500,8 +1500,8 @@ function Index() {
                         <tr>
                           <th scope="col" className="p-4">
                             <div className="flex items-center">
-                              <input id="checkbox-all" aria-describedby="checkbox-1" type="checkbox" name="allSelect" className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" checked="" />
-                              <label for="checkbox-all" className="sr-only">checkbox</label>
+                              <input id="checkbox-all" aria-describedby="checkbox-1" type="checkbox" name="allSelect" className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded"  />
+                              <label htmlFor="checkbox-all" className="sr-only">checkbox</label>
                             </div>
                           </th>
                           <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-600 uppercase">Itenaray Day</th>
@@ -1515,7 +1515,7 @@ function Index() {
                               <td className="p-4 w-4">
                                 <span className="flex items-center">
                                   <input id="checkbox-1" name="r0091" aria-describedby="checkbox-1" type="checkbox" className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
-                                  <label for="checkbox-1" className="sr-only" />
+                                  <label htmlFor="checkbox-1" className="sr-only" />
                                 </span>
                               </td>
                               <td className="p-4 whitespace-nowrap capitalize text-base font-normal text-gray-700">Day {days.day}</td>
@@ -1724,7 +1724,7 @@ function Index() {
                         return (
                           <div key={idx}>
 
-                            <div key={idx} className="w-full lg:w-6/12  px-4">
+                            <div key={idx*3+20} className="w-full lg:w-6/12  px-4">
                               <div className="relative w-full mb-3">
                                 <label
                                   className={`text-sm font-medium ${color?.text} block mb-2`}
