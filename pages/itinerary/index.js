@@ -32,7 +32,7 @@ function Index() {
   const [color, setColor] = useState({})
   const [error, setError] = useState({})
   const [mode, setMode] = useState()
-  const [disp, setDisp] = useState(1)
+  const [disp, setDisp] = useState(0)
   const [imageLogo, setImageLogo] = useState()
   const [uploadImageSpin, setUploadImageSpin] = useState(false)
 
@@ -1302,7 +1302,7 @@ function Index() {
 
         <div id='0' className={disp === 0 ? 'block' : 'hidden'}>
           {/* progress bar */}
-          <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
+          <div key={0} className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
             <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
               <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
@@ -1536,11 +1536,6 @@ function Index() {
                 </div>
               </div>
             </div>
-
-
-
-
-
             <div className='flex items-center justify-end space-x-2 sm:space-x-3 ml-auto'>
               <Button Primary={language?.Next} onClick={() => { setDisp(0) }} />
             </div>
@@ -1573,10 +1568,6 @@ function Index() {
 
           {/*content of div*/}
           <span className={`text-sm text-3xl font-bold ${color?.text} block mb-2`}>Day : {visibleDay.day}</span>
-
-
-
-
 
           {/*Field next */}
           <span className={`text-sm text-3xl font-bold ${color?.text} block mb-2`}>Activities</span>
@@ -1728,9 +1719,10 @@ function Index() {
                           </div>
                         </div>
                       </div>
+
                       {activity?.milestones?.map((eve, idx) => {
                         return (
-                          <>
+                          <div key={idx}>
 
                             <div key={idx} className="w-full lg:w-6/12  px-4">
                               <div className="relative w-full mb-3">
@@ -1755,7 +1747,7 @@ function Index() {
                             </div>
                             {/* field */}
 
-                            <div key={idx * 2} className="w-full lg:w-6/12  px-4">
+                            <div key={idx * 2+10} className="w-full lg:w-6/12  px-4">
                               <div className="relative w-full mb-3">
                                 <label
                                   className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -1775,51 +1767,47 @@ function Index() {
                                 </div>
                               </div><br />
                             </div>
-
-                            <br/>
-                            
-                          <br/> 
-
-                          </>
+                          </div>
                         )
                       })}
-                      
-                         <>
-                         <span className={`text-sm flex text-3xl font-bold ${color?.text} block mb-2`}>ADD ONS</span>
-                       
-                            {activity.add_on.map((add,idx)=>{
-                              let temp = addons.filter(i=>i.addon_id===add.addon_id);
-                             return(<div key={idx}>
-                              
+
+                      <>
+                        <span className={`text-sm flex text-3xl font-bold ${color?.text} block mb-2`}>ADD ONS</span>
+
+                        {activity.add_on.map((add, idx) => {
+                          let temp = addons.filter(i => i.addon_id === add.addon_id);
+                          return (
+                            <div key={idx}>
+
                               <p>Addon Name: {temp[0]?.name}</p>
                               <p>Addon Provider: {temp[0]?.provider}</p>
                               <p>Addon description: {temp[0]?.description}</p>
                               <p>Addon Price: {temp[0]?.price}</p>
                               <p>Addon Serves to: {temp[0]?.serves}</p>
                               <p>Addon Has Quantity: {temp[0]?.quantity} </p>
-                             </div>
-                              ) 
-                            })}
-                          <br/>
-                          <span className={`text-sm flex text-3xl font-bold ${color?.text} block mb-2`}>List of Service Providers</span>
-                              
-                          <span className={`text-sm flex text-3xl mt-4 font-bold ${color?.text} block mb-2`}>Providers</span>
-                            {activity.providers.map((add,idx)=>{
-                              let temp = providers.filter(i=>i.provider_id===add.provider_id);
-                             return(<div key={idx}>
-                             
-                              <p>Provider Category: {temp[0]?.provider_category}</p>
-                              <p>Provider Name: {temp[0]?.Name}</p>
-                              <p>Company: {temp[0]?.Company}</p>
-                              <p>Languages: {temp[0]?.languageOptions?.toString()}</p>
-                              <p>Guide Experience: {temp[0]?.guideExperience?.years}</p>
-                              <p>Guide Certificates: {temp[0]?.guideExperience?.certifications.toString()} </p>
-                             <p>Guide Specialisations: {temp[0]?.guideExperience?.specializations.toString()} </p>
-                             </div>
-                              ) 
-                            })}
-                         </>
-                      
+                            </div>
+                          )
+                        })}
+                        <br />
+                        <span className={`text-sm flex text-3xl font-bold ${color?.text} block mb-2`}>List of Service Providers</span>
+
+                        <span className={`text-sm flex text-3xl mt-4 font-bold ${color?.text} block mb-2`}>Providers</span>
+                        {activity.providers.map((add, idx) => {
+                          let temp = providers.filter(i => i.provider_id === add.provider_id);
+                          return (<div key={idx}>
+
+                            <p>Provider Category: {temp[0]?.provider_category}</p>
+                            <p>Provider Name: {temp[0]?.Name}</p>
+                            <p>Company: {temp[0]?.Company}</p>
+                            <p>Languages: {temp[0]?.languageOptions?.toString()}</p>
+                            <p>Guide Experience: {temp[0]?.guideExperience?.years}</p>
+                            <p>Guide Certificates: {temp[0]?.guideExperience?.certifications.toString()} </p>
+                            <p>Guide Specialisations: {temp[0]?.guideExperience?.specializations.toString()} </p>
+                          </div>
+                          )
+                        })}
+                      </>
+
                     </div>
                   </div>
                 </div>
@@ -1828,15 +1816,7 @@ function Index() {
             )
           })}
 
-          
-        
-      
-
-
         </div>
-
-
-
 
       </div >
       <Footer color={color} Primary={english.Foot} />
