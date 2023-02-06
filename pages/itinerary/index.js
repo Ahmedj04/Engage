@@ -20,7 +20,7 @@ var language;
 var currentProperty;
 var currentLogged;
 let colorToggle;
-let ser=0;
+var ser=0;
 import Router from "next/router";
 import Button from '../../components/Button';
 
@@ -91,12 +91,12 @@ function Index() {
                   "addon_id": "addon002"
                 }
               ],
-              "capacity": [
+              "capacity": 
                 {
                   "adult": 4,
                   "children": 3
                 }
-              ],
+              ,
               "providers": [
                 {
                   "provider_id": "provider001"
@@ -136,12 +136,12 @@ function Index() {
                   "addon_id": "addon003"
                 }
               ],
-              "capacity": [
+              "capacity": 
                 {
                   "adult": 4,
                   "children": 3
                 }
-              ],
+              ,
               "providers": [
                 {
                   "provider_id": "provider004"
@@ -295,12 +295,12 @@ function Index() {
                   "addon_id": "addon0010"
                 }
               ],
-              "capacity": [
+              "capacity": 
                 {
                   "adult": 4,
                   "children": 3
                 }
-              ],
+              ,
               "providers": [
                 {
                   "provider_id": "provider006"
@@ -443,12 +443,12 @@ function Index() {
                   "addon_id": "addon0014"
                 }
               ],
-              "capacity": [
+              "capacity": 
                 {
                   "adult": 4,
                   "children": 3
                 }
-              ],
+              ,
               "providers": [
                 {
                   "provider_id": "provider009"
@@ -558,12 +558,12 @@ function Index() {
                   "addon_id": "addon001"
                 }
               ],
-              "capacity": [
+              "capacity": 
                 {
                   "adult": 4,
                   "children": 3
                 }
-              ],
+              ,
               "providers": [
                 {
                   "provider_id": "provider004"
@@ -1706,7 +1706,7 @@ function Index() {
                           <input
                             type="text" data-testid="test_property_name"
                             className={`shadow-sm ${color?.greybackground} w-12 mx-4 border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                             defaultValue={activity.capacity.[ser].adult} required
+                             defaultValue={activity?.capacity?.adult} required
                           // onChange={(e) => ()} 
                           />
                           <label
@@ -1718,7 +1718,7 @@ function Index() {
                           <input
                             type="text" data-testid="test_property_name"
                             className={`shadow-sm ${color?.greybackground} border w-12 mx-4 border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          defaultValue={activity.capacity.[0].children} required
+                          defaultValue={activity?.capacity?.children} required
                           // onChange={(e) => ()} 
                           />
                           <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
