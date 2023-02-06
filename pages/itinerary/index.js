@@ -1686,7 +1686,7 @@ function Index() {
                     </div>
 
                     {/*Tour capacity */}
-                    <div className="w-full lg:w-6/12  px-4">
+                    <div className="w-full lg:w-6/12  px-4 ">
                       <div className="relative w-full mb-3">
                         <label
                           className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
@@ -1695,28 +1695,28 @@ function Index() {
                           <span style={{ color: "#ff0000" }}>*</span>
                         </label>
                         <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
-                        <div className={visible === 1 ? 'block flex ' : 'hidden'}>
+                        <div className={visible === 1 ? 'block flex flex-wrap' : 'hidden'}>
                           <label
-                            className={`text-sm  font-medium ${color?.text} block mb-2`}
+                            className={`text-sm  font-medium ${color?.text} block mb-2 px-2 mt-2`}
                             htmlFor="grid-password">
                             Adults
                             <span style={{ color: "#ff0000" }}>*</span>
                           </label>
                           <input
                             type="text" data-testid="test_property_name"
-                            className={`shadow-sm ${color?.greybackground} w-12 mx-4 border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                            className={`shadow-sm ${color?.greybackground} w-12 mx-4 border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5 mt-2`}
                              defaultValue={activity?.capacity?.adult} required
                           // onChange={(e) => ()} 
                           />
                           <label
-                            className={`text-sm font-medium ${color?.text} block mb-2`}
+                            className={`text-sm font-medium ${color?.text} block mb-2 mt-2`}
                             htmlFor="grid-password">
                             Children
                             <span style={{ color: "#ff0000" }}>*</span>
                           </label>
                           <input
                             type="text" data-testid="test_property_name"
-                            className={`shadow-sm ${color?.greybackground} border w-12 mx-4 border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                            className={`shadow-sm ${color?.greybackground} border w-12 mx-4 border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5 mt-2`}
                           defaultValue={activity?.capacity?.children} required
                           // onChange={(e) => ()} 
                           />
@@ -1831,7 +1831,7 @@ function Index() {
                     {/* mile stones */}
                     {activity?.milestones?.map((eve, idx) => {
                       return (
-                        <div key={idx} className="flex mt-4 p-4 shadow-lg border flex-wrap lg:w-full">
+                        <div key={idx} className="flex mt-4 p-4 shadow-lg border flex-wrap lg:w-full md:w-full">
                           {/* milestone place field */}
                           <div key={idx * 3 + 20} className="w-full lg:w-6/12  px-4">
                             <div className="relative w-full mb-3">
