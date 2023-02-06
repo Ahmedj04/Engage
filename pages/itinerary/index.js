@@ -20,7 +20,6 @@ var language;
 var currentProperty;
 var currentLogged;
 let colorToggle;
-var ser=0;
 import Router from "next/router";
 import Button from '../../components/Button';
 
@@ -1594,7 +1593,7 @@ function Index() {
                     </tbody>
                   </table>
 
-                  <div className='flex items-center justify-end space-x-2 border border-black sm:space-x-3 ml-auto'>
+                  <div className='flex items-center justify-end space-x-2  sm:space-x-3 ml-auto'>
                     <Button Primary={language?.Previous} onClick={() => { setDisp(1) }} />
                   </div>
 
@@ -2203,7 +2202,7 @@ function Index() {
               </div>
             </div>
 
-            <div className='flex items-center justify-end space-x-2 border border-black sm:space-x-3 ml-auto'>
+            <div className='flex items-center justify-end space-x-2 sm:space-x-3 ml-auto'>
               <Button Primary={language?.Previous} onClick={() => { setDisp(2) }} />
             </div>
 
