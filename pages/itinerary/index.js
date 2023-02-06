@@ -20,6 +20,7 @@ var language;
 var currentProperty;
 var currentLogged;
 let colorToggle;
+let ser=0;
 import Router from "next/router";
 import Button from '../../components/Button';
 
@@ -1705,7 +1706,7 @@ function Index() {
                           <input
                             type="text" data-testid="test_property_name"
                             className={`shadow-sm ${color?.greybackground} w-12 mx-4 border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                             defaultValue={activity.capacity.[0].adult} required
+                             defaultValue={activity.capacity.[ser].adult} required
                           // onChange={(e) => ()} 
                           />
                           <label
