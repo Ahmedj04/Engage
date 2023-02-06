@@ -37,6 +37,7 @@ function Index() {
   const [uploadImageSpin, setUploadImageSpin] = useState(false)
 
   const [visibleDay, setVisibleDay] = useState({})
+  const [activity, setActivity] = useState([])
   const [actionDay, setActionDay] = useState(0)
 
   const [itenary, setItenary] = useState(
@@ -91,9 +92,7 @@ function Index() {
               ],
               "capacity": [
                 {
-                  "adult": 4
-                },
-                {
+                  "adult": 4,
                   "children": 3
                 }
               ],
@@ -138,9 +137,7 @@ function Index() {
               ],
               "capacity": [
                 {
-                  "adult": 4
-                },
-                {
+                  "adult": 4,
                   "children": 3
                 }
               ],
@@ -177,9 +174,7 @@ function Index() {
               ],
               "capacity": [
                 {
-                  "adult": 4
-                },
-                {
+                  "adult": 4,
                   "children": 0
                 }
               ],
@@ -218,9 +213,7 @@ function Index() {
               ],
               "capacity": [
                 {
-                  "adult": 4
-                },
-                {
+                  "adult": 4,
                   "children": 2
                 }
               ],
@@ -266,9 +259,8 @@ function Index() {
               ],
               "capacity": [
                 {
-                  "adult": 4
-                },
-                {
+                  "adult": 4,
+
                   "children": 3
                 }
               ],
@@ -304,9 +296,7 @@ function Index() {
               ],
               "capacity": [
                 {
-                  "adult": 4
-                },
-                {
+                  "adult": 4,
                   "children": 3
                 }
               ],
@@ -419,12 +409,7 @@ function Index() {
                 }
               ],
               "capacity": [
-                {
-                  "adult": 4
-                },
-                {
-                  "children": 3
-                }
+                {}
               ],
               "providers": [
                 {
@@ -459,9 +444,7 @@ function Index() {
               ],
               "capacity": [
                 {
-                  "adult": 4
-                },
-                {
+                  "adult": 4,
                   "children": 3
                 }
               ],
@@ -576,9 +559,7 @@ function Index() {
               ],
               "capacity": [
                 {
-                  "adult": 4
-                },
-                {
+                  "adult": 4,
                   "children": 3
                 }
               ],
@@ -595,6 +576,7 @@ function Index() {
 
     }
   )
+
   const [addons, setAddons] = useState([
     {
       "addon_id": "addon001",
@@ -1318,12 +1300,18 @@ function Index() {
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
                 <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Day Description</div>
               </div>
+              <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
+                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Activity</div>
+              </div>
 
             </div>
 
             <div className="pt-6">
               <div className=" md:px-4 mx-auto w-full">
                 <div className="flex flex-wrap">
+
+                  {/* tour name filed */}
                   <div className="w-full lg:w-6/12  px-4">
                     <div className="relative w-full mb-3">
                       <label
@@ -1346,7 +1334,7 @@ function Index() {
                     </div>
                   </div>
 
-
+                  {/* tour type */}
                   <div className="w-full lg:w-6/12  px-4">
                     <div className="relative w-full mb-3">
                       <label
@@ -1375,6 +1363,7 @@ function Index() {
                     </div>
                   </div>
 
+                  {/* tour description */}
                   <div className="w-full lg:w-6/12  px-4">
                     <div className="relative w-full mb-3">
                       <label
@@ -1396,6 +1385,7 @@ function Index() {
                     </div>
                   </div>
 
+                  {/* duration day and night */}
                   <div className="w-full lg:w-6/12  px-4">
                     <div className="relative w-full mb-3">
                       <label
@@ -1436,27 +1426,7 @@ function Index() {
                     </div>
                   </div>
 
-                  <div className="w-full lg:w-6/12  px-4">
-                    <div className="relative w-full mb-3">
-                      <label
-                        className={`text-sm font-medium ${color?.text} block mb-2`}
-                        htmlFor="grid-password">
-                        Tour Name
-                        <span style={{ color: "#ff0000" }}>*</span>
-                      </label>
-                      <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
-                        <input
-                          type="text" data-testid="test_property_name"
-                          className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          defaultValue={itenary.tour_name} required
-                        // onChange={(e) => ()} 
-                        />
-                        <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
-                          {/* for error messages{error?.property_name}*/}</p>
-                      </div>
-                    </div>
-                  </div>
+
                 </div>
                 <div className='flex items-center justify-end space-x-2 sm:space-x-3 ml-auto'>
                   <Button Primary={language?.Next} onClick={() => { setDisp(1) }} />
@@ -1488,6 +1458,10 @@ function Index() {
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
                 <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Day Description</div>
               </div>
+              <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
+                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Activity</div>
+              </div>
 
             </div>
             {/* progress bar end */}
@@ -1500,7 +1474,7 @@ function Index() {
                         <tr>
                           <th scope="col" className="p-4">
                             <div className="flex items-center">
-                              <input id="checkbox-all" aria-describedby="checkbox-1" type="checkbox" name="allSelect" className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded"  />
+                              <input id="checkbox-all" aria-describedby="checkbox-1" type="checkbox" name="allSelect" className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                               <label htmlFor="checkbox-all" className="sr-only">checkbox</label>
                             </div>
                           </th>
@@ -1537,7 +1511,7 @@ function Index() {
               </div>
             </div>
             <div className='flex items-center justify-end space-x-2 sm:space-x-3 ml-auto'>
-              <Button Primary={language?.Next} onClick={() => { setDisp(0) }} />
+              <Button Primary={language?.Previous} onClick={() => { setDisp(0) }} />
             </div>
           </div>
         </div>
@@ -1562,182 +1536,377 @@ function Index() {
                 <div className={`${color.crossbg} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>Day Description</div>
               </div>
 
+              <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 btn-primary">4</button>
+                <div className={`${color.crossbg} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>Activity</div>
+              </div>
+
             </div>
           </div>
           {/* progress bar end */}
 
           {/*content of div*/}
-          <span className={`text-sm text-3xl font-bold ${color?.text} block mb-2`}>Day : {visibleDay.day}</span>
+          <span className={`p-2 text-left text-lg font-bold text-gray-900 uppercase`}>Day : {visibleDay.day}</span>
 
-          {/*Field next */}
-          <span className={`text-sm text-3xl font-bold ${color?.text} block mb-2`}>Activities</span>
-          {/* activities of selected day display */}
-          {visibleDay?.activities?.map((activity, id) => {
-            return (
-              <div key={id} className="border-black border-2 border mb-4">
-                <div className="pt-6">
-                  <div className=" md:px-4 mx-auto w-full">
-                    <div className="flex flex-wrap">
-
-                      {/* field */}
-                      <div className="w-full lg:w-6/12  px-4">
-                        <div className="relative w-full mb-3">
-                          <label
-                            className={`text-sm font-medium ${color?.text} block mb-2`}
-                            htmlFor="grid-password">
-                            Boarding Point
-                            <span style={{ color: "#ff0000" }}>*</span>
-                          </label>
-                          <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
-                          <div className={visible === 1 ? 'block' : 'hidden'}>
-                            <input
-                              type="text" data-testid="test_property_name"
-                              className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                              defaultValue={activity.boarding_point} required
-                            // onChange={(e) => ()} 
-                            />
-                            <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
-                              {/* for error messages{error?.property_name}*/}</p>
+          {/* table of activities for day */}
+          <div className="flex flex-col mt-8 lg:mr-0 sm:mr-0 ">
+            <div className="overflow-x-auto">
+              <div className="align-middle inline-block min-w-full">
+                <div className="shadow overflow-hidden">
+                  <table className="table data table-fixed min-w-full divide-y divide-gray-200" id="myTable">
+                    <thead className=" bg-gray-100">
+                      <tr>
+                        <th scope="col" className="p-4">
+                          <div className="flex items-center">
+                            <input id="checkbox-all" aria-describedby="checkbox-1" type="checkbox" name="allSelect" className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                            <label htmlFor="checkbox-all" className="sr-only">checkbox</label>
                           </div>
-                        </div>
-                      </div>
-
-                      {/* field */}
-                      <div className="w-full lg:w-6/12  px-4">
-                        <div className="relative w-full mb-3">
-                          <label
-                            className={`text-sm font-medium ${color?.text} block mb-2`}
-                            htmlFor="grid-password">
-                            Guided Tour
-                            <span style={{ color: "#ff0000" }}>*</span>
-                          </label>
-                          <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
-                          <div className={visible === 1 ? 'block' : 'hidden'}>
-                            <input
-                              type="text" data-testid="test_property_name"
-                              className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                              defaultValue={activity.Guided_tour} required
-                            // onChange={(e) => ()} 
-                            />
-                            <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
-                              {/* for error messages{error?.property_name}*/}</p>
-                          </div>
-                        </div>
-                      </div>
-
-
-                      {/* field */}
-                      <div className="w-full lg:w-6/12  px-4">
-                        <div className="relative w-full mb-3">
-                          <label
-                            className={`text-sm font-medium ${color?.text} block mb-2`}
-                            htmlFor="grid-password">
-                            Activity Name
-                            <span style={{ color: "#ff0000" }}>*</span>
-                          </label>
-                          <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
-                          <div className={visible === 1 ? 'block' : 'hidden'}>
-                            <input
-                              type="text" data-testid="test_property_name"
-                              className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                              defaultValue={activity.activity_name} required
-                            // onChange={(e) => ()} 
-                            />
-                            <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
-                              {/* for error messages{error?.property_name}*/}</p>
-                          </div>
-                        </div>
-                      </div>
-
-
-                      {/* field */}
-                      <div className="w-full lg:w-6/12  px-4">
-                        <div className="relative w-full mb-3">
-                          <label
-                            className={`text-sm font-medium ${color?.text} block mb-2`}
-                            htmlFor="grid-password">
-                            Time Of Ride
-                            <span style={{ color: "#ff0000" }}>*</span>
-                          </label>
-                          <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
-                          <div className={visible === 1 ? 'block' : 'hidden'}>
-                            <input
-                              type="text" data-testid="test_property_name"
-                              className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                              defaultValue={activity.time_of_ride} required
-                            // onChange={(e) => ()} 
-                            />
-                            <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
-                              {/* for error messages{error?.property_name}*/}</p>
-                          </div>
-                        </div>
-                      </div>
-
-
-                      {/* field */}
-                      <div className="w-full lg:w-6/12  px-4">
-                        <div className="relative w-full mb-3">
-                          <label
-                            className={`text-sm font-medium ${color?.text} block mb-2`}
-                            htmlFor="grid-password">
-                            Distance
-                            <span style={{ color: "#ff0000" }}>*</span>
-                          </label>
-                          <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
-                          <div className={visible === 1 ? 'block' : 'hidden'}>
-                            <input
-                              type="text" data-testid="test_property_name"
-                              className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                              defaultValue={activity.distance} required
-                            // onChange={(e) => ()} 
-                            />
-                            <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
-                              {/* for error messages{error?.property_name}*/}</p>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* field */}
-                      <div className="w-full lg:w-6/12  px-4">
-                        <div className="relative w-full mb-3">
-                          <label
-                            className={`text-sm font-medium ${color?.text} block mb-2`}
-                            htmlFor="grid-password">
-                            Place
-                            <span style={{ color: "#ff0000" }}>*</span>
-                          </label>
-                          <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
-                          <div className={visible === 1 ? 'block' : 'hidden'}>
-                            <input
-                              type="text" data-testid="test_property_name"
-                              className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                              defaultValue={activity.place} required
-                            // onChange={(e) => ()} 
-                            />
-                            <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
-                              {/* for error messages{error?.property_name}*/}</p>
-                          </div>
-                        </div>
-                      </div>
-
-                      {activity?.milestones?.map((eve, idx) => {
+                        </th>
+                        <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-600 uppercase">Activity Name</th>
+                        <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-600 uppercase">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className=" bg-white divide-y  divide-gray-200" id="TableList">
+                      {visibleDay?.activities?.map((activity, id) => {
                         return (
-                          <div key={idx}>
+                          <tr key={id}>
+                            <td className="p-4 w-4">
+                              <span className="flex items-center">
+                                <input id="checkbox-1" name="r0091" aria-describedby="checkbox-1" type="checkbox"
+                                  className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                                <label htmlFor="checkbox-1" className="sr-only" />
+                              </span>
+                            </td>
+                            <td className="p-4 whitespace-nowrap capitalize text-base font-normal text-gray-700">{activity.activity_name}</td>
 
-                            <div key={idx*3+20} className="w-full lg:w-6/12  px-4">
+                            <td className="py-4 whitespace-nowrap capitalize">
+                              <div>
+                                <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                  onClick={() => { setActivity(activity); setDisp(3) }}>Edit </button>
+
+                              </div>
+                            </td>
+                          </tr>
+                        )
+                      })}
+
+                    </tbody>
+                  </table>
+
+                  <div className='flex items-center justify-end space-x-2 border border-black sm:space-x-3 ml-auto'>
+                    <Button Primary={language?.Previous} onClick={() => { setDisp(1) }} />
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+
+        {/* activity widget */}
+
+        <div id='3' className={disp === 3 ? 'block' : 'hidden'}>
+          {/* progress bar */}
+          <div key={0} className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
+            <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+              <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
+                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Tour Description</div>
+              </div>
+              <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
+                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Tour Itenary</div>
+              </div>
+
+              <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
+                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Day Description</div>
+              </div>
+
+
+              <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">4</button>
+                <div className={`${color.crossbg} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>Activity</div>
+              </div>
+            </div>
+
+            {/* activities of selected day display */}
+
+            <div key={8} className="shadow-lg  border-2 border mb-4">
+              <div className="pt-6">
+                <div className=" md:px-4 mx-auto w-full">
+                  <div className="flex flex-wrap">
+                    {/* activity name field */}
+                    <div className="w-full lg:w-6/12  px-4">
+                      <div className="relative w-full mb-3">
+                        <label
+                          className={`text-sm font-medium ${color?.text} block mb-2`}
+                          htmlFor="grid-password">
+                          Activity Name
+                          <span style={{ color: "#ff0000" }}>*</span>
+                        </label>
+                        <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                        <div className={visible === 1 ? 'block' : 'hidden'}>
+                          <input
+                            type="text" data-testid="test_property_name"
+                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                            defaultValue={activity.activity_name} required
+                          // onChange={(e) => ()} 
+                          />
+                          <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                            {/* for error messages{error?.property_name}*/}</p>
+                        </div>
+                      </div>
+                    </div>
+
+
+                    {/* borading point field */}
+                    <div className="w-full lg:w-6/12  px-4">
+                      <div className="relative w-full mb-3">
+                        <label
+                          className={`text-sm font-medium ${color?.text} block mb-2`}
+                          htmlFor="grid-password">
+                          Boarding Point
+                          <span style={{ color: "#ff0000" }}>*</span>
+                        </label>
+                        <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                        <div className={visible === 1 ? 'block' : 'hidden'}>
+                          <input
+                            type="text" data-testid="test_property_name"
+                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                            defaultValue={activity.boarding_point} required
+                          // onChange={(e) => ()} 
+                          />
+                          <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                            {/* for error messages{error?.property_name}*/}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/*Tour capacity */}
+                    <div className="w-full lg:w-6/12  px-4">
+                      <div className="relative w-full mb-3">
+                        <label
+                          className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
+                          htmlFor="grid-password">
+                          Tour Capacity
+                          <span style={{ color: "#ff0000" }}>*</span>
+                        </label>
+                        <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                        <div className={visible === 1 ? 'block flex ' : 'hidden'}>
+                          <label
+                            className={`text-sm  font-medium ${color?.text} block mb-2`}
+                            htmlFor="grid-password">
+                            Adults
+                            <span style={{ color: "#ff0000" }}>*</span>
+                          </label>
+                          <input
+                            type="text" data-testid="test_property_name"
+                            className={`shadow-sm ${color?.greybackground} w-12 mx-4 border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                             defaultValue={activity.capacity.[0].adult} required
+                          // onChange={(e) => ()} 
+                          />
+                          <label
+                            className={`text-sm font-medium ${color?.text} block mb-2`}
+                            htmlFor="grid-password">
+                            Children
+                            <span style={{ color: "#ff0000" }}>*</span>
+                          </label>
+                          <input
+                            type="text" data-testid="test_property_name"
+                            className={`shadow-sm ${color?.greybackground} border w-12 mx-4 border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                          defaultValue={activity.capacity.[0].children} required
+                          // onChange={(e) => ()} 
+                          />
+                          <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                            {/* for error messages{error?.property_name}*/}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* guided tour field */}
+                    <div className="w-full lg:w-6/12  px-4">
+                      <div className="relative w-full mb-3">
+                        <label
+                          className={`text-sm font-medium ${color?.text} block mb-2`}
+                          htmlFor="grid-password">
+                          Guided Tour
+                          <span style={{ color: "#ff0000" }}>*</span>
+                        </label>
+                        <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                        <div className={visible === 1 ? 'block' : 'hidden'}>
+                          <input
+                            type="text" data-testid="test_property_name"
+                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                            defaultValue={activity.Guided_tour} required
+                          // onChange={(e) => ()} 
+                          />
+                          <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                            {/* for error messages{error?.property_name}*/}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* time of ride field */}
+                    <div className="w-full lg:w-6/12  px-4">
+                      <div className="relative w-full mb-3">
+                        <label
+                          className={`text-sm font-medium ${color?.text} block mb-2`}
+                          htmlFor="grid-password">
+                          Time Of Ride
+                          <span style={{ color: "#ff0000" }}>*</span>
+                        </label>
+                        <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                        <div className={visible === 1 ? 'block' : 'hidden'}>
+                          <input
+                            type="text" data-testid="test_property_name"
+                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                            defaultValue={activity.time_of_ride} required
+                          // onChange={(e) => ()} 
+                          />
+                          <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                            {/* for error messages{error?.property_name}*/}</p>
+                        </div>
+                      </div>
+                    </div>
+
+
+                    {/* distance field */}
+                    <div className="w-full lg:w-6/12  px-4">
+                      <div className="relative w-full mb-3">
+                        <label
+                          className={`text-sm font-medium ${color?.text} block mb-2`}
+                          htmlFor="grid-password">
+                          Distance
+                          <span style={{ color: "#ff0000" }}>*</span>
+                        </label>
+                        <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                        <div className={visible === 1 ? 'block' : 'hidden'}>
+                          <input
+                            type="text" data-testid="test_property_name"
+                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                            defaultValue={activity.distance} required
+                          // onChange={(e) => ()} 
+                          />
+                          <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                            {/* for error messages{error?.property_name}*/}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* place field */}
+                    <div className="w-full lg:w-6/12  px-4">
+                      <div className="relative w-full mb-3">
+                        <label
+                          className={`text-sm font-medium ${color?.text} block mb-2`}
+                          htmlFor="grid-password">
+                          Place
+                          <span style={{ color: "#ff0000" }}>*</span>
+                        </label>
+                        <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                        <div className={visible === 1 ? 'block' : 'hidden'}>
+                          <input
+                            type="text" data-testid="test_property_name"
+                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                            defaultValue={activity?.place} required
+                          // onChange={(e) => ()} 
+                          />
+                          <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                            {/* for error messages{error?.property_name}*/}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* milestone label */}
+                    <div className="relative w-full mb-3">
+                      <label
+                        className={`text-sm font-black ${color?.text} block mb-2`}
+                        htmlFor="grid-password">
+                        Mile Stones
+                        <span style={{ color: "#ff0000" }}>*</span>
+                      </label>
+                    </div>
+                    {/* mile stones */}
+                    {activity?.milestones?.map((eve, idx) => {
+                      return (
+                        <div key={idx} className="flex mt-4 p-4 shadow-lg border flex-wrap lg:w-full">
+                          {/* milestone place field */}
+                          <div key={idx * 3 + 20} className="w-full lg:w-6/12  px-4">
+                            <div className="relative w-full mb-3">
+                              <label
+                                className={`text-sm font-medium ${color?.text} block mb-2`}
+                                htmlFor="grid-password">
+                                Mile Stone {idx + 1} Place
+                                <span style={{ color: "#ff0000" }}>*</span>
+                              </label>
+                              <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                              <div className={visible === 1 ? 'block' : 'hidden'}>
+                                <input
+                                  type="text" data-testid="test_property_name"
+                                  className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                  defaultValue={Object.keys(eve)[0]} required
+                                // onChange={(e) => ()} 
+                                />
+                                <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                  {/* for error messages{error?.property_name}*/}</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div key={idx * 8 + 20} className="w-full lg:w-6/12  px-4">
+                            <div className="relative w-full mb-3">
+                              <label
+                                className={`text-sm font-medium ${color?.text} block mb-2`}
+                                htmlFor="grid-password">
+                                Description
+                                <span style={{ color: "#ff0000" }}>*</span>
+                              </label>
+                              <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                              <div className={visible === 1 ? 'block' : 'hidden'}>
+                                <textarea rows='3' data-testid="test_property_name"
+                                  className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                  defaultValue={eve.description} required
+                                // onChange={(e) => ()} 
+                                />
+                                <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                  {/* for error messages{error?.property_name}*/}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    })}
+
+                    <>
+                      {/* addon label */}
+                      <div className="relative w-full mt-4 ">
+                        <label
+                          className={`text-sm font-black ${color?.text} block`}
+                          htmlFor="grid-password">
+                          ADD ONs
+                          <span style={{ color: "#ff0000" }}>*</span>
+                        </label>
+                      </div>
+                      {/* addno */}
+                      {activity?.add_on?.map((add, idx) => {
+                        let temp = addons.filter(i => i.addon_id === add.addon_id);
+                        return (
+                          <div key={idx} className="mt-8 p-4 shadow-lg border flex flex-wrap lg:w-full">
+                            {/* Addon name field */}
+                            <div key={idx * 8 + 20} className="w-full lg:w-6/12  px-4">
                               <div className="relative w-full mb-3">
                                 <label
                                   className={`text-sm font-medium ${color?.text} block mb-2`}
                                   htmlFor="grid-password">
-                                  Mile Stone {idx + 1} Place
+                                  Addon Name
                                   <span style={{ color: "#ff0000" }}>*</span>
                                 </label>
                                 <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
                                 <div className={visible === 1 ? 'block' : 'hidden'}>
-                                  <input
-                                    type="text" data-testid="test_property_name"
+                                  <input type='text' data-testid="test_property_name"
                                     className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                                    defaultValue={Object.keys(eve)[0]} required
+                                    defaultValue={temp[0]?.name} required
                                   // onChange={(e) => ()} 
                                   />
                                   <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
@@ -1745,78 +1914,302 @@ function Index() {
                                 </div>
                               </div>
                             </div>
-                            {/* field */}
 
-                            <div key={idx * 2+10} className="w-full lg:w-6/12  px-4">
+                            {/* Addon Description field */}
+                            <div key={idx * 8 + 20} className="w-full lg:w-6/12  px-4">
                               <div className="relative w-full mb-3">
                                 <label
                                   className={`text-sm font-medium ${color?.text} block mb-2`}
                                   htmlFor="grid-password">
-                                  Description
+                                  Addon Provider
                                   <span style={{ color: "#ff0000" }}>*</span>
                                 </label>
                                 <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
                                 <div className={visible === 1 ? 'block' : 'hidden'}>
-                                  <textarea rows='3' data-testid="test_property_name"
+                                  <input type='text' data-testid="test_property_name"
                                     className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                                    defaultValue={eve.description} required
+                                    defaultValue={temp[0]?.provider} required
                                   // onChange={(e) => ()} 
                                   />
                                   <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
                                     {/* for error messages{error?.property_name}*/}</p>
                                 </div>
-                              </div><br />
+                              </div>
                             </div>
+
+                            {/* Addon Provider field */}
+                            <div key={idx * 8 + 20} className="w-full lg:w-6/12  px-4">
+                              <div className="relative w-full mb-3">
+                                <label
+                                  className={`text-sm font-medium ${color?.text} block mb-2`}
+                                  htmlFor="grid-password">
+                                  Addon Description
+                                  <span style={{ color: "#ff0000" }}>*</span>
+                                </label>
+                                <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                                <div className={visible === 1 ? 'block' : 'hidden'}>
+                                  <input type='text' data-testid="test_property_name"
+                                    className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                    defaultValue={temp[0]?.description} required
+                                  // onChange={(e) => ()} 
+                                  />
+                                  <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                    {/* for error messages{error?.property_name}*/}</p>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Addon Price field */}
+                            <div key={idx * 8 + 20} className="w-full lg:w-6/12  px-4">
+                              <div className="relative w-full mb-3">
+                                <label
+                                  className={`text-sm font-medium ${color?.text} block mb-2`}
+                                  htmlFor="grid-password">
+                                  Addon Price
+                                  <span style={{ color: "#ff0000" }}>*</span>
+                                </label>
+                                <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                                <div className={visible === 1 ? 'block' : 'hidden'}>
+                                  <input type='text' data-testid="test_property_name"
+                                    className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                    defaultValue={temp[0]?.price} required
+                                  // onChange={(e) => ()} 
+                                  />
+                                  <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                    {/* for error messages{error?.property_name}*/}</p>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Addon Services field */}
+                            <div key={idx * 8 + 20} className="w-full lg:w-6/12  px-4">
+                              <div className="relative w-full mb-3">
+                                <label
+                                  className={`text-sm font-medium ${color?.text} block mb-2`}
+                                  htmlFor="grid-password">
+                                  Addon Serves to
+                                  <span style={{ color: "#ff0000" }}>*</span>
+                                </label>
+                                <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                                <div className={visible === 1 ? 'block' : 'hidden'}>
+                                  <input type='text' data-testid="test_property_name"
+                                    className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                    defaultValue={temp[0]?.serves} required
+                                  // onChange={(e) => ()} 
+                                  />
+                                  <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                    {/* for error messages{error?.property_name}*/}</p>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Addon quantity field */}
+                            <div key={idx * 8 + 20} className="w-full lg:w-6/12  px-4">
+                              <div className="relative w-full mb-3">
+                                <label
+                                  className={`text-sm font-medium ${color?.text} block mb-2`}
+                                  htmlFor="grid-password">
+                                  Addon Has Quantity
+                                  <span style={{ color: "#ff0000" }}>*</span>
+                                </label>
+                                <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                                <div className={visible === 1 ? 'block' : 'hidden'}>
+                                  <input type='text' data-testid="test_property_name"
+                                    className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                    defaultValue={temp[0]?.quantity} required
+                                  // onChange={(e) => ()} 
+                                  />
+                                  <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                    {/* for error messages{error?.property_name}*/}</p>
+                                </div>
+                              </div>
+                            </div>
+
+
+
                           </div>
                         )
                       })}
 
-                      <>
-                        <span className={`text-sm flex text-3xl font-bold ${color?.text} block mb-2`}>ADD ONS</span>
-
-                        {activity.add_on.map((add, idx) => {
-                          let temp = addons.filter(i => i.addon_id === add.addon_id);
-                          return (
-                            <div key={idx}>
-
-                              <p>Addon Name: {temp[0]?.name}</p>
-                              <p>Addon Provider: {temp[0]?.provider}</p>
-                              <p>Addon description: {temp[0]?.description}</p>
-                              <p>Addon Price: {temp[0]?.price}</p>
-                              <p>Addon Serves to: {temp[0]?.serves}</p>
-                              <p>Addon Has Quantity: {temp[0]?.quantity} </p>
+                      {/* Provider label */}
+                      <div className="relative w-full mt-4 ">
+                        <label
+                          className={`text-sm font-black ${color?.text} block mb-2`}
+                          htmlFor="grid-password">
+                          Providers
+                          <span style={{ color: "#ff0000" }}>*</span>
+                        </label>
+                      </div>
+                      {/* providers */}
+                      {activity?.providers?.map((add, idx) => {
+                        let temp = providers.filter(i => i.provider_id === add.provider_id);
+                        return (<div key={idx} className="mt-4 mb-4 p-4 shadow-lg border flex flex-wrap lg:w-full">
+                          {/* Provider category name field */}
+                          <div key={idx * 8 + 20} className="w-full lg:w-6/12  px-4">
+                            <div className="relative w-full mb-3">
+                              <label
+                                className={`text-sm font-medium ${color?.text} block mb-2`}
+                                htmlFor="grid-password">
+                                Provider Category
+                                <span style={{ color: "#ff0000" }}>*</span>
+                              </label>
+                              <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                              <div className={visible === 1 ? 'block' : 'hidden'}>
+                                <input type='text' data-testid="test_property_name"
+                                  className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                  defaultValue={temp[0]?.provider_category} required
+                                // onChange={(e) => ()} 
+                                />
+                                <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                  {/* for error messages{error?.property_name}*/}</p>
+                              </div>
                             </div>
-                          )
-                        })}
-                        <br />
-                        <span className={`text-sm flex text-3xl font-bold ${color?.text} block mb-2`}>List of Service Providers</span>
-
-                        <span className={`text-sm flex text-3xl mt-4 font-bold ${color?.text} block mb-2`}>Providers</span>
-                        {activity.providers.map((add, idx) => {
-                          let temp = providers.filter(i => i.provider_id === add.provider_id);
-                          return (<div key={idx}>
-
-                            <p>Provider Category: {temp[0]?.provider_category}</p>
-                            <p>Provider Name: {temp[0]?.Name}</p>
-                            <p>Company: {temp[0]?.Company}</p>
-                            <p>Languages: {temp[0]?.languageOptions?.toString()}</p>
-                            <p>Guide Experience: {temp[0]?.guideExperience?.years}</p>
-                            <p>Guide Certificates: {temp[0]?.guideExperience?.certifications.toString()} </p>
-                            <p>Guide Specialisations: {temp[0]?.guideExperience?.specializations.toString()} </p>
                           </div>
-                          )
-                        })}
-                      </>
 
-                    </div>
+                          {/* Provider name field */}
+                          <div key={idx * 8 + 20} className="w-full lg:w-6/12  px-4">
+                            <div className="relative w-full mb-3">
+                              <label
+                                className={`text-sm font-medium ${color?.text} block mb-2`}
+                                htmlFor="grid-password">
+                                Provider Name
+                                <span style={{ color: "#ff0000" }}>*</span>
+                              </label>
+                              <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                              <div className={visible === 1 ? 'block' : 'hidden'}>
+                                <input type='text' data-testid="test_property_name"
+                                  className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                  defaultValue={temp[0]?.Name} required
+                                // onChange={(e) => ()} 
+                                />
+                                <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                  {/* for error messages{error?.property_name}*/}</p>
+                              </div>
+                            </div>
+                          </div>
+
+
+                          {/* Provider Company name field */}
+                          <div key={idx * 8 + 20} className="w-full lg:w-6/12  px-4">
+                            <div className="relative w-full mb-3">
+                              <label
+                                className={`text-sm font-medium ${color?.text} block mb-2`}
+                                htmlFor="grid-password">
+                                Company
+                                <span style={{ color: "#ff0000" }}>*</span>
+                              </label>
+                              <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                              <div className={visible === 1 ? 'block' : 'hidden'}>
+                                <input type='text' data-testid="test_property_name"
+                                  className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                  defaultValue={temp[0]?.Company} required
+                                // onChange={(e) => ()} 
+                                />
+                                <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                  {/* for error messages{error?.property_name}*/}</p>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Provider Experience field */}
+                          <div key={idx * 8 + 20} className="w-full lg:w-6/12  px-4">
+                            <div className="relative w-full mb-3">
+                              <label
+                                className={`text-sm font-medium ${color?.text} block mb-2`}
+                                htmlFor="grid-password">
+                                Experience
+                                <span style={{ color: "#ff0000" }}>*</span>
+                              </label>
+                              <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                              <div className={visible === 1 ? 'block' : 'hidden'}>
+                                <input type='text' data-testid="test_property_name"
+                                  className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                  defaultValue={temp[0]?.guideExperience?.years} required
+                                // onChange={(e) => ()} 
+                                />
+                                <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                  {/* for error messages{error?.property_name}*/}</p>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Languages field */}
+                          <div key={idx * 8 + 20} className="w-full lg:w-6/12  px-4">
+                            <div className="relative w-full mb-3">
+                              <label
+                                className={`text-sm font-medium ${color?.text} block mb-2`}
+                                htmlFor="grid-password">
+                                Languages
+                                <span style={{ color: "#ff0000" }}>*</span>
+                              </label>
+                              <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                              <div className={visible === 1 ? 'block' : 'hidden'}>
+                                <select className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}>
+                                  {temp[0]?.languageOptions.map((item, i) => { return (<option value={item} key={i}>{item}</option>) })}
+                                </select>
+                                <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                  {/* for error messages{error?.property_name}*/}</p>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Certification field */}
+                          <div key={idx * 8 + 20} className="w-full lg:w-6/12  px-4">
+                            <div className="relative w-full mb-3">
+                              <label
+                                className={`text-sm font-medium ${color?.text} block mb-2`}
+                                htmlFor="grid-password">
+                                Certification
+                                <span style={{ color: "#ff0000" }}>*</span>
+                              </label>
+                              <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                              <div className={visible === 1 ? 'block' : 'hidden'}>
+                                <select className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}>
+                                  {temp[0]?.guideExperience?.certifications.map((item, i) => { return (<option value={item} key={i}>{item}</option>) })}
+                                </select>
+                                <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                  {/* for error messages{error?.property_name}*/}</p>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Specialization field */}
+                          <div key={idx * 8 + 20} className="w-full lg:w-6/12  px-4">
+                            <div className="relative w-full mb-3">
+                              <label
+                                className={`text-sm font-medium ${color?.text} block mb-2`}
+                                htmlFor="grid-password">
+                                Specialisations
+                                <span style={{ color: "#ff0000" }}>*</span>
+                              </label>
+                              <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                              <div className={visible === 1 ? 'block' : 'hidden'}>
+                                <select className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}>
+                                  {temp[0]?.guideExperience?.specializations.map((item, i) => { return (<option value={item} key={i}>{item}</option>) })}
+                                </select>
+                                <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                  {/* for error messages{error?.property_name}*/}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        )
+                      })}
+                    </>
+
                   </div>
                 </div>
               </div>
+            </div>
 
-            )
-          })}
+            <div className='flex items-center justify-end space-x-2 border border-black sm:space-x-3 ml-auto'>
+              <Button Primary={language?.Previous} onClick={() => { setDisp(2) }} />
+            </div>
 
+
+          </div>
         </div>
+
 
       </div >
       <Footer color={color} Primary={english.Foot} />
