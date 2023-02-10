@@ -784,8 +784,8 @@ function Index() {
         "max": 7
       },
       "servicesOffered": {
-        "Veg Food": true,
-        "Non-Veg Food": true,
+        "site seeing": true,
+        "guiding": true,
       },
       "contactInformation": {
         "email": "taxi@t2k.com",
@@ -1796,7 +1796,7 @@ function Index() {
                       </div>
                     </div>
 
-                    {/* place field */}
+                    {/* place */}
                     <div className="w-full lg:w-6/12  px-4">
                       <div className="relative w-full mb-3">
                         <label
@@ -2192,6 +2192,154 @@ function Index() {
                               </div>
                             </div>
                           </div>
+
+                           {/* Services offered */}
+                            <div key={idx * 8 + 20} className="w-full lg:w-6/12  px-4">
+                            <div className="relative w-full mb-3">
+                              <label
+                                className={`text-sm font-medium ${color?.text} block mb-2`}
+                                htmlFor="grid-password">
+                                Services offered
+                                <span style={{ color: "#ff0000" }}>*</span>
+                              </label>
+                              <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                              <div className={visible === 1 ? 'block' : 'hidden'}>
+                                <select className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}>
+                                {Object.keys(temp[0]?.servicesOffered).map((item, i) => { return (<option value={item} key={i}>{item}</option>) })}
+                                </select>
+                                <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                  {/* for error messages{error?.property_name}*/} </p>
+                              </div>
+                            </div>
+                          </div> 
+
+
+                           {/* Contact email information */}
+                           <div key={idx * 8 + 20} className="w-full lg:w-6/12  px-4">
+                            <div className="relative w-full mb-3">
+                              <label
+                                className={`text-sm font-medium ${color?.text} block mb-2`}
+                                htmlFor="grid-password">
+                                Email
+                                <span style={{ color: "#ff0000" }}>*</span>
+                              </label>
+                              <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                              <div className={visible === 1 ? 'block' : 'hidden'}>
+                                <input type='text' className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                defaultValue={temp[0]?.contactInformation.email} />
+                                <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                  {/* for error messages{error?.property_name}*/}</p>
+                              </div>
+                            </div>
+                          </div>
+
+                           {/* Contact phone information */}
+                           <div key={idx * 8 + 20} className="w-full lg:w-6/12  px-4">
+                            <div className="relative w-full mb-3">
+                              <label
+                                className={`text-sm font-medium ${color?.text} block mb-2`}
+                                htmlFor="grid-password">
+                                Phone
+                                <span style={{ color: "#ff0000" }}>*</span>
+                              </label>
+                              <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                              <div className={visible === 1 ? 'block' : 'hidden'}>
+                                <input type='text' className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                defaultValue={temp[0]?.contactInformation.phone} />
+                                <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                  {/* for error messages{error?.property_name}*/}</p>
+                              </div>
+                            </div>
+                          </div>
+                           {/* Contact website information */}
+                           <div key={idx * 8 + 20} className="w-full lg:w-6/12  px-4">
+                            <div className="relative w-full mb-3">
+                              <label
+                                className={`text-sm font-medium ${color?.text} block mb-2`}
+                                htmlFor="grid-password">
+                                Website
+                                <span style={{ color: "#ff0000" }}>*</span>
+                              </label>
+                              <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                              <div className={visible === 1 ? 'block' : 'hidden'}>
+                                <input type='text' className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                defaultValue={temp[0]?.contactInformation.website} />
+                                <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                  {/* for error messages{error?.property_name}*/}</p>
+                              </div>
+                            </div>
+                          </div>
+
+
+                           {/*Provider review */}
+                           <span key={idx * 8 + 20} className="w-full   px-4">Provider Review</span>
+                            <div >
+                            {
+                              temp[0]?.reviews?.map((item,id)=>{
+                                return (<div key={id}
+                                  className="mt-4 mb-4 p-4 shadow-lg border flex flex-wrap lg:w-11/12">
+
+                                    {/* reviewer name */}
+                                    {/* Reviewers name*/}
+                           <div key={idx * 8 + 20} className="w-full lg:w-6/12  px-4">
+                            <div className="relative w-full mb-3">
+                              <label
+                                className={`text-sm font-medium ${color?.text} block mb-2`}
+                                htmlFor="grid-password">
+                                Reviewers name
+                                <span style={{ color: "#ff0000" }}>*</span>
+                              </label>
+                              <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                              <div className={visible === 1 ? 'block' : 'hidden'}>
+                                <input type='text' className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                defaultValue={item?.name} />
+                                <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                  {/* for error messages{error?.property_name}*/}</p>
+                              </div>
+                            </div>
+                          </div>
+                                    {/* Ratings*/}
+                           <div key={idx * 8 + 20} className="w-full lg:w-6/12  px-4">
+                            <div className="relative w-full mb-3">
+                              <label
+                                className={`text-sm font-medium ${color?.text} block mb-2`}
+                                htmlFor="grid-password">
+                                Ratings
+                                <span style={{ color: "#ff0000" }}>*</span>
+                              </label>
+                              <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                              <div className={visible === 1 ? 'block' : 'hidden'}>
+                                <input type='text' className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                defaultValue={item?.rating} />
+                                <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                  {/* for error messages{error?.property_name}*/}</p>
+                              </div>
+                            </div>
+                          </div>
+                                    {/* Review*/}
+                           <div key={idx * 8 + 20} className="w-full lg:w-6/12  px-4">
+                            <div className="relative w-full mb-3">
+                              <label
+                                className={`text-sm font-medium ${color?.text} block mb-2`}
+                                htmlFor="grid-password">
+                                Review
+                                <span style={{ color: "#ff0000" }}>*</span>
+                              </label>
+                              <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                              <div className={visible === 1 ? 'block' : 'hidden'}>
+                                <input type='text' className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                defaultValue={item?.review} />
+                                <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                  {/* for error messages{error?.property_name}*/}</p>
+                              </div>
+                            </div>
+                          </div>
+                                  {/* {JSON.stringify(item)} */}
+                                </div>)
+                              })
+                            }
+                            </div>
+                         
                         </div>
                         )
                       })}
