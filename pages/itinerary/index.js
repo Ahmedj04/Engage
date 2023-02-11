@@ -1439,7 +1439,7 @@ function Index() {
         </div>
 
 
-
+      {/* itinerary basic functionality */}
         <div id='1' className={disp === 1 ? 'block' : 'hidden'}>
           {/* progress bar */}
           <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
