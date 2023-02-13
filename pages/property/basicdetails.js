@@ -74,22 +74,21 @@ export default function BasicDetails() {
     }
   }
 
+
   const fetchBasicDetails = async () => {
-    const url = `/api/${currentProperty.address_province.replace(
-      /\s+/g,
-      "-"
-    )}/${currentProperty.address_city}/${currentProperty.property_category
-      }s/${currentProperty.property_id}`;
-    axios.get(url)
-      .then((response) => {
-        setBasicDetails(response?.data);
-        setAllHotelDetails(response?.data);
-        setImageLogo(response?.data?.logo)
-        logger.info("url  to fetch property details hitted successfully")
-        setVisible(1)
-      })
-      .catch((error) => { logger.error("url to fetch property details, failed") });
-  }
+    try {
+      const { address_province, address_city, property_category, property_id } = currentProperty;
+      const url = `/api/${address_province.replace(/\s+/g, "-")}/${address_city}/${property_category}s/${property_id}`;
+      const response = await axios.get(url);
+      setBasicDetails(response.data);
+      setAllHotelDetails(response.data);
+      setImageLogo(response.data.logo);
+      logger.info("url to fetch property details hit successfully");
+      setVisible(1);
+    } catch (error) {
+      logger.error("url to fetch property details failed");
+    }
+  };
 
 
   /* Function call to fetch Current Property Details when page loads */
