@@ -1,4 +1,5 @@
 export default {
+  places:"lieux",
   logo:"Logo",
   systemprefrence:"Préférences de Système",
   colorscheme:"Schéma de Couleur",
