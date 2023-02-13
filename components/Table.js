@@ -22,7 +22,7 @@ const Table = (args) => {
         "id": ''
     });
 
-    function myFunction() {
+    function  searchFunction() {
         // Declare variables
         var input, filter, table, tr, td, i, txtValue;
         input = document.getElementById("myInput");
@@ -110,7 +110,7 @@ const Table = (args) => {
                         <form className="lg:pr-3" action="#" method="GET">
                             <label htmlFor="users-search" className="sr-only">{args?.common?.search}</label>
                             <div className="mt-1 relative lg:w-64 xl:w-96">
-                                <input type="text" name="email" id="myInput" onKeyUp={myFunction}
+                                <input type="text" name="email" id="myInput" onKeyUp={ searchFunction}
                                     className={`${args?.color?.greybackground} border border-gray-300 ${args?.color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} placeholder={args?.common?.Search}>
                                 </input>
                             </div>

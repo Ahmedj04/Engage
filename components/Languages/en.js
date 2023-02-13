@@ -1,4 +1,5 @@
 export default {
+  places:"Places",
   logo:"Logo",
   systemprefrences:"System Prefrences",
   colorscheme:"Color Scheme",
@@ -804,7 +805,36 @@ inventory:'./inventories',
 promotion:'./promotions',
 modification:'./modifications',
 extraguestcharge:'./extraguestcharges',
-inbox:'./inbox'
+inbox:'./inbox',
+places:'../places'
+},
+"PlaceSide":{
+ dashboard:'../property/dashboard',
+ basicdetails:'../property/basicdetails',
+ address:'../property/address',
+ contact:'../property/contact',
+ reviews:'../property/reviews',
+ gallery:'../property/gallery',
+ services: '../property/services',
+ propertysummary:'../property/propertysummary',
+ roombundle:'../property/allroombundles',
+ rooms:'../property/rooms',
+ packages:'../property/packages',
+ result:'../property/allresults',
+propertysummary:'../property/propertysummary',
+propertyxml:'../property/propertyxml',
+roomsxml:'../property/roomsxml',
+raterules:'../property/raterules',
+additionalservices:'../property/additionalservices',
+theme:'../property/theme',
+pointofsale:'../property/pointofsales',
+availability:'../property/availability',
+inventory:'../property/inventories',
+promotion:'../property/promotions',
+modification:'../property/modifications',
+extraguestcharge:'../property/extraguestcharges',
+inbox:'../property/inbox',
+places:'./places/index'
 },
 
 

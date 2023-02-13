@@ -1,4 +1,5 @@
 export default {
+  places:"أماكن",
   logo:"شعار",
   systemprefrences:"تفضيلات النظام",
   colorscheme:"نظام الألوان",
