@@ -834,7 +834,7 @@ promotion:'../property/promotions',
 modification:'../property/modifications',
 extraguestcharge:'../property/extraguestcharges',
 inbox:'../property/inbox',
-places:'./places/index'
+places:'../places'
 },
 
 

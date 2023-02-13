@@ -3,25 +3,99 @@ import Sidebar from "../../components/Sidebar";
 import Header from "../../components/Header";
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
-import language from "../../components/Languages/en";
+import english from "../../components/Languages/en";
+import french from "../../components/Languages/fr"
+import arabic from "../../components/Languages/ar"
 import { useRouter } from "next/router"
 import Headloader from "../../components/loaders/headloader";
 import LineLoader from '../../components/loaders/lineloader';
 import Button from '../../components/Button';
+import Title from '../../components/title';
+import colorFile from '../../components/color';
+let colorToggle;
+let language;
+let currentProperty;
+let currentLogged;
 // main function
 const Place = () => {
     // states to store data 
-    const [basicDetails, setBasicDetails] = useState({ "propert_name": "client", "property_id": "t2k0032" });
-    const [visible, setVisible] = useState(0)
+    const [visible, setVisible] = useState(1)
     const [attraction, setAttraction] = useState({})
     const [disp, setDisp] = useState(0)
     const [place, setPlace] = useState({})
-    const [color, setColor] = useState({ "text": "black" })
-    const currentLogged = { "id": "user001" }
+    const [color, setColor] = useState({})
+    const [error, setError] = useState({})
+    const [mode, setMode] = useState()
+    const router = useRouter();
+
+
     // to execute as soon as page loads
+
+    // first function to be executed
+    const firstfun = () => {
+        if (typeof window !== 'undefined') {
+            var locale = localStorage.getItem("Language");
+            colorToggle = localStorage.getItem("colorToggle");
+            if (colorToggle === "" || colorToggle === undefined || colorToggle === null || colorToggle === "system") {
+                window.matchMedia("(prefers-color-scheme:dark)").matches === true ? setColor(colorFile?.dark) : setColor(colorFile?.light)
+                setMode(window.matchMedia("(prefers-color-scheme:dark)").matches === true ? true : false);
+            }
+            else if (colorToggle === "true" || colorToggle === "false") {
+                setColor(colorToggle === "true" ? colorFile?.dark : colorFile?.light);
+                setMode(colorToggle === "true" ? true : false)
+            }
+            {
+                if (locale === "ar") {
+                    language = arabic;
+                }
+                if (locale === "en") {
+                    language = english;
+                }
+                if (locale === "fr") {
+                    language = french;
+
+                }
+            }
+            /** Current Property Details fetched from the local storage **/
+            currentProperty = JSON.parse(localStorage.getItem("property"));
+            currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
+
+        }
+    }
+
+    //will run as soon as page loads
     useEffect(() => {
-        fetchPlace()
+        firstfun();
     }, [])
+
+    useEffect(() => {
+        if (JSON.stringify(currentLogged) === 'null') {
+            router?.push(window.location.origin)
+        }
+        else {
+            fetchPlace()
+        }
+
+    }, []);
+
+    const colorToggler = (newColor) => {
+        if (newColor === 'system') {
+            window.matchMedia("(prefers-color-scheme:dark)").matches === true ? setColor(colorFile?.dark)
+                : setColor(colorFile?.light)
+            localStorage.setItem("colorToggle", newColor)
+        }
+        else if (newColor === 'light') {
+            setColor(colorFile?.light)
+            localStorage.setItem("colorToggle", false)
+        }
+        else if (newColor === 'dark') {
+            setColor(colorFile?.dark)
+            localStorage.setItem("colorToggle", true)
+        }
+        firstfun();
+        router.push('../places/place')
+    }
+
     //    function to fetch data
     const fetchPlace = async () => {
         axios.get('/api/places/srinagar').then((response) => {
@@ -32,11 +106,15 @@ const Place = () => {
         console.log("Place Data fetched");
     }
 
+
+
     return (
         <div>
-            <Header />
-            <Sidebar />
-            <div className='px-4 pt-24 pb-2 relative overflow-y-auto lg:ml-64'>
+            <Title name={`Engage |  ${language?.places}`} />
+            <Header color={color} Primary={english.PlaceSide} Type={currentLogged?.user_type} Sec={colorToggler} mode={mode} setMode={setMode} />
+            <Sidebar color={color} Primary={english.PlaceSide} Type={currentLogged?.user_type} />
+
+            <div className={`${color?.greybackground} px-4 pt-24 pb-2 h-screen relative overflow-y-auto lg:ml-64`}>
                 {/* Navbar */}
                 <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
                     <ol className="inline-flex items-center space-x-1 md:space-x-2">
@@ -76,14 +154,14 @@ const Place = () => {
                 {/* place definition */}
                 <div id='0' className={disp === 0 ? 'block' : 'hidden'}>
                     {/* progress bar */}
-                    <div key={0} className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
+                    <div className={`${color?.whitebackground} shadow rounded-lg px-12  sm:p-6 xl:p-8  2xl:col-span-2`}>
                         <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
-                        <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
                                 <div className={`${color.crossbg} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>Place</div>
                             </div>
-                           
-                          
+
+
                             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
                                 <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Gallery</div>
@@ -102,7 +180,7 @@ const Place = () => {
                         </div>
 
                         <div className=" md:px-4 mx-auto w-full">
-                            <div className="flex shadow border p-4 m-4 bg-white flex-wrap">
+                            <div className={`flex shadow border p-4 m-4 ${color?.whitebackground} flex-wrap`}>
                                 {/* place name */}
 
                                 <div className="w-full lg:w-6/12  px-4">
@@ -322,7 +400,7 @@ const Place = () => {
                                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">2</button>
                                 <div className={`${color.crossbg} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>Gallery</div>
                             </div>
-                            
+
 
                             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
@@ -338,7 +416,7 @@ const Place = () => {
                         </div>
 
                         <div className=" md:px-4 mx-auto w-full">
-                            <div className="flex shadow border p-4 m-4 bg-white flex-wrap">
+                            <div className={`flex shadow border p-4 m-4   ${color?.whitebackground} flex-wrap`}>
                                 <div className="w-full lg:w-6/12  px-4">
                                     <div className="relative w-full mb-3">
                                         <label
@@ -356,7 +434,7 @@ const Place = () => {
                                 <div className='flex'>
                                     {place?.images?.map((item, idx) => {
                                         return (<div key={idx} className=' p-2'>
-                                            <img src={item?.image_link} alt={item?.description}  />
+                                            <img src={item?.image_link} alt={item?.description} />
                                         </div>)
                                     })}
                                 </div>
@@ -376,30 +454,30 @@ const Place = () => {
 
                 {/* list of attraction */}
                 <div id='2' className={disp === 2 ? 'block' : 'hidden'}>
-                <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
-                       
-                           
-                          
-                            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
-                                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Places</div>
-                            </div>
-                            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-                                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Gallery</div>
-                            </div>
-
-                            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-                                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">3</button>
-                                <div className={`${color.crossbg} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>Attractions</div>
-                            </div>
+                    <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
 
 
-                            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
-                                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Attraction</div>
-                            </div>
+
+                        <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                            <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
+                            <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Places</div>
                         </div>
+                        <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                            <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
+                            <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Gallery</div>
+                        </div>
+
+                        <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                            <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">3</button>
+                            <div className={`${color.crossbg} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>Attractions</div>
+                        </div>
+
+
+                        <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                            <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
+                            <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Attraction</div>
+                        </div>
+                    </div>
 
                     <div>
                         {/* table of activities for day */}
@@ -421,7 +499,7 @@ const Place = () => {
                                                     <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-600 uppercase">Actions</th>
                                                 </tr>
                                             </thead>
-                                            <tbody className=" bg-white divide-y  divide-gray-200" id="TableList">
+                                            <tbody className={`${color?.whitebackground} divide-y  divide-gray-200`}  id="TableList">
                                                 {place?.attractions?.map((item, idx) => {
                                                     return (
                                                         <tr key={idx}>
@@ -474,7 +552,7 @@ const Place = () => {
 
                 {/* attraction   */}
                 <div id='3' className={disp === 3 ? 'block' : 'hidden'}>
-                  
+
                     {/* progress bar */}
                     <div key={0} className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
                         <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
@@ -500,7 +578,7 @@ const Place = () => {
                         </div>
 
 
-                        <div className='bg-white  mt-4 p-4 shadow divide-gray-200'>
+                        <div className={`${color?.whitebackground}  mt-4 p-4 shadow divide-gray-200`} >
                             <div className='flex flex-wrap'>
                                 <div className=" w-full lg:w-6/12  px-4">
                                     {/* attraction name  */}

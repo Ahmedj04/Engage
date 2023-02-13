@@ -22,9 +22,9 @@ const Table = (args) => {
         "id": ''
     });
 
-    function  searchFunction() {
+    function searchFunction() {
         // Declare variables
-        var input, filter, table, tr, td, i, txtValue;
+        let input, filter, table, tr, td, i, txtValue;
         input = document.getElementById("myInput");
         filter = input.value.toUpperCase();
         table = document.getElementById("myTable");
@@ -106,11 +106,11 @@ const Table = (args) => {
                 <h1 className={`text-xl sm:text-2xl font-semibold ${args?.color?.text}`}>{(args?.name !== "ARI") ? <>{args?.cols?.name}</> : <>{args?.name}</>}</h1>
                 <div className="sm:flex">
                     <div className=" sm:flex items-center sm:divide-x sm:divide-gray-100 mb-3 sm:mb-0">
-                       {/* search form */}
+                        {/* search form */}
                         <form className="lg:pr-3" action="#" method="GET">
                             <label htmlFor="users-search" className="sr-only">{args?.common?.search}</label>
                             <div className="mt-1 relative lg:w-64 xl:w-96">
-                                <input type="text" name="email" id="myInput" onKeyUp={ searchFunction}
+                                <input type="text" name="email" id="myInput" onKeyUp={searchFunction}
                                     className={`${args?.color?.greybackground} border border-gray-300 ${args?.color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} placeholder={args?.common?.Search}>
                                 </input>
                             </div>
@@ -479,7 +479,9 @@ const Table = (args) => {
                                 </tbody>
                             </table>
                         </div>
-                    </div></div></div>
+                    </div>
+                </div>
+            </div>
 
             {/* Pagination */}
             <div className={`${args?.color?.whitebackground} sticky sm:flex items-center w-full sm:justify-between bottom-0 right-0 border-t border-gray-200 p-4`}>
