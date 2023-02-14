@@ -198,7 +198,7 @@ function Rooms() {
             </li>
           </ol>
         </nav>
-
+  
         {/* Rooms Table */}
         <div className={(visible === 0 && colorToggle == false ? 'block' : 'hidden')}><LoaderTable /></div>
         <div className={(visible === 0 && colorToggle == true ? 'block' : 'hidden')}><LoaderDarkTable /></div>
