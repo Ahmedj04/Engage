@@ -26,7 +26,7 @@ const Place = () => {
     const [seasons, setSeasons] = useState([])
     const [languages, setLanguages] = useState([])
     const [categories, setCategories] = useState([])
-    const [info, setInfo] = useState({})
+    const [extraInfo, setExtraInfo] = useState([])
     const [color, setColor] = useState({})
     const [error, setError] = useState({})
     const [mode, setMode] = useState()
@@ -104,7 +104,7 @@ const Place = () => {
     const fetchPlace = async () => {
         axios.get('/api/places/srinagar').then((response) => {
             setPlace(response?.data);
-            setInfo(response?.data?.additional_information)
+            setExtraInfo(response?.data?.additional_information)
             setCategories(response?.data?.place_category)
             setLanguages(response?.data?.place_languages)
             setSeasons(response?.data?.place_seasons)
@@ -541,7 +541,7 @@ const Place = () => {
                                 </label>
 
                                 
-                                {info?.map((info, index) => {
+                                {extraInfo?.map((info, index) => {
                                     return (
                                         <div key={index} className='flex mt-4 flex-wrap'>
                                             {/*Additional info*/}
