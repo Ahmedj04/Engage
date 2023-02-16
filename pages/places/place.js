@@ -19,10 +19,14 @@ let currentLogged;
 // main function
 const Place = () => {
     // states to store data 
-    const [visible, setVisible] = useState(1)
+    const [visible, setVisible] = useState(0)
     const [attraction, setAttraction] = useState({})
     const [disp, setDisp] = useState(0)
     const [place, setPlace] = useState({})
+    const [seasons, setSeasons] = useState([])
+    const [languages, setLanguages] = useState([])
+    const [categories, setCategories] = useState([])
+    const [info, setInfo] = useState({})
     const [color, setColor] = useState({})
     const [error, setError] = useState({})
     const [mode, setMode] = useState()
@@ -100,6 +104,10 @@ const Place = () => {
     const fetchPlace = async () => {
         axios.get('/api/places/srinagar').then((response) => {
             setPlace(response?.data);
+            setInfo(response?.data?.additional_information)
+            setCategories(response?.data?.place_category)
+            setLanguages(response?.data?.place_languages)
+            setSeasons(response?.data?.place_seasons)
             setVisible(1);
         }).catch((err) => { alert(JSON.stringify(err)) })
 
@@ -147,9 +155,10 @@ const Place = () => {
                         </li>
                     </ol>
                 </nav>
-                <h6 className={`${color?.text} capitalize text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}>
+                <h6 className={`${color?.text} capitalize text-xl flex leading-none pl-6 lg:pt-2 pt-6 mb-8 font-bold`}>
                     {place?.name}
                 </h6>
+
 
                 {/* place definition */}
                 <div id='0' className={disp === 0 ? 'block' : 'hidden'}>
@@ -291,63 +300,8 @@ const Place = () => {
                                         </div>
                                     </div>
                                 </div>
-
-                                {/* Avg Summer Temp */}
-                                <div className="w-full lg:w-6/12  px-4">
-                                    <div className="relative w-full mb-3">
-                                        <label
-                                            className={`text-sm font-medium ${color?.text} block mb-2`}
-                                            htmlFor="grid-password">
-                                            Average Summer Temperature
-                                            <span style={{ color: "#ff0000" }}>*</span>
-                                        </label>
-                                        <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
-                                        <div className={visible === 1 ? 'block' : 'hidden'}>
-                                            <input
-                                                type="text" data-testid="test_property_name"
-                                                className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                                                defaultValue={place?.avg_summer_temp} required
-                                                onChange={
-                                                    (e) => (
-                                                        {}
-                                                    )
-                                                } />
-                                            {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
-                        {error?.property_name}
-                        </p> */}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* avg winter temp */}
-                                <div className="w-full lg:w-6/12  px-4">
-                                    <div className="relative w-full mb-3">
-                                        <label
-                                            className={`text-sm font-medium ${color?.text} block mb-2`}
-                                            htmlFor="grid-password">
-                                            Average Winter Temperature
-                                            <span style={{ color: "#ff0000" }}>*</span>
-                                        </label>
-                                        <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
-                                        <div className={visible === 1 ? 'block' : 'hidden'}>
-                                            <input
-                                                type="text" data-testid="test_property_name"
-                                                className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                                                defaultValue={place?.avg_winter_temp} required
-                                                onChange={
-                                                    (e) => (
-                                                        {}
-                                                    )
-                                                } />
-                                            {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
-                        {error?.property_name}
-                        </p> */}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* best time to visit */}
-                                <div className="w-full lg:w-6/12  px-4">
+                                   {/* best time to visit */}
+                                   <div className="w-full lg:w-6/12  px-4">
                                     <div className="relative w-full mb-3">
                                         <label
                                             className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -373,11 +327,276 @@ const Place = () => {
                                     </div>
                                 </div>
 
+
+                                <label className={`w-full lg:w-12/12 mt-3 mb-3 px-4 text-sm font-bold ${color?.text} block mb-2`} htmlFor="grid-password">
+                                    Climate
+
+                                </label>
+
+                                {seasons?.map((season, index) => {
+                                    return (<div key={index} className="flex mt-4 flex-wrap">
+
+                                        {/* season name  */}
+                                        <div className="w-full lg:w-6/12  px-4">
+                                            <div className="relative w-full mb-3">
+                                                <label
+                                                    className={`text-sm font-medium ${color?.text} block mb-2`}
+                                                    htmlFor="grid-password">
+                                                    Season Name
+                                                    <span style={{ color: "#ff0000" }}>*</span>
+                                                </label>
+                                                <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                                                <div className={visible === 1 ? 'block' : 'hidden'}>
+                                                    <input
+                                                        type="text" data-testid="test_property_name"
+                                                        className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                                        defaultValue={season?.season_name} required
+                                                        onChange={
+                                                            (e) => (
+                                                                {}
+                                                            )
+                                                        } />
+                                                    {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                        {error?.property_name}
+                        </p> */}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* season period  */}
+                                        <div className="w-full lg:w-6/12  px-4">
+                                            <div className="relative w-full mb-3">
+                                                <label
+                                                    className={`text-sm font-medium ${color?.text} block mb-2`}
+                                                    htmlFor="grid-password">
+                                                    Season Period
+                                                    <span style={{ color: "#ff0000" }}>*</span>
+                                                </label>
+                                                <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                                                <div className={visible === 1 ? 'block' : 'hidden'}>
+                                                    <input
+                                                        type="text" data-testid="test_property_name"
+                                                        className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                                        defaultValue={season?.period} required
+                                                        onChange={
+                                                            (e) => (
+                                                                {}
+                                                            )
+                                                        } />
+                                                    {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                        {error?.property_name}
+                        </p> */}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {/* mim temp */}
+
+                                        <div className="w-full lg:w-6/12  px-4">
+                                            <div className="relative w-full mb-3">
+                                                <label
+                                                    className={`text-sm font-medium ${color?.text} block mb-2`}
+                                                    htmlFor="grid-password">
+                                                    Min Temperature
+                                                    <span style={{ color: "#ff0000" }}>*</span>
+                                                </label>
+                                                <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                                                <div className={visible === 1 ? 'block' : 'hidden'}>
+                                                    <input
+                                                        type="text" data-testid="test_property_name"
+                                                        className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                                        defaultValue={season?.min_temp} required
+                                                        onChange={
+                                                            (e) => (
+                                                                {}
+                                                            )
+                                                        } />
+                                                    {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                        {error?.property_name}
+                        </p> */}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {/* min temp */}
+
+                                        <div className="w-full lg:w-6/12  px-4">
+                                            <div className="relative w-full mb-3">
+                                                <label
+                                                    className={`text-sm font-medium ${color?.text} block mb-2`}
+                                                    htmlFor="grid-password">
+                                                    Max Temperature
+                                                    <span style={{ color: "#ff0000" }}>*</span>
+                                                </label>
+                                                <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                                                <div className={visible === 1 ? 'block' : 'hidden'}>
+                                                    <input
+                                                        type="text" data-testid="test_property_name"
+                                                        className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                                        defaultValue={season?.max_temp} required
+                                                        onChange={
+                                                            (e) => (
+                                                                {}
+                                                            )
+                                                        } />
+                                                    {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                        {error?.property_name}
+                        </p> */}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {/* unit */}
+
+                                        <div className="w-full lg:w-6/12  px-4">
+                                            <div className="relative w-full mb-3">
+                                                <label
+                                                    className={`text-sm font-medium ${color?.text} block mb-2`}
+                                                    htmlFor="grid-password">
+                                                    Temperature Unit
+                                                    <span style={{ color: "#ff0000" }}>*</span>
+                                                </label>
+                                                <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                                                <div className={visible === 1 ? 'block' : 'hidden'}>
+                                                    <input
+                                                        type="text" data-testid="test_property_name"
+                                                        className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                                        defaultValue={season?.unit} required
+                                                        onChange={
+                                                            (e) => (
+                                                                {}
+                                                            )
+                                                        } />
+                                                    {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                        {error?.property_name}
+                        </p> */}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>)
+                                })}
+
+                                <label className={`w-full lg:w-12/12 mt-3 mb-3 px-4 text-sm font-bold ${color?.text} block mb-2`} htmlFor="grid-password">
+                                    Languages
+                                </label>
+                                {languages.map((language, index) => {
+                                    return (
+                                        <div key={index} className='flex mt-4 flex-wrap'>
+                                            {/*Languages*/}
+                                            <div className="w-full lg:w-full  px-4">
+                                                <div className="relative w-full mb-3">
+                                                    <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                                                    <div className={visible === 1 ? 'block' : 'hidden'}>
+                                                        <input
+                                                            type="text" data-testid="test_property_name"
+                                                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                                            defaultValue={language?.language} required
+                                                            onChange={
+                                                                (e) => (
+                                                                    {}
+                                                                )
+                                                            } />
+                                                        {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                        {error?.property_name}
+                        </p> */}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    )
+                                })}
+
+                                <label className={`w-full lg:w-12/12 mt-3 mb-3 px-4 text-sm font-bold ${color?.text} block mb-2`} htmlFor="grid-password">
+                                    Category
+                                </label>
+
+                                {categories?.map((category, index) => {
+                                    return (
+                                        <div key={index} className='flex mt-4 flex-wrap'>
+                                            {/*Languages*/}
+                                            <div className="w-full lg:w-full  px-4">
+                                                <div className="relative w-full mb-3">
+                                                    <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                                                    <div className={visible === 1 ? 'block' : 'hidden'}>
+                                                        <input
+                                                            type="text" data-testid="test_property_name"
+                                                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                                            defaultValue={category?.cat_name} required
+                                                            onChange={
+                                                                (e) => (
+                                                                    {}
+                                                                )
+                                                            } />
+                                                        {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                        {error?.property_name}
+                        </p> */}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )
+                                })}
+
+                                <label className={`w-full lg:w-12/12 mt-3 mb-3 px-4 text-sm font-bold ${color?.text} block mb-2`} htmlFor="grid-password">
+                                    Additional Information
+                                </label>
+
+                                
+                                {info?.map((info, index) => {
+                                    return (
+                                        <div key={index} className='flex mt-4 flex-wrap'>
+                                            {/*Additional info*/}
+                                            <div className="w-full lg:w-6/12  px-4">
+                                                <div className="relative w-full mb-3">
+                                                    <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                                                    <div className={visible === 1 ? 'block' : 'hidden'}>
+                                                        <input
+                                                            type="text" data-testid="test_property_name"
+                                                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                                            defaultValue={info?.key} required
+                                                            onChange={
+                                                                (e) => (
+                                                                    {}
+                                                                )
+                                                            } />
+                                                      
+                                                        {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                        {error?.property_name}
+                        </p> */}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {/*Additional info*/}
+                                            <div className="w-full lg:w-6/12  px-4">
+                                                <div className="relative w-full mb-3">
+                                                    <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                                                    <div className={visible === 1 ? 'block' : 'hidden'}>
+                                                    <input
+                                                            type="text" data-testid="test_property_name"
+                                                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                                            defaultValue={info?.value} required
+                                                            onChange={
+                                                                (e) => (
+                                                                    {}
+                                                                )
+                                                            } />
+                                                      
+                                                        {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                        {error?.property_name}
+                        </p> */}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )
+                                })}
+
+
+                             
                             </div>
                         </div>
                         {/* button div */}
                         <div className='flex justify-end mt-2 '>
-                            <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                            <button className="bg-gradient-to-r mb-4 bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
                                 onClick={() => setDisp(1)}>Next </button>
                         </div>
 
@@ -499,7 +718,7 @@ const Place = () => {
                                                     <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-600 uppercase">Actions</th>
                                                 </tr>
                                             </thead>
-                                            <tbody className={`${color?.whitebackground} divide-y  divide-gray-200`}  id="TableList">
+                                            <tbody className={`${color?.whitebackground} divide-y  divide-gray-200`} id="TableList">
                                                 {place?.attractions?.map((item, idx) => {
                                                     return (
                                                         <tr key={idx}>
