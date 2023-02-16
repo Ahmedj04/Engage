@@ -168,7 +168,7 @@ const Table = (args) => {
                 </div>
             </div>
             {/* Table */}
-            <div className="flex flex-col mt-8 lg:-mr-20 sm:mr-0">
+            <div className="flex flex-col mt-8 lg:-mr-20 sm:mr-0 w-full ">
                 <div className="overflow-x-auto">
                     <div className="align-middle inline-block min-w-full">
                         <div className="shadow overflow-hidden">
