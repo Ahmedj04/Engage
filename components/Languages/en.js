@@ -863,7 +863,8 @@ inventory:'../inventories',
 promotion:'../promotions',
 modification:'../modifications',
 extraguestcharge:'../extraguestcharges',
-inbox:'../inbox'
+inbox:'../inbox',
+places:'../../places'
  },
  
  "Side2":{
