@@ -1,6 +1,7 @@
 import axios from 'axios'
 import Sidebar from "../../components/Sidebar";
 import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import english from "../../components/Languages/en";
@@ -12,6 +13,8 @@ import LineLoader from '../../components/loaders/lineloader';
 import Button from '../../components/Button';
 import Title from '../../components/title';
 import colorFile from '../../components/color';
+import Multiselect from 'multiselect-react-dropdown';
+import GlobalData from '../../components/GlobalData'
 let colorToggle;
 let language;
 let currentProperty;
@@ -75,6 +78,7 @@ const Place = () => {
     //will run as soon as page loads
     useEffect(() => {
         firstfun();
+
     }, [])
 
     useEffect(() => {
@@ -111,8 +115,10 @@ const Place = () => {
             setPlace(response?.data);
             setExtraInfo(response?.data?.additional_information)
             setCategories(response?.data?.place_category)
-            setLanguages(response?.data?.place_languages)
+            //setLanguages(response?.data?.place_languages)
+            setLanguages((response?.data?.place_languages?.map(lang => GlobalData.LanguageData.filter(i => i.language_code === lang.language))).flat())
             setSeasons(response?.data?.place_seasons)
+
             setVisible(1);
         }).catch((err) => { alert(JSON.stringify(err)) })
 
@@ -142,13 +148,31 @@ const Place = () => {
         }
     }
 
+    //changing multiselected data
+    const languageViews = (viewData) => {
+        console.log("multiselect data changed")
+        // setFinalView([]);
+        // var final_view_data = []
+        // viewData.map(item => {
+        //   var temp = {
+        //     view: item?.view
+        //   }
+        //   final_view_data.push(temp)
+        // });
+        // setFinalView(final_view_data);
+        // setRoomView(1)
+    }
+
+    //catgory
+    const category=[{category_name:'Adventure'},{category_name:'biking'},{category_name:'honey-moon'}]
+    const selectedCategory=[{category_name:'Adventure'}]
     return (
         <div>
             <Title name={`Engage |  ${language?.places}`} />
             <Header color={color} Primary={english.PlaceSide} Type={currentLogged?.user_type} Sec={colorToggler} mode={mode} setMode={setMode} />
             <Sidebar color={color} Primary={english.PlaceSide} Type={currentLogged?.user_type} />
 
-            <div className={`${color?.greybackground} px-4 pt-24 pb-2 h-screen relative overflow-y-auto lg:ml-64`}>
+            <div className={`${color?.greybackground} px-4 pt-24 pb-2 h-screen relative overflow-y-auto  lg:ml-64`}>
                 {/* Navbar */}
                 <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
                     <ol className="inline-flex items-center space-x-1 md:space-x-2">
@@ -181,15 +205,16 @@ const Place = () => {
                         </li>
                     </ol>
                 </nav>
-                <h6 className={`${color?.text} capitalize text-xl flex leading-none pl-6 lg:pt-2 pt-6 mb-8 font-bold`}>
+                <h6 className={`${color?.text} capitalize text-xl flex leading-none pl-6 lg:pt-2 pt-6 mb-2 font-bold`}>
                     {place?.name}
                 </h6>
 
 
                 {/* place definition */}
                 <div id='0' className={disp === 0 ? 'block' : 'hidden'}>
-                    {/* progress bar */}
-                    <div className={`${color?.whitebackground} shadow rounded-lg px-12  sm:p-6 xl:p-8  2xl:col-span-2`}>
+                    {/* main display div */}
+                    <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
+                        {/* progress bar */}
                         <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
                             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
@@ -213,9 +238,9 @@ const Place = () => {
                                 <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Attraction</div>
                             </div>
                         </div>
-
+                        {/* progress end*/}
                         <div className=" md:px-4 mx-auto w-full">
-                            <div className={`flex shadow border p-4 m-4 ${color?.whitebackground} flex-wrap`}>
+                            <div className={`flex ${color?.whitebackground} flex-wrap`}>
                                 {/* place name */}
 
                                 <div className="w-full lg:w-6/12  px-4">
@@ -353,67 +378,61 @@ const Place = () => {
                                     </div>
                                 </div>
 
-                                <label className={`w-full lg:w-12/12 mt-3 mb-3 px-4 text-sm font-bold ${color?.text} block mb-2`} htmlFor="grid-password">
-                                    Languages
-                                </label>
-                                {languages.map((language, index) => {
-                                    return (
-                                        <div key={index} className='flex mt-4 flex-wrap'>
-                                            {/*Languages*/}
-                                            <div className="w-full lg:w-full  px-4">
-                                                <div className="relative w-full mb-3">
-                                                    <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
-                                                    <div className={visible === 1 ? 'block' : 'hidden'}>
-                                                        <input
-                                                            type="text" data-testid="test_property_name"
-                                                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                                                            defaultValue={language?.language} required
-                                                            onChange={
-                                                                (e) => (
-                                                                    {}
-                                                                )
-                                                            } />
-                                                        {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
-                        {error?.property_name}
-                        </p> */}
-                                                    </div>
-                                                </div>
-                                            </div>
+                                {/* place languages */}
+                                <div className="w-full lg:w-6/12 px-4">
+                                    <div className="relative w-full mb-3">
+                                        <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                                            htmlFor="grid-password">
+                                            Languages
+                                            <span style={{ color: "#ff0000" }}>*</span>
+                                        </label>
+                                        <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                                        <div className={visible === 1 ? 'block' : 'hidden'}>
+                                            <Multiselect
+                                                className={`shadow-sm ${color?.greybackground} ${color?.text} mb-3 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full
+                       `}
+                                                isObject={true}
+                                                options={GlobalData?.LanguageData}
+                                                onRemove={(event) => { languageViews(event) }}
+                                                onSelect={(event) => { languageViews(event) }}
+                                                selectedValues={languages}
+                                                displayValue="language_name"
 
+                                            />
+                                            <p className="text-sm text-sm text-red-700 font-light">
+                                                {error?.view}</p>
                                         </div>
-                                    )
-                                })}
+                                    </div>
+                                </div>
 
-                                <label className={`w-full lg:w-12/12 mt-3 mb-3 px-4 text-sm font-bold ${color?.text} block mb-2`} htmlFor="grid-password">
-                                    Category
-                                </label>
 
-                                {categories?.map((category, index) => {
-                                    return (
-                                        <div key={index} className='flex mt-4 flex-wrap'>
-                                            {/*Languages*/}
-                                            <div className="w-full lg:w-full  px-4">
-                                                <div className="relative w-full mb-3">
-                                                    <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
-                                                    <div className={visible === 1 ? 'block' : 'hidden'}>
-                                                        <input
-                                                            type="text" data-testid="test_property_name"
-                                                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                                                            defaultValue={category?.cat_name} required
-                                                            onChange={
-                                                                (e) => (
-                                                                    {}
-                                                                )
-                                                            } />
-                                                        {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
-                        {error?.property_name}
-                        </p> */}
-                                                    </div>
-                                                </div>
-                                            </div>
+                                {/* Categories */}
+                                <div className="w-full lg:w-6/12 px-4">
+                                    <div className="relative w-full mb-3">
+                                        <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                                            htmlFor="grid-password">
+                                            Categories
+                                            <span style={{ color: "#ff0000" }}>*</span>
+                                        </label>
+                                        <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                                        <div className={visible === 1 ? 'block' : 'hidden'}>
+                                            <Multiselect
+                                                className={`shadow-sm ${color?.greybackground} ${color?.text} mb-3 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full
+                       `}
+                                                isObject={true}
+                                                options={category}
+                                                onRemove={(event) => { languageViews(event) }}
+                                                onSelect={(event) => { languageViews(event) }}
+                                                selectedValues={selectedCategory}
+                                                displayValue="category_name"
+
+                                            />
+                                            <p className="text-sm text-sm text-red-700 font-light">
+                                                {error?.view}</p>
                                         </div>
-                                    )
-                                })}
+                                    </div>
+                                </div>
+
 
                                 <label className={`w-full lg:w-12/12 mt-3 mb-3 px-4 text-sm font-bold ${color?.text} block mb-2`} htmlFor="grid-password">
                                     Additional Information
@@ -480,6 +499,7 @@ const Place = () => {
                         </div>
 
                     </div>
+                    {/* main display div ends */}
                 </div>
 
                 {/* climate definition */}
@@ -533,8 +553,6 @@ const Place = () => {
                                         <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd"></path></svg>
                                     </button>
 
-
-
                                     <span className={`${color?.textgray} hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}>
                                         <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd"></path></svg>
                                     </span>
@@ -544,19 +562,16 @@ const Place = () => {
 
                                 </div>
                                 {/* icons end*/}
-                                <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150 ml-80">ADD</button>
+                                <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150 lg:ml-72 xl:ml-80 md:ml-64">ADD</button>
 
                             </div>
-
-
-
                         </div>
                         {/* table */}
-                        <div className="flex flex-col mt-8 lg:-mr-20 sm:mr-0 w-full -ml-8">
+                        <div className="flex flex-col mt-8 lg:-mr-20 sm:mr-0 w-full  relative">
                             <div className="overflow-x-auto">
                                 <div className="align-middle inline-block min-w-full">
                                     <div className="shadow overflow-hidden">
-                                        <table className="table data table-fixed min-w-full divide-y divide-gray-200" id="myTable">
+                                        <table className="table data table-fixed lg:min-w-full divide-y divide-gray-200 min-w-screen" id="myTable">
                                             <thead className={` ${color?.tableheader} `}>
                                                 <tr>
                                                     {/* checkbox */}
@@ -632,10 +647,10 @@ const Place = () => {
                                                                 </select>
                                                             </td>
                                                             <td>
-                                                                <button className={`bg-gradient-to-r bg-green-600 hover:bg-green-700 mr-2 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}>
+                                                                <button className={`bg-gradient-to-r mt-1 bg-green-600 hover:bg-green-700 mr-2 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}>
 
                                                                     Save</button>
-                                                                <button className={`bg-gradient-to-r bg-gray-400 hover:${color?.greybackground}0 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}
+                                                                <button className={`bg-gradient-to-r my-1 bg-gray-400 hover:${color?.greybackground}0 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}
                                                                     onClick={() => {
                                                                         setEditSeason({});
                                                                         setEditRow({ edit: 0, id: undefined })
@@ -676,7 +691,7 @@ const Place = () => {
                                                                     {season?.unit}
                                                                 </td>
                                                                 <td>
-                                                                    <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                                                    <button className="bg-gradient-to-r mt-1 mr-2 bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
                                                                         onClick={() => {
                                                                             setEditSeason(season);
                                                                             setEditRow({ edit: 1, id: index })
@@ -684,7 +699,7 @@ const Place = () => {
                                                                     >
 
                                                                         Edit</button>
-                                                                    <button className="bg-gradient-to-r ml-2 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                                                    <button className="bg-gradient-to-r my-1 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
                                                                     >
 
                                                                         Delete</button>
@@ -715,7 +730,7 @@ const Place = () => {
                             <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
                                 onClick={() => setDisp(1)}>Next </button>
                         </div>
-                        
+
 
                     </div>
                 </div>
@@ -1055,7 +1070,7 @@ const Place = () => {
 
             </div>
 
-
+            <Footer color={color} Primary={english.PlaceSide} />
         </div>
 
 

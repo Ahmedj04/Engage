@@ -3,6 +3,7 @@ import Button from '../../components/Button';
 import axios from 'axios';
 import Sidebar from "../../components/Sidebar";
 import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import english from "../../components/Languages/en";
@@ -71,7 +72,7 @@ function Index() {
     }
     else {
       //will call fetch data call, when implemented
-     //fetchBasicDetails();
+      //fetchBasicDetails();
     }
 
   }, []);
@@ -140,9 +141,9 @@ function Index() {
                 <div className={`${color?.text} text-base font-medium  inline-flex items-center`}>
                   <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
                   <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
-                  <div className={visible === 1 ? 'block' : 'hidden'}>  
+                  <div className={visible === 1 ? 'block' : 'hidden'}>
                     {language?.places}
-                  
+
                   </div></div>
 
               </div>
@@ -199,14 +200,13 @@ function Index() {
         </div>
 
 
-
-        {/* table of activities for day */}
-        <div className="shadow-md flex flex-col mt-8 lg:-mr-20 sm:mr-0">
-          <div className="overflow-x-auto">
-            <div className="align-middle inline-block min-w-full">
-              <div className="shadow overflow-hidden">
-                <table className="table data table-fixed min-w-full divide-y divide-gray-200" id="myTable">
-                  <thead className={`${color?.tableheader}`}>
+        <div className={`${color?.whitebackground} shadow rounded-lg px-12 my-2 sm:p-6 xl:p-8  2xl:col-span-2`}>
+          {/* table of activities for day */}
+          <div className="flex flex-col mt-8 lg:-mr-20 sm:mr-0 w-full  relative">
+            <div className="overflow-x-auto">
+              <div className="align-middle inline-block min-w-full">
+                <div className="shadow overflow-hidden">
+                  <table className="table data table-fixed lg:min-w-full divide-y divide-gray-200 min-w-screen" id="myTable"> <thead className={`${color?.tableheader}`}>
                     <tr>
                       <th scope="col" className={`p-4 ${color?.textgray}`}>
                         <div className="flex items-center">
@@ -218,44 +218,46 @@ function Index() {
                       <th scope="col" className={`p-4 text-left text-xs font-semibold ${color?.text} uppercase`}>Actions</th>
                     </tr>
                   </thead>
-                  <tbody className={` ${color?.whitebackground} divide-y  divide-gray-200`} id="TableList">
+                    <tbody className={` ${color?.whitebackground} divide-y  divide-gray-200`} id="TableList">
 
 
-                    <tr >
-                      <td className="p-4 w-4">
-                        <span className="flex items-center">
-                          <input id="checkbox-1" name="r0091" aria-describedby="checkbox-1" type="checkbox"
-                            className={`bg-gray-50 ${color?.text} text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded`} />
-                          <label htmlFor="checkbox-1" className="sr-only" />
-                        </span>
-                      </td>
-                      <td className={`${color?.text} p-4 whitespace-nowrap capitalize text-base font-normal`}>Srinagar</td>
+                      <tr >
+                        <td className="p-4 w-4">
+                          <span className="flex items-center">
+                            <input id="checkbox-1" name="r0091" aria-describedby="checkbox-1" type="checkbox"
+                              className={`bg-gray-50 ${color?.text} text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded`} />
+                            <label htmlFor="checkbox-1" className="sr-only" />
+                          </span>
+                        </td>
+                        <td className={`${color?.text} p-4 whitespace-nowrap capitalize text-base font-normal`}>Srinagar</td>
 
-                      <td className="py-4 whitespace-nowrap capitalize">
-                        <div> <Link href="../places/place">
-                          <a> <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-                          >Edit </button>
-                          </a>
-                        </Link>
+                        <td className="py-4 whitespace-nowrap capitalize">
+                          <div> <Link href="../places/place">
+                            <a> <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                            >Edit </button>
+                            </a>
+                          </Link>
 
-                        </div>
-                      </td>
-                    </tr>
+                          </div>
+                        </td>
+                      </tr>
 
 
 
-                  </tbody>
-                </table>
+                    </tbody>
+                  </table>
 
-                <div className='flex items-center justify-end space-x-2  sm:space-x-3 ml-auto'>
-                  {/* <Button Primary={} onClick={() => { }} /> */}
+                  <div className='flex items-center justify-end space-x-2  sm:space-x-3 ml-auto'>
+                    {/* <Button Primary={} onClick={() => { }} /> */}
+                  </div>
+
                 </div>
-
               </div>
             </div>
           </div>
         </div>
       </div>
+      <Footer color={color} Primary={english.PlaceSide} />
     </>
   )
 }
