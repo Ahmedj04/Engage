@@ -353,153 +353,6 @@ const Place = () => {
                                     </div>
                                 </div>
 
-
-                                <label className={`w-full lg:w-12/12 mt-3 mb-3 px-4 text-sm font-bold ${color?.text} block mb-2`} htmlFor="grid-password">
-                                    Climate
-
-                                </label>
-
-                                {seasons?.map((season, index) => {
-                                    return (<div key={index} className="flex mt-4 flex-wrap">
-
-                                        {/* season name  */}
-                                        <div className="w-full lg:w-6/12  px-4">
-                                            <div className="relative w-full mb-3">
-                                                <label
-                                                    className={`text-sm font-medium ${color?.text} block mb-2`}
-                                                    htmlFor="grid-password">
-                                                    Season Name
-                                                    <span style={{ color: "#ff0000" }}>*</span>
-                                                </label>
-                                                <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
-                                                <div className={visible === 1 ? 'block' : 'hidden'}>
-                                                    <input
-                                                        type="text" data-testid="test_property_name"
-                                                        className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                                                        defaultValue={season?.season_name} required
-                                                        onChange={
-                                                            (e) => (
-                                                                {}
-                                                            )
-                                                        } />
-                                                    {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
-                        {error?.property_name}
-                        </p> */}
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {/* season period  */}
-                                        <div className="w-full lg:w-6/12  px-4">
-                                            <div className="relative w-full mb-3">
-                                                <label
-                                                    className={`text-sm font-medium ${color?.text} block mb-2`}
-                                                    htmlFor="grid-password">
-                                                    Season Period
-                                                    <span style={{ color: "#ff0000" }}>*</span>
-                                                </label>
-                                                <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
-                                                <div className={visible === 1 ? 'block' : 'hidden'}>
-                                                    <input
-                                                        type="text" data-testid="test_property_name"
-                                                        className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                                                        defaultValue={season?.period} required
-                                                        onChange={
-                                                            (e) => (
-                                                                {}
-                                                            )
-                                                        } />
-                                                    {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
-                        {error?.property_name}
-                        </p> */}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {/* mim temp */}
-
-                                        <div className="w-full lg:w-6/12  px-4">
-                                            <div className="relative w-full mb-3">
-                                                <label
-                                                    className={`text-sm font-medium ${color?.text} block mb-2`}
-                                                    htmlFor="grid-password">
-                                                    Min Temperature
-                                                    <span style={{ color: "#ff0000" }}>*</span>
-                                                </label>
-                                                <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
-                                                <div className={visible === 1 ? 'block' : 'hidden'}>
-                                                    <input
-                                                        type="text" data-testid="test_property_name"
-                                                        className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                                                        defaultValue={season?.min_temp} required
-                                                        onChange={
-                                                            (e) => (
-                                                                {}
-                                                            )
-                                                        } />
-                                                    {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
-                        {error?.property_name}
-                        </p> */}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {/* min temp */}
-
-                                        <div className="w-full lg:w-6/12  px-4">
-                                            <div className="relative w-full mb-3">
-                                                <label
-                                                    className={`text-sm font-medium ${color?.text} block mb-2`}
-                                                    htmlFor="grid-password">
-                                                    Max Temperature
-                                                    <span style={{ color: "#ff0000" }}>*</span>
-                                                </label>
-                                                <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
-                                                <div className={visible === 1 ? 'block' : 'hidden'}>
-                                                    <input
-                                                        type="text" data-testid="test_property_name"
-                                                        className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                                                        defaultValue={season?.max_temp} required
-                                                        onChange={
-                                                            (e) => (
-                                                                {}
-                                                            )
-                                                        } />
-                                                    {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
-                        {error?.property_name}
-                        </p> */}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {/* unit */}
-
-                                        <div className="w-full lg:w-6/12  px-4">
-                                            <div className="relative w-full mb-3">
-                                                <label
-                                                    className={`text-sm font-medium ${color?.text} block mb-2`}
-                                                    htmlFor="grid-password">
-                                                    Temperature Unit
-                                                    <span style={{ color: "#ff0000" }}>*</span>
-                                                </label>
-                                                <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
-                                                <div className={visible === 1 ? 'block' : 'hidden'}>
-                                                    <input
-                                                        type="text" data-testid="test_property_name"
-                                                        className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                                                        defaultValue={season?.unit} required
-                                                        onChange={
-                                                            (e) => (
-                                                                {}
-                                                            )
-                                                        } />
-                                                    {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
-                        {error?.property_name}
-                        </p> */}
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>)
-                                })}
-
                                 <label className={`w-full lg:w-12/12 mt-3 mb-3 px-4 text-sm font-bold ${color?.text} block mb-2`} htmlFor="grid-password">
                                     Languages
                                 </label>
@@ -730,10 +583,68 @@ const Place = () => {
                                                         Actions</th>
                                                 </tr>
                                             </thead>
+
                                             <tbody className={` ${color?.whitebackground} divide-y  divide-gray-200`}>
                                                 {seasons.map((season, index) => {
                                                     return (<>
-                                                        {(editRow?.edit === 1 && editRow.id === index) ? <p>editing</p> :
+                                                        {(editRow?.edit === 1 && editRow.id === index) ? <tr key={index}>
+                                                            <td className="p-4 w-4">
+                                                                <span className="flex items-center">
+                                                                    <input id="checkbox-1" name={season?.index} aria-describedby="checkbox-1" type="checkbox"
+                                                                        className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                                                                    <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
+                                                                </span>
+                                                            </td>
+
+                                                            <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                                                <input type="text"
+                                                                    className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
+                                                                    defaultValue={editSeason?.season_name}
+                                                                    onChange={(e) => setEditSeason({ ...editSeason, season_name: e.target.value })} />
+                                                            </td>
+
+                                                            <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                                                <input type="text" className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
+                                                                    defaultValue={editSeason?.period}
+                                                                    onChange={(e) => setEditSeason({ ...editSeason, period: e.target.value })} />
+
+                                                            </td>
+                                                            <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                                                <input type="text" className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
+                                                                    defaultValue={editSeason?.max_temp}
+                                                                    onChange={(e) => setEditSeason({ ...editSeason, max_temp: e.target.value })} />
+
+                                                            </td>
+                                                            <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                                                <input type="text"
+                                                                    className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
+                                                                    defaultValue={editSeason?.min_temp}
+                                                                    onChange={(e) => setEditSeason({ ...editSeason, min_temp: e.target.value })} />
+
+                                                            </td>
+                                                            <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                                                <select onChange={(e) => setEditSeason({ ...editSeason, unit: e.target.value })}
+                                                                    className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
+                                                                >
+                                                                    <option value={editSeason?.unit}>{editSeason?.unit}</option>
+                                                                    <option value={'F'}>F</option>
+
+                                                                </select>
+                                                            </td>
+                                                            <td>
+                                                                <button className={`bg-gradient-to-r bg-green-600 hover:bg-green-700 mr-2 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}>
+
+                                                                    Save</button>
+                                                                <button className={`bg-gradient-to-r bg-gray-400 hover:${color?.greybackground}0 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}
+                                                                    onClick={() => {
+                                                                        setEditSeason({});
+                                                                        setEditRow({ edit: 0, id: undefined })
+                                                                    }}
+                                                                >
+
+                                                                    Cancel</button>
+                                                            </td>
+                                                        </tr> :
                                                             <tr key={index}>
                                                                 <td className="p-4 w-4">
                                                                     <span className="flex items-center">
@@ -772,7 +683,7 @@ const Place = () => {
                                                                         }}
                                                                     >
 
-                                                                        Edit{JSON.stringify(editRow)}</button>
+                                                                        Edit</button>
                                                                     <button className="bg-gradient-to-r ml-2 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
                                                                     >
 
@@ -799,9 +710,12 @@ const Place = () => {
 
                         {/* button div */}
                         <div className='flex justify-end mt-2 '>
-                            <button className="bg-gradient-to-r mb-4 bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                            <button className="mr-4 bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                onClick={() => setDisp(0)}>Previous </button>
+                            <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
                                 onClick={() => setDisp(1)}>Next </button>
                         </div>
+                        
 
                     </div>
                 </div>
@@ -865,7 +779,7 @@ const Place = () => {
                         </div>
                         <div className='flex justify-end mt-2 '>
                             <button className="mr-4 bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-                                onClick={() => setDisp(0)}>Previous </button>
+                                onClick={() => setDisp(5)}>Previous </button>
                             <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
                                 onClick={() => setDisp(2)}>Next </button>
                         </div>
