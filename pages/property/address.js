@@ -237,11 +237,11 @@ function Address() {
       <Header color={color} Primary={english?.Side} Type={currentLogged?.user_type}  Sec={colorToggler} mode={mode} setMode={setMode}/>
       <Sidebar color={color} Primary={english?.Side} Type={currentLogged?.user_type} />
 
-      <div id="main-content"
+      <div data-testid ="main-content"
         className={`${color?.greybackground} px-4 py-2 pt-24 pb-2 relative overflow-y-auto lg:ml-64`}>
 
         {/* Navbar */}
-        <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
+        <nav data-testid="nav" className="flex mb-5 ml-4" aria-label="Breadcrumb">
           <ol className="inline-flex items-center space-x-1 md:space-x-2">
             <li className="inline-flex items-center">
               <div className={`${color?.text} text-base font-medium  inline-flex items-center`}>
@@ -274,7 +274,7 @@ function Address() {
         </nav>
 
         {/* Update Address Form */}
-        <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
+        <div data-testid="main address" className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
           <h6 className={`${color?.text} text-xl  flex leading-none pl-6 pt-2 font-bold`}>
             {language?.address}
           </h6>
@@ -319,7 +319,7 @@ function Address() {
                     </label>
                     <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                     <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
+                      <input data-testid="landmark"
                         type="text"
                         className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                         defaultValue={address?.address_landmark}
@@ -337,7 +337,7 @@ function Address() {
                 </div>
                 <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
-                    <label
+                    <label data-testid="country"
                       className={`text-sm font-medium ${color?.text} block mb-2`}
                       htmlFor="grid-password"
                     >
@@ -346,7 +346,7 @@ function Address() {
                     </label>
                     <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                     <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <select className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                      <select data-testid="province" className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                         onChange={(e) => {
 
                           setAllHotelDetails({
@@ -415,7 +415,7 @@ function Address() {
                 </div>
                 <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
-                    <label
+                    <label data-testid="city"
                       className={`text-sm font-medium ${color?.text} block mb-2`}
                       htmlFor="grid-password"
                     >
@@ -463,7 +463,7 @@ function Address() {
                     </label>
                     <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                     <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
+                      <input data-testid="postal code"
                         type="text"
                         className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                         defaultValue={allHotelDetails.address_zipcode != '' ? allHotelDetails.address_zipcode : ''}
@@ -493,7 +493,7 @@ function Address() {
                     </label>
                     <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                     <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
+                      <input data-testid="latitude"
                         type="text"
                         className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                         defaultValue={address?.address_latitude}
@@ -521,6 +521,7 @@ function Address() {
                     <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                     <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
+                      data-testid="longitude"
                         type="text"
                         className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                         defaultValue={address?.address_longitude}
@@ -549,6 +550,7 @@ function Address() {
                     <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                     <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
+                      data-testid="precision"
                         type="text"
                         className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                         defaultValue={address?.address_precision}
@@ -572,7 +574,7 @@ function Address() {
 
                 <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
                   <div className={flag !== 1 && spinner === 0 ? 'block' : 'hidden'}>
-                    <Button Primary={language?.UpdateDisabled} /></div>
+                    <Button data-testid="update" Primary={language?.UpdateDisabled} /></div>
                   <div className={spinner === 0 && flag === 1 ? 'block' : 'hidden'}>
                     <Button Primary={language?.Update} onClick={() => { submitAddressEdit() }} />
                   </div>
@@ -601,7 +603,7 @@ function Address() {
         />
       </div>
 
-      <Footer color={color} Primary={english.Foot} />
+      <Footer data-testid="footer" color={color} Primary={english.Foot} />
 
     </>
   );
