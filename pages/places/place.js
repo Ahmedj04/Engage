@@ -15,6 +15,7 @@ import Title from '../../components/title';
 import colorFile from '../../components/color';
 import Multiselect from 'multiselect-react-dropdown';
 import GlobalData from '../../components/GlobalData'
+import { blue, red } from '@mui/material/colors';
 let colorToggle;
 let language;
 let currentProperty;
@@ -397,15 +398,26 @@ const Place = () => {
                                         <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
                                         <div className={visible === 1 ? 'block' : 'hidden'}>
                                             <Multiselect
-                                                className={`shadow-sm ${color?.greybackground} ${color?.text} mb-3 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full
-                       `}
                                                 isObject={true}
                                                 options={GlobalData?.LanguageData}
                                                 onRemove={(event) => { languageViews(event) }}
                                                 onSelect={(event) => { languageViews(event) }}
                                                 selectedValues={languages}
                                                 displayValue="language_name"
-
+                                                placeholder="Search"
+                                                closeIcon='circle'
+                                               style={{
+                                                    chips: {
+                                                      background: '#0891b2',
+                                                      'font-size': '0.875 rem'
+                                                    },
+                                                    searchBox: {
+                                                      border: 'none',
+                                                      'border-bottom': 'none',
+                                                      'border-radius': '0px'
+                                                    }
+                                                  }}
+                                                
                                             />
                                             <p className="text-sm text-sm text-red-700 font-light">
                                                 {error?.view}</p>
@@ -413,8 +425,7 @@ const Place = () => {
                                     </div>
                                 </div>
 
-
-                                {/* Categories */}
+ {/* Categories */}
                                 <div className="w-full lg:w-6/12 px-4">
                                     <div className="relative w-full mb-3">
                                         <label className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -425,14 +436,26 @@ const Place = () => {
                                         <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
                                         <div className={visible === 1 ? 'block' : 'hidden'}>
                                             <Multiselect
-                                                className={`shadow-sm ${color?.greybackground} ${color?.text} mb-3 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full
-                       `}
                                                 isObject={true}
                                                 options={category}
                                                 onRemove={(event) => { languageViews(event) }}
                                                 onSelect={(event) => { languageViews(event) }}
                                                 selectedValues={selectedCategory}
                                                 displayValue="category_name"
+                                                placeholder="Search"
+                                                id="css_custom"
+                                                closeIcon='circle'
+                                                style={{
+                                                    chips: {
+                                                      background: '#0891b2',
+                                                      'font-size': '0.875 rem'
+                                                    },
+                                                    searchBox: {
+                                                      border: 'none',
+                                                      'border-bottom': 'none',
+                                                      'border-radius': '0px'
+                                                    }
+                                                  }}
 
                                             />
                                             <p className="text-sm text-sm text-red-700 font-light">
@@ -792,8 +815,8 @@ const Place = () => {
                                                                         onChange={(e) => setEditSeason({ ...editSeason, period: e.target.value })} />
 
                                                                 </td>
-                                                               
-                                                                
+
+
                                                                 <td>
                                                                     <button className={`bg-gradient-to-r mt-1 bg-green-600 hover:bg-green-700 mr-2 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}>
 
@@ -826,7 +849,7 @@ const Place = () => {
 
                                                                         {row?.value}
                                                                     </td>
-                                                                   
+
                                                                     <td>
                                                                         <button className="bg-gradient-to-r mt-1 mr-2 bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
                                                                             onClick={() => {
@@ -843,7 +866,7 @@ const Place = () => {
                                                                     </td>
                                                                 </tr>}
                                                         </>
-                                                       
+
                                                     )
                                                 })}
 
@@ -1205,7 +1228,7 @@ const Place = () => {
                 </div>
 
 
-                
+
             </div>
 
             <Footer color={color} Primary={english.PlaceSide} />

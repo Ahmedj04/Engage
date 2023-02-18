@@ -7,6 +7,7 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  
 }
 
 a {
@@ -17,3 +18,8 @@ a {
 * {
   box-sizing: border-box;
 }
+
+
+/* .searchBox#css_custom_input option { color: yellowgreen; } */
+/* .chip { background: #414141; padding : "5px 10px"}  */
+/* .multiselectContainer searchBox { border: "none"; border-bottom: "none"; border-radius: "0px" } */

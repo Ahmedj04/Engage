@@ -1270,6 +1270,7 @@ const allDelete = async () => {
           {/* Room Description */}
           <div id='0' className={disp === 0 ? 'block' : 'hidden'}>
             <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
+              {/* progress bar starts */}
               <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
                 <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                   <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
@@ -1289,15 +1290,16 @@ const allDelete = async () => {
                   <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.room} {language?.rates}</div>
                 </div>
               </div>
+              {/* Progress bar ends */}
               <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  pb-2 font-bold`}>
                 {language?.room} {language?.description}
               </h6>
               <div className="pt-6">
                 <div className=" md:px-2 mx-auto w-full">
                   <div className="flex flex-wrap">
-
+                       {/* room name */}
                     <div className="w-full lg:w-6/12 px-4">
-                      <div className="relative w-full mb-3">
+                     <div className="relative w-full mb-3">
                         <label
                           className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password"
@@ -1321,6 +1323,7 @@ const allDelete = async () => {
                             {error?.room_name}</p></div>
                       </div>
                     </div>
+                    {/* room type */}
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -1349,6 +1352,7 @@ const allDelete = async () => {
                         </div>
                       </div>
                     </div>
+                    {/* room description */}
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
@@ -1373,7 +1377,7 @@ const allDelete = async () => {
                             {error?.room_description}</p></div>
                       </div>
                     </div>
-
+                      {/* room capacity */}
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
@@ -1399,6 +1403,7 @@ const allDelete = async () => {
                             {error?.room_capacity}</p></div>
                       </div>
                     </div>
+                    {/* max number of occupants */}
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
@@ -1423,6 +1428,7 @@ const allDelete = async () => {
                             {error?.maximum_number_of_occupants}</p></div>
                       </div>
                     </div>
+                    {/* minimum number of occupants */}
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
@@ -1448,6 +1454,7 @@ const allDelete = async () => {
                             {error?.minimum_number_of_occupants}</p></div>
                       </div>
                     </div>
+                    {/* age of occupants */}
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
@@ -1473,6 +1480,7 @@ const allDelete = async () => {
                             {error?.minimum_age_of_occupants}</p></div>
                       </div>
                     </div>
+                    {/* views room */}
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label className={`text-sm font-medium ${color?.text} block mb-2`}
