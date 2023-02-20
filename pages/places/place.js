@@ -16,6 +16,7 @@ import colorFile from '../../components/color';
 import Multiselect from 'multiselect-react-dropdown';
 import GlobalData from '../../components/GlobalData'
 import { blue, red } from '@mui/material/colors';
+import Gallery from '../../components/gallery';
 let colorToggle;
 let language;
 let currentProperty;
@@ -34,13 +35,16 @@ const Place = () => {
     const [color, setColor] = useState({})
     const [error, setError] = useState({})
     const [mode, setMode] = useState()
+    const [spinner, setSpinner] = useState(0)
+    const [spin, setSpin] = useState(0)
+
     const router = useRouter();
     const [editRow, setEditRow] = useState({
         edit: 0,
         id: undefined
     })
     const [editSeason, setEditSeason] = useState({})
-
+    const [placeImage, setPlaceImage] = useState([])
 
     // to execute as soon as page loads
 
@@ -119,6 +123,9 @@ const Place = () => {
             //setLanguages(response?.data?.place_languages)
             setLanguages((response?.data?.place_languages?.map(lang => GlobalData.LanguageData.filter(i => i.language_code === lang.language))).flat())
             setSeasons(response?.data?.place_seasons)
+            let images = []
+            response?.data?.images.map((image, id) => { images.push({ ...image, 'image_idx': id }) })
+            setPlaceImage(images)
 
             setVisible(1);
         }).catch((err) => { alert(JSON.stringify(err)) })
@@ -233,17 +240,27 @@ const Place = () => {
 
                             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-                                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Gallery</div>
+                                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Climate</div>
                             </div>
 
                             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
+                                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>More Info</div>
+                            </div>
+
+                            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
+                                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Gallery</div>
+                            </div>
+
+                            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">5</button>
                                 <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Attractions</div>
                             </div>
 
 
                             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
+                                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">6</button>
                                 <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Attraction</div>
                             </div>
                         </div>
@@ -406,18 +423,18 @@ const Place = () => {
                                                 displayValue="language_name"
                                                 placeholder="Search"
                                                 closeIcon='circle'
-                                               style={{
+                                                style={{
                                                     chips: {
-                                                      background: '#0891b2',
-                                                      'font-size': '0.875 rem'
+                                                        background: '#0891b2',
+                                                        'font-size': '0.875 rem'
                                                     },
                                                     searchBox: {
-                                                      border: 'none',
-                                                      'border-bottom': 'none',
-                                                      'border-radius': '0px'
+                                                        border: 'none',
+                                                        'border-bottom': 'none',
+                                                        'border-radius': '0px'
                                                     }
-                                                  }}
-                                                
+                                                }}
+
                                             />
                                             <p className="text-sm text-sm text-red-700 font-light">
                                                 {error?.view}</p>
@@ -425,7 +442,7 @@ const Place = () => {
                                     </div>
                                 </div>
 
- {/* Categories */}
+                                {/* Categories */}
                                 <div className="w-full lg:w-6/12 px-4">
                                     <div className="relative w-full mb-3">
                                         <label className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -447,15 +464,15 @@ const Place = () => {
                                                 closeIcon='circle'
                                                 style={{
                                                     chips: {
-                                                      background: '#0891b2',
-                                                      'font-size': '0.875 rem'
+                                                        background: '#0891b2',
+                                                        'font-size': '0.875 rem'
                                                     },
                                                     searchBox: {
-                                                      border: 'none',
-                                                      'border-bottom': 'none',
-                                                      'border-radius': '0px'
+                                                        border: 'none',
+                                                        'border-bottom': 'none',
+                                                        'border-radius': '0px'
                                                     }
-                                                  }}
+                                                }}
 
                                             />
                                             <p className="text-sm text-sm text-red-700 font-light">
@@ -478,32 +495,45 @@ const Place = () => {
 
                 {/* climate definition */}
                 <div id='5' className={disp === 5 ? 'block' : 'hidden'}>
-                    {/* progress bar */}
+
 
                     <div className={`${color?.whitebackground} shadow rounded-lg px-12 h-auto sm:p-6 xl:p-8  2xl:col-span-2`}>
-                        <div className=" relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+                        {/* progress bar */}
+                        <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+                            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
+                                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Place</div>
+                            </div>
                             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-                                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
-                                <div className={`${color.crossbg} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>Place</div>
+                                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">2</button>
+                                <div className={`${color.crossbg} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>Climate</div>
                             </div>
 
 
+
+
                             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
+                                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
+                                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>More Info</div>
+                            </div>
+
+                            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
                                 <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Gallery</div>
                             </div>
 
                             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
+                                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">5</button>
                                 <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Attractions</div>
                             </div>
 
 
                             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
+                                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">6</button>
                                 <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Attraction</div>
                             </div>
                         </div>
+                        {/* progress end*/}
 
                         <div className="sm:flex">
                             <div className=" sm:flex items-center sm:divide-x sm:divide-gray-100 mb-3 sm:mb-0">
@@ -703,29 +733,41 @@ const Place = () => {
                     {/* progress bar */}
 
                     <div className={`${color?.whitebackground} shadow rounded-lg px-12  sm:p-6 xl:p-8  2xl:col-span-2`}>
+                        {/* progress bar */}
                         <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
-                            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-                                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
-                                <div className={`${color.crossbg} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>Place</div>
+                            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
+                                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Place</div>
                             </div>
-
 
                             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-                                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Gallery</div>
+                                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Climate</div>
                             </div>
 
-                            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-                                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Attractions</div>
+                            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">3</button>
+                                <div className={`${color.crossbg} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>More Info</div>
                             </div>
 
 
                             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
+                                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Gallery</div>
+                            </div>
+
+                            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">5</button>
+                                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Attractions</div>
+                            </div>
+
+
+                            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">6</button>
                                 <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Attraction</div>
                             </div>
                         </div>
+                        {/* progress end*/}
 
                         <div className="sm:flex">
                             <div className=" sm:flex items-center sm:divide-x sm:divide-gray-100 mb-3 sm:mb-0">
@@ -901,31 +943,39 @@ const Place = () => {
                 <div id='1' className={disp === 1 ? 'block' : 'hidden'}>
                     {/* progress bar */}
                     <div key={0} className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
+                        {/* progress bar */}
                         <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
-
                             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
                                 <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Place</div>
                             </div>
 
-                            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-                                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">2</button>
-                                <div className={`${color.crossbg} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>Gallery</div>
+                            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
+                                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Climate</div>
                             </div>
-
-
                             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
+                                <div className={`${color.crossbg} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>More Info</div>
+                            </div>
+
+                            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">4</button>
+                                <div className={`${color.widget} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>Gallery</div>
+                            </div>
+
+                            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">5</button>
                                 <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Attractions</div>
                             </div>
 
 
                             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
+                                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">6</button>
                                 <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Attraction</div>
                             </div>
-
                         </div>
+                        {/* progress end*/}
 
                         <div className=" md:px-4 mx-auto w-full">
                             <div className={`flex shadow border p-4 m-4   ${color?.whitebackground} flex-wrap`}>
@@ -935,7 +985,7 @@ const Place = () => {
                                             className={`text-lg font-bold ${color?.text} block mb-2`}
                                             htmlFor="grid-password">
                                             Image Gallery
-                                            <span style={{ color: "#ff0000" }}>*</span>
+
                                         </label>
 
                                     </div>
@@ -943,13 +993,16 @@ const Place = () => {
 
 
                                 {/* images */}
-                                <div className='flex'>
+                                {/* <div className='flex'>
                                     {place?.images?.map((item, idx) => {
                                         return (<div key={idx} className=' p-2'>
                                             <img src={item?.image_link} alt={item?.description} />
                                         </div>)
                                     })}
-                                </div>
+                                </div> */}
+
+                                <Gallery language={language} allDelete={() => { alert('all delete selected') }}
+                                    visible={visible} images={placeImage} color={color} spinner={spinner} spin={spin} uploadImage={() => { alert('upload image clicked') }} />
 
                             </div>
                         </div>
