@@ -839,7 +839,7 @@ const Place = () => {
                                 <button
                                     onClick={()=>setShowNewInfo(1)}
                                     className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150 lg:ml-72 xl:ml-80 md:ml-64">
-                                    ADD</button>
+                                    ADD Info</button>
 
                             </div>
                         </div>
@@ -1108,7 +1108,7 @@ const Place = () => {
                              font-semibold
                                     rounded-lg text-sm px-5 py-2 text-center 
                               items-center ease-linear transition-all duration-150" onClick={() => setShowNewAtt(1)} >
-                                            ADD</button>
+                                            ADD ATTRACTIONS</button>
 
                                     </div>
                                 </div>
@@ -1211,7 +1211,7 @@ const Place = () => {
                              font-semibold
                                     rounded-lg text-sm px-5 py-2 text-center 
                               items-center ease-linear transition-all duration-150" onClick={() => setEditMilestone(1)} >
-                                        ADD</button>
+                                        ADD MILESTONE</button>
 
                                 </div>
                             </div>
