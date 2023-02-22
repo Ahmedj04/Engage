@@ -146,8 +146,7 @@ const Place = () => {
     }
     //add info
     function infoAdd(){
-        alert(JSON.stringify(newInfo));
-        setExtraInfo([...extraInfo,newInfo])
+       setExtraInfo([...extraInfo,newInfo])
         document.getElementById("newInfo").reset();
         setShowNewInfo(0);
     }
