@@ -356,7 +356,7 @@ function Gallery({language, allDelete,visible,images,color,spinner,spin,uploadIm
               >  
                 <div className="flex justify-between p-5 border-b rounded-t">
                   <h3 className={`text-xl ${color?.text} font-semibold`}>
-                  {'image_title' in actionEnlargeImage?<>{actionEnlargeImage?.image_title}</>:<>{actionEnlargeImage?.image_description}</>}
+                  {actionEnlargeImage?.image_title}
                   </h3>
                   <button
                     onClick={() => {

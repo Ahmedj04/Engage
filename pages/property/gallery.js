@@ -455,8 +455,8 @@ function Gallery() {
   function left(key) {
     if (document.getElementById("enlarge").className == "block") {
       setActionEnlargeImage(
-        enlargedImage
-          .filter((i) => i.image_idx === indexImage - 1)
+        
+        images.filter((i) => i.image_idx === indexImage - 1)
           .map((j) => {
             return {
               image_id: j?.image_id,

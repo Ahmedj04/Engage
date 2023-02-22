@@ -17,6 +17,7 @@ import Multiselect from 'multiselect-react-dropdown';
 import GlobalData from '../../components/GlobalData'
 import { blue, red } from '@mui/material/colors';
 import Gallery from '../../components/gallery';
+// import searchFunction from '../../components/searchFunction';
 let colorToggle;
 let language;
 let currentProperty;
@@ -37,7 +38,8 @@ const Place = () => {
     const [mode, setMode] = useState()
     const [spinner, setSpinner] = useState(0)
     const [spin, setSpin] = useState(0)
-
+    const [flag, setFlag] = useState(0)
+    const [editMilestone, setEditMilestone] = useState(0);
     const router = useRouter();
     const [editRow, setEditRow] = useState({
         edit: 0,
@@ -114,6 +116,12 @@ const Place = () => {
         router.push('../places/place')
     }
 
+    function removeMileStone(itemMile,idx){
+        alert(JSON.stringify(itemMile))
+        const item=attraction?.milestones.filter(milestone=> milestone.milestone_id != itemMile.milestone_id)
+        alert(JSON.stringify(item))
+        setAttraction({...attraction,milestones:item})
+    }
     //    function to fetch data
     const fetchPlace = async () => {
         axios.get('/api/places/srinagar').then((response) => {
@@ -978,7 +986,7 @@ const Place = () => {
                         {/* progress end*/}
 
                         <div className=" md:px-4 mx-auto w-full">
-                            <div className={`flex shadow border p-4 m-4   ${color?.whitebackground} flex-wrap`}>
+                            <div className={`flex  p-4 m-4   ${color?.whitebackground} flex-wrap`}>
                                 <div className="w-full lg:w-6/12  px-4">
                                     <div className="relative w-full mb-3">
                                         <label
@@ -991,15 +999,6 @@ const Place = () => {
                                     </div>
                                 </div>
 
-
-                                {/* images */}
-                                {/* <div className='flex'>
-                                    {place?.images?.map((item, idx) => {
-                                        return (<div key={idx} className=' p-2'>
-                                            <img src={item?.image_link} alt={item?.description} />
-                                        </div>)
-                                    })}
-                                </div> */}
 
                                 <Gallery language={language} allDelete={() => { alert('all delete selected') }}
                                     visible={visible} images={placeImage} color={color} spinner={spinner} spin={spin} uploadImage={() => { alert('upload image clicked') }} />
@@ -1047,7 +1046,52 @@ const Place = () => {
                     <div>
                         {/* table of activities for day */}
                         <div className="flex flex-col mt-8 lg:mr-0 sm:mr-0 ">
+                            {/* page heading, search bar,icons and add button*/}
+                            <div className="m-4">
+                                <div className="sm:flex">
+                                    <div className=" sm:flex items-center sm:divide-x sm:divide-gray-100 mb-3 sm:mb-0">
+                                        {/* search form */}
+                                        <form className="lg:pr-3" action="#" method="GET">
+                                            <label htmlFor="users-search" className="sr-only">Search</label>
+                                            <div className="mt-1 relative lg:w-64 xl:w-96">
+                                                <input type="text" name="email" id="myInput" onKeyUp={searchFunction}
+                                                    className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} placeholder="Search">
+                                                </input>
+                                            </div>
+                                        </form>
+                                        {/* search form end */}
+                                        {/* icons start */}
+                                        <div className="flex space-x-1 pl-0 sm:pl-2 mt-3 sm:mt-0">
+                                            <span className={`${color?.textgray} hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}>
+                                                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd"></path></svg>
+                                            </span>
 
+                                            <button data-tooltip="Delete" aria-label="Delete" className={`${color?.textgray} hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}>
+                                                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd"></path></svg>
+                                            </button>
+
+
+
+                                            <span className={`${color?.textgray} hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}>
+                                                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd"></path></svg>
+                                            </span>
+                                            <span className={`${color?.textgray} hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}>
+                                                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg>
+                                            </span>
+                                        </div>
+                                        {/* icons end*/}
+                                    </div>
+
+                                    <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
+                                        <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex  
+                             font-semibold
+                                    rounded-lg text-sm px-5 py-2 text-center 
+                              items-center ease-linear transition-all duration-150" onClick={() => alert("add clicked")} >
+                                            ADD</button>
+
+                                    </div>
+                                </div>
+                            </div>
                             <div className="overflow-x-auto">
                                 <div className="align-middle inline-block min-w-full">
                                     <div className="shadow overflow-hidden">
@@ -1111,15 +1155,11 @@ const Place = () => {
                         </div>
                     </div>
                 </div>
-
-
-
-
                 {/* attraction   */}
                 <div id='3' className={disp === 3 ? 'block' : 'hidden'}>
 
                     {/* progress bar */}
-                    <div key={0} className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
+                    <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
                         <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
                             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
@@ -1141,7 +1181,20 @@ const Place = () => {
                                 <div className={`${color.crossbg} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>Attraction</div>
                             </div>
                         </div>
+                        {/* page heading, search bar,icons and add button*/}
+                        <div className="mx-4">
+                            <h1 className={`text-xl sm:text-2xl font-semibold ${color?.text}`}>Places</h1>
+                            <div className="sm:flex">
+                                <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
+                                    <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex  
+                             font-semibold
+                                    rounded-lg text-sm px-5 py-2 text-center 
+                              items-center ease-linear transition-all duration-150" onClick={() => setEditMilestone(1)} >
+                                        ADD</button>
 
+                                </div>
+                            </div>
+                        </div>
 
                         <div className={`${color?.whitebackground}  mt-4 p-4 shadow divide-gray-200`} >
                             <div className='flex flex-wrap'>
@@ -1205,14 +1258,38 @@ const Place = () => {
                                 <label
                                     className={`text-sm font-bold  ${color?.text} block mb-2`}
                                     htmlFor="grid-password">
-                                    MileStones
-                                    <span style={{ color: "#ff0000" }}>*</span>
+                                    {attraction?.milestones?.length != 0? 'MileStones':''} 
                                 </label>
                             </div>
                         </div>
-
+                                                        
                         {attraction?.milestones?.map((milestone, idx) => {
-                            return (<div key={idx} className="flex flex-wrap">
+                            return (
+                            <div key={idx}> {/* cross button */}
+                            <button
+                                   type="button"
+                                   onClick={() => {
+                                      removeMileStone(milestone,idx);
+                                   }}
+                                   className="text-gray-400  bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto flex justify-end items-center"
+                                   data-modal-toggle="user-modal"
+                               >
+                                   <svg
+                                       className="w-5 h-5"
+                                       fill="currentColor"
+                                       viewBox="0 0 20 20"
+                                       xmlns="http://www.w3.org/2000/svg"
+                                   >
+                                       <path
+                                           fillRule="evenodd"
+                                           d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                           clipRule="evenodd"
+                                       ></path>
+                                   </svg>
+                               </button>
+                               {/* cross button ends */}
+                            <div  className="flex flex-wrap">
+                                
                                 {/* milestone name */}
                                 <div className=" w-full lg:w-6/12  px-4">
                                     {/* attraction name  */}
@@ -1242,6 +1319,7 @@ const Place = () => {
                                 </div>
                                 {/* milestone description */}
                                 <div className=" w-full lg:w-6/12  px-4">
+                                   
                                     {/* attraction name  */}
                                     <div className="relative w-full mb-3">
                                         <label
@@ -1267,8 +1345,10 @@ const Place = () => {
                                     </div>
                                 </div>
 
+                            </div>
                             </div>)
                         })}
+                        {JSON.stringify(attraction.milestones)}
 
                         <div className='flex items-center justify-end space-x-2  sm:space-x-3 ml-auto'>
                             <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
@@ -1280,7 +1360,123 @@ const Place = () => {
 
                 </div>
 
+                {/* Modal milestone */}
+                <div className={editMilestone === 1 ? "block" : "hidden"}>
+                    <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
+                        <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
+                            <div
+                                className={`${color?.whitebackground} rounded-lg shadow relative`}
+                            >
+                                <div className="flex items-start justify-between p-5 border-b rounded-t">
+                                    <h3 className={`${color?.text} text-xl font-semibold`}>
+                                        Add Milestone
+                                    </h3>
+                                    {/* cross button */}
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            //   setActionImage({});
+                                            //   setError({});
+                                            document.getElementById("editMile").reset();
+                                            setEditMilestone(0);
+                                        }}
+                                        className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                                        data-modal-toggle="user-modal"
+                                    >
+                                        <svg
+                                            className="w-5 h-5"
+                                            fill="currentColor"
+                                            viewBox="0 0 20 20"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                fillRule="evenodd"
+                                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                                clipRule="evenodd"
+                                            ></path>
+                                        </svg>
+                                    </button>
+                                    {/* cross button ends */}
+                                </div>
 
+                                <div className="p-6 space-y-6">
+                                    <form id="editMile">
+                                        <div className="flex flex-wrap">
+                                            {/* milestone name */}
+                                            <div className=" w-full lg:w-6/12  px-4">
+                                                {/* attraction name  */}
+                                                <div className="relative w-full mb-3">
+                                                    <label
+                                                        className={`text-sm font-medium ${color?.text} block mb-2`}
+                                                        htmlFor="grid-password">
+                                                        MileStone Name
+                                                        <span style={{ color: "#ff0000" }}>*</span>
+                                                    </label>
+                                                    <input
+                                                        type="text" data-testid="test_property_name"
+                                                        className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                                        required
+                                                        onChange={
+                                                            (e) => (
+                                                                {}
+                                                            )
+                                                        } />
+                                                    {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                                             {error?.property_name}
+                                                             </p> */}
+
+                                                </div>
+                                            </div>
+                                            {/* milestone description */}
+                                            <div className=" w-full lg:w-6/12  px-4">
+                                                {/* attraction name  */}
+                                                <div className="relative w-full mb-3">
+                                                    <label
+                                                        className={`text-sm font-medium ${color?.text} block mb-2`}
+                                                        htmlFor="grid-password">
+                                                        MileStone Description
+                                                        <span style={{ color: "#ff0000" }}>*</span>
+                                                    </label>
+
+
+                                                    <textarea data-testid="test_property_name"
+                                                        className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                                        required
+                                                        onChange={
+                                                            (e) => (
+                                                                {}
+                                                            )
+                                                        } />
+                                                    {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                                             {error?.property_name}
+                                                        </p> */}
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </form>
+                                </div>
+                                <div className="items-center p-6 border-t border-gray-200 rounded-b">
+
+                                    <div
+                                    // className={spinner === 0 && flag === 1 ? "block" : "hidden"}
+                                    >
+                                        <Button
+                                            Primary={language?.Add}
+                                        //   onClick={validationGalleryEdit}
+                                        />
+                                    </div>
+                                    {/* <div
+                                        className={spinner === 1 && flag === 1 ? "block" : "hidden"}
+                                    >
+                                        <Button Primary={language?.SpinnerUpdate} />
+                                    </div> */}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
 
