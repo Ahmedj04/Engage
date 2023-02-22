@@ -48,6 +48,14 @@ const Place = () => {
     const [editSeason, setEditSeason] = useState({})
     const [placeImage, setPlaceImage] = useState([])
     const [newMile, setNewMile] = useState({})
+    const [newAttraction, setNewAttraction] = useState({
+        "attraction_name": "",
+        "attraction_description": "",
+        "milestones": []
+    })
+    const [showNewAtt, setShowNewAtt] = useState(0)
+    const [newInfo, setNewInfo] = useState({})
+    const [showNewInfo, setShowNewInfo] = useState(0)
 
     // to execute as soon as page loads
 
@@ -122,10 +130,26 @@ const Place = () => {
         const item = attraction?.milestones.filter(milestone => milestone.milestone_id != itemMile.milestone_id)
         setAttraction({ ...attraction, milestones: item })
     }
-//add milestone
-    function milestoneAdd(){
-        setAttraction({ ...attraction, milestones: [...attraction?.milestones,newMile]})
+    //add milestone
+    function milestoneAdd() {
+        setAttraction({ ...attraction, milestones: [...attraction?.milestones, newMile] })
+        document.getElementById("editMile").reset();
         setEditMilestone(0);
+    }
+    //add attraction
+    function attractionAdd() {
+        place?.attractions
+        setPlace({ ...place, attractions: [...place?.attractions, newAttraction] })
+        document.getElementById("newAttraction").reset();
+        setShowNewAtt(0);
+
+    }
+    //add info
+    function infoAdd(){
+        alert(JSON.stringify(newInfo));
+        setExtraInfo([...extraInfo,newInfo])
+        document.getElementById("newInfo").reset();
+        setShowNewInfo(0);
     }
     //    function to fetch data
     const fetchPlace = async () => {
@@ -813,7 +837,10 @@ const Place = () => {
 
                                 </div>
                                 {/* icons end*/}
-                                <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150 lg:ml-72 xl:ml-80 md:ml-64">ADD</button>
+                                <button
+                                    onClick={()=>setShowNewInfo(1)}
+                                    className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150 lg:ml-72 xl:ml-80 md:ml-64">
+                                    ADD</button>
 
                             </div>
                         </div>
@@ -929,16 +956,6 @@ const Place = () => {
                                         </table>
                                     </div></div></div></div>
 
-
-
-
-
-
-
-
-
-
-
                         {/* button div */}
                         <div className='flex justify-end mt-2 '>
                             <button className="mr-4 bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
@@ -1006,7 +1023,7 @@ const Place = () => {
 
 
                                 <Gallery language={language} allDelete={() => { alert('all delete selected') }}
-                                    visible={visible} images={placeImage} setImages={(value)=>{setPlaceImage(value)}} color={color} spinner={spinner} spin={spin} uploadImage={() => { alert('upload image clicked') }} />
+                                    visible={visible} images={placeImage} setImages={(value) => { setPlaceImage(value) }} color={color} spinner={spinner} spin={spin} uploadImage={() => { alert('upload image clicked') }} />
 
                             </div>
                         </div>
@@ -1091,7 +1108,7 @@ const Place = () => {
                                         <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex  
                              font-semibold
                                     rounded-lg text-sm px-5 py-2 text-center 
-                              items-center ease-linear transition-all duration-150" onClick={() => alert("add clicked")} >
+                              items-center ease-linear transition-all duration-150" onClick={() => setShowNewAtt(1)} >
                                             ADD</button>
 
                                     </div>
@@ -1353,10 +1370,11 @@ const Place = () => {
                                     </div>
                                 </div>)
                         })}
+
                         <div className='flex items-center justify-end space-x-2  sm:space-x-3 ml-auto'>
                             <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
                                 onClick={() => setDisp(2)}>Previous </button>
-                            {/* <Button Primary={} onClick={() => { }} /> */}
+
                         </div>
 
                     </div>
@@ -1421,7 +1439,7 @@ const Place = () => {
                                                         required
                                                         onChange={
                                                             (e) => (
-                                                                setNewMile({ ...newMile, milestone_name:e.target.value })
+                                                                setNewMile({ ...newMile, milestone_name: e.target.value })
                                                             )
                                                         } />
                                                     {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
@@ -1447,7 +1465,7 @@ const Place = () => {
                                                         required
                                                         onChange={
                                                             (e) => (
-                                                                setNewMile({ ...newMile, milestone_description:e.target.value })
+                                                                setNewMile({ ...newMile, milestone_description: e.target.value })
                                                             )
                                                         } />
                                                     {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
@@ -1468,6 +1486,244 @@ const Place = () => {
                                         <Button
                                             Primary={language?.Add}
                                             onClick={milestoneAdd}
+                                        />
+                                    </div>
+                                    {/* <div
+                                        className={spinner === 1 && flag === 1 ? "block" : "hidden"}
+                                    >
+                                        <Button Primary={language?.SpinnerUpdate} />
+                                    </div> */}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                {/* Modal Add Attraction */}
+                <div className={showNewAtt === 1 ? "block" : "hidden"}>
+                    <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
+                        <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
+                            <div
+                                className={`${color?.whitebackground} rounded-lg shadow relative`}
+                            >
+                                <div className="flex items-start justify-between p-5 border-b rounded-t">
+                                    <h3 className={`${color?.text} text-xl font-semibold`}>
+                                        Add Attraction
+                                    </h3>
+                                    {/* cross button */}
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            //   setActionImage({});
+                                            //   setError({});
+                                            document.getElementById("newAttraction").reset();
+                                            setShowNewAtt(0);
+                                        }}
+                                        className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                                        data-modal-toggle="user-modal"
+                                    >
+                                        <svg
+                                            className="w-5 h-5"
+                                            fill="currentColor"
+                                            viewBox="0 0 20 20"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                fillRule="evenodd"
+                                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                                clipRule="evenodd"
+                                            ></path>
+                                        </svg>
+                                    </button>
+                                    {/* cross button ends */}
+                                </div>
+
+                                <div className="p-6 space-y-6">
+                                    <form id="newAttraction">
+                                        <div className="flex flex-wrap">
+                                            {/* milestone name */}
+                                            <div className=" w-full lg:w-6/12  px-4">
+                                                {/* attraction name  */}
+                                                <div className="relative w-full mb-3">
+                                                    <label
+                                                        className={`text-sm font-medium ${color?.text} block mb-2`}
+                                                        htmlFor="grid-password">
+                                                        Attraction Name
+                                                        <span style={{ color: "#ff0000" }}>*</span>
+                                                    </label>
+                                                    <input
+                                                        type="text" data-testid="test_property_name"
+                                                        className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                                        required
+                                                        onChange={
+                                                            (e) => (
+                                                                setNewAttraction({ ...newAttraction, attraction_name: e.target.value })
+                                                            )
+                                                        } />
+                                                    {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                                             {error?.property_name}
+                                                             </p> */}
+
+                                                </div>
+                                            </div>
+                                            {/* milestone description */}
+                                            <div className=" w-full lg:w-6/12  px-4">
+                                                {/* attraction name  */}
+                                                <div className="relative w-full mb-3">
+                                                    <label
+                                                        className={`text-sm font-medium ${color?.text} block mb-2`}
+                                                        htmlFor="grid-password">
+                                                        Attraction Description
+                                                        <span style={{ color: "#ff0000" }}>*</span>
+                                                    </label>
+
+
+                                                    <textarea data-testid="test_property_name"
+                                                        className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                                        required
+                                                        onChange={
+                                                            (e) => (
+                                                                setNewAttraction({ ...newAttraction, attraction_description: e.target.value })
+                                                            )
+                                                        } />
+                                                    {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                                             {error?.property_name}
+                                                        </p> */}
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </form>
+                                </div>
+                                <div className="items-center p-6 border-t border-gray-200 rounded-b">
+
+                                    <div
+                                    // className={spinner === 0 && flag === 1 ? "block" : "hidden"}
+                                    >
+                                        <Button
+                                            Primary={language?.Add}
+                                            onClick={attractionAdd}
+                                        />
+                                    </div>
+                                    {/* <div
+                                        className={spinner === 1 && flag === 1 ? "block" : "hidden"}
+                                    >
+                                        <Button Primary={language?.SpinnerUpdate} />
+                                    </div> */}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                 {/* Modal Info*/}
+                 <div className={showNewInfo === 1 ? "block" : "hidden"}>
+                    <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
+                        <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
+                            <div
+                                className={`${color?.whitebackground} rounded-lg shadow relative`}
+                            >
+                                <div className="flex items-start justify-between p-5 border-b rounded-t">
+                                    <h3 className={`${color?.text} text-xl font-semibold`}>
+                                        Add Info
+                                    </h3>
+                                    {/* cross button */}
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            //   setActionImage({});
+                                            //   setError({});
+                                            document.getElementById("newInfo").reset();
+                                            setShowNewInfo(0);
+                                        }}
+                                        className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                                        data-modal-toggle="user-modal"
+                                    >
+                                        <svg
+                                            className="w-5 h-5"
+                                            fill="currentColor"
+                                            viewBox="0 0 20 20"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                fillRule="evenodd"
+                                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                                clipRule="evenodd"
+                                            ></path>
+                                        </svg>
+                                    </button>
+                                    {/* cross button ends */}
+                                </div>
+
+                                <div className="p-6 space-y-6">
+                                    <form id="newInfo">
+                                        <div className="flex flex-wrap">
+                                            {/* milestone name */}
+                                            <div className=" w-full lg:w-6/12  px-4">
+                                                {/* attraction name  */}
+                                                <div className="relative w-full mb-3">
+                                                    <label
+                                                        className={`text-sm font-medium ${color?.text} block mb-2`}
+                                                        htmlFor="grid-password">
+                                                        Info Key
+                                                        <span style={{ color: "#ff0000" }}>*</span>
+                                                    </label>
+                                                    <input
+                                                        type="text" data-testid="test_property_name"
+                                                        className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                                        required
+                                                        onChange={
+                                                            (e) => (
+                                                                setNewInfo({ ...newInfo, key: e.target.value })
+                                                            )
+                                                        } />
+                                                    {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                                             {error?.property_name}
+                                                             </p> */}
+
+                                                </div>
+                                            </div>
+                                            {/* milestone description */}
+                                            <div className=" w-full lg:w-6/12  px-4">
+                                                {/* attraction name  */}
+                                                <div className="relative w-full mb-3">
+                                                    <label
+                                                        className={`text-sm font-medium ${color?.text} block mb-2`}
+                                                        htmlFor="grid-password">
+                                                        Info Value
+                                                        <span style={{ color: "#ff0000" }}>*</span>
+                                                    </label>
+
+
+                                                    <textarea data-testid="test_property_name"
+                                                        className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                                        required
+                                                        onChange={
+                                                            (e) => (
+                                                                setNewInfo({ ...newInfo, value: e.target.value })
+                                                            )
+                                                        } />
+                                                    {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                                             {error?.property_name}
+                                                        </p> */}
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </form>
+                                </div>
+                                <div className="items-center p-6 border-t border-gray-200 rounded-b">
+
+                                    <div
+                                    // className={spinner === 0 && flag === 1 ? "block" : "hidden"}
+                                    >
+                                        <Button
+                                            Primary={language?.Add}
+                                            onClick={()=>infoAdd()}
                                         />
                                     </div>
                                     {/* <div
