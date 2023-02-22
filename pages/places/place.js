@@ -602,7 +602,7 @@ const Place = () => {
 
                                 </div>
                                 {/* icons end*/}
-                                <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150 lg:ml-72 xl:ml-80 md:ml-64">ADD</button>
+                                <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150 lg:ml-72 xl:ml-80 md:ml-64">ADD SEASON</button>
 
                             </div>
                         </div>
@@ -839,7 +839,7 @@ const Place = () => {
                                 <button
                                     onClick={()=>setShowNewInfo(1)}
                                     className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150 lg:ml-72 xl:ml-80 md:ml-64">
-                                    ADD Info</button>
+                                    ADD INFO</button>
 
                             </div>
                         </div>
@@ -1108,7 +1108,7 @@ const Place = () => {
                              font-semibold
                                     rounded-lg text-sm px-5 py-2 text-center 
                               items-center ease-linear transition-all duration-150" onClick={() => setShowNewAtt(1)} >
-                                            ADD ATTRACTIONS</button>
+                                            ADD ATTRACTION</button>
 
                                     </div>
                                 </div>
@@ -1627,7 +1627,7 @@ const Place = () => {
                             >
                                 <div className="flex items-start justify-between p-5 border-b rounded-t">
                                     <h3 className={`${color?.text} text-xl font-semibold`}>
-                                        Add Info
+                                        Add INFO
                                     </h3>
                                     {/* cross button */}
                                     <button
