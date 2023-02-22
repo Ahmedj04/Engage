@@ -47,6 +47,7 @@ const Place = () => {
     })
     const [editSeason, setEditSeason] = useState({})
     const [placeImage, setPlaceImage] = useState([])
+    const [newMile, setNewMile] = useState({})
 
     // to execute as soon as page loads
 
@@ -115,12 +116,16 @@ const Place = () => {
         firstfun();
         router.push('../places/place')
     }
-
-    function removeMileStone(itemMile,idx){
-        alert(JSON.stringify(itemMile))
-        const item=attraction?.milestones.filter(milestone=> milestone.milestone_id != itemMile.milestone_id)
-        alert(JSON.stringify(item))
-        setAttraction({...attraction,milestones:item})
+    //remove milestone
+    function removeMileStone(itemMile, idx) {
+        //network call to delete milestone after sucess do below task
+        const item = attraction?.milestones.filter(milestone => milestone.milestone_id != itemMile.milestone_id)
+        setAttraction({ ...attraction, milestones: item })
+    }
+//add milestone
+    function milestoneAdd(){
+        setAttraction({ ...attraction, milestones: [...attraction?.milestones,newMile]})
+        setEditMilestone(0);
     }
     //    function to fetch data
     const fetchPlace = async () => {
@@ -132,7 +137,7 @@ const Place = () => {
             setLanguages((response?.data?.place_languages?.map(lang => GlobalData.LanguageData.filter(i => i.language_code === lang.language))).flat())
             setSeasons(response?.data?.place_seasons)
             let images = []
-            response?.data?.images.map((image, id) => { images.push({ ...image, 'image_idx': id }) })
+            response?.data?.images.map((image, id) => { images.push({ ...image, 'image_idx': id, 'isChecked': false }) })
             setPlaceImage(images)
 
             setVisible(1);
@@ -1001,7 +1006,7 @@ const Place = () => {
 
 
                                 <Gallery language={language} allDelete={() => { alert('all delete selected') }}
-                                    visible={visible} images={placeImage} color={color} spinner={spinner} spin={spin} uploadImage={() => { alert('upload image clicked') }} />
+                                    visible={visible} images={placeImage} setImages={(value)=>{setPlaceImage(value)}} color={color} spinner={spinner} spin={spin} uploadImage={() => { alert('upload image clicked') }} />
 
                             </div>
                         </div>
@@ -1196,7 +1201,7 @@ const Place = () => {
                             </div>
                         </div>
 
-                        <div className={`${color?.whitebackground}  mt-4 p-4 shadow divide-gray-200`} >
+                        <div className={`${color?.whitebackground}  mt-4 p-4  divide-gray-200`} >
                             <div className='flex flex-wrap'>
                                 <div className=" w-full lg:w-6/12  px-4">
                                     {/* attraction name  */}
@@ -1258,98 +1263,96 @@ const Place = () => {
                                 <label
                                     className={`text-sm font-bold  ${color?.text} block mb-2`}
                                     htmlFor="grid-password">
-                                    {attraction?.milestones?.length != 0? 'MileStones':''} 
+                                    {attraction?.milestones?.length != 0 ? 'MileStones' : ''}
                                 </label>
                             </div>
                         </div>
-                                                        
+
                         {attraction?.milestones?.map((milestone, idx) => {
                             return (
-                            <div key={idx}> {/* cross button */}
-                            <button
-                                   type="button"
-                                   onClick={() => {
-                                      removeMileStone(milestone,idx);
-                                   }}
-                                   className="text-gray-400  bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto flex justify-end items-center"
-                                   data-modal-toggle="user-modal"
-                               >
-                                   <svg
-                                       className="w-5 h-5"
-                                       fill="currentColor"
-                                       viewBox="0 0 20 20"
-                                       xmlns="http://www.w3.org/2000/svg"
-                                   >
-                                       <path
-                                           fillRule="evenodd"
-                                           d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                           clipRule="evenodd"
-                                       ></path>
-                                   </svg>
-                               </button>
-                               {/* cross button ends */}
-                            <div  className="flex flex-wrap">
-                                
-                                {/* milestone name */}
-                                <div className=" w-full lg:w-6/12  px-4">
-                                    {/* attraction name  */}
-                                    <div className="relative w-full mb-3">
-                                        <label
-                                            className={`text-sm font-medium ${color?.text} block mb-2`}
-                                            htmlFor="grid-password">
-                                            MileStone Name
-                                            <span style={{ color: "#ff0000" }}>*</span>
-                                        </label>
-                                        <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
-                                        <div className={visible === 1 ? 'block' : 'hidden'}>
-                                            <input
-                                                type="text" data-testid="test_property_name"
-                                                className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                                                defaultValue={milestone?.milestone_name} required
-                                                onChange={
-                                                    (e) => (
-                                                        {}
-                                                    )
-                                                } />
-                                            {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
-                                                             {error?.property_name}
-                                                        </p> */}
-                                        </div>
-                                    </div>
-                                </div>
-                                {/* milestone description */}
-                                <div className=" w-full lg:w-6/12  px-4">
-                                   
-                                    {/* attraction name  */}
-                                    <div className="relative w-full mb-3">
-                                        <label
-                                            className={`text-sm font-medium ${color?.text} block mb-2`}
-                                            htmlFor="grid-password">
-                                            MileStone Description
-                                            <span style={{ color: "#ff0000" }}>*</span>
-                                        </label>
-                                        <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
-                                        <div className={visible === 1 ? 'block' : 'hidden'}>
-                                            <textarea data-testid="test_property_name"
-                                                className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                                                defaultValue={milestone?.milestone_description} required
-                                                onChange={
-                                                    (e) => (
-                                                        {}
-                                                    )
-                                                } />
-                                            {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
-                                                             {error?.property_name}
-                                                        </p> */}
-                                        </div>
-                                    </div>
-                                </div>
+                                <div key={idx}> {/* cross button */}
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            removeMileStone(milestone, idx);
+                                        }}
+                                        className="text-gray-400  bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto flex justify-end items-center"
+                                        data-modal-toggle="user-modal"
+                                    >
+                                        <svg
+                                            className="w-5 h-5"
+                                            fill="currentColor"
+                                            viewBox="0 0 20 20"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                fillRule="evenodd"
+                                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                                clipRule="evenodd"
+                                            ></path>
+                                        </svg>
+                                    </button>
+                                    {/* cross button ends */}
+                                    <div className="flex flex-wrap">
 
-                            </div>
-                            </div>)
+                                        {/* milestone name */}
+                                        <div className=" w-full lg:w-6/12  px-4">
+                                            {/* attraction name  */}
+                                            <div className="relative w-full mb-3">
+                                                <label
+                                                    className={`text-sm font-medium ${color?.text} block mb-2`}
+                                                    htmlFor="grid-password">
+                                                    MileStone Name
+                                                    <span style={{ color: "#ff0000" }}>*</span>
+                                                </label>
+                                                <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                                                <div className={visible === 1 ? 'block' : 'hidden'}>
+                                                    <input
+                                                        type="text" data-testid="test_property_name"
+                                                        className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                                        defaultValue={milestone?.milestone_name} required
+                                                        onChange={
+                                                            (e) => (
+                                                                {}
+                                                            )
+                                                        } />
+                                                    {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                                             {error?.property_name}
+                                                        </p> */}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {/* milestone description */}
+                                        <div className=" w-full lg:w-6/12  px-4">
+
+                                            {/* attraction name  */}
+                                            <div className="relative w-full mb-3">
+                                                <label
+                                                    className={`text-sm font-medium ${color?.text} block mb-2`}
+                                                    htmlFor="grid-password">
+                                                    MileStone Description
+                                                    <span style={{ color: "#ff0000" }}>*</span>
+                                                </label>
+                                                <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                                                <div className={visible === 1 ? 'block' : 'hidden'}>
+                                                    <textarea data-testid="test_property_name"
+                                                        className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                                        defaultValue={milestone?.milestone_description} required
+                                                        onChange={
+                                                            (e) => (
+                                                                {}
+                                                            )
+                                                        } />
+                                                    {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                                             {error?.property_name}
+                                                        </p> */}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>)
                         })}
-                        {JSON.stringify(attraction.milestones)}
-
                         <div className='flex items-center justify-end space-x-2  sm:space-x-3 ml-auto'>
                             <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
                                 onClick={() => setDisp(2)}>Previous </button>
@@ -1418,7 +1421,7 @@ const Place = () => {
                                                         required
                                                         onChange={
                                                             (e) => (
-                                                                {}
+                                                                setNewMile({ ...newMile, milestone_name:e.target.value })
                                                             )
                                                         } />
                                                     {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
@@ -1444,7 +1447,7 @@ const Place = () => {
                                                         required
                                                         onChange={
                                                             (e) => (
-                                                                {}
+                                                                setNewMile({ ...newMile, milestone_description:e.target.value })
                                                             )
                                                         } />
                                                     {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
@@ -1464,7 +1467,7 @@ const Place = () => {
                                     >
                                         <Button
                                             Primary={language?.Add}
-                                        //   onClick={validationGalleryEdit}
+                                            onClick={milestoneAdd}
                                         />
                                     </div>
                                     {/* <div
