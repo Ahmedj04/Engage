@@ -17,7 +17,7 @@ import Multiselect from 'multiselect-react-dropdown';
 import GlobalData from '../../components/GlobalData'
 import { blue, red } from '@mui/material/colors';
 import Gallery from '../../components/gallery';
-// import searchFunction from '../../components/searchFunction';
+import searchFunction from '../../components/searchFunction';
 let colorToggle;
 let language;
 let currentProperty;
@@ -169,28 +169,7 @@ const Place = () => {
         console.log("Place Data fetched");
     }
 
-    //table search function
-    function searchFunction() {
-        // Declare variables
-        let input, filter, table, tr, td, i, txtValue;
-        input = document.getElementById("myInput");
-        filter = input.value.toUpperCase();
-        table = document.getElementById("myTable");
-        tr = table.getElementsByTagName("tr");
-
-        // Loop through all table rows, and hide those who don't match the search query
-        for (i = 1; i < tr.length; i++) {
-            td = tr[i];
-            if (td) {
-                txtValue = td.textContent || td.innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                } else {
-                    tr[i].style.display = "none";
-                }
-            }
-        }
-    }
+   
 
     //changing multiselected data
     const languageViews = (viewData) => {
@@ -577,7 +556,7 @@ const Place = () => {
                                 <form className="lg:pr-3" action="#" method="GET">
                                     <label htmlFor="users-search" className="sr-only">Search</label>
                                     <div className="mt-1 relative lg:w-64 xl:w-96">
-                                        <input type="text" name="email" id="myInput" onKeyUp={searchFunction}
+                                        <input type="text" name="email" id="climateInput" onKeyUp={()=>searchFunction('climateInput','climateTable')}
                                             className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} placeholder='Search'>
                                         </input>
                                     </div>
@@ -611,7 +590,7 @@ const Place = () => {
                             <div className="overflow-x-auto">
                                 <div className="align-middle inline-block min-w-full">
                                     <div className="shadow overflow-hidden">
-                                        <table className="table data table-fixed lg:min-w-full divide-y divide-gray-200 min-w-screen" id="myTable">
+                                        <table className="table data table-fixed lg:min-w-full divide-y divide-gray-200 min-w-screen" id="climateTable">
                                             <thead className={` ${color?.tableheader} `}>
                                                 <tr>
                                                     {/* checkbox */}
@@ -811,7 +790,7 @@ const Place = () => {
                                 <form className="lg:pr-3" action="#" method="GET">
                                     <label htmlFor="users-search" className="sr-only">Search</label>
                                     <div className="mt-1 relative lg:w-64 xl:w-96">
-                                        <input type="text" name="email" id="myInput" onKeyUp={searchFunction}
+                                        <input type="text" name="email" id="infoInput" onKeyUp={()=>searchFunction('infoInput','infoTable')}
                                             className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} placeholder='Search'>
                                         </input>
                                     </div>
@@ -848,7 +827,7 @@ const Place = () => {
                             <div className="overflow-x-auto">
                                 <div className="align-middle inline-block min-w-full">
                                     <div className="shadow overflow-hidden">
-                                        <table className="table data table-fixed lg:min-w-full divide-y divide-gray-200 min-w-screen" id="myTable">
+                                        <table className="table data table-fixed lg:min-w-full divide-y divide-gray-200 min-w-screen" id="infoTable">
                                             <thead className={` ${color?.tableheader} `}>
                                                 <tr>
                                                     {/* checkbox */}
@@ -1075,7 +1054,7 @@ const Place = () => {
                                         <form className="lg:pr-3" action="#" method="GET">
                                             <label htmlFor="users-search" className="sr-only">Search</label>
                                             <div className="mt-1 relative lg:w-64 xl:w-96">
-                                                <input type="text" name="email" id="myInput" onKeyUp={searchFunction}
+                                                <input type="text" name="email" id="attractionInput" onKeyUp={()=>searchFunction('attractionInput','attractionTable')}
                                                     className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} placeholder="Search">
                                                 </input>
                                             </div>
@@ -1116,7 +1095,8 @@ const Place = () => {
                             <div className="overflow-x-auto">
                                 <div className="align-middle inline-block min-w-full">
                                     <div className="shadow overflow-hidden">
-                                        <table className="table data table-fixed min-w-full divide-y divide-gray-200" id="myTable">
+                                        <table className="table data table-fixed min-w-full divide-y divide-gray-200" 
+                                        id="attractionTable">
                                             <thead className=" bg-gray-100">
                                                 <tr>
                                                     <th scope="col" className="p-4">
