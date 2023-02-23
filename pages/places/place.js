@@ -124,6 +124,14 @@ const Place = () => {
         firstfun();
         router.push('../places/place')
     }
+    //edit season
+    function editSeasonDetails(){
+        let otherSeasons=seasons.filter(i=>i.season_id != editSeason.season_id)
+        alert(JSON.stringify(otherSeasons))
+        setSeasons([...otherSeasons,editSeason]);
+        setEditSeason({});
+        setEditRow({ edit: 0, id: undefined })
+    }
     //remove milestone
     function removeMileStone(itemMile, idx) {
         //network call to delete milestone after sucess do below task
@@ -144,9 +152,16 @@ const Place = () => {
         setShowNewAtt(0);
 
     }
+
+    //delete season
+   function deleteSeason(season){
+    //network call
+    let remainingSeasons=seasons.filter(i=>i.season_id != season.season_id)
+    setSeasons(remainingSeasons);
+   }
     //add info
-    function infoAdd(){
-       setExtraInfo([...extraInfo,newInfo])
+    function infoAdd() {
+        setExtraInfo([...extraInfo, newInfo])
         document.getElementById("newInfo").reset();
         setShowNewInfo(0);
     }
@@ -169,7 +184,7 @@ const Place = () => {
         console.log("Place Data fetched");
     }
 
-   
+
 
     //changing multiselected data
     const languageViews = (viewData) => {
@@ -510,8 +525,6 @@ const Place = () => {
 
                 {/* climate definition */}
                 <div id='5' className={disp === 5 ? 'block' : 'hidden'}>
-
-
                     <div className={`${color?.whitebackground} shadow rounded-lg px-12 h-auto sm:p-6 xl:p-8  2xl:col-span-2`}>
                         {/* progress bar */}
                         <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
@@ -556,7 +569,7 @@ const Place = () => {
                                 <form className="lg:pr-3" action="#" method="GET">
                                     <label htmlFor="users-search" className="sr-only">Search</label>
                                     <div className="mt-1 relative lg:w-64 xl:w-96">
-                                        <input type="text" name="email" id="climateInput" onKeyUp={()=>searchFunction('climateInput','climateTable')}
+                                        <input type="text" name="email" id="climateInput" onKeyUp={() => searchFunction('climateInput', 'climateTable')}
                                             className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} placeholder='Search'>
                                         </input>
                                     </div>
@@ -661,12 +674,16 @@ const Place = () => {
                                                                     className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
                                                                 >
                                                                     <option value={editSeason?.unit}>{editSeason?.unit}</option>
-                                                                    <option value={'F'}>F</option>
+                                                                    <option value={'Farenhiet'}>Farenhiet</option>
 
                                                                 </select>
                                                             </td>
                                                             <td>
-                                                                <button className={`bg-gradient-to-r mt-1 bg-green-600 hover:bg-green-700 mr-2 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}>
+                                                                <button 
+                                                                 onClick={() => {
+                                                                    editSeasonDetails();
+                                                                }}
+                                                                className={`bg-gradient-to-r mt-1 bg-green-600 hover:bg-green-700 mr-2 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}>
 
                                                                     Save</button>
                                                                 <button className={`bg-gradient-to-r my-1 bg-gray-400 hover:${color?.greybackground}0 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}
@@ -719,7 +736,7 @@ const Place = () => {
 
                                                                         Edit</button>
                                                                     <button className="bg-gradient-to-r my-1 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-                                                                    >
+                                                                    onClick={()=>{deleteSeason(season)}} >
 
                                                                         Delete</button>
                                                                 </td>
@@ -790,7 +807,7 @@ const Place = () => {
                                 <form className="lg:pr-3" action="#" method="GET">
                                     <label htmlFor="users-search" className="sr-only">Search</label>
                                     <div className="mt-1 relative lg:w-64 xl:w-96">
-                                        <input type="text" name="email" id="infoInput" onKeyUp={()=>searchFunction('infoInput','infoTable')}
+                                        <input type="text" name="email" id="infoInput" onKeyUp={() => searchFunction('infoInput', 'infoTable')}
                                             className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} placeholder='Search'>
                                         </input>
                                     </div>
@@ -816,7 +833,7 @@ const Place = () => {
                                 </div>
                                 {/* icons end*/}
                                 <button
-                                    onClick={()=>setShowNewInfo(1)}
+                                    onClick={() => setShowNewInfo(1)}
                                     className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150 lg:ml-72 xl:ml-80 md:ml-64">
                                     ADD INFO</button>
 
@@ -1017,7 +1034,8 @@ const Place = () => {
 
 
                 {/* list of attraction */}
-                <div id='2' className={disp === 2 ? 'block' : 'hidden'}>
+                <div id='2' className={disp === 2 ? `${color?.whitebackground} block shadow rounded-lg px-12  sm:p-6 xl:p-8  2xl:col-span-2` : 'hidden'}>
+
                     <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
 
 
@@ -1054,7 +1072,7 @@ const Place = () => {
                                         <form className="lg:pr-3" action="#" method="GET">
                                             <label htmlFor="users-search" className="sr-only">Search</label>
                                             <div className="mt-1 relative lg:w-64 xl:w-96">
-                                                <input type="text" name="email" id="attractionInput" onKeyUp={()=>searchFunction('attractionInput','attractionTable')}
+                                                <input type="text" name="email" id="attractionInput" onKeyUp={() => searchFunction('attractionInput', 'attractionTable')}
                                                     className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} placeholder="Search">
                                                 </input>
                                             </div>
@@ -1095,8 +1113,8 @@ const Place = () => {
                             <div className="overflow-x-auto">
                                 <div className="align-middle inline-block min-w-full">
                                     <div className="shadow overflow-hidden">
-                                        <table className="table data table-fixed min-w-full divide-y divide-gray-200" 
-                                        id="attractionTable">
+                                        <table className="table data table-fixed min-w-full divide-y divide-gray-200"
+                                            id="attractionTable">
                                             <thead className=" bg-gray-100">
                                                 <tr>
                                                     <th scope="col" className="p-4">
@@ -1598,8 +1616,8 @@ const Place = () => {
                 </div>
 
 
-                 {/* Modal Info*/}
-                 <div className={showNewInfo === 1 ? "block" : "hidden"}>
+                {/* Modal Info*/}
+                <div className={showNewInfo === 1 ? "block" : "hidden"}>
                     <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
                         <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
                             <div
@@ -1702,7 +1720,7 @@ const Place = () => {
                                     >
                                         <Button
                                             Primary={language?.Add}
-                                            onClick={()=>infoAdd()}
+                                            onClick={() => infoAdd()}
                                         />
                                     </div>
                                     {/* <div
