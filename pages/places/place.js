@@ -203,7 +203,7 @@ const Place = () => {
             <Header color={color} Primary={english.PlaceSide} Type={currentLogged?.user_type} Sec={colorToggler} mode={mode} setMode={setMode} />
             <Sidebar color={color} Primary={english.PlaceSide} Type={currentLogged?.user_type} />
 
-            <div className={`${color?.greybackground} px-4 pt-24 pb-2 h-screen relative overflow-y-auto  lg:ml-64`}>
+            <div className={`${color?.greybackground} px-4 pt-24 pb-2  relative overflow-y-auto  lg:ml-64`}>
                 {/* Navbar */}
                 <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
                     <ol className="inline-flex items-center space-x-1 md:space-x-2">
