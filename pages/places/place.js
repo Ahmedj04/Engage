@@ -55,7 +55,10 @@ const Place = () => {
         "milestones": []
     })
     const [showNewAtt, setShowNewAtt] = useState(0)
+    const [addSeason, setAddSeason] = useState(0)
+    const [newSeason, setNewSeason] = useState({})
     const [newInfo, setNewInfo] = useState({})
+    const [editInfo, setEditInfo] = useState({})
     const [showNewInfo, setShowNewInfo] = useState(0)
     const [allCheck, setAllCheck] = useState(0)
 
@@ -126,6 +129,14 @@ const Place = () => {
         firstfun();
         router.push('../places/place')
     }
+    //new info
+    function saveInfoChanges(e){
+        e.preventDefault();
+        let infoTemp = extraInfo.filter(info=>info?.info_id!=editInfo?.info_id)
+        setExtraInfo([...infoTemp,editInfo])
+        setEditRow({ edit: 0, id: undefined })
+        //alert(JSON.stringify(editInfo))
+    }
     //edit season
     function editSeasonDetails() {
         let otherSeasons = seasons.filter(i => i.season_id != editSeason.season_id)
@@ -133,6 +144,14 @@ const Place = () => {
         setSeasons([...otherSeasons, editSeason]);
         setEditSeason({});
         setEditRow({ edit: 0, id: undefined })
+    }
+    //add season
+    function addSeasonDetails(){
+        alert(JSON.stringify(newSeason));
+        setNewSeason({...newSeason,'isChecked': false})
+        setSeasons([ ...seasons,newSeason])
+        document.getElementById("newSeason").reset();
+        setAddSeason(0);
     }
     //remove milestone
     function removeMileStone(itemMile, idx) {
@@ -645,7 +664,9 @@ const Place = () => {
 
                                 </div>
                                 {/* icons end*/}
-                                <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150 lg:ml-72 xl:ml-80 md:ml-64">ADD SEASON</button>
+                                <button 
+                                onClick={()=>setAddSeason(1)}
+                                className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150 lg:ml-72 xl:ml-80 md:ml-64">ADD SEASON</button>
 
                             </div>
                         </div>
@@ -960,21 +981,21 @@ const Place = () => {
                                                                 <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
                                                                     <input type="text"
                                                                         className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                                                                        defaultValue={editSeason?.key}
-                                                                        onChange={(e) => setEditSeason({ ...editSeason, season_name: e.target.value })} />
+                                                                        defaultValue={editInfo?.key}
+                                                                        onChange={(e) => setEditInfo({ ...editInfo, key: e.target.value })} />
                                                                 </td>
 
                                                                 <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
                                                                     <input type="text" className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                                                                        defaultValue={editSeason?.value}
-                                                                        onChange={(e) => setEditSeason({ ...editSeason, period: e.target.value })} />
+                                                                        defaultValue={editInfo?.value}
+                                                                        onChange={(e) => setEditInfo({ ...editInfo, value: e.target.value })} />
 
                                                                 </td>
 
 
                                                                 <td>
-                                                                    <button className={`bg-gradient-to-r mt-1 bg-green-600 hover:bg-green-700 mr-2 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}>
-
+                                                                    <button className={`bg-gradient-to-r mt-1 bg-green-600 hover:bg-green-700 mr-2 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}
+                                                                        onClick={(e)=>saveInfoChanges(e)}>
                                                                         Save</button>
                                                                     <button className={`bg-gradient-to-r my-1 bg-gray-400 hover:${color?.greybackground}0 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}
                                                                         onClick={() => {
@@ -1008,7 +1029,7 @@ const Place = () => {
                                                                     <td>
                                                                         <button className="bg-gradient-to-r mt-1 mr-2 bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
                                                                             onClick={() => {
-                                                                                setEditSeason(row);
+                                                                                setEditInfo(row);
                                                                                 setEditRow({ edit: 1, id: index })
                                                                             }}
                                                                         >
@@ -1680,6 +1701,205 @@ const Place = () => {
                                         <Button
                                             Primary={language?.Add}
                                             onClick={attractionAdd}
+                                        />
+                                    </div>
+                                    {/* <div
+                                        className={spinner === 1 && flag === 1 ? "block" : "hidden"}
+                                    >
+                                        <Button Primary={language?.SpinnerUpdate} />
+                                    </div> */}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                {/* Modal Add Climate*/}
+                <div className={addSeason === 1 ? "block" : "hidden"}>
+                    <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
+                        <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
+                            <div
+                                className={`${color?.whitebackground} rounded-lg shadow relative`}
+                            >
+                                <div className="flex items-start justify-between p-5 border-b rounded-t">
+                                    <h3 className={`${color?.text} text-xl font-semibold`}>
+                                        Add Season
+                                    </h3>
+                                    {/* cross button */}
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            //   setActionImage({});
+                                            //   setError({});
+                                            document.getElementById("newSeason").reset();
+                                            setAddSeason(0);
+                                        }}
+                                        className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                                        data-modal-toggle="user-modal"
+                                    >
+                                        <svg
+                                            className="w-5 h-5"
+                                            fill="currentColor"
+                                            viewBox="0 0 20 20"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                fillRule="evenodd"
+                                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                                clipRule="evenodd"
+                                            ></path>
+                                        </svg>
+                                    </button>
+                                    {/* cross button ends */}
+                                </div>
+
+                                <div className="p-6 space-y-6">
+                                    <form id="newSeason">
+                                        <div className="flex flex-wrap">
+                                          
+                                            <div className=" w-full lg:w-6/12  px-4">
+                                                {/* season name  */}
+                                                <div className="relative w-full mb-3">
+                                                    <label
+                                                        className={`text-sm font-medium ${color?.text} block mb-2`}
+                                                        htmlFor="grid-password">
+                                                        Season Name
+                                                        <span style={{ color: "#ff0000" }}>*</span>
+                                                    </label>
+                                                    <input
+                                                        type="text" data-testid="test_property_name"
+                                                        className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                                        required
+                                                        onChange={
+                                                            (e) => (
+                                                                setNewSeason({ ...newSeason, season_name: e.target.value })
+                                                            )
+                                                        } />
+                                                    {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                                             {error?.property_name}
+                                                             </p> */}
+
+                                                </div>
+                                            </div>
+                                            {/* season period */}
+                                            <div className=" w-full lg:w-6/12  px-4">
+                                                
+                                                <div className="relative w-full mb-3">
+                                                    <label
+                                                        className={`text-sm font-medium ${color?.text} block mb-2`}
+                                                        htmlFor="grid-password">
+                                                            Season Period
+                                                        <span style={{ color: "#ff0000" }}>*</span>
+                                                    </label>
+
+
+                                                    <textarea data-testid="test_property_name"
+                                                        className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                                        required
+                                                        onChange={
+                                                            (e) => (
+                                                                setNewSeason({ ...newSeason, period: e.target.value })
+                                                            )
+                                                        } />
+                                                    {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                                             {error?.property_name}
+                                                        </p> */}
+
+                                                </div>
+                                            </div>
+                                                        
+                                             {/* min temp */}
+                                             <div className=" w-full lg:w-6/12  px-4">
+                                                
+                                                <div className="relative w-full mb-3">
+                                                    <label
+                                                        className={`text-sm font-medium ${color?.text} block mb-2`}
+                                                        htmlFor="grid-password">
+                                                            Min temp
+                                                        <span style={{ color: "#ff0000" }}>*</span>
+                                                    </label>
+
+
+                                                    <input type='text' data-testid="test_property_name"
+                                                        className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                                        required
+                                                        onChange={
+                                                            (e) => (
+                                                                setNewSeason({ ...newSeason, min_temp: e.target.value })
+                                                            )
+                                                        } />
+                                                    {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                                             {error?.property_name}
+                                                        </p> */}
+
+                                                </div>
+                                            </div>
+                                             {/* max temp */}
+                                             <div className=" w-full lg:w-6/12  px-4">
+                                                 <div className="relative w-full mb-3">
+                                                    <label
+                                                        className={`text-sm font-medium ${color?.text} block mb-2`}
+                                                        htmlFor="grid-password">
+                                                            Max temp
+                                                        <span style={{ color: "#ff0000" }}>*</span>
+                                                    </label>
+
+
+                                                    <input type='text' data-testid="test_property_name"
+                                                        className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                                        required
+                                                        onChange={
+                                                            (e) => (
+                                                                setNewSeason({ ...newSeason, max_temp: e.target.value })
+                                                            )
+                                                        } />
+                                                    {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                                             {error?.property_name}
+                                                        </p> */}
+                                                        
+
+                                                </div>
+                                            </div>
+                                             {/* Temperature Unit */}
+                                             <div className=" w-full lg:w-6/12  px-4">
+                                                
+                                                <div className="relative w-full mb-3">
+                                                    <label
+                                                        className={`text-sm font-medium ${color?.text} block mb-2`}
+                                                        htmlFor="grid-password">
+                                                            Temperature Unit
+                                                        <span style={{ color: "#ff0000" }}>*</span>
+                                                    </label>
+
+
+                                                   <select onChange={(e) => setNewSeason({ ...newSeason, unit: e.target.value })}
+                                                                        className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
+                                                                    >
+                                                                        <option disabled>Select Unit</option>
+                                                                        <option value={'Celsius'}>Celsius</option>
+                                                                        <option value={'Farenhiet'}>Farenhiet</option>
+
+                                                                    </select>
+                                                    {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                                             {error?.property_name}
+                                                        </p> */}
+                                                        
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </form>
+                                </div>
+                                <div className="items-center p-6 border-t border-gray-200 rounded-b">
+
+                                    <div
+                                    // className={spinner === 0 && flag === 1 ? "block" : "hidden"}
+                                    >
+                                        <Button
+                                            Primary={language?.Add}
+                                            onClick={addSeasonDetails}
                                         />
                                     </div>
                                     {/* <div
