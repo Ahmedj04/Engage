@@ -202,12 +202,7 @@ const Place = () => {
       };
 
     const allCheckbox = (e) =>{
-      //  const { name, checked } = e.target;
-        // let tempCon = seasons.map((item) =>
-        //   item.season_id === name ? { ...item, isChecked: checked } : item
-        // );
-
-      let tempCon=[];
+     let tempCon=[];
      seasons.map((item) =>
      tempCon.push({...item,'isChecked':'checked'})
         );
@@ -675,13 +670,13 @@ const Place = () => {
                                                     return (<>
                                                         {(editRow?.edit === 1 && editRow.id === index) ? 
                                                         <tr key={index}>
-                                                            {JSON.stringify(editSeason)}
-                                                            <td className="p-4 w-4">
+                                                           <td className="p-4 w-4">
                                                                 <span className="flex items-center">
                                                                     <input
                                                                      type="checkbox"
                                                                      id={editSeason?.season_id}
                                                                      tooltip
+                                                                     disabled
                                                                      title="Click here to delete image."
                                                                      name={editSeason?.season_id}
                                                                      checked={editSeason.isChecked || false}
