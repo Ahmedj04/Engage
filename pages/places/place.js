@@ -57,6 +57,7 @@ const Place = () => {
     const [showNewAtt, setShowNewAtt] = useState(0)
     const [newInfo, setNewInfo] = useState({})
     const [showNewInfo, setShowNewInfo] = useState(0)
+    const [allCheck, setAllCheck] = useState(0)
 
     // to execute as soon as page loads
 
@@ -126,10 +127,10 @@ const Place = () => {
         router.push('../places/place')
     }
     //edit season
-    function editSeasonDetails(){
-        let otherSeasons=seasons.filter(i=>i.season_id != editSeason.season_id)
+    function editSeasonDetails() {
+        let otherSeasons = seasons.filter(i => i.season_id != editSeason.season_id)
         alert(JSON.stringify(otherSeasons))
-        setSeasons([...otherSeasons,editSeason]);
+        setSeasons([...otherSeasons, editSeason]);
         setEditSeason({});
         setEditRow({ edit: 0, id: undefined })
     }
@@ -155,11 +156,11 @@ const Place = () => {
     }
 
     //delete season
-   function deleteSeason(season){
-    //network call
-    let remainingSeasons=seasons.filter(i=>i.season_id != season.season_id)
-    setSeasons(remainingSeasons);
-   }
+    function deleteSeason(season) {
+        //network call
+        let remainingSeasons = seasons.filter(i => i.season_id != season.season_id)
+        setSeasons(remainingSeasons);
+    }
     //add info
     function infoAdd() {
         setExtraInfo([...extraInfo, newInfo])
@@ -174,8 +175,8 @@ const Place = () => {
             setCategories(response?.data?.place_category)
             //setLanguages(response?.data?.place_languages)
             setLanguages((response?.data?.place_languages?.map(lang => GlobalData.LanguageData.filter(i => i.language_code === lang.language))).flat())
-            let tempSeason=[]
-            response?.data?.place_seasons.map((season, id) => { tempSeason.push({ ...season,'isChecked': false }) })
+            let tempSeason = []
+            response?.data?.place_seasons.map((season, id) => { tempSeason.push({ ...season, 'isChecked': false }) })
             setSeasons(tempSeason)
             let images = []
             response?.data?.images.map((image, id) => { images.push({ ...image, 'image_idx': id, 'isChecked': false }) })
@@ -188,27 +189,46 @@ const Place = () => {
     }
 
     //handle check box
-    const handlecheckbox = (e,edit) => {
+    const handlecheckbox = (e,season) => {
         const { name, checked } = e.target;
-        let tempCon = seasons.map((item) =>
-          item.season_id === name ? { ...item, isChecked: checked } : item
-        );
-        setSeasons(tempCon); 
-        check = tempCon
-          .filter((i) => i.isChecked === true)
-          .map((j) => {
-            return j.image_id;
-          });
-      };
+        let tempCon;
+        if(season.isChecked === false){
+            tempCon = seasons.map((item) =>
+            item.season_id === name ? { ...item, isChecked: 'checked' } : item
+        );}
 
-    const allCheckbox = (e) =>{
-     let tempCon=[];
-     seasons.map((item) =>
-     tempCon.push({...item,'isChecked':'checked'})
-        );
+        else{
+             tempCon = seasons.map((item) =>
+            item.season_id === name ? { ...item, isChecked: false } : item
+        );}
 
-        setSeasons(tempCon); 
+       
+        setSeasons(tempCon);
         check = tempCon
+            .filter((i) => i.isChecked === 'checked')
+            .map((j) => {
+                return j.season_id;
+            });
+            
+    };
+
+
+    const allCheckbox = (e) => {
+        let tempCon = [];
+        if (allCheck === 0) {
+            seasons.map((item) =>
+                tempCon.push({ ...item, 'isChecked': 'checked' })
+            );
+        }
+        else {
+            seasons.map((item) =>
+                tempCon.push({ ...item, 'isChecked': false })
+            );
+        }
+
+        setSeasons(tempCon);
+        check = tempCon
+
     }
     //changing multiselected data
     const languageViews = (viewData) => {
@@ -226,9 +246,9 @@ const Place = () => {
     }
 
     //delete All seasons
-    function deleteAllSeason(){
+    function deleteAllSeason() {
         alert(JSON.stringify(seasons));
-        let remainingSeasons =seasons.filter(season=>season.isChecked != 'checked');
+        let remainingSeasons = seasons.filter(season => season.isChecked != 'checked');
         setSeasons(remainingSeasons);
     }
 
@@ -641,10 +661,13 @@ const Place = () => {
                                                     <th scope="col" className="p-4">
                                                         <div className="flex items-center">
                                                             <input id="checkbox-all" aria-describedby="checkbox-1" type="checkbox"
-                                                                name="allSelect" 
+                                                                checked={allCheck === 1 || false}
+                                                                name="allSelect"
                                                                 onChange={(e) => {
+                                                                    setAllCheck(allCheck === 1 ? 0 : 1);
                                                                     allCheckbox(e);
-                                                                  }}
+                                                                }}
+                                                               
                                                                 className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                                                             <label htmlFor="checkbox-all" className="sr-only">checkbox</label>
                                                         </div>
@@ -668,94 +691,93 @@ const Place = () => {
                                             <tbody className={` ${color?.whitebackground} divide-y  divide-gray-200`}>
                                                 {seasons.map((season, index) => {
                                                     return (<>
-                                                        {(editRow?.edit === 1 && editRow.id === index) ? 
-                                                        <tr key={index}>
-                                                           <td className="p-4 w-4">
-                                                                <span className="flex items-center">
-                                                                    <input
-                                                                     type="checkbox"
-                                                                     id={editSeason?.season_id}
-                                                                     tooltip
-                                                                     disabled
-                                                                     title="Click here to delete image."
-                                                                     name={editSeason?.season_id}
-                                                                     checked={editSeason.isChecked || false}
-                                                                     onChange={(e) => {
-                                                                       handlecheckbox(e);
-                                                                     }}
-                                                                aria-describedby="checkbox-1"
-                                                                className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
-                                                                    <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
-                                                                </span>
-                                                            </td>
-
-                                                            <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
-                                                                <input type="text"
-                                                                    className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
-                                                                    defaultValue={editSeason?.season_name}
-                                                                    onChange={(e) => setEditSeason({ ...editSeason, season_name: e.target.value })} />
-                                                            </td>
-
-                                                            <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
-                                                                <input type="text" className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
-                                                                    defaultValue={editSeason?.period}
-                                                                    onChange={(e) => setEditSeason({ ...editSeason, period: e.target.value })} />
-
-                                                            </td>
-                                                            <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
-                                                                <input type="text" className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
-                                                                    defaultValue={editSeason?.max_temp}
-                                                                    onChange={(e) => setEditSeason({ ...editSeason, max_temp: e.target.value })} />
-
-                                                            </td>
-                                                            <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
-                                                                <input type="text"
-                                                                    className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
-                                                                    defaultValue={editSeason?.min_temp}
-                                                                    onChange={(e) => setEditSeason({ ...editSeason, min_temp: e.target.value })} />
-
-                                                            </td>
-                                                            <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
-                                                                <select onChange={(e) => setEditSeason({ ...editSeason, unit: e.target.value })}
-                                                                    className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
-                                                                >
-                                                                    <option value={editSeason?.unit}>{editSeason?.unit}</option>
-                                                                    <option value={'Farenhiet'}>Farenhiet</option>
-
-                                                                </select>
-                                                            </td>
-                                                            <td>
-                                                                <button 
-                                                                 onClick={() => {
-                                                                    editSeasonDetails();
-                                                                }}
-                                                                className={`bg-gradient-to-r mt-1 bg-green-600 hover:bg-green-700 mr-2 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}>
-
-                                                                    Save</button>
-                                                                <button className={`bg-gradient-to-r my-1 bg-gray-400 hover:${color?.greybackground}0 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}
-                                                                    onClick={() => {
-                                                                        setEditSeason({});
-                                                                        setEditRow({ edit: 0, id: undefined })
-                                                                    }}
-                                                                >
-
-                                                                    Cancel</button>
-                                                            </td>
-                                                        </tr> :
+                                                        {(editRow?.edit === 1 && editRow.id === index) ?
                                                             <tr key={index}>
                                                                 <td className="p-4 w-4">
                                                                     <span className="flex items-center">
-                                                                        <input 
-                                                                         type="checkbox"
-                                                                         id={season?.season_id}
-                                                                         tooltip
-                                                                         title="Click here to delete image."
-                                                                         name={season?.season_id}
-                                                                         checked={season.isChecked || false}
-                                                                         onChange={(e) => {
-                                                                           handlecheckbox(e);
-                                                                         }}
-                                                                        aria-describedby="checkbox-1"
+                                                                        <input
+                                                                            type="checkbox"
+                                                                            id={editSeason?.season_id}
+                                                                            tooltip
+                                                                            disabled
+                                                                            title="Click here to delete image."
+                                                                            name={editSeason?.season_id}
+                                                                            checked={editSeason.isChecked || false}
+
+                                                                            aria-describedby="checkbox-1"
+                                                                            className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                                                                        <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
+                                                                    </span>
+                                                                </td>
+
+                                                                <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                                                    <input type="text"
+                                                                        className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
+                                                                        defaultValue={editSeason?.season_name}
+                                                                        onChange={(e) => setEditSeason({ ...editSeason, season_name: e.target.value })} />
+                                                                </td>
+
+                                                                <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                                                    <input type="text" className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
+                                                                        defaultValue={editSeason?.period}
+                                                                        onChange={(e) => setEditSeason({ ...editSeason, period: e.target.value })} />
+
+                                                                </td>
+                                                                <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                                                    <input type="text" className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
+                                                                        defaultValue={editSeason?.max_temp}
+                                                                        onChange={(e) => setEditSeason({ ...editSeason, max_temp: e.target.value })} />
+
+                                                                </td>
+                                                                <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                                                    <input type="text"
+                                                                        className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
+                                                                        defaultValue={editSeason?.min_temp}
+                                                                        onChange={(e) => setEditSeason({ ...editSeason, min_temp: e.target.value })} />
+
+                                                                </td>
+                                                                <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                                                    <select onChange={(e) => setEditSeason({ ...editSeason, unit: e.target.value })}
+                                                                        className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
+                                                                    >
+                                                                        <option value={editSeason?.unit}>{editSeason?.unit}</option>
+                                                                        <option value={'Farenhiet'}>Farenhiet</option>
+
+                                                                    </select>
+                                                                </td>
+                                                                <td>
+                                                                    <button
+                                                                        onClick={() => {
+                                                                            editSeasonDetails();
+                                                                        }}
+                                                                        className={`bg-gradient-to-r mt-1 bg-green-600 hover:bg-green-700 mr-2 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}>
+
+                                                                        Save</button>
+                                                                    <button className={`bg-gradient-to-r my-1 bg-gray-400 hover:${color?.greybackground}0 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}
+                                                                        onClick={() => {
+                                                                            setEditSeason({});
+                                                                            setEditRow({ edit: 0, id: undefined })
+                                                                        }}
+                                                                    >
+
+                                                                        Cancel</button>
+                                                                </td>
+                                                            </tr> :
+                                                            <tr key={index}>
+                                                                <td className="p-4 w-4">
+                                                                    <span className="flex items-center">
+                                                                        <input
+                                                                            type="checkbox"
+                                                                            id={season?.season_id}
+                                                                            tooltip
+                                                                            title="Click here to delete image."
+                                                                            name={season?.season_id}
+                                                                            checked={season.isChecked || false}
+                                                                            onChange={(e) => {
+                                                                                
+                                                                                handlecheckbox(e,season);
+                                                                                }}
+                                                                            aria-describedby="checkbox-1"
                                                                             className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                                                                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                                                                     </span>
@@ -792,7 +814,7 @@ const Place = () => {
 
                                                                         Edit</button>
                                                                     <button className="bg-gradient-to-r my-1 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-                                                                    onClick={()=>{deleteSeason(season)}} >
+                                                                        onClick={() => { deleteSeason(season) }} >
 
                                                                         Delete</button>
                                                                 </td>
