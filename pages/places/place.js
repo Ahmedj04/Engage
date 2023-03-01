@@ -61,6 +61,7 @@ const Place = () => {
     const [editInfo, setEditInfo] = useState({})
     const [showNewInfo, setShowNewInfo] = useState(0)
     const [allCheck, setAllCheck] = useState(0)
+    const [allCheckInfo, setAllCheckInfo] = useState(0)
 
     // to execute as soon as page loads
 
@@ -130,10 +131,10 @@ const Place = () => {
         router.push('../places/place')
     }
     //new info
-    function saveInfoChanges(e){
+    function saveInfoChanges(e) {
         e.preventDefault();
-        let infoTemp = extraInfo.filter(info=>info?.info_id!=editInfo?.info_id)
-        setExtraInfo([...infoTemp,editInfo])
+        let infoTemp = extraInfo.filter(info => info?.info_id != editInfo?.info_id)
+        setExtraInfo([...infoTemp, editInfo])
         setEditRow({ edit: 0, id: undefined })
         //alert(JSON.stringify(editInfo))
     }
@@ -146,10 +147,10 @@ const Place = () => {
         setEditRow({ edit: 0, id: undefined })
     }
     //add season
-    function addSeasonDetails(){
+    function addSeasonDetails() {
         alert(JSON.stringify(newSeason));
-        setNewSeason({...newSeason,'isChecked': false})
-        setSeasons([ ...seasons,newSeason])
+        setNewSeason({ ...newSeason, 'isChecked': false })
+        setSeasons([...seasons, newSeason])
         document.getElementById("newSeason").reset();
         setAddSeason(0);
     }
@@ -202,36 +203,78 @@ const Place = () => {
             setPlaceImage(images)
 
             setVisible(1);
-        }).catch((err) => { alert(JSON.stringify(err)) })
+        }).catch((err) => {
+            //alert(JSON.stringify(err)) 
+            let response = { "name": "srinagar", "description": "Srinagar is the largest city and the summer capital of Jammu and Kashmir, India. \n\t\t\tIt lies in the Kashmir Valley on the banks of the Jhelum River, a tributary of the Indus, and Dal and Anchar lakes. The city is known for its natural environment, gardens, waterfronts and houseboats. \n\t\t\tIt is known for traditional Kashmiri handicrafts like the Kashmir shawl made of pashmina and cashmere wool, and also dried fruits. It is the 31st-most populous city in India, the northernmost city in India to have over one million people, and the second-largest metropolitan area in the Himalayas after Kathmandu, Nepal. ", "airport_distance": 12.5, "latitude": "34.083656N", "longitude": "74.7973E", "places_id": "p001", "best_time_to_visit": "may to oct", "additional_information": [{ "info_id": "info001", "key": "item must have", "value": "light jacket", "type": "place", "external_link": "p001" }, { "info_id": "info002", "key": "Mobile SIM", "value": "POSTPAID SIM", "type": "place", "external_link": "p001" }], "place_category": [{ "cat_id": "cat001", "cat_name": "Honey moon", "type": "place", "external_link": "p001" }, { "cat_id": "cat002", "cat_name": "Adventure", "type": "place", "external_link": "p001" }], "place_languages": [{ "lang_id": "lang001", "language": "en", "external_link": "p001" }, { "lang_id": "lang003", "language": "ur", "external_link": "p001" }, { "lang_id": "lang002", "language": "ks", "external_link": "p001" }], "place_seasons": [{ "season_id": "season001", "season_name": "spring", "period": "march-may", "min_temp": 5, "max_temp": 20, "unit": "Celsius", "external_link": "p001" }, { "season_id": "season002", "season_name": "summer", "period": "june-aug", "min_temp": 10, "max_temp": 32, "unit": "Celsius", "external_link": "p001" }, { "season_id": "season003", "season_name": "autum", "period": "sept-nov", "min_temp": 5, "max_temp": 22, "unit": "Celsius", "external_link": "p001" }, { "season_id": "season004", "season_name": "winter", "period": "dec-feb", "min_temp": -5, "max_temp": 2, "unit": "Celsius", "external_link": "p001" }], "images": [{ "image_id": "pimg001", "image_link": "https://images.pexels.com/photos/11876444/pexels-photo-11876444.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2", "image_description": "Hazratbal Shrine", "image_title": "Hazratbal Shrine", "image_type": "Place" }, { "image_id": "pimg002", "image_link": "https://images.pexels.com/photos/7438902/pexels-photo-7438902.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2", "image_description": "Char Chinar", "image_title": "Char Chinar", "image_type": "Place" }], "attractions": [{ "attraction_id": "attr002", "places_id": "p001", "attraction_name": "Char chinar", "attraction_description": "Char Chinar, also sometimes called Char Chinari, Ropa Lank, or Rupa Lank, is an island in Dal Lake, Srinagar, Jammu and Kashmir. Dal Lake includes 3 islands, 2 of which are marked with beautiful Chinar trees.", "milestones": [{ "milestone_id": "milestone002", "attraction_id": "attr002", "milestone_name": "bulvard road", "milestone_description": "road along side the banks of dal lake" }] }, { "attraction_id": "attr001", "places_id": "p001", "attraction_name": "Hazratbal", "attraction_description": "The Hazratbal Shrine (Kashmiri: درگاه حَضْرَت بل), popularly called Dargah Sharif (\"the Holy Shrine\"), is a Muslim shrine located in Hazratbal locality of Srinagar in Jammu and Kashmir, India. It contains a relic, Moi-e-Muqqadas, which is widely believed to be the hair of the Islamic prophet Muhammad S.A.W (Pbuh).[1] It is situated on the northern bank of the Dal Lake in Srinagar, and is considered to be Kashmirs holiest Muslim shrine.", "milestones": [{ "milestone_id": "milestone001", "attraction_id": "attr001", "milestone_name": "bod dal", "milestone_description": "it is part of dal lake through which we can go to lakut dal" }] }] };
+            setPlace(response);
+            let tempInfo = []
+            response?.additional_information.map((add_inf, id) => { tempInfo.push({ ...add_inf, 'isChecked': false }) })
+            setExtraInfo(tempInfo)
+
+            setCategories(response?.place_category)
+            //setLanguages(response?.data?.place_languages)
+
+            setLanguages((response?.place_languages?.map(lang => GlobalData.LanguageData.filter(i => i.language_code === lang.language))).flat())
+            let tempSeason = []
+            response?.place_seasons.map((season, id) => { tempSeason.push({ ...season, 'isChecked': false }) })
+            setSeasons(tempSeason)
+            let images = []
+            response?.images.map((image, id) => { images.push({ ...image, 'image_idx': id, 'isChecked': false }) })
+            setPlaceImage(images)
+            setVisible(1);
+
+        })
 
         console.log("Place Data fetched");
     }
 
     //handle check box
-    const handlecheckbox = (e,season) => {
+    const handlecheckbox = (e, season) => {
         const { name, checked } = e.target;
         let tempCon;
-        if(season.isChecked === false){
+        if (season.isChecked === false) {
             tempCon = seasons.map((item) =>
-            item.season_id === name ? { ...item, isChecked: 'checked' } : item
-        );}
+                item.season_id === name ? { ...item, isChecked: 'checked' } : item
+            );
+        }
 
-        else{
-             tempCon = seasons.map((item) =>
-            item.season_id === name ? { ...item, isChecked: false } : item
-        );}
-
-       
+        else {
+            tempCon = seasons.map((item) =>
+                item.season_id === name ? { ...item, isChecked: false } : item
+            );
+        }
         setSeasons(tempCon);
         check = tempCon
             .filter((i) => i.isChecked === 'checked')
             .map((j) => {
                 return j.season_id;
             });
-            
+    };
+    //handle check box seasons
+    const handlecheckboxinfo = (e, itemInfo) => {
+        const { name, checked } = e.target;
+        let tempInf;
+        if (itemInfo.isChecked === false) {
+            tempInf = extraInfo.map((item) =>
+                item.info_id === name ? { ...item, isChecked: 'checked' } : item
+            );
+        }
+
+        else {
+            tempInf = extraInfo.map((item) =>
+                item.info_id === name ? { ...item, isChecked: false } : item
+            );
+        }
+
+        setExtraInfo(tempInf);
+        check = tempInf
+            .filter((i) => i.isChecked === 'checked')
+            .map((j) => {
+                return j.info_id;
+            });
     };
 
-
+    //check all seasons
     const allCheckbox = (e) => {
         let tempCon = [];
         if (allCheck === 0) {
@@ -247,7 +290,22 @@ const Place = () => {
 
         setSeasons(tempCon);
         check = tempCon
-
+    }
+    // check all info's
+    const allCheckboxInfo = (e) => {
+        let tempInf = [];
+        if (allCheckInfo === 0) {
+            extraInfo.map((item) =>
+                tempInf.push({ ...item, 'isChecked': 'checked' })
+            );
+        }
+        else {
+            extraInfo.map((item) =>
+                tempInf.push({ ...item, 'isChecked': false })
+            );
+        }
+        setExtraInfo(tempInf);
+        check = tempInf
     }
     //changing multiselected data
     const languageViews = (viewData) => {
@@ -266,11 +324,22 @@ const Place = () => {
 
     //delete All seasons
     function deleteAllSeason() {
-        alert(JSON.stringify(seasons));
         let remainingSeasons = seasons.filter(season => season.isChecked != 'checked');
         setSeasons(remainingSeasons);
+        setAllCheck(0);
+    }
+    //delete selected info item
+    function deleteSelectedInfo() {
+        let remainingInfo = extraInfo.filter(inf => inf.isChecked != 'checked');
+        setExtraInfo(remainingInfo);
+        setAllCheckInfo(0);
     }
 
+    //delete info
+    function deleteInfo(e, infoRow) {
+        let remainingInfo = extraInfo.filter(inf => inf.info_id != infoRow.info_id);
+        setExtraInfo(remainingInfo);
+    }
     //catgory
     const category = [{ category_name: 'Adventure' },
     { category_name: 'Theatre, Music and Culture' },
@@ -664,9 +733,9 @@ const Place = () => {
 
                                 </div>
                                 {/* icons end*/}
-                                <button 
-                                onClick={()=>setAddSeason(1)}
-                                className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150 lg:ml-72 xl:ml-80 md:ml-64">ADD SEASON</button>
+                                <button
+                                    onClick={() => setAddSeason(1)}
+                                    className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150 lg:ml-72 xl:ml-80 md:ml-64">ADD SEASON</button>
 
                             </div>
                         </div>
@@ -688,7 +757,7 @@ const Place = () => {
                                                                     setAllCheck(allCheck === 1 ? 0 : 1);
                                                                     allCheckbox(e);
                                                                 }}
-                                                               
+
                                                                 className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                                                             <label htmlFor="checkbox-all" className="sr-only">checkbox</label>
                                                         </div>
@@ -795,9 +864,9 @@ const Place = () => {
                                                                             name={season?.season_id}
                                                                             checked={season.isChecked || false}
                                                                             onChange={(e) => {
-                                                                                
-                                                                                handlecheckbox(e,season);
-                                                                                }}
+
+                                                                                handlecheckbox(e, season);
+                                                                            }}
                                                                             aria-describedby="checkbox-1"
                                                                             className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                                                                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
@@ -918,7 +987,7 @@ const Place = () => {
                                         <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd"></path></svg>
                                     </span>
 
-                                    <button onClick={() => { alert("all deleted") }} data-tooltip="Delete" aria-label="Delete" className={`${color?.textgray} hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}>
+                                    <button onClick={() => { deleteSelectedInfo() }} data-tooltip="Delete" aria-label="Delete" className={`${color?.textgray} hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}>
                                         <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd"></path></svg>
                                     </button>
 
@@ -949,7 +1018,13 @@ const Place = () => {
                                                     {/* checkbox */}
                                                     <th scope="col" className="p-4">
                                                         <div className="flex items-center">
-                                                            <input id="checkbox-all" aria-describedby="checkbox-1" type="checkbox"
+                                                            <input id="checkbox-all"
+                                                                onChange={(e) => {
+                                                                    setAllCheckInfo(allCheckInfo === 1 ? 0 : 1);
+                                                                    allCheckboxInfo(e);
+                                                                }}
+                                                                checked={allCheckInfo === 1 ? 'checked' : false}
+                                                                aria-describedby="checkbox-1" type="checkbox"
                                                                 name="allSelect"
                                                                 className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                                                             <label htmlFor="checkbox-all" className="sr-only">checkbox</label>
@@ -969,48 +1044,56 @@ const Place = () => {
                                                 {extraInfo.map((row, index) => {
                                                     return (
                                                         <>
-                                                            {(editRow?.edit === 1 && editRow.id === index) ? <tr key={index}>
-                                                                <td className="p-4 w-4">
-                                                                    <span className="flex items-center">
-                                                                        <input id="checkbox-1" name={index} aria-describedby="checkbox-1" type="checkbox"
-                                                                            className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-full rounded" />
-                                                                        <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
-                                                                    </span>
-                                                                </td>
-
-                                                                <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
-                                                                    <input type="text"
-                                                                        className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                                                                        defaultValue={editInfo?.key}
-                                                                        onChange={(e) => setEditInfo({ ...editInfo, key: e.target.value })} />
-                                                                </td>
-
-                                                                <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
-                                                                    <input type="text" className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                                                                        defaultValue={editInfo?.value}
-                                                                        onChange={(e) => setEditInfo({ ...editInfo, value: e.target.value })} />
-
-                                                                </td>
-
-
-                                                                <td>
-                                                                    <button className={`bg-gradient-to-r mt-1 bg-green-600 hover:bg-green-700 mr-2 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}
-                                                                        onClick={(e)=>saveInfoChanges(e)}>
-                                                                        Save</button>
-                                                                    <button className={`bg-gradient-to-r my-1 bg-gray-400 hover:${color?.greybackground}0 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}
-                                                                        onClick={() => {
-                                                                            setEditSeason({});
-                                                                            setEditRow({ edit: 0, id: undefined })
-                                                                        }}
-                                                                    >
-
-                                                                        Cancel</button>
-                                                                </td>
-                                                            </tr> :
+                                                            {(editRow?.edit === 1 && editRow.id === index) ?
                                                                 <tr key={index}>
                                                                     <td className="p-4 w-4">
                                                                         <span className="flex items-center">
-                                                                            <input id="checkbox-1" name={index} aria-describedby="checkbox-1" type="checkbox"
+                                                                            <input disabled id="checkbox-1" name={index}
+                                                                                checked={editInfo.isChecked || false}
+                                                                                aria-describedby="checkbox-1" type="checkbox"
+                                                                                className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-full rounded" />
+                                                                            <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
+                                                                        </span>
+                                                                    </td>
+
+                                                                    <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                                                        <input type="text"
+                                                                            className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                                                            defaultValue={editInfo?.key}
+                                                                            onChange={(e) => setEditInfo({ ...editInfo, key: e.target.value })} />
+                                                                    </td>
+
+                                                                    <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                                                        <input type="text" className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                                                            defaultValue={editInfo?.value}
+                                                                            onChange={(e) => setEditInfo({ ...editInfo, value: e.target.value })} />
+
+                                                                    </td>
+
+
+                                                                    <td>
+                                                                        <button className={`bg-gradient-to-r mt-1 bg-green-600 hover:bg-green-700 mr-2 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}
+                                                                            onClick={(e) => saveInfoChanges(e)}>
+                                                                            Save</button>
+                                                                        <button className={`bg-gradient-to-r my-1 bg-gray-400 hover:${color?.greybackground}0 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}
+                                                                            onClick={() => {
+                                                                                setEditSeason({});
+                                                                                setEditRow({ edit: 0, id: undefined })
+                                                                            }}
+                                                                        >
+
+                                                                            Cancel</button>
+                                                                    </td>
+                                                                </tr> :
+                                                                <tr key={index}>
+                                                                    <td className="p-4 w-4">
+                                                                        <span className="flex items-center">
+                                                                            <input id="checkbox-1"
+                                                                                name={row?.info_id}
+                                                                                aria-describedby="checkbox-1"
+                                                                                type="checkbox"
+                                                                                checked={row.isChecked || false}
+                                                                                onClick={(e) => handlecheckboxinfo(e, row)}
                                                                                 className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                                                                             <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                                                                         </span>
@@ -1036,6 +1119,9 @@ const Place = () => {
 
                                                                             Edit</button>
                                                                         <button className="bg-gradient-to-r my-1 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                                                            onClick={(e) => {
+                                                                                deleteInfo(e, row);
+                                                                            }}
                                                                         >
 
                                                                             Delete</button>
@@ -1757,7 +1843,7 @@ const Place = () => {
                                 <div className="p-6 space-y-6">
                                     <form id="newSeason">
                                         <div className="flex flex-wrap">
-                                          
+
                                             <div className=" w-full lg:w-6/12  px-4">
                                                 {/* season name  */}
                                                 <div className="relative w-full mb-3">
@@ -1784,12 +1870,12 @@ const Place = () => {
                                             </div>
                                             {/* season period */}
                                             <div className=" w-full lg:w-6/12  px-4">
-                                                
+
                                                 <div className="relative w-full mb-3">
                                                     <label
                                                         className={`text-sm font-medium ${color?.text} block mb-2`}
                                                         htmlFor="grid-password">
-                                                            Season Period
+                                                        Season Period
                                                         <span style={{ color: "#ff0000" }}>*</span>
                                                     </label>
 
@@ -1808,15 +1894,15 @@ const Place = () => {
 
                                                 </div>
                                             </div>
-                                                        
-                                             {/* min temp */}
-                                             <div className=" w-full lg:w-6/12  px-4">
-                                                
+
+                                            {/* min temp */}
+                                            <div className=" w-full lg:w-6/12  px-4">
+
                                                 <div className="relative w-full mb-3">
                                                     <label
                                                         className={`text-sm font-medium ${color?.text} block mb-2`}
                                                         htmlFor="grid-password">
-                                                            Min temp
+                                                        Min temp
                                                         <span style={{ color: "#ff0000" }}>*</span>
                                                     </label>
 
@@ -1835,13 +1921,13 @@ const Place = () => {
 
                                                 </div>
                                             </div>
-                                             {/* max temp */}
-                                             <div className=" w-full lg:w-6/12  px-4">
-                                                 <div className="relative w-full mb-3">
+                                            {/* max temp */}
+                                            <div className=" w-full lg:w-6/12  px-4">
+                                                <div className="relative w-full mb-3">
                                                     <label
                                                         className={`text-sm font-medium ${color?.text} block mb-2`}
                                                         htmlFor="grid-password">
-                                                            Max temp
+                                                        Max temp
                                                         <span style={{ color: "#ff0000" }}>*</span>
                                                     </label>
 
@@ -1857,34 +1943,34 @@ const Place = () => {
                                                     {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
                                                              {error?.property_name}
                                                         </p> */}
-                                                        
+
 
                                                 </div>
                                             </div>
-                                             {/* Temperature Unit */}
-                                             <div className=" w-full lg:w-6/12  px-4">
-                                                
+                                            {/* Temperature Unit */}
+                                            <div className=" w-full lg:w-6/12  px-4">
+
                                                 <div className="relative w-full mb-3">
                                                     <label
                                                         className={`text-sm font-medium ${color?.text} block mb-2`}
                                                         htmlFor="grid-password">
-                                                            Temperature Unit
+                                                        Temperature Unit
                                                         <span style={{ color: "#ff0000" }}>*</span>
                                                     </label>
 
 
-                                                   <select onChange={(e) => setNewSeason({ ...newSeason, unit: e.target.value })}
-                                                                        className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
-                                                                    >
-                                                                        <option disabled>Select Unit</option>
-                                                                        <option value={'Celsius'}>Celsius</option>
-                                                                        <option value={'Farenhiet'}>Farenhiet</option>
+                                                    <select onChange={(e) => setNewSeason({ ...newSeason, unit: e.target.value })}
+                                                        className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
+                                                    >
+                                                        <option disabled>Select Unit</option>
+                                                        <option value={'Celsius'}>Celsius</option>
+                                                        <option value={'Farenhiet'}>Farenhiet</option>
 
-                                                                    </select>
+                                                    </select>
                                                     {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
                                                              {error?.property_name}
                                                         </p> */}
-                                                        
+
 
                                                 </div>
                                             </div>
