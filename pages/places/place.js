@@ -22,6 +22,7 @@ let colorToggle;
 let language;
 let currentProperty;
 let check = [];
+let checkAttraction = [];
 let currentLogged;
 // main function
 const Place = () => {
@@ -62,6 +63,8 @@ const Place = () => {
     const [showNewInfo, setShowNewInfo] = useState(0)
     const [allCheck, setAllCheck] = useState(0)
     const [allCheckInfo, setAllCheckInfo] = useState(0)
+    const [allCheckAttractions, setAllCheckAttractions] = useState(0)
+    const [placeAttractions, setPlaceAttractions] = useState([])
 
     // to execute as soon as page loads
 
@@ -136,20 +139,18 @@ const Place = () => {
         let infoTemp = extraInfo.filter(info => info?.info_id != editInfo?.info_id)
         setExtraInfo([...infoTemp, editInfo])
         setEditRow({ edit: 0, id: undefined })
-        //alert(JSON.stringify(editInfo))
+       
     }
     //edit season
     function editSeasonDetails() {
         let otherSeasons = seasons.filter(i => i.season_id != editSeason.season_id)
-        alert(JSON.stringify(otherSeasons))
-        setSeasons([...otherSeasons, editSeason]);
+       setSeasons([...otherSeasons, editSeason]);
         setEditSeason({});
         setEditRow({ edit: 0, id: undefined })
     }
     //add season
     function addSeasonDetails() {
-        alert(JSON.stringify(newSeason));
-        setNewSeason({ ...newSeason, 'isChecked': false })
+      setNewSeason({ ...newSeason, 'isChecked': false })
         setSeasons([...seasons, newSeason])
         document.getElementById("newSeason").reset();
         setAddSeason(0);
@@ -191,7 +192,11 @@ const Place = () => {
     const fetchPlace = async () => {
         axios.get('/api/places/srinagar').then((response) => {
             setPlace(response?.data);
-            setExtraInfo(response?.data?.additional_information)
+            let tempInfo = []
+            response?.data?.additional_information.map((add_inf, id) => { tempInfo.push({ ...add_inf, 'isChecked': false }) })
+            setExtraInfo(tempInfo)
+
+
             setCategories(response?.data?.place_category)
             //setLanguages(response?.data?.place_languages)
             setLanguages((response?.data?.place_languages?.map(lang => GlobalData.LanguageData.filter(i => i.language_code === lang.language))).flat())
@@ -201,28 +206,13 @@ const Place = () => {
             let images = []
             response?.data?.images.map((image, id) => { images.push({ ...image, 'image_idx': id, 'isChecked': false }) })
             setPlaceImage(images)
+            let att = []
+            response?.data?.attractions.map((attraction, id) => { att.push({ ...attraction, 'isChecked': false }) })
 
+            setPlaceAttractions(att)
             setVisible(1);
         }).catch((err) => {
-            //alert(JSON.stringify(err)) 
-            let response = { "name": "srinagar", "description": "Srinagar is the largest city and the summer capital of Jammu and Kashmir, India. \n\t\t\tIt lies in the Kashmir Valley on the banks of the Jhelum River, a tributary of the Indus, and Dal and Anchar lakes. The city is known for its natural environment, gardens, waterfronts and houseboats. \n\t\t\tIt is known for traditional Kashmiri handicrafts like the Kashmir shawl made of pashmina and cashmere wool, and also dried fruits. It is the 31st-most populous city in India, the northernmost city in India to have over one million people, and the second-largest metropolitan area in the Himalayas after Kathmandu, Nepal. ", "airport_distance": 12.5, "latitude": "34.083656N", "longitude": "74.7973E", "places_id": "p001", "best_time_to_visit": "may to oct", "additional_information": [{ "info_id": "info001", "key": "item must have", "value": "light jacket", "type": "place", "external_link": "p001" }, { "info_id": "info002", "key": "Mobile SIM", "value": "POSTPAID SIM", "type": "place", "external_link": "p001" }], "place_category": [{ "cat_id": "cat001", "cat_name": "Honey moon", "type": "place", "external_link": "p001" }, { "cat_id": "cat002", "cat_name": "Adventure", "type": "place", "external_link": "p001" }], "place_languages": [{ "lang_id": "lang001", "language": "en", "external_link": "p001" }, { "lang_id": "lang003", "language": "ur", "external_link": "p001" }, { "lang_id": "lang002", "language": "ks", "external_link": "p001" }], "place_seasons": [{ "season_id": "season001", "season_name": "spring", "period": "march-may", "min_temp": 5, "max_temp": 20, "unit": "Celsius", "external_link": "p001" }, { "season_id": "season002", "season_name": "summer", "period": "june-aug", "min_temp": 10, "max_temp": 32, "unit": "Celsius", "external_link": "p001" }, { "season_id": "season003", "season_name": "autum", "period": "sept-nov", "min_temp": 5, "max_temp": 22, "unit": "Celsius", "external_link": "p001" }, { "season_id": "season004", "season_name": "winter", "period": "dec-feb", "min_temp": -5, "max_temp": 2, "unit": "Celsius", "external_link": "p001" }], "images": [{ "image_id": "pimg001", "image_link": "https://images.pexels.com/photos/11876444/pexels-photo-11876444.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2", "image_description": "Hazratbal Shrine", "image_title": "Hazratbal Shrine", "image_type": "Place" }, { "image_id": "pimg002", "image_link": "https://images.pexels.com/photos/7438902/pexels-photo-7438902.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2", "image_description": "Char Chinar", "image_title": "Char Chinar", "image_type": "Place" }], "attractions": [{ "attraction_id": "attr002", "places_id": "p001", "attraction_name": "Char chinar", "attraction_description": "Char Chinar, also sometimes called Char Chinari, Ropa Lank, or Rupa Lank, is an island in Dal Lake, Srinagar, Jammu and Kashmir. Dal Lake includes 3 islands, 2 of which are marked with beautiful Chinar trees.", "milestones": [{ "milestone_id": "milestone002", "attraction_id": "attr002", "milestone_name": "bulvard road", "milestone_description": "road along side the banks of dal lake" }] }, { "attraction_id": "attr001", "places_id": "p001", "attraction_name": "Hazratbal", "attraction_description": "The Hazratbal Shrine (Kashmiri: درگاه حَضْرَت بل), popularly called Dargah Sharif (\"the Holy Shrine\"), is a Muslim shrine located in Hazratbal locality of Srinagar in Jammu and Kashmir, India. It contains a relic, Moi-e-Muqqadas, which is widely believed to be the hair of the Islamic prophet Muhammad S.A.W (Pbuh).[1] It is situated on the northern bank of the Dal Lake in Srinagar, and is considered to be Kashmirs holiest Muslim shrine.", "milestones": [{ "milestone_id": "milestone001", "attraction_id": "attr001", "milestone_name": "bod dal", "milestone_description": "it is part of dal lake through which we can go to lakut dal" }] }] };
-            setPlace(response);
-            let tempInfo = []
-            response?.additional_information.map((add_inf, id) => { tempInfo.push({ ...add_inf, 'isChecked': false }) })
-            setExtraInfo(tempInfo)
-
-            setCategories(response?.place_category)
-            //setLanguages(response?.data?.place_languages)
-
-            setLanguages((response?.place_languages?.map(lang => GlobalData.LanguageData.filter(i => i.language_code === lang.language))).flat())
-            let tempSeason = []
-            response?.place_seasons.map((season, id) => { tempSeason.push({ ...season, 'isChecked': false }) })
-            setSeasons(tempSeason)
-            let images = []
-            response?.images.map((image, id) => { images.push({ ...image, 'image_idx': id, 'isChecked': false }) })
-            setPlaceImage(images)
-            setVisible(1);
-
+            alert(JSON.stringify(err))
         })
 
         console.log("Place Data fetched");
@@ -250,7 +240,7 @@ const Place = () => {
                 return j.season_id;
             });
     };
-    //handle check box seasons
+    //handle check box info
     const handlecheckboxinfo = (e, itemInfo) => {
         const { name, checked } = e.target;
         let tempInf;
@@ -273,6 +263,29 @@ const Place = () => {
                 return j.info_id;
             });
     };
+    //handle check box Attractions
+    const handlecheckboxattraction = (e, itemInfo) => {
+        const { name, checked } = e.target;
+        let tempattr;
+        if (itemInfo.isChecked === false) {
+            tempattr = placeAttractions.map((item) =>
+                item.attraction_id === name ? { ...item, isChecked: 'checked' } : item
+            );
+        }
+
+        else {
+            tempattr = placeAttractions.map((item) =>
+                item.attraction_id === name ? { ...item, isChecked: false } : item
+            );
+        }
+
+        setPlaceAttractions(tempattr);
+        check = tempattr
+            .filter((i) => i.isChecked === 'checked')
+            .map((j) => {
+                return j.attraction_id;
+            });
+    }
 
     //check all seasons
     const allCheckbox = (e) => {
@@ -293,7 +306,7 @@ const Place = () => {
     }
     // check all info's
     const allCheckboxInfo = (e) => {
-        let tempInf = [];
+        let tempattr = [];
         if (allCheckInfo === 0) {
             extraInfo.map((item) =>
                 tempInf.push({ ...item, 'isChecked': 'checked' })
@@ -340,6 +353,32 @@ const Place = () => {
         let remainingInfo = extraInfo.filter(inf => inf.info_id != infoRow.info_id);
         setExtraInfo(remainingInfo);
     }
+    //delete attractions
+    function deleteAttractions() {
+        let remainingAtt = placeAttractions.filter(attr => attr.isChecked != 'checked');
+        setPlaceAttractions(remainingAtt);
+    }
+    //changing multiselected attraction
+    const multiselectAttr = () => {
+        let tempCon = [];
+        if (allCheckAttractions === 0) {
+            placeAttractions.map((item) =>
+                tempCon.push({ ...item, 'isChecked': 'checked' })
+            );
+        }
+        else {
+            placeAttractions.map((item) =>
+                tempCon.push({ ...item, 'isChecked': false })
+            );
+        }
+
+        setPlaceAttractions(tempCon);
+        check = tempCon
+    }
+
+
+
+
     //catgory
     const category = [{ category_name: 'Adventure' },
     { category_name: 'Theatre, Music and Culture' },
@@ -1269,7 +1308,7 @@ const Place = () => {
                                                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd"></path></svg>
                                             </span>
 
-                                            <button data-tooltip="Delete" aria-label="Delete" className={`${color?.textgray} hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}>
+                                            <button data-tooltip="Delete" onClick={(e) => deleteAttractions()} aria-label="Delete" className={`${color?.textgray} hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}>
                                                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd"></path></svg>
                                             </button>
 
@@ -1304,7 +1343,13 @@ const Place = () => {
                                                 <tr>
                                                     <th scope="col" className="p-4">
                                                         <div className="flex items-center">
-                                                            <input id="checkbox-all" aria-describedby="checkbox-1" type="checkbox" name="allSelect" className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                                                            <input id="checkbox-all"
+
+                                                                onChange={(e) => {
+                                                                    setAllCheckAttractions(allCheckAttractions === 1 ? 0 : 1);
+                                                                    multiselectAttr(e);
+                                                                }}
+                                                                aria-describedby="checkbox-1" type="checkbox" name="allSelect" className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                                                             <label htmlFor="checkbox-all" className="sr-only">checkbox</label>
                                                         </div>
                                                     </th>
@@ -1313,12 +1358,17 @@ const Place = () => {
                                                 </tr>
                                             </thead>
                                             <tbody className={`${color?.whitebackground} divide-y  divide-gray-200`} id="TableList">
-                                                {place?.attractions?.map((item, idx) => {
+                                                {placeAttractions?.map((item, idx) => {
                                                     return (
                                                         <tr key={idx}>
                                                             <td className="p-4 w-4">
                                                                 <span className="flex items-center">
-                                                                    <input id="checkbox-1" name="r0091" aria-describedby="checkbox-1" type="checkbox"
+                                                                    <input id="checkbox-1"
+                                                                        name={item?.attraction_id}
+                                                                        aria-describedby="checkbox-1"
+                                                                        type="checkbox"
+                                                                        checked={item.isChecked || false}
+                                                                        onClick={(e) => handlecheckboxattraction(e, item)}
                                                                         className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                                                                     <label htmlFor="checkbox-1" className="sr-only" />
                                                                 </span>
@@ -1333,7 +1383,7 @@ const Place = () => {
                                                                     >Edit </button>
                                                                     </a>
                                                                 </Link>
-
+                                                                  
                                                                 </div>
                                                             </td>
                                                         </tr>
