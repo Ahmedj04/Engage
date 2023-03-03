@@ -139,18 +139,18 @@ const Place = () => {
         let infoTemp = extraInfo.filter(info => info?.info_id != editInfo?.info_id)
         setExtraInfo([...infoTemp, editInfo])
         setEditRow({ edit: 0, id: undefined })
-       
+
     }
     //edit season
     function editSeasonDetails() {
         let otherSeasons = seasons.filter(i => i.season_id != editSeason.season_id)
-       setSeasons([...otherSeasons, editSeason]);
+        setSeasons([...otherSeasons, editSeason]);
         setEditSeason({});
         setEditRow({ edit: 0, id: undefined })
     }
     //add season
     function addSeasonDetails() {
-      setNewSeason({ ...newSeason, 'isChecked': false })
+        setNewSeason({ ...newSeason, 'isChecked': false })
         setSeasons([...seasons, newSeason])
         document.getElementById("newSeason").reset();
         setAddSeason(0);
@@ -469,7 +469,7 @@ const Place = () => {
 
                             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">6</button>
-                                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Attraction</div>
+                                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>MileStones</div>
                             </div>
                         </div>
                         {/* progress end*/}
@@ -736,7 +736,7 @@ const Place = () => {
 
                             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">6</button>
-                                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Attraction</div>
+                                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>MileStones</div>
                             </div>
                         </div>
                         {/* progress end*/}
@@ -1003,7 +1003,7 @@ const Place = () => {
 
                             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">6</button>
-                                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Attraction</div>
+                                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>MileStones</div>
                             </div>
                         </div>
                         {/* progress end*/}
@@ -1173,7 +1173,10 @@ const Place = () => {
 
                                             </tbody>
                                         </table>
-                                    </div></div></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         {/* button div */}
                         <div className='flex justify-end mt-2 '>
@@ -1221,7 +1224,7 @@ const Place = () => {
 
                             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">6</button>
-                                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Attraction</div>
+                                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>MileStones</div>
                             </div>
                         </div>
                         {/* progress end*/}
@@ -1259,31 +1262,41 @@ const Place = () => {
 
                 {/* list of attraction */}
                 <div id='2' className={disp === 2 ? `${color?.whitebackground} block shadow rounded-lg px-12  sm:p-6 xl:p-8  2xl:col-span-2` : 'hidden'}>
-
+                    {/* progress bar */}
                     <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
-
-
-
                         <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                             <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
-                            <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Places</div>
-                        </div>
-                        <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                            <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-                            <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Gallery</div>
+                            <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Place</div>
                         </div>
 
-                        <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-                            <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">3</button>
-                            <div className={`${color.crossbg} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>Attractions</div>
+                        <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                            <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
+                            <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Climate</div>
                         </div>
+                        <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                            <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
+                            <div className={`${color.crossbg} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>More Info</div>
+                        </div>
+
 
 
                         <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                             <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
-                            <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Attraction</div>
+                            <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Gallery</div>
+                        </div>
+
+                        <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                            <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">5</button>
+                            <div className={`${color.widget} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>Attractions</div>
+                        </div>
+
+
+                        <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                            <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">6</button>
+                            <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>MileStones</div>
                         </div>
                     </div>
+                    {/* progress end*/}
 
                     <div>
                         {/* table of activities for day */}
@@ -1345,15 +1358,16 @@ const Place = () => {
                                                         <div className="flex items-center">
                                                             <input id="checkbox-all"
 
-                                                                onChange={(e) => {
-                                                                    setAllCheckAttractions(allCheckAttractions === 1 ? 0 : 1);
-                                                                    multiselectAttr(e);
-                                                                }}
+                                                                // onChange={(e) => {
+                                                                //     setAllCheckAttractions(allCheckAttractions === 1 ? 0 : 1);
+                                                                //     multiselectAttr(e);
+                                                                // }}
                                                                 aria-describedby="checkbox-1" type="checkbox" name="allSelect" className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                                                             <label htmlFor="checkbox-all" className="sr-only">checkbox</label>
                                                         </div>
                                                     </th>
-                                                    <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-600 uppercase">Attraction Name</th>
+                                                    <th scope="col" className="p-4  text-left text-xs font-semibold text-gray-600 uppercase">Attraction Name</th>
+                                                    <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-600 uppercase ">Attraction Description</th>
                                                     <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-600 uppercase">Actions</th>
                                                 </tr>
                                             </thead>
@@ -1367,14 +1381,15 @@ const Place = () => {
                                                                         name={item?.attraction_id}
                                                                         aria-describedby="checkbox-1"
                                                                         type="checkbox"
-                                                                        checked={item.isChecked || false}
+                                                                        // checked={item.isChecked || false}
                                                                         onClick={(e) => handlecheckboxattraction(e, item)}
                                                                         className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                                                                     <label htmlFor="checkbox-1" className="sr-only" />
                                                                 </span>
                                                             </td>
                                                             <td className="p-4 whitespace-nowrap capitalize text-base font-normal text-gray-700">{item?.attraction_name}</td>
-
+                                                            <td className="p-4 whitespace-nowrap capitalize text-base font-normal text-gray-700 break-words">{item?.attraction_description} 
+                                                           </td>
                                                             <td className="py-4 whitespace-nowrap capitalize">
                                                                 <div> <Link href="../places/place">
                                                                     <a> <button
@@ -1383,7 +1398,7 @@ const Place = () => {
                                                                     >Edit </button>
                                                                     </a>
                                                                 </Link>
-                                                                  
+
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -1409,199 +1424,227 @@ const Place = () => {
                         </div>
                     </div>
                 </div>
-                {/* attraction   */}
+                {/*attraction  milestone  */}
                 <div id='3' className={disp === 3 ? 'block' : 'hidden'}>
 
-                    {/* progress bar */}
+
                     <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
+                        {/* progress bar */}
                         <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
                             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
                                 <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Place</div>
                             </div>
+
                             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
+                                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Climate</div>
+                            </div>
+                            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
+                                <div className={`${color.crossbg} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>More Info</div>
+                            </div>
+
+
+
+                            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
                                 <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Gallery</div>
                             </div>
 
                             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
+                                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">5</button>
                                 <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Attractions</div>
                             </div>
 
-
                             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-                                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">4</button>
-                                <div className={`${color.crossbg} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>Attraction</div>
+                                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">6</button>
+                                <div className={`${color.widget} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>MileStones</div>
                             </div>
+
                         </div>
+                        {/* progress end*/}
+
+                        <h1 className={`text-xl sm:text-2xl font-semibold ${color?.text}`}>MileStones</h1>
+
                         {/* page heading, search bar,icons and add button*/}
-                        <div className="mx-4">
-                            <h1 className={`text-xl sm:text-2xl font-semibold ${color?.text}`}>Places</h1>
-                            <div className="sm:flex">
-                                <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
-                                    <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex  
+
+                        <div className="sm:flex">
+                            <div className=" sm:flex items-center sm:divide-x sm:divide-gray-100 mb-3 sm:mb-0">
+                                {/* search form */}
+                                <form className="lg:pr-3" action="#" method="GET">
+                                    <label htmlFor="users-search" className="sr-only">Search</label>
+                                    <div className="mt-1 relative lg:w-64 xl:w-96">
+                                        <input type="text" name="email" id="MileInput" onKeyUp={() => searchFunction('MileInput', 'mileTable')}
+                                            className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} placeholder='Search'>
+                                        </input>
+                                    </div>
+                                </form>
+                                {/* search form end */}
+                                {/* icons start */}
+                                <div className="flex space-x-1 pl-0 sm:pl-2 mt-3 sm:mt-0">
+                                    <span className={`${color?.textgray} hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}>
+                                        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd"></path></svg>
+                                    </span>
+
+                                    <button onClick={() => { alert("delete all milestones") }} data-tooltip="Delete" aria-label="Delete" className={`${color?.textgray} hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}>
+                                        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd"></path></svg>
+                                    </button>
+
+                                    <span className={`${color?.textgray} hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}>
+                                        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd"></path></svg>
+                                    </span>
+                                    <span className={`${color?.textgray} hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}>
+                                        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg>
+                                    </span>
+
+                                </div>
+                                {/* icons end*/}
+                                <button className="ml-72 bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex  
                              font-semibold
                                     rounded-lg text-sm px-5 py-2 text-center 
                               items-center ease-linear transition-all duration-150" onClick={() => setEditMilestone(1)} >
-                                        ADD MILESTONE</button>
+                                    ADD MILESTONE</button>
 
-                                </div>
                             </div>
                         </div>
+                        {/* milestone table */}
+                        <div className="flex flex-col mt-8 lg:-mr-20 sm:mr-0 w-full  relative">
+                            <div className="overflow-x-auto">
+                                <div className="align-middle inline-block min-w-full">
+                                    <div className="shadow overflow-hidden">
+                                        <table
+                                            id='mileTable'
+                                            className="table data table-fixed lg:min-w-full divide-y divide-gray-200 min-w-screen">
+                                            <thead className={` ${color?.tableheader} `}>
+                                                <tr>
+                                                    {/* checkbox */}
+                                                    <th scope="col" className="p-4">
+                                                        <div className="flex items-center">
+                                                            <input id="checkbox-all"
+                                                                // onChange={(e) => {
+                                                                //     setAllCheckInfo(allCheckInfo === 1 ? 0 : 1);
+                                                                //     allCheckboxInfo(e);
+                                                                // }}
+                                                                checked={allCheckInfo === 1 ? 'checked' : false}
+                                                                aria-describedby="checkbox-1" type="checkbox"
+                                                                name="allSelect"
+                                                                className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                                                            <label htmlFor="checkbox-all" className="sr-only">checkbox</label>
+                                                        </div>
+                                                    </th>
 
-                        <div className={`${color?.whitebackground}  mt-4 p-4  divide-gray-200`} >
-                            <div className='flex flex-wrap'>
-                                <div className=" w-full lg:w-6/12  px-4">
-                                    {/* attraction name  */}
-                                    <div className="relative w-full mb-3">
-                                        <label
-                                            className={`text-sm font-medium ${color?.text} block mb-2`}
-                                            htmlFor="grid-password">
-                                            Attraction Name
-                                            <span style={{ color: "#ff0000" }}>*</span>
-                                        </label>
-                                        <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
-                                        <div className={visible === 1 ? 'block' : 'hidden'}>
-                                            <input
-                                                type="text" data-testid="test_property_name"
-                                                className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                                                defaultValue={attraction?.attraction_name} required
-                                                onChange={
-                                                    (e) => (
-                                                        {}
+                                                    <th scope="col" className={`p-4 text-left text-xs font-semibold ${color?.textgray} uppercase`}>
+                                                        Milestone Name</th>
+                                                    <th scope="col" className={`p-4 text-left text-xs font-semibold ${color?.textgray} uppercase`}>
+                                                        Milestone Description</th>
+                                                    <th scope="col" className={`p-4 text-left text-xs font-semibold ${color?.textgray} uppercase`}>
+                                                        Actions</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody className={` ${color?.whitebackground} divide-y  divide-gray-200`}>
+                                                {attraction?.milestones?.map((row, index) => {
+                                                    return (
+                                                        <>
+                                                            {(editRow?.edit === 1 && editRow.id === index) ?
+                                                                <tr key={index}>
+                                                                    <td className="p-4 w-4">
+                                                                        <span className="flex items-center">
+                                                                            <input disabled id="checkbox-1" name={index}
+                                                                                checked={editInfo.isChecked || false}
+                                                                                aria-describedby="checkbox-1" type="checkbox"
+                                                                                className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-full rounded" />
+                                                                            <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
+                                                                        </span>
+                                                                    </td>
+
+                                                                    <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                                                        <input type="text"
+                                                                            className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                                                            defaultValue={editInfo?.milestone_name}
+                                                                        // onChange={(e) => setEditInfo({ ...editInfo, key: e.target.value })} 
+                                                                        />
+                                                                    </td>
+
+                                                                    <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                                                        <input type="text" className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                                                            defaultValue={editInfo?.milestone_description}
+                                                                            onChange={(e) => setEditInfo({ ...editInfo, value: e.target.value })} />
+
+                                                                    </td>
+
+
+                                                                    <td>
+                                                                        <button className={`bg-gradient-to-r mt-1 bg-green-600 hover:bg-green-700 mr-2 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}
+                                                                            onClick={(e) => saveInfoChanges(e)}>
+                                                                            Save</button>
+                                                                        <button className={`bg-gradient-to-r my-1 bg-gray-400 hover:${color?.greybackground}0 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}
+                                                                            onClick={() => {
+                                                                                setEditSeason({});
+                                                                                setEditRow({ edit: 0, id: undefined })
+                                                                            }}
+                                                                        >
+
+                                                                            Cancel</button>
+                                                                    </td>
+                                                                </tr> :
+                                                                <tr key={index}>
+                                                                    <td className="p-4 w-4">
+                                                                        <span className="flex items-center">
+                                                                            <input id="checkbox-1"
+                                                                                name={row?.info_id}
+                                                                                aria-describedby="checkbox-1"
+                                                                                type="checkbox"
+                                                                                checked={row.isChecked || false}
+                                                                                onClick={(e) => handlecheckboxinfo(e, row)}
+                                                                                className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                                                                            <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
+                                                                        </span>
+                                                                    </td>
+
+                                                                    <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+
+                                                                        {row?.milestone_name}
+                                                                    </td>
+
+                                                                    <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+
+                                                                        {row?.milestone_description}
+                                                                    </td>
+
+                                                                    <td>
+                                                                        <button className="bg-gradient-to-r mt-1 mr-2 bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                                                            onClick={() => {
+                                                                                setEditInfo(row);
+                                                                                setEditRow({ edit: 1, id: index })
+                                                                            }}
+                                                                        >
+
+                                                                            Edit</button>
+                                                                        <button className="bg-gradient-to-r my-1 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                                                            onClick={(e) => {
+                                                                                removeMileStone(row, index);
+                                                                            }}
+                                                                        >
+
+                                                                            Delete</button>
+                                                                    </td>
+                                                                </tr>}
+                                                        </>
+
                                                     )
-                                                } />
-                                            {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
-                                                             {error?.property_name}
-                                                        </p> */}
-                                        </div>
-                                    </div>
-                                </div>
+                                                })}
 
-                                <div className=" w-full lg:w-6/12  px-4">
-                                    {/* attraction description */}
-                                    <div className="relative w-full mb-3">
-                                        <label
-                                            className={`text-sm font-medium ${color?.text} block mb-2`}
-                                            htmlFor="grid-password">
-                                            Attraction Description
-                                            <span style={{ color: "#ff0000" }}>*</span>
-                                        </label>
-                                        <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
-                                        <div className={visible === 1 ? 'block' : 'hidden'}>
-                                            <textarea data-testid="test_property_name"
-                                                className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                                                defaultValue={attraction?.attraction_description} required
-                                                onChange={
-                                                    (e) => (
-                                                        {}
-                                                    )
-                                                } />
-                                            {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
-                                                             {error?.property_name}
-                                                        </p> */}
-                                        </div>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        {/* Milestone */}
-                        <div className="w-full lg:w-6/12  px-4">
-                            <div className="relative w-full mt-8 mb-3">
-                                <label
-                                    className={`text-sm font-bold  ${color?.text} block mb-2`}
-                                    htmlFor="grid-password">
-                                    {attraction?.milestones?.length != 0 ? 'MileStones' : ''}
-                                </label>
-                            </div>
-                        </div>
 
-                        {attraction?.milestones?.map((milestone, idx) => {
-                            return (
-                                <div key={idx}> {/* cross button */}
-                                    <button
-                                        type="button"
-                                        onClick={() => {
-                                            removeMileStone(milestone, idx);
-                                        }}
-                                        className="text-gray-400  bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto flex justify-end items-center"
-                                        data-modal-toggle="user-modal"
-                                    >
-                                        <svg
-                                            className="w-5 h-5"
-                                            fill="currentColor"
-                                            viewBox="0 0 20 20"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                fillRule="evenodd"
-                                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                                clipRule="evenodd"
-                                            ></path>
-                                        </svg>
-                                    </button>
-                                    {/* cross button ends */}
-                                    <div className="flex flex-wrap">
 
-                                        {/* milestone name */}
-                                        <div className=" w-full lg:w-6/12  px-4">
-                                            {/* attraction name  */}
-                                            <div className="relative w-full mb-3">
-                                                <label
-                                                    className={`text-sm font-medium ${color?.text} block mb-2`}
-                                                    htmlFor="grid-password">
-                                                    MileStone Name
-                                                    <span style={{ color: "#ff0000" }}>*</span>
-                                                </label>
-                                                <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
-                                                <div className={visible === 1 ? 'block' : 'hidden'}>
-                                                    <input
-                                                        type="text" data-testid="test_property_name"
-                                                        className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                                                        defaultValue={milestone?.milestone_name} required
-                                                        onChange={
-                                                            (e) => (
-                                                                {}
-                                                            )
-                                                        } />
-                                                    {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
-                                                             {error?.property_name}
-                                                        </p> */}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {/* milestone description */}
-                                        <div className=" w-full lg:w-6/12  px-4">
 
-                                            {/* attraction name  */}
-                                            <div className="relative w-full mb-3">
-                                                <label
-                                                    className={`text-sm font-medium ${color?.text} block mb-2`}
-                                                    htmlFor="grid-password">
-                                                    MileStone Description
-                                                    <span style={{ color: "#ff0000" }}>*</span>
-                                                </label>
-                                                <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
-                                                <div className={visible === 1 ? 'block' : 'hidden'}>
-                                                    <textarea data-testid="test_property_name"
-                                                        className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                                                        defaultValue={milestone?.milestone_description} required
-                                                        onChange={
-                                                            (e) => (
-                                                                {}
-                                                            )
-                                                        } />
-                                                    {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
-                                                             {error?.property_name}
-                                                        </p> */}
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>)
-                        })}
 
                         <div className='flex items-center justify-end space-x-2  sm:space-x-3 ml-auto'>
                             <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"

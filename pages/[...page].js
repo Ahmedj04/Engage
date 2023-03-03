@@ -11,7 +11,7 @@ import ClassicDark from './themes/classic-dark'
 const logger = require("../services/logger");
 var language;
 function Page({ data, room_data, package_data }) {
- const [allHotelDetails, setAllHotelDetails] = useState([]);
+  const [allHotelDetails, setAllHotelDetails] = useState([]);
   const [allRooms, setAllRooms] = useState({});
   const [allPackages, setAllPackages] = useState({});
   const [phone, setPhone] = useState({});
@@ -38,58 +38,57 @@ function Page({ data, room_data, package_data }) {
 
   }
   const fetchProperty = async () => {
-    
-    if(data?.http_code !='404'){
-   var language= router.locale || 'en';
-    console.log("language is "+language)
-    fetchLanguage(language)
-    setAllHotelDetails(data);
-    setTheme(data?.theme != "" ? data?.theme : 'Classic');
-    fetchRoomDetails(room_data);
-    fetchPackageDetails(package_data);
-    
-    data?.contacts?.map(i => { if (i.contact_type === 'Phone') { setPhone(i) } });
-    data?.contacts?.map(i => { if (i.contact_type === 'Email') { setEmail(i) } });
-    var ser = [];
-    data?.services?.map(i => {
-      if (i.service_value !== "no")
-        if (i.service_value !== "Not available") {
-          {
-            ser.push(i)
-          }
-        }
-      setServices(ser)
-    }
 
-    );
-    setDisp(1);
-    logger.info("url  to fetch property details hitted successfully")
-  }
-  else{
-    router.push('/404');
-  }
+    if (data?.http_code != '404') {
+      var language = router.locale || 'en';
+      console.log("language is " + language)
+      fetchLanguage(language)
+      setAllHotelDetails(data);
+      setTheme(data?.theme != "" ? data?.theme : 'Classic');
+      fetchRoomDetails(room_data);
+      fetchPackageDetails(package_data);
+
+      data?.contacts?.map(i => { if (i.contact_type === 'Phone') { setPhone(i) } });
+      data?.contacts?.map(i => { if (i.contact_type === 'Email') { setEmail(i) } });
+      var ser = [];
+      data?.services?.map(i => {
+        if (i.service_value !== "no")
+          if (i.service_value !== "Not available") {
+            {
+              ser.push(i)
+            }
+          }
+        setServices(ser)
+      }
+
+      );
+      setDisp(1);
+      logger.info("url  to fetch property details hitted successfully")
+    }
+    else {
+      router.push('/404');
+    }
 
   }
 
   const fetchRoomDetails = async (room_data) => {
-      setAllRooms(room_data);
-        }
+    setAllRooms(room_data);
+  }
 
   const fetchPackageDetails = async (package_data) => {
-      setAllPackages(package_data);
-      }
+    setAllPackages(package_data);
+  }
 
   /* Function call to fetch Current Property Details when page loads */
   useEffect(() => {
-    if(data==='404')
-    {
+    if (data === '404') {
       router.push('/404')
     }
-    else{
+    else {
       fetchProperty();
     }
-    
-},[data]);
+
+  }, [data]);
 
 
   return (<>{disp === 0 ?
@@ -124,17 +123,17 @@ export async function getServerSideProps(context) {
   //to check if url is valid string
   if (items.split('/').length === 5) {
     //fetch hotel data
-  const data = await fetch(`${process.env.serverURL}:${process.env.port}/api${items}`)
+    const data = await fetch(`${process.env.serverURL}:${process.env.port}/api${items}`)
       .then((response) => response.json());
-    let property_id= data?.property_id;
+    let property_id = data?.property_id;
     //fetch room data
-    const room_data=await fetch(`${process.env.serverURL}:${process.env.port}/api/all_rooms_details/${property_id}`)
-    .then((response) => response.json());
-//fetch package data
-    const package_data=await fetch(`${process.env.serverURL}:${process.env.port}/api/all_packages_details/${property_id}`)
-    .then((response) => response.json()) 
+    const room_data = await fetch(`${process.env.serverURL}:${process.env.port}/api/all_rooms_details/${property_id}`)
+      .then((response) => response.json());
+    //fetch package data
+    const package_data = await fetch(`${process.env.serverURL}:${process.env.port}/api/all_packages_details/${property_id}`)
+      .then((response) => response.json())
     //return data fetched to function generation html  
-    return { props: { data,room_data,package_data } }
+    return { props: { data, room_data, package_data } }
   }
   else {
     let data = '404';
@@ -142,7 +141,6 @@ export async function getServerSideProps(context) {
     return { props: { data } }
   }
 }
-
 export default Page;
 Page.getLayout = function PageLayout(page) {
   return (
