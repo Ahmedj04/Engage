@@ -148,7 +148,7 @@ function Classic(args) {
    })
   
    return (
-      <div >
+      <>
          <div className="header w-full">
             <div className="container">
                <div className="header-logo">
@@ -1356,7 +1356,7 @@ function Classic(args) {
             </div>
          </footer>
 
-      </div>
+      </>
    );
 }
 export default Classic

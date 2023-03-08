@@ -91,15 +91,9 @@ function Page({ data, room_data, package_data }) {
   }, [data]);
 
 
-  return (<>{disp === 0 ?
+  return (
+    
     <>
-      <div className="h-screen bg-white">
-        <div className="flex justify-center items-center h-full">
-          <img className="h-32 w-32" src="https://icons8.com/preloaders/preloaders/1488/Iphone-spinner-2.gif" alt="" />
-        </div>
-      </div>
-    </> :
-    <div>
       {/* Classic Theme */}
       {theme === "Classic" ?
         <div className="sticky">
@@ -112,8 +106,8 @@ function Page({ data, room_data, package_data }) {
           <ClassicDark language={language} allHotelDetails={allHotelDetails}
             allRooms={allRooms} allPackages={allPackages} services={services}
             phone={phone} email={email} /></div> : <div className="sticky"></div>}
-    </div>
-  }</>
+    </>
+  
 
   );
 }
