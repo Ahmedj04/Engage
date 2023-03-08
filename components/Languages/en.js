@@ -1,5 +1,5 @@
 export default {
-  addons:"Addon's",
+  addons:"Addons",
   providers:"Providers",
   places:"Places",
   logo:"Logo",
