@@ -13,6 +13,7 @@ import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar";
 import LoaderTable from "../../components/loadertable";
 import Headloader from "../../components/loaders/headloader";
+import { InitialActions,ColorToggler } from '../../components/initalActions';
 var language;
 var currentProperty;
 var currentLogged;
@@ -140,28 +141,28 @@ function Rooms() {
     Router.push("./rooms/addroom")
   }
 
-  const colorToggler = (newColor) => {
-    if (newColor === 'system') {
-      window.matchMedia("(prefers-color-scheme:dark)").matches === true ? setColor(colorFile?.dark)
-      : setColor(colorFile?.light)
-      localStorage.setItem("colorToggle", newColor)
-    }
-    else if (newColor === 'light') {
-      setColor(colorFile?.light)
-      localStorage.setItem("colorToggle", false)
-    }
-    else if (newColor === 'dark') {
-      setColor(colorFile?.dark)
-      localStorage.setItem("colorToggle", true)
-    }
-   firstfun();
-   Router.push('./rooms')
-  }
+  // const colorToggler = (newColor) => {
+  //   if (newColor === 'system') {
+  //     window.matchMedia("(prefers-color-scheme:dark)").matches === true ? setColor(colorFile?.dark)
+  //     : setColor(colorFile?.light)
+  //     localStorage.setItem("colorToggle", newColor)
+  //   }
+  //   else if (newColor === 'light') {
+  //     setColor(colorFile?.light)
+  //     localStorage.setItem("colorToggle", false)
+  //   }
+  //   else if (newColor === 'dark') {
+  //     setColor(colorFile?.dark)
+  //     localStorage.setItem("colorToggle", true)
+  //   }
+  //  firstfun();
+  //  Router.push('./rooms')
+  // }
 
   return (
     <>
 
-      <Header color={color} Primary={english?.Side} Type={currentLogged?.user_type} Sec={colorToggler} mode={mode} setMode={setMode} />
+      <Header color={color} Primary={english?.Side} Type={currentLogged?.user_type} Sec={ColorToggler} mode={mode} setMode={setMode} />
       <Sidebar color={color} Primary={english?.Side} Type={currentLogged?.user_type} />
       <div id="main-content"
         className={`${color?.whitebackground} min-h-screen pt-24 relative overflow-y-auto lg:ml-64`}>
