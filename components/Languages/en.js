@@ -1,4 +1,6 @@
 export default {
+  addons:"Addon's",
+  providers:"Providers",
   places:"Places",
   logo:"Logo",
   systemprefrences:"System Prefrences",
@@ -205,6 +207,7 @@ export default {
   width:"Width",
   incm:"in cm",
   infeet:"in feet",
+  itinerarySettings:"Itinerary Settings",
   "Update" :{
     label: "Update",
      color: "bg-cyan-600 hover:bg-cyan-700 mx-2 text-white "    
@@ -806,7 +809,9 @@ promotion:'./promotions',
 modification:'./modifications',
 extraguestcharge:'./extraguestcharges',
 inbox:'./inbox',
-places:'../places'
+places:'../places',
+addons:'../itinerary/addons',
+providers:'../itinerary/providers'
 },
 "PlaceSide":{
  dashboard:'../property/dashboard',
@@ -834,7 +839,9 @@ promotion:'../property/promotions',
 modification:'../property/modifications',
 extraguestcharge:'../property/extraguestcharges',
 inbox:'../property/inbox',
-places:'../places'
+places:'../places',
+addons:'../itinerary/addons',
+providers:'../itinerary/providers'
 },
 
 
@@ -864,7 +871,9 @@ promotion:'../promotions',
 modification:'../modifications',
 extraguestcharge:'../extraguestcharges',
 inbox:'../inbox',
-places:'../../places'
+places:'../../places',
+addons:'../../itinerary/addons',
+providers:'../../itinerary/providers'
  },
  
  "Side2":{
@@ -892,7 +901,9 @@ inventory:'../../inventories',
 promotion:'../../promotions',
 modification:'../../modifications',
 extraguestcharge:'../../extraguestcharges',
-inbox:'../../inbox'
+inbox:'../../inbox',
+addons:'../../itinerary/addons',
+providers:'../itinerary/providers'
  },
  "Foot":{
   termsandconditions:'./termsandconditions',

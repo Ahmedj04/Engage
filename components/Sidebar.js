@@ -8,6 +8,7 @@ var language;
 const Sidebar = (args) => {
   const [ari, setAri] = useState(false)
   const [services, setServices] = useState(false)
+  const [addon, setAddon] = useState(false)
   useEffect(() => {
 
     const firstfun = () => {
@@ -152,7 +153,7 @@ const Sidebar = (args) => {
 
 
 
-              {/** Drop down example **/}
+              {/** Drop down services **/}
               <li>
                 <button type="button" onClick={() => { setServices(!services) }}
                   className={`${args?.color?.text} ${args?.color?.sidebar} group  rounded-lg flex items-center p-2 
@@ -210,8 +211,8 @@ const Sidebar = (args) => {
                   </Link></span>
               </li>
 
-        {/* places */}
-        <li className={`${args?.color?.text} ${args?.color?.sidebar} group text-base font-normal rounded-lg flex items-center p-2  group`}>
+              {/* places */}
+              <li className={`${args?.color?.text} ${args?.color?.sidebar} group text-base font-normal rounded-lg flex items-center p-2  group`}>
                 <svg
                   className={`w-6 h-6 ${args?.color?.textgray} flex-shrink-0  ${args?.color?.iconhover} transition duration-75`}
                   fill="currentColor"
@@ -230,6 +231,41 @@ const Sidebar = (args) => {
                     <a>
                       {language?.places}</a>
                   </Link></span>
+              </li>
+
+              {/** Drop down Addon's **/}
+              <li>
+                <button type="button" onClick={() => { setAddon(!addon) }}
+                  className={`${args?.color?.text} ${args?.color?.sidebar} group  rounded-lg flex items-center p-2 
+            w-full p-2 text-base font-normal  transition duration-75`} >
+                  <svg
+                    className={`w-6 h-6 ${args?.color?.textgray} flex-shrink-0  ${args?.color?.iconhover} transition duration-75`}
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"></path>
+                  </svg>
+
+                  <span className="flex-1 ml-3 text-left whitespace-nowrap" >{language?.itinerarySettings}</span>
+                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
+                </button>
+                <div className={addon === true ? 'block' : 'hidden'}>
+                  <ul className="py-2 space-y-2">
+                    <li className={`${args?.color?.text}  text-base font-normal rounded-lg flex items-center p-2 pl-11`}
+                    >
+                      <Link href={{ pathname: args?.Primary?.addons, query: { id: 1 } }}>
+                        <a>{language?.addons}</a></Link>
+                    </li>
+                    <li className={`${args?.color?.text} ${args?.color?.sidebar} group text-base font-normal rounded-lg flex items-center p-2 pl-11`}>
+                      <Link href={{ pathname: args?.Primary?.providers, query: { id: 1 } }}>
+                        <a
+                        >
+                          {language?.providers}</a>
+                      </Link></li>
+
+                  </ul></div>
               </li>
 
 

@@ -1,4 +1,6 @@
 export default {
+  addons:"Compléments",
+  providers:"Fournisseurs",
   places:"lieux",
   logo:"Logo",
   systemprefrence:"Préférences de Système",
@@ -21,6 +23,7 @@ export default {
   editchildguestcharges:"Modifier les frais d'invité enfant",
   imagelink:"Lien Image",
   settings:"Réglages",
+  itinerarySettings:"Paramètres d'itinéraire",
   "AddfromURL" :{
     label:"Ajouter à partir de l'url",
      color: "bg-cyan-600 hover:bg-cyan-700 text-white ",

@@ -1,4 +1,6 @@
 export default {
+  addons:"الإضافات",
+  providers:"الموفرون",
   places:"أماكن",
   logo:"شعار",
   systemprefrences:"تفضيلات النظام",
@@ -32,6 +34,7 @@ export default {
   imagelink:"رابط الصورة",
   extraguestcharge:"رسوم ضيف إضافية",
   name:"اسم",
+  itinerarySettings:"إعدادات خط سير الرحلة",
   "AddfromURL" :{
     label:"إضافة من رابط",
      color: "bg-cyan-600 hover:bg-cyan-700 text-white ",

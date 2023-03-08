@@ -103,7 +103,6 @@ const Place = () => {
     //will run as soon as page loads
     useEffect(() => {
         firstfun();
-
     }, [])
 
     useEffect(() => {
