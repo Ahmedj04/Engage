@@ -178,9 +178,6 @@ const Place = () => {
     //edit attraction
     function attractionEdit(){
         let unChangedAttractions=placeAttractions.filter(item=>item.attraction_id!=attraction.attraction_id)
-        
-        alert(JSON.stringify(unChangedAttractions))
-        console.log([unChangedAttractions,attraction])
         setPlaceAttractions([...unChangedAttractions,attraction])
         setDisp(2);
     }
