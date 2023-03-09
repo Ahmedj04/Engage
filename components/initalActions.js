@@ -55,4 +55,7 @@ const ColorToggler = (newColor,setColor) => {
    // router.push(page);
   }
 
-  export {InitialActions,ColorToggler}
+  export {
+    InitialActions,
+    ColorToggler
+}

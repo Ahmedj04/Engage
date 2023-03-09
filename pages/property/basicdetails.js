@@ -85,7 +85,8 @@ export default function BasicDetails() {
       setImageLogo(response.data.logo);
       logger.info("url to fetch property details hit successfully");
       setVisible(1);
-    } catch (error) {
+    }
+    catch (error) {
       logger.error("url to fetch property details failed");
     }
   };
@@ -296,8 +297,6 @@ export default function BasicDetails() {
   return (
     <>
       <Title name={`Engage |  ${language?.basicdetails}`} />
-
-
       <Header color={color} Primary={english.Side} Type={currentLogged?.user_type} Sec={colorToggler} mode={mode} setMode={setMode} />
       <Sidebar color={color} Primary={english.Side} Type={currentLogged?.user_type} />
 
@@ -344,7 +343,7 @@ export default function BasicDetails() {
           <div className="pt-6">
             <div className=" md:px-4 mx-auto w-full">
               <div className="flex flex-wrap">
-              
+
                 <div className="w-full lg:w-6/12  px-4">
                   <div className="relative w-full mb-3">
                     <label
@@ -561,7 +560,7 @@ export default function BasicDetails() {
                       className={`text-sm ${color?.text} font-medium  block mb-2`}
                       htmlFor="grid-password"
                     >
-                      {language?.logo} 
+                      {language?.logo}
                       <span style={{ color: "#ff0000" }}>*</span>
                     </label>
                     <div className="flex  mb-2">
@@ -583,9 +582,9 @@ export default function BasicDetails() {
                   <div className={flag !== 1 && spinner === 0 ? 'block' : 'hidden'}>
                     <Button testid="test_button_disabled" Primary={language?.UpdateDisabled} /></div>
                   <div className={spinner === 0 && flag === 1 ? 'block' : 'hidden'}>
-                    <Button testid="test_button" Primary={language?.Update} 
-            
-                    onClick={validationBasicDetails} 
+                    <Button testid="test_button" Primary={language?.Update}
+
+                      onClick={validationBasicDetails}
                     />
                   </div>
                   <div className={spinner === 1 && flag === 1 ? 'block' : 'hidden'}>

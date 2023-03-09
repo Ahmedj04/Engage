@@ -14,7 +14,6 @@ import Headloader from "../../components/loaders/headloader";
 import LineLoader from '../../components/loaders/lineloader';
 import Title from '../../components/title';
 import colorFile from '../../components/color';
-import { data } from 'jquery';
 import searchFunction from '../../components/searchFunction';
 let colorToggle;
 let language;
@@ -28,9 +27,6 @@ function Index() {
   const [error, setError] = useState({})
   const [mode, setMode] = useState()
   const router = useRouter();
-
-
-
 
   // first function to be executed
   const firstfun = () => {
@@ -104,28 +100,6 @@ function Index() {
   }
 
 
-  // function searchFunction() {
-  //   // Declare variables
-  //   var input, filter, table, tr, td, i, txtValue;
-  //   input = document.getElementById("myInput");
-  //   filter = input.value.toUpperCase();
-  //   table = document.getElementById("myTable");
-  //   tr = table.getElementsByTagName("tr");
-
-  //   // Loop through all table rows, and hide those who don't match the search query
-  //   for (i = 1; i < tr.length; i++) {
-  //     td = tr[i];
-  //     if (td) {
-  //       txtValue = td.textContent || td.innerText;
-  //       if (txtValue.toUpperCase().indexOf(filter) > -1) {
-  //         tr[i].style.display = "";
-  //       } else {
-  //         tr[i].style.display = "none";
-  //       }
-  //     }
-  //   }
-  // }
-
   return (
     <>
       <Title name={`Engage |  ${language?.places}`} />
@@ -170,7 +144,7 @@ function Index() {
               <form className="lg:pr-3" action="#" method="GET">
                 <label htmlFor="users-search" className="sr-only">Search</label>
                 <div className="mt-1 relative lg:w-64 xl:w-96">
-                  <input type="text" name="email" id="myInput" onKeyUp={searchFunction}
+                  <input type="text" name="email" id="placesInput" onKeyUp={()=>searchFunction('placesInput','placesTable')}
                     className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} placeholder="Search">
                   </input>
                 </div>
@@ -216,7 +190,8 @@ function Index() {
             <div className="overflow-x-auto">
               <div className="align-middle inline-block min-w-full">
                 <div className="shadow overflow-hidden">
-                  <table className="table data table-fixed lg:min-w-full divide-y divide-gray-200 min-w-screen" id="myTable"> <thead className={`${color?.tableheader}`}>
+                  <table className="table data table-fixed lg:min-w-full divide-y divide-gray-200 min-w-screen" id="placesTable"> 
+                  <thead className={`${color?.tableheader}`}>
                     <tr>
                       <th scope="col" className={`p-4 ${color?.textgray}`}>
                         <div className="flex items-center">
