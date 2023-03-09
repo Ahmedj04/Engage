@@ -297,10 +297,10 @@ function Addons() {
             :<></>}
             
             {editaddon===1?
-            <EditAddons activeAddon={activeAddon} setActiveAddon={setActiveAddon} set={editAddOn} theme={color}/>
+            <EditAddons activeAddon={activeAddon} setActiveAddon={setActiveAddon} set={editAddOn} theme={color} reset={()=>setEditaddon(0)}/>
             :<></>}
             {editaddon===2?
-           <NewAddon activeAddon={activeAddon} setActiveAddon={setActiveAddon} set={newAddOn} theme={color}/>:<></>}
+           <NewAddon activeAddon={activeAddon} setActiveAddon={setActiveAddon} set={newAddOn} theme={color} reset={()=>setEditaddon(0)}/>:<></>}
 
             <Footer color={color} Primary={english.Foot} />
         </>

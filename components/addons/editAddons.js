@@ -10,7 +10,7 @@ import { ToastContainer, toast } from "react-toastify";
 let language, currentLogged, currentProperty, colorToggle;
 
 
-function EditAddons({ activeAddon,setActiveAddon, set, theme }) {
+function EditAddons({ activeAddon,setActiveAddon, set, theme,reset }) {
     const [mode, setMode] = useState();
     const [color, setColor] = useState(theme);
     const [visible, setVisible] = useState(1);
@@ -226,6 +226,8 @@ function EditAddons({ activeAddon,setActiveAddon, set, theme }) {
 
                                 {/* button */}
                                 <div className='flex justify-end mr-4 w-full mt-4 '>
+                                <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150 mr-2"
+                                        onClick={() => reset()}>Back</button>
                                     <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
                                         onClick={() => set()}>Update</button>
                                 </div>
