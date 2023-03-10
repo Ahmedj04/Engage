@@ -1,13 +1,25 @@
-import React, { useState } from 'react'
-import Button from './Button';
-import Loader from './loaders/imageloader';
-import validationGalleryEdit from './validation/gallery/galleryedit';
+import React, { useState } from "react";
+import Button from "./Button";
+import Loader from "./loaders/imageloader";
+import validationGalleryEdit from "./validation/gallery/galleryedit";
+import ProgressStatus from "./progressStatus";
 let check = [];
-function Gallery({ language, allDelete, visible, images, setImages, color, spinner, spin, uploadImage }) {
+
+function Gallery({
+  language,
+  allDelete,
+  visible,
+  images,
+  setImages,
+  color,
+  spinner,
+  spin,
+  uploadImage
+}) {
   const handlecheckbox = (e) => {
     console.log(images.length);
     const { name, checked } = e.target;
-    console.log(e.target)
+    console.log(e.target);
     let tempCon = images.map((item) =>
       item.image_id === name ? { ...item, isChecked: checked } : item
     );
@@ -19,10 +31,10 @@ function Gallery({ language, allDelete, visible, images, setImages, color, spinn
       });
   };
 
-
   const [selectedImage, setSelectedImage] = useState(false);
 
   const [image, setImage] = useState({});
+  const [insertImage, setInsertImage] = useState(0);
 
   const [editImage, setEditImage] = useState(0);
   const [deleteImage, setdeleteImage] = useState(0);
@@ -53,12 +65,13 @@ function Gallery({ language, allDelete, visible, images, setImages, color, spinn
     setShowSearchedImages(1);
   };
   return (
-
     <div>
+              
       {/* Gallery */}
-      <div id='2' className={'block'}>
-        <div className={`${color?.whitebackground} rounded-lg sm:p-6 xl:p-8  2xl:col-span-2 my-3`}>
-
+      <div id="2" className={"block"}>
+        <div
+           className={`${color?.whitebackground} rounded-lg sm:p-6 xl:p-8  2xl:col-span-2 my-3`}
+        >
           <div className="sm:flex py-2 ">
             <div className="hidden sm:flex items-center sm:divide-x sm:divide-gray-100 mb-3 ml-5 sm:mb-0">
               <form className="lg:pr-3" id="imageSearchBox">
@@ -75,7 +88,7 @@ function Gallery({ language, allDelete, visible, images, setImages, color, spinn
                   ></input>
                 </div>
               </form>
-              {/*  icons to delete , clear , setting */}
+       {/*  icons to delete , clear , setting */}
 
               <div className="flex space-x-1 pl-0 sm:pl-2 mt-3 sm:mt-0">
                 <a
@@ -84,7 +97,13 @@ function Gallery({ language, allDelete, visible, images, setImages, color, spinn
                     setShowSearchedImages(0);
                     clearSearchField();
                   }}
-                  className={`${color?.textgray}  hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center ${showSearchedImages === 1 ? 'bg-yellow-100' : ''}`}
+                  className={`${color?.textgray}  hover:${
+                    color?.text
+                  } cursor-pointer p-1 ${
+                    color?.hover
+                  } rounded inline-flex justify-center ${
+                    showSearchedImages === 1 ? "bg-yellow-100" : ""
+                  }`}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -173,10 +192,24 @@ function Gallery({ language, allDelete, visible, images, setImages, color, spinn
               </div>
             </div>
             <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
-
+              {/* button to add image */}
               <Button Primary={language?.Add} onClick={() => setAddImage(1)} />
-              <a href="#" className={`w-1/2 ${color?.text} ${color?.whitebackground} border border-gray-300  ${color?.hover}  focus:ring-4 focus:ring-cyan-200 font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto`}>
-                <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clipRule="evenodd"></path></svg>
+              <a
+                href="#"
+                className={`w-1/2 ${color?.text} ${color?.whitebackground} border border-gray-300  ${color?.hover}  focus:ring-4 focus:ring-cyan-200 font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto`}
+              >
+                <svg
+                  className="-ml-1 mr-2 h-6 w-6"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z"
+                    clipRule="evenodd"
+                  ></path>
+                </svg>
                 Import
               </a>
             </div>
@@ -327,7 +360,6 @@ function Gallery({ language, allDelete, visible, images, setImages, color, spinn
                 })}
               </div>
             </div>
-
           </div>
           {/* main gallery Ends */}
         </div>
@@ -345,7 +377,8 @@ function Gallery({ language, allDelete, visible, images, setImages, color, spinn
                 width="28px"
                 onClick={() => {
                   setActionEnlargeImage(
-                    images.filter((i) => i.image_idx === indexImage - 1)
+                    images
+                      .filter((i) => i.image_idx === indexImage - 1)
                       .map((j) => {
                         return {
                           image_id: j?.image_id,
@@ -439,7 +472,8 @@ function Gallery({ language, allDelete, visible, images, setImages, color, spinn
                 }
                 onClick={() => {
                   setActionEnlargeImage(
-                    images.filter((i) => i.image_idx === indexImage + 1)
+                    images
+                      .filter((i) => i.image_idx === indexImage + 1)
                       .map((j) => {
                         return {
                           image_id: j?.image_id,
@@ -601,6 +635,7 @@ function Gallery({ language, allDelete, visible, images, setImages, color, spinn
         </div>
 
         {/* Modal Add */}
+                
         <div className={addImage === 1 ? "block" : "hidden"}>
           <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
             <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
@@ -611,11 +646,12 @@ function Gallery({ language, allDelete, visible, images, setImages, color, spinn
                   <h3 className={`${color?.text} text-xl font-semibold`}>
                     {language?.addnewimage}
                   </h3>
+                  {/* cross button */}
                   <button
                     type="button"
                     onClick={() => {
                       setImage({});
-                      document.getElementById("addgallery").reset();
+                      // document.getElementById("addgallery").reset();
                       setAddImage(0);
                       setActionImage({});
                       setError({});
@@ -635,132 +671,174 @@ function Gallery({ language, allDelete, visible, images, setImages, color, spinn
                       ></path>
                     </svg>
                   </button>
+                  {/* cross button ends */}
                 </div>
-                <form id="addgallery">
-                  <div className="p-6 space-y-6">
-                    <div className="grid grid-cols-6 gap-6">
-                      <div className="col-span-6 sm:col-span-3">
-                        <label
-                          className={`text-sm ${color?.text} font-medium  block mb-2`}
-                          htmlFor="grid-password"
-                        >
-                          {language?.imageupload}
-                          <span style={{ color: "#ff0000" }}>*</span>
-                        </label>
-                        <div className="flex">
-                          <input
-                            type="file"
-                            name="myImage"
-                            accept="image/png, image/gif, image/jpeg, image/jpg"
-                            onChange={(e) => {
-                              onChangePhoto(e, "imageFile");
-                            }}
-                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg 
-                                                focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                            defaultValue=""
-                          />
+
+                <div className={insertImage === 0 ? "block" : "hidden"}>
+                <ProgressStatus name={['Upload Image','Image Details']} selected={1} color={color}/>
+                  <form id="addgallery">
+                
+                    <div className="p-6 space-y-6">
+                      <div className="grid grid-cols-6 gap-6">
+                        <div className="col-span-6 sm:col-span-3">
+                          <label
+                            className={`text-sm ${color?.text} font-medium  block mb-2`}
+                            htmlFor="grid-password"
+                          >
+                            {language?.imageupload}
+                            <span style={{ color: "#ff0000" }}>*</span>
+                          </label>
+
+                          <div className="flex">
+                            <input
+                              type="file"
+                              name="myImage"
+                              accept="image/png, image/gif, image/jpeg, image/jpg"
+                              onChange={(e) => {
+                                onChangePhoto(e, "imageFile");
+                              }}
+                              className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg 
+                                              focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                              defaultValue=""
+                            />
+                          </div>
+                          <div className="col-span-6 sm:col-span-3 mt-2">
+                            <p className="text-sm text-sm text-red-700 font-light">
+                              {error?.image_link}
+                            </p>
+                            
+                          </div>
                         </div>
                         <div className="col-span-6 sm:col-span-3 mt-2">
-                          <p className="text-sm text-sm text-red-700 font-light">
-                            {error?.image_link}
-                          </p>
-                          {spin === 0 ? (
-                            <Button
+                          <img
+                            className={` ${color?.text}`}
+                            src={image?.image_link}
+                            alt="Image Preview"
+                            style={{ height: "150px", width: "250px" }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                <div className='flex justify-end gap-2 mr-7'>
+                  {/* upload image button */}
+                {spin === 0 ? (
+                            
+                            <Button 
                               Primary={language?.Upload}
                               onClick={uploadImage}
                             />
                           ) : (
                             <Button Primary={language?.SpinnerUpload} />
                           )}
+
+                            {/* change widget button next */}
+
+                  <Button  Primary={language?.Next}
+                                 onClick={() => setInsertImage(1)}>Next</Button>
+                                 </div>
+                </div>
+                <div className={insertImage === 1 ? "block" : "hidden"}>
+                <ProgressStatus name={['Upload Image','Image Details']} selected={'2'} color={color}/>
+                  <form id="addgallery">
+                    <div className="p-6 space-y-6">
+                      <div className="grid grid-cols-6 gap-6">
+                        <div className="col-span-6 sm:col-span-3">
+                          <label
+                            className={`text-sm ${color?.text} capitalize font-medium  block mb-2`}
+                            htmlFor="grid-password"
+                          >
+                            {language?.image} {language?.titl}
+                            <span style={{ color: "#ff0000" }}>*</span>
+                          </label>
+                          <input
+                            type="text"
+                            onChange={(e) =>
+                              setActionImage(
+                                { ...actionImage, image_title: e.target.value },
+                                setFlag(1)
+                              )
+                            }
+                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg 
+                                          focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                            placeholder="Image Title"
+                          />
+                          <p className="text-sm text-sm text-red-700 font-light">
+                            {error?.image_title}
+                          </p>
+                        </div>
+                        <div className="col-span-6 sm:col-span-3">
+                          <label
+                            className={`text-sm ${color?.text} font-medium  block mb-2`}
+                            htmlFor="grid-password"
+                          >
+                            {language?.image} {language?.description}
+                            <span style={{ color: "#ff0000" }}>*</span>
+                          </label>
+                          <textarea
+                            rows="2"
+                            columns="60"
+                            onChange={(e) =>
+                              setActionImage(
+                                {
+                                  ...actionImage,
+                                  image_description: e.target.value,
+                                },
+                                setFlag(1)
+                              )
+                            }
+                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg 
+                                          focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                            defaultValue=""
+                          />
+                          <p className="text-sm text-sm text-red-700 font-light">
+                            {error?.image_description}
+                          </p>
                         </div>
                       </div>
-                      <div className="col-span-6 sm:col-span-3 mt-2">
-                        <img
-                          className={` ${color?.text}`}
-                          src={image?.image_link}
-                          alt="Image Preview"
-                          style={{ height: "150px", width: "250px" }}
-                        />
-                      </div>
-                      <div className="col-span-6 sm:col-span-3">
-                        <label
-                          className={`text-sm ${color?.text} capitalize font-medium  block mb-2`}
-                          htmlFor="grid-password"
-                        >
-                          {language?.image} {language?.titl}
-                          <span style={{ color: "#ff0000" }}>*</span>
-                        </label>
-                        <input
-                          type="text"
-                          onChange={(e) =>
-                            setActionImage(
-                              { ...actionImage, image_title: e.target.value },
-                              setFlag(1)
-                            )
-                          }
-                          className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg 
-                                            focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          placeholder="Image Title"
-                        />
-                        <p className="text-sm text-sm text-red-700 font-light">
-                          {error?.image_title}
-                        </p>
-                      </div>
-                      <div className="col-span-6 sm:col-span-3">
-                        <label
-                          className={`text-sm ${color?.text} font-medium  block mb-2`}
-                          htmlFor="grid-password"
-                        >
-                          {language?.image} {language?.description}
-                          <span style={{ color: "#ff0000" }}>*</span>
-                        </label>
-                        <textarea
-                          rows="2"
-                          columns="60"
-                          onChange={(e) =>
-                            setActionImage(
-                              {
-                                ...actionImage,
-                                image_description: e.target.value,
-                              },
-                              setFlag(1)
-                            )
-                          }
-                          className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg 
-                                            focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          defaultValue=""
-                        />
-                        <p className="text-sm text-sm text-red-700 font-light">
-                          {error?.image_description}
-                        </p>
-                      </div>
                     </div>
-                  </div>
-                </form>
-                <div className="items-center p-6 border-t border-gray-200 rounded-b">
+                  </form>
+                 
+                  <div className="">
+                
+                    <div className='flex justify-end mr-7'>
+                   
+                  <Button Primary={language?.Previous} onClick={() => setInsertImage(0)}>Previous</Button>
+                  <div className={insertImage === 1 ? "block" : "hidden"}>
                   <div
-                    className={flag !== 1 && spinner === 0 ? "block" : "hidden"}
-                  >
-                    <Button Primary={language?.AddDisabled} />
-                  </div>
-                  <div
-                    className={spinner === 0 && flag === 1 ? "block" : "hidden"}
-                  >
-                    <Button
-                      Primary={language?.Add}
-                      onClick={() => {
-                        validationGallery();
-                      }}
-                    />
-                  </div>
-                  <div
-                    className={spinner === 1 && flag === 1 ? "block" : "hidden"}
-                  >
-                    <Button Primary={language?.SpinnerAdd} />
+                      className={
+                        flag !== 1 && spinner === 0 ? "block" : "hidden"
+                      }
+                    >
+                      <Button Primary={language?.AddDisabled} />
+                    </div>
+                    <div
+                      className={
+                        spinner === 0 && flag === 1 ? "block" : "hidden"
+                      }
+                    >
+                      <Button 
+                        Primary={language?.Add}
+                        onClick={() => {
+                          validationGallery();
+                        }}
+                      />
+                    </div>
+                    <div
+                      className={
+                        spinner === 1 && flag === 1 ? "block" : "hidden"
+                      }
+                    >
+                      <Button Primary={language?.SpinnerAdd} />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+                  </div>
+                </div>
+
+                
           </div>
         </div>
 
@@ -980,10 +1058,9 @@ function Gallery({ language, allDelete, visible, images, setImages, color, spinn
             </div>
           </div>
         </div>
-
       </div>
     </div>
-  )
+  );
 }
 
-export default Gallery
+export default Gallery;
