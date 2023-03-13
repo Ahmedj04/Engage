@@ -10,7 +10,7 @@ import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
 import Button from "../../components/Button";
 import Footer from '../../components/Footer';
-import colorFile from '../../components/color';
+import colorFile from '../../components/colors/Color';
 import Router from 'next/router';
 import Headloader from '../../components/loaders/headloader';
 import Textboxloader from '../../components/loaders/textboxloader';

@@ -1,5 +1,6 @@
-import colorFile from './color';
+import colorFile from './colors/Color';
 import {english,french,arabic} from './Languages/Languages';
+import ColorToggler from './colorToggler/ColorToggler';
 
 
 const InitialActions = ({ setColor, setMode }) => {
@@ -36,26 +37,7 @@ const InitialActions = ({ setColor, setMode }) => {
     return {language, currentLogged, currentProperty, colorToggle};
 }
 
-const ColorToggler = (newColor,setColor) => {
-    
-    if (newColor === 'system') {
-      window.matchMedia("(prefers-color-scheme:dark)").matches === true ? setColor(colorFile?.dark)
-        : setColor(colorFile?.light)
-      localStorage.setItem("colorToggle", newColor)
-    }
-    else if (newColor === 'light') {
-      setColor(colorFile?.light)
-      localStorage.setItem("colorToggle", false)
-    }
-    else if (newColor === 'dark') {
-      setColor(colorFile?.dark)
-      localStorage.setItem("colorToggle", true)
-    }
-   // firstfun();
-   // router.push(page);
-  }
-
-  export {
+export {
     InitialActions,
     ColorToggler
 }

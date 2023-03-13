@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import objChecker from "lodash";
 import StarRatings from 'react-star-ratings';
-import colorFile from "../../components/color";
+import colorFile from "../../components/colors/Color";
 import axios from 'axios';
 import Link from "next/link";
 import Headloader from "../../components/loaders/headloader";

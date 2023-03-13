@@ -6,20 +6,28 @@ import Lineloader from '../loaders/lineloader';
 import Textboxloader from '../loaders/textboxloader';
 import { ToastContainer, toast } from "react-toastify";
 import Multiselect from 'multiselect-react-dropdown';
-import GlobalData from '../GlobalData'
-
-
 
 let language, currentLogged, currentProperty, colorToggle;
 
-
-function Editproviders({ activeProvider,setActiveProvider, set, theme,reset }) {
+function Editproviders({ activeProvider, setActiveProvider, set, theme, reset }) {
     const [mode, setMode] = useState();
     const [color, setColor] = useState(theme);
     const [visible, setVisible] = useState(1);
     const [propertyName, setpropertyName] = useState('')
-    const [languages, setLanguages] = useState([{"language_code":"en"}])
-
+    const [languages, setLanguages] = useState([{ "language_code": "en" }])
+    const [servicesOffered, setServicesOffered] = useState([{
+        "service_id": "service001",
+        "service_name": "Guide",
+    }, {
+        "service_id": "service002",
+        "service_name": "Photography",
+    }, {
+        "service_id": "service003",
+        "service_name": "Food Serving",
+    }])
+    function serviceViews(event) {
+        console.log(event)
+    }
     useEffect(() => {
         const resp = InitialActions({ setColor, setMode })
         language = resp?.language;
@@ -30,20 +38,7 @@ function Editproviders({ activeProvider,setActiveProvider, set, theme,reset }) {
 
     }, [theme])
 
-     //changing multiselected data
-     const languageViews = (viewData) => {
-        console.log("multiselect data changed")
-        // setFinalView([]);
-        // var final_view_data = []
-        // viewData.map(item => {
-        //   var temp = {
-        //     view: item?.view
-        //   }
-        //   final_view_data.push(temp)
-        // });
-        // setFinalView(final_view_data);
-        // setRoomView(1)
-    }
+
 
     return (
         <>
@@ -107,7 +102,7 @@ function Editproviders({ activeProvider,setActiveProvider, set, theme,reset }) {
                                                 defaultValue={activeProvider.providerName} required
                                                 onChange={
                                                     (e) => (
-                                                        setActiveProvider({...activeProvider,providerName:e.target.value})
+                                                        setActiveProvider({ ...activeProvider, providerName: e.target.value })
                                                     )
                                                 } />
                                             {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
@@ -132,7 +127,7 @@ function Editproviders({ activeProvider,setActiveProvider, set, theme,reset }) {
                                                 defaultValue={activeProvider.providerCategory} required
                                                 onChange={
                                                     (e) => (
-                                                        setActiveProvider({...activeProvider,providerCategory:e.target.value})
+                                                        setActiveProvider({ ...activeProvider, providerCategory: e.target.value })
                                                     )
                                                 } />
                                             {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
@@ -157,7 +152,7 @@ function Editproviders({ activeProvider,setActiveProvider, set, theme,reset }) {
                                                 defaultValue={activeProvider.providerCompany} required
                                                 onChange={
                                                     (e) => (
-                                                        setActiveProvider({...activeProvider,providerCompany:e.target.value})
+                                                        setActiveProvider({ ...activeProvider, providerCompany: e.target.value })
                                                     )
                                                 } />
                                             {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
@@ -166,23 +161,23 @@ function Editproviders({ activeProvider,setActiveProvider, set, theme,reset }) {
                                     </div>
                                 </div>
 
-                                  {/* place languages */}
-                                  <div className="w-full lg:w-6/12 px-4">
+                                {/* services offered */}
+                                <div className="w-full lg:w-6/12 px-4">
                                     <div className="relative w-full mb-3">
                                         <label className={`text-sm font-medium ${color?.text} block mb-2`}
                                             htmlFor="grid-password">
-                                            Languages
+                                            Services Offered
                                             <span style={{ color: "#ff0000" }}>*</span>
                                         </label>
                                         <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                                         <div className={visible === 1 ? 'block' : 'hidden'}>
                                             <Multiselect
                                                 isObject={true}
-                                                options={GlobalData?.LanguageData}
-                                                onRemove={(event) => { languageViews(event) }}
-                                                onSelect={(event) => { languageViews(event) }}
-                                                selectedValues={languages}
-                                                displayValue="language_name"
+                                                options={servicesOffered}
+                                                onRemove={(event) => { serviceViews(event) }}
+                                                onSelect={(event) => { serviceViews(event) }}
+                                                selectedValues={activeProvider?.servicesOffered}
+                                                displayValue="service_name"
                                                 placeholder="Search"
                                                 closeIcon='circle'
                                                 style={{
@@ -200,15 +195,50 @@ function Editproviders({ activeProvider,setActiveProvider, set, theme,reset }) {
                                             />
                                             <p className="text-sm text-sm text-red-700 font-light">
                                                 {/* {error?.view} */}
-                                                </p>
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
 
-                             
+                                {/* Provider Contact */}
+                                <>
+                                {activeProvider.contactInformation.map((contact, index)=>{
+                                    return <React.Fragment key={index}>
+                                 
+                                        {/* Provider Category */}
+                                <div className="w-full lg:w-6/12  px-4">
+                                    <div className="relative w-full mb-3">
+                                        <label
+                                            className={`text-sm font-medium ${color?.text} block mb-2 capitalize`}
+                                            htmlFor="grid-password">
+                                            {contact.contact_type}
+                                            <span style={{ color: "#ff0000" }}>*</span>
+                                        </label>
+                                        <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                                        <div className={visible === 1 ? 'block' : 'hidden'}>
+                                            <input
+                                                type="text" data-testid="test_addon_description"
+                                                className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                                defaultValue={contact.contact_data} required
+                                                onChange={
+                                                    (e) => (
+                                                        setActiveProvider({ ...activeProvider, providerCategory: e.target.value })
+                                                    )
+                                                } />
+                                            {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                        {error?.property_name}</p> */}
+                                        </div>
+                                    </div>
+                                </div>
+                                    </React.Fragment>
+                                })}
+                            </>
+                                
+
+
                                 {/* button */}
                                 <div className='flex justify-end mr-4 w-full mt-4 '>
-                                <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150 mr-2"
+                                    <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150 mr-2"
                                         onClick={() => reset()}>Back</button>
                                     <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
                                         onClick={() => set()}>Update</button>
@@ -217,7 +247,7 @@ function Editproviders({ activeProvider,setActiveProvider, set, theme,reset }) {
                         </div>
                     </div>
                 </div>
-              
+
                 {/* Toast Container */}
                 <ToastContainer position="top-center"
                     autoClose={5000}

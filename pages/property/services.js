@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from "axios";
 import Sidebar from "../../components/Sidebar";
 import LoaderDarkTable from "../../components/loaders/darktableloader";
-import colorFile from "../../components/color";
+import colorFile from "../../components/colors/Color";
 import Header from "../../components/Header";
 import Link from "next/link";
 import Table from '../../components/Table';

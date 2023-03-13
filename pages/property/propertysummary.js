@@ -11,7 +11,7 @@ import DarkModeLogic from "../../components/darkmodelogic";
 import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar";
-import colorFile from "../../components/color";
+import colorFile from "../../components/colors/Color";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 import Carousel from 'better-react-carousel';
@@ -51,11 +51,7 @@ function PropertySummary() {
     {fetchHotelDetails();}
   }, [])
 
-//  useEffect(()=>{ 
-//   setColor(DarkModeLogic(darkModeSwitcher))
-//  },[darkModeSwitcher])
-
-   const firstfun = () => {
+  const firstfun = () => {
   if (typeof window !== 'undefined') {
     var locale = localStorage.getItem("Language");
     const colorToggle =localStorage.getItem("colorToggle");

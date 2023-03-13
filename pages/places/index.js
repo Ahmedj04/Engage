@@ -13,7 +13,7 @@ import { useRouter } from "next/router";
 import Headloader from "../../components/loaders/headloader";
 import LineLoader from '../../components/loaders/lineloader';
 import Title from '../../components/title';
-import colorFile from '../../components/color';
+import colorFile from '../../components/colors/Color';
 import searchFunction from '../../components/searchFunction';
 let colorToggle;
 let language;

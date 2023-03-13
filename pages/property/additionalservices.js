@@ -3,7 +3,7 @@ import validateAdditionalServices from '../../components/validation/additionalse
 import validateAdditionalServicesEdit from '../../components/validation/additionalservices/additionalservicesedit';
 import LoaderDarkTable from "../../components/loaders/darktableloader";
 import axios from "axios";
-import colorFile from "../../components/color";
+import colorFile from "../../components/colors/Color";
 import Sidebar from "../../components/Sidebar";
 import Header from "../../components/Header";
 import Link from "next/link";

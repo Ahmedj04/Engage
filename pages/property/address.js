@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Country, State, City } from "country-state-city";
 import lang from '../../components/GlobalData'
 import axios from "axios";
-import colorFile from '../../components/color'
+import colorFile from '../../components/colors/Color'
 import objChecker, { filter } from "lodash";
 import Title from '../../components/title';
 import Sidebar from "../../components/Sidebar";

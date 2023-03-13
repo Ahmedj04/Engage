@@ -12,7 +12,7 @@ import Headloader from '../../../components/loaders/headloader';
 import Lineloader from '../../../components/loaders/lineloader';
 import Button from '../../../components/Button';
 import { ToastContainer, toast } from 'react-toastify';
-import colorFile from '../../../components/color';
+import colorFile from '../../../components/colors/Color';
 import 'react-toastify/dist/ReactToastify.css';
 import Link from "next/link";
 import english from "../../../components/Languages/en";

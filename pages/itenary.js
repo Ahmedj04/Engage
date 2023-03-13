@@ -1,12 +1,13 @@
 
 import React, { useEffect, useState } from 'react';
+import { Table } from "@nextui-org/react";
 import LoaderDarkTable from '../components/loaders/darktableloader';
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
-import colorFile from "../components/color";
+import colorFile from "../components/colors/Color";
 import axios from "axios";
 import Link from "next/link";
-import Table from '../components/Table';
+//import Table from '../components/Table';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import english from "../components/Languages/en"
@@ -1232,164 +1233,35 @@ function itenary() {
              </nav>
  {/*nav end */}
 {/*content start*/}
-            <div className='mx-4'>
-                <div className='flex'>
-                    <span className='text-3xl'>{itenary.tour_name}</span>
-                    <h2 className='indent-4 pt-3'>{itenary.duration_days} Days and {itenary.duration_nights} Nights - {itenary.tour_type} tour</h2>
-                </div>
-            <p className='text-lg'>Tour Description: {itenary.tour_summary} </p>
-                {/*Day wise activity */}
-                <div >
-                 <div className='mt-4 mx-4 p-2 '>
-                 <span className='text-3xl'>Itenary <br /></span>
-                  {itenary.plan.map((item, i) => (
-                     <div key={i} >
-                     <table className='my-16 border-collapse border border-black bg-zinc-300 w-full'>
-                      <tbody className=''>
-                        <tr className='border border-black'>
-                            <th className='border border-black'>Day:</th>
-                               <td className='border border-black'>{item.day}</td>
-                                    </tr>
-                                    {item.activities.map((act, i) => {
-                                    return ( <>
-                                    <tr className='mt-8 pt-4 border border-black' key={i}>
-                                       <th className='border border-black' width='auto'>Activity name :</th>
-                                       <td className='border border-black'>{act?.activity_name}</td>
-                                    </tr>
-                                 <tr className='mt-8 pt-4 border border-black' key={i}>
-                                      <th className='border border-black' width='auto'>Time of ride :</th>
-                                      <td className='border border-black'>{act?.time_of_ride}</td>
-                                  </tr>
-                                  <tr className='mt-8 pt-4 border border-black' key={i}>
-                                      <th className='border border-black' width='auto'>Distance :</th>
-                                      <td className='border border-black'>{act?.distance}</td>
-                                  </tr>
-                                  <tr className='mt-8 pt-4 border border-black' key={i}>
-                                      <th className='border border-black' width='auto'>Place:</th>
-                                      <td className='border border-black'>{act?.place}</td>
-                                  </tr>
-                                  <tr className='mt-8 pt-4 border border-black' key={i}>
-                                      <th className='border border-black' width='auto'>Mile stones :</th>
-                                      <td className='border border-black'>
-                                          {act.milestones.map((ms, id) => {
-                                              return (<><tr className='border border-black' key={id}>
-                                                  <th className='border border-black' width='auto'>Place:</th>
-                                                  <td className='border border-black'> {Object.keys(ms)[0]}</td>
-                                              </tr>
-                                                  <tr className='border border-black' key={id}>
-                                                      <th className='border border-black' width='auto'>Description:</th>
-                                                      <td className='border border-black'>{ms.description}</td>
-                                                  </tr></>)
-                                          })}
-                                      </td>
-                                  </tr>
-                                  <tr className='border border-black' key={i}>
-                                      <th className='border border-black' width='auto'>Boarding point:</th>
-                                      <td className='border border-black'>{act?.boarding_point}</td>
-                                  </tr>
-                                  <tr className='border border-black' key={i}>
-                                      <th className='border border-black' width='auto'>Guided Tour:</th>
-                                      <td className='border border-black'>{act?.Guided_tour ? 'Yes' : 'No'}</td>
-                                  </tr>
-                                  <tr className='border border-black' key={i}>
-                                      <th className='border border-black' width='auto'>Capacity:</th>
-                                      <td className='border border-black'>
-                                          <tr className='border border-black' key={i}>
-                                              <th className='border border-black' width='auto'>Adult :</th>
-                                              <td className='border border-black'>{act?.capacity.[0].adult}</td>
-                                          </tr>
-                                          <tr className='border border-black' key={i}>
-                                              <th className='border border-black' width='auto'>Children :</th>
-                                              <td className='border border-black'>{act?.capacity.[1].children}</td>
-                                          </tr>
-                                      </td>
-                                  </tr>
-
-                                  <tr className='border border-black' key={i}>
-                                      <th className='border border-black' width='auto'>Addons:</th>
-                                      <td className='border border-black'>
-                                          {act?.add_on.map((Add, idx) => {
-                                              return (
-                                                  <tr className='border border-black' key={idx}>
-                                                      <th className='border border-black' width='auto'>Addon_id:</th>
-                                                      <td className='border border-black'>{Add.addon_id}</td>
-                                                  </tr>)
-                                        })}
-
-                                     </td>
-                               </tr>
-
-                                   <tr className='border border-black' key={i}>
-                                       <th className='border border-black' width='auto'>Provider:</th>
-                                       <td className='border border-black'>
-                                           <tr className='border border-black' key={i}>
-                                               {act?.providers.map((pro, idx) => {
-                                                   return (<tr className='border border-black' key={idx}><th className='border border-black' width='auto'>Provider_id:</th>
-                                                       <td className='border border-black'>{pro.provider_id}</td>
-                                                   </tr>)
-                                               })}
-                                           </tr>
-                                       </td>
-                                   </tr>
-                               </>
-                                                    )
-                                                })}
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                ))
-                                }
-
-                            </div>
-
-
-                            {/*Pricing box */}
-                            <div className='mt-4 mx-4 border-2 border-black p-2 h-80'>
-                                <p className='text-2xl'>Participants and Pricing</p>
-                                <p className='text-xl'>Min Participants: {itenary.min_participants} , Max Participants {itenary.max_participants}</p>
-                                <span className='text-xl'>Pricing</span>
-                                <ul className='text-lg'>
-                                    <li>Currency : {itenary.currency}</li>
-                                    <li>Charges Type : {itenary.price_type}</li>
-                                    <li>Base Price : {itenary.price_amount}</li>
-                                    <li>Tax Included : {itenary.tax_included}</li>
-                                    <li>Tax Type : {itenary.tax_type}</li>
-                                    <li>Tax Amount : {itenary.tax_amount}</li>
-                                    <li>Other Charges : {itenary.other_charges}</li>
-                                </ul>
-                            </div>
-
-                            {/* addons */}
-                            <div className="mt-4 mx-4 border-2 border-black p-2">
-                            <table className='px-4 border border-black'>
-                                <tr className='px-4 border border-black'>
-                                <th className='px-4 border border-black'>addon_id</th>
-                                <th className='px-4 border border-black'>addon name</th>
-                                <th className='px-4 border border-black'>addon provider</th>
-                                <th className='px-4 border border-black'>addon description</th>
-                                <th className='px-4 border border-black'>addon price</th>
-                                <th className='px-4 border border-black'>addon serves</th>
-                                <th className='px-4 border border-black'>addon quantity</th>
-                                </tr>
-                                {addons.map((addon,i)=>{
-                                    return(
-                                        <tr key={i} className='px-4 border border-black'>
-                                                <td className='px-4 border border-black'>{addon?.addon_id}</td>
-                                                <td className='px-4 border border-black'>{addon?.name}</td>
-                                                <td className='px-4 border border-black'>{addon?.provider}</td>
-                                                <td className='px-4 border border-black'>{addon?.description}</td>
-                                                <td className='px-4 border border-black'>{addon?.price}</td>
-                                                <td className='px-4 border border-black'>{addon?.serves}</td>
-                                                <td className='px-4 border border-black'>{addon?.quantity}</td>
-                                            </tr>
-                                        )
-                                })}
-                            </table>
-                            </div>
-                        </div>
-
-                    </div>
+<Table>
+      <Table.Header>
+        <Table.Column>NAME</Table.Column>
+        <Table.Column>ROLE</Table.Column>
+        <Table.Column>STATUS</Table.Column>
+      </Table.Header>
+      <Table.Body>
+        <Table.Row key="1">
+          <Table.Cell>Tony Reichert</Table.Cell>
+          <Table.Cell>CEO</Table.Cell>
+          <Table.Cell>Active</Table.Cell>
+        </Table.Row>
+        <Table.Row key="2">
+          <Table.Cell>Zoey Lang</Table.Cell>
+          <Table.Cell>Technical Lead</Table.Cell>
+          <Table.Cell>Paused</Table.Cell>
+        </Table.Row>
+        <Table.Row key="3">
+          <Table.Cell>Jane Fisher</Table.Cell>
+          <Table.Cell>Senior Developer</Table.Cell>
+          <Table.Cell>Active</Table.Cell>
+        </Table.Row>
+        <Table.Row key="4">
+          <Table.Cell>William Howard</Table.Cell>
+          <Table.Cell>Community Manager</Table.Cell>
+          <Table.Cell>Vacation</Table.Cell>
+        </Table.Row>
+      </Table.Body>
+    </Table>
                     {/* Toast Container */}
                     <ToastContainer position="top-center"
                         autoClose={5000}

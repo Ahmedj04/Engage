@@ -1,6 +1,6 @@
 import Sidebar from "../../components/Sidebar";
 import Head from "next/head";
-import colorFile from "../../components/color";
+import colorFile from "../../components/colors/Color";
 import Header from "../../components/Header";
 import { useState, useEffect } from "react";
 import axios from 'axios';

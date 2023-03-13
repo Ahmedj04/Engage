@@ -34,49 +34,57 @@ function Providers() {
     }, [])
 
     const [providers, setProviders] = useState([
-      {
-        "provider_id": "Guide001",
-        "providerCategory": "Guide",
-        "providerName": "John Smith",
-        "providerCompany": "Smith's Tour Guides",
-        "languageOptions": [
-          "English",
-          "Spanish",
-          "French"
-        ],
-        "providerExperience": {
-          "years": 10,
-          "certifications": [
-            "Certified Tour Guide",
-            "Certified Local Guide"
-          ],
-          "specializations": [
-            "Historical Monuments",
-            "Nature and Wildlife"
-          ]
-        },
-        "groupSize": {
-          "min": 5,
-          "max": 20
-        },
-        "servicesOffered": {
-          "guidedTours": true,
-          "photographyGuidance": true
-        },
-        "contactInformation": {
-          "email": "johnsmith@tourguides.com",
-          "phone": "555-555-5555",
-          "website": "www.smithstourguides.com"
-        },
-        "reviews": [
-          {
-            "name": "Samantha Brown",
-            "rating": 5,
-            "review": "John was an excellent guide for our family's trip to the city. He was knowledgeable and accommodating us with a lot of interesting information about the places we visited."
-          }
-        ]
-    }
-  ])
+        {
+            "provider_id": "Guide001",
+            "providerCategory": "Guide",
+            "providerName": "John Smith",
+            "providerCompany": "Smith's Tour Guides",
+
+            "servicesOffered":
+                [{
+                    "service_id": "service001",
+                    "service_name": "Guide",
+                }, {
+                    "service_id": "service002",
+                    "service_name": "Photography",
+                }
+                ],
+            "contactInformation": {
+                "email": "johnsmith@tourguides.com",
+                "phone": "555-555-5555",
+                "website": "www.smithstourguides.com"
+            }
+        }, {
+            "provider_id": "Provider002",
+            "providerCategory": "Shikara",
+            "providerName": "Noor Mahal",
+            "providerCompany": "Dal Shikara Association",
+
+            "servicesOffered":
+            [{
+                "service_id": "service001",
+                "service_name": "Guide",
+            }, {
+                "service_id": "service002",
+                "service_name": "Photography",
+            }
+            ],
+            "contactInformation": [{
+                "contact_type":"email",
+                "contact_data": "Dal-Shikara@gmail.com"
+            },
+            {
+                "contact_type":"phone",
+                "contact_data": "7006177777"
+            },{
+                "contact_type":"website",
+                "contact_data": "www.dalshikara.com"
+            }
+            ]
+        }
+    ]
+
+    )
     //edit addon
     function editAddOnfunction() {
         let unchangedAddons = addons.filter((item) => item.addon_id != activeProvider.addon_id);

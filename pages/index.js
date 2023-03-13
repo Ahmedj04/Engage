@@ -4,7 +4,7 @@ import Axios from "axios";
 import bcrypt from "bcryptjs";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import colorFile from "../components/color";
+import colorFile from "../components/colors/Color";
 import { useRouter } from "next/router";
 import Cookies from 'js-cookie';
 import Button from "../components/Button";

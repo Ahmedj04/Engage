@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import colorFile from '../../components/color';
+import colorFile from '../../components/colors/Color';
 import { useRouter } from "next/router";
 // import Link from "next/link";
 import axios from 'axios';

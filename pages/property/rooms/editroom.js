@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import validateBedData from '../../../components/validation/room/roombedadd';
 import validateRoom from '../../../components/validation/room/roomdescriptionadd';
 import validateSingleBedEdit from '../../../components/validation/room/roomsinglebededit';
-import colorFile from '../../../components/color';
+import colorFile from '../../../components/colors/Color';
 import validateEditGallery from '../../../components/validation/room/roomgalleryedit';
 import validateRoomRates from '../../../components/validation/room/roomratesadd';
 import validateBedAdd from '../../../components/validation/room/roomsinglebedadd';

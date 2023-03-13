@@ -15,7 +15,7 @@ import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
 const logger = require("../../services/logger");
-import colorFile from '../../components/color';
+import colorFile from '../../components/colors/Color';
 var language;
 var currentUser;
 var currentLogged;

@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import objChecker from "lodash";
 import Title from "../../components/title";
-import colorFile from "../../components/color";
+import colorFile from "../../components/colors/Color";
 import validateGallery from "../../components/validation/gallery/galleryadd";
 import validateEditGallery from "../../components/validation/gallery/galleryedit";
 import { useState, useEffect } from "react";
