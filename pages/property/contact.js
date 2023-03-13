@@ -14,9 +14,7 @@ import Header from "../../components/Header";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
 import objChecker from "lodash";
-import english from "../../components/Languages/en"
-import french from "../../components/Languages/fr"
-import arabic from "../../components/Languages/ar"
+import {english,french,arabic} from "../../components/Languages/Languages";
 var language;
 var currentProperty;
 var propertyName;

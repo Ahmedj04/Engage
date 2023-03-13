@@ -11,7 +11,8 @@ import Lineloader from '../../components/loaders/lineloader';
 import Textboxloader from '../../components/loaders/textboxloader';
 import { ToastContainer, toast } from "react-toastify";
 import searchFunction from '../../components/searchFunction';
-import Editproviders from '../../components/providers/editProviders';
+import Editproviders from '../../components/providers/EditProviders';
+import AddProviders from '../../components/providers/AddProvider'
 import NewAddon from '../../components/addons/newAddon';
 
 let language, currentLogged, currentProperty, colorToggle;
@@ -49,11 +50,18 @@ function Providers() {
                     "service_name": "Photography",
                 }
                 ],
-            "contactInformation": {
-                "email": "johnsmith@tourguides.com",
-                "phone": "555-555-5555",
-                "website": "www.smithstourguides.com"
-            }
+                "contactInformation": [{
+                    "contact_type":"email",
+                    "contact_data": "Dal-Shikara@gmail.com"
+                },
+                {
+                    "contact_type":"phone",
+                    "contact_data": "7006177777"
+                },{
+                    "contact_type":"website",
+                    "contact_data": "www.dalshikara.com"
+                }
+                ]
         }, {
             "provider_id": "Provider002",
             "providerCategory": "Shikara",
@@ -85,16 +93,16 @@ function Providers() {
     ]
 
     )
-    //edit addon
-    function editAddOnfunction() {
+    //edit provider
+    function editProviderfunction() {
         let unchangedAddons = addons.filter((item) => item.addon_id != activeProvider.addon_id);
         setAddons([...unchangedAddons, activeProvider]);
         setActiveProvider({});
         setEditprovider(0);
     }
-    //new addon
-    function newAddOn() {
-        setAddons([...addons, activeProvider]);
+    //new provider
+    function newProvider() {
+        setProviders([...providers, activeProvider]);
         setActiveProvider({});
         setEditprovider(0);
     }
@@ -334,11 +342,11 @@ function Providers() {
                 : <></>}
             {/* edit addons */}
             {editprovider === 1 ?
-                <Editproviders activeProvider={activeProvider} setActiveProvider={setActiveProvider} set={editAddOnfunction} theme={color} reset={() => setEditprovider(0)} />
+                <Editproviders activeProvider={activeProvider} setActiveProvider={setActiveProvider} set={()=>{editProviderfunction(); setActiveProvider({});}} theme={color} reset={() =>{setActiveProvider({});setEditprovider(0)} } />
                 : <></>}
             {/* add addons */}
             {editprovider === 2 ?
-                <NewAddon activeProvider={activeProvider} setActiveProvider={setActiveProvider} set={newAddOn} theme={color} reset={() => setEditprovider(0)} /> : <></>}
+                <AddProviders activeProvider={activeProvider} setActiveProvider={setActiveProvider} set={()=>{newProvider();}} theme={color} reset={() => setEditprovider(0)} /> : <></>}
 
             <Footer color={color} Primary={english.Foot} />
         </>

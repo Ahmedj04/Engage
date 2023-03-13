@@ -7,15 +7,16 @@ import Textboxloader from '../loaders/textboxloader';
 import { ToastContainer, toast } from "react-toastify";
 import Multiselect from 'multiselect-react-dropdown';
 import AddContact from '../contacts/AddContact';
+
 let language, currentLogged, currentProperty, colorToggle;
 
-function Editproviders({ activeProvider, setActiveProvider, set, theme, reset }) {
-    const [addContact, setAddContact] = useState(0);
-    const [contact, setContact] = useState({});
-    const [flag, setFlag] = useState(0);
+function AddProvider({ activeProvider, setActiveProvider, set, theme, reset }) {
     const [mode, setMode] = useState();
     const [color, setColor] = useState(theme);
     const [visible, setVisible] = useState(1);
+    const [addContact, setAddContact] = useState(0);
+    const [contact, setContact] = useState({});
+    const [flag, setFlag] = useState(0);
     const [propertyName, setpropertyName] = useState('')
     const [languages, setLanguages] = useState([{ "language_code": "en" }])
     const [servicesOffered, setServicesOffered] = useState([{
@@ -85,14 +86,13 @@ function Editproviders({ activeProvider, setActiveProvider, set, theme, reset })
                             <div className="flex items-center">
                                 <div className={`${color?.textgray} text-base font-medium  inline-flex items-center`}>
                                     <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-                                    <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">Edit {language?.provider}</span>
+                                    <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">Add {language?.provider}</span>
                                 </div>
                             </div>
                         </li>
                     </ol>
                 </nav>
                 {/* Navbar End*/}
-                {/* add contact button */}
                 <div className='flex justify-end'>
                 <button
                     className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150 mr-2 mb-2"
@@ -101,6 +101,7 @@ function Editproviders({ activeProvider, setActiveProvider, set, theme, reset })
                 </div>
                 
                 <div className={`${color?.whitebackground} shadow rounded-lg px-12  sm:p-6 xl:p-8  2xl:col-span-2`}>
+
                     <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}>
                         {activeProvider.providerName}
                     </h6>
@@ -122,7 +123,7 @@ function Editproviders({ activeProvider, setActiveProvider, set, theme, reset })
                                             <input
                                                 type="text" data-testid="test_addon_name"
                                                 className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                                                defaultValue={activeProvider.providerName} required
+                                                required
                                                 onChange={
                                                     (e) => (
                                                         setActiveProvider({ ...activeProvider, providerName: e.target.value })
@@ -147,7 +148,7 @@ function Editproviders({ activeProvider, setActiveProvider, set, theme, reset })
                                             <input
                                                 type="text" data-testid="test_addon_description"
                                                 className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                                                defaultValue={activeProvider.providerCategory} required
+                                                required
                                                 onChange={
                                                     (e) => (
                                                         setActiveProvider({ ...activeProvider, providerCategory: e.target.value })
@@ -172,7 +173,7 @@ function Editproviders({ activeProvider, setActiveProvider, set, theme, reset })
                                             <input
                                                 type="text" data-testid="test_addon_description"
                                                 className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                                                defaultValue={activeProvider.providerCompany} required
+                                                required
                                                 onChange={
                                                     (e) => (
                                                         setActiveProvider({ ...activeProvider, providerCompany: e.target.value })
@@ -225,38 +226,38 @@ function Editproviders({ activeProvider, setActiveProvider, set, theme, reset })
 
                                 {/* Provider Contact */}
                                 <>
-                                {activeProvider?.contactInformation?.map((contact, index)=>{
-                                    return <React.Fragment key={index}>
-                                 
-                                        {/* Provider Category */}
-                                <div className="w-full lg:w-6/12  px-4">
-                                    <div className="relative w-full mb-3">
-                                        <label
-                                            className={`text-sm font-medium ${color?.text} block mb-2 capitalize`}
-                                            htmlFor="grid-password">
-                                            {contact.contact_type}
-                                            <span style={{ color: "#ff0000" }}>*</span>
-                                        </label>
-                                        <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                                        <div className={visible === 1 ? 'block' : 'hidden'}>
-                                            <input
-                                                type="text" data-testid="test_addon_description"
-                                                className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                                                defaultValue={contact.contact_data} required
-                                                onChange={
-                                                    (e) => (
-                                                        setActiveProvider({ ...activeProvider, providerCategory: e.target.value })
-                                                    )
-                                                } />
-                                            {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                    {activeProvider?.contactInformation?.map((contact, index) => {
+                                        return <React.Fragment key={index}>
+
+                                            {/* Provider Category */}
+                                            <div className="w-full lg:w-6/12  px-4">
+                                                <div className="relative w-full mb-3">
+                                                    <label
+                                                        className={`text-sm font-medium ${color?.text} block mb-2 capitalize`}
+                                                        htmlFor="grid-password">
+                                                        {contact.contact_type}
+                                                        <span style={{ color: "#ff0000" }}>*</span>
+                                                    </label>
+                                                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                                                    <div className={visible === 1 ? 'block' : 'hidden'}>
+                                                        <input
+                                                            type="text" data-testid="test_addon_description"
+                                                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                                            required
+                                                            onChange={
+                                                                (e) => (
+                                                                    setActiveProvider({ ...activeProvider, providerCategory: e.target.value })
+                                                                )
+                                                            } />
+                                                        {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
                         {error?.property_name}</p> */}
-                                        </div>
-                                    </div>
-                                </div>
-                                    </React.Fragment>
-                                })}
-                            </>
-                                
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </React.Fragment>
+                                    })}
+                                </>
+
 
 
                                 {/* button */}
@@ -284,7 +285,6 @@ function Editproviders({ activeProvider, setActiveProvider, set, theme, reset })
 
 
             </div>
-
             {addContact === 1 ? <AddContact
                 contact={contact}
                 setContact={setContact}
@@ -295,9 +295,8 @@ function Editproviders({ activeProvider, setActiveProvider, set, theme, reset })
                 validationContact={() => { alert('contactAdded') }}
                 setAddContact={(val) => setAddContact(val)} />
                 : <></>}
-
         </>
     )
 }
 
-export default Editproviders;
+export default AddProvider;
