@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import colorFile from '../../../components/color';
+import colorFile from '../../../components/colors/Color';
 import Router from 'next/router';
 import EmojiPicker from 'emoji-picker-react';
 import axios from 'axios';
