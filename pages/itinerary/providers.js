@@ -11,7 +11,6 @@ import Lineloader from '../../components/loaders/lineloader';
 import Textboxloader from '../../components/loaders/textboxloader';
 import { ToastContainer, toast } from "react-toastify";
 import searchFunction from '../../components/searchFunction';
-
 import EditProviders from '../../components/providers/EditProviders';
 import AddProviders from '../../components/providers/AddProvider'
 import NewAddon from '../../components/addons/newAddon';
