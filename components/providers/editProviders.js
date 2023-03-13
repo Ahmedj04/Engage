@@ -9,7 +9,7 @@ import Multiselect from 'multiselect-react-dropdown';
 import AddContact from '../contacts/AddContact';
 let language, currentLogged, currentProperty, colorToggle;
 
-function Editproviders({ activeProvider, setActiveProvider, set, theme, reset }) {
+function EditProviders({ activeProvider, setActiveProvider, set, theme, reset }) {
     const [addContact, setAddContact] = useState(0);
     const [contact, setContact] = useState({});
     const [flag, setFlag] = useState(0);
@@ -99,7 +99,7 @@ function Editproviders({ activeProvider, setActiveProvider, set, theme, reset })
                     onClick={() => setAddContact(1)}>ADD Contact</button>
 
                 </div>
-                
+
                 <div className={`${color?.whitebackground} shadow rounded-lg px-12  sm:p-6 xl:p-8  2xl:col-span-2`}>
                     <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}>
                         {activeProvider.providerName}
@@ -300,4 +300,4 @@ function Editproviders({ activeProvider, setActiveProvider, set, theme, reset })
     )
 }
 
-export default Editproviders;
+export default EditProviders;
