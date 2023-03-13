@@ -11,7 +11,7 @@ import Lineloader from '../../components/loaders/lineloader';
 import Textboxloader from '../../components/loaders/textboxloader';
 import { ToastContainer, toast } from "react-toastify";
 import searchFunction from '../../components/searchFunction';
-import Editproviders from '../../components/providers/EditProviders';
+import EditProviders from '../../components/providers/EditProviders';
 import AddProviders from '../../components/providers/AddProvider'
 import NewAddon from '../../components/addons/newAddon';
 
@@ -342,7 +342,7 @@ function Providers() {
                 : <></>}
             {/* edit addons */}
             {editprovider === 1 ?
-                <Editproviders activeProvider={activeProvider} setActiveProvider={setActiveProvider} set={()=>{editProviderfunction(); setActiveProvider({});}} theme={color} reset={() =>{setActiveProvider({});setEditprovider(0)} } />
+                <EditProviders activeProvider={activeProvider} setActiveProvider={setActiveProvider} set={()=>{editProviderfunction(); setActiveProvider({});}} theme={color} reset={() =>{setActiveProvider({});setEditprovider(0)} } />
                 : <></>}
             {/* add addons */}
             {editprovider === 2 ?
