@@ -811,7 +811,8 @@ extraguestcharge:'./extraguestcharges',
 inbox:'./inbox',
 places:'../places',
 addons:'../itinerary/addons',
-providers:'../itinerary/providers'
+providers:'../itinerary/providers',
+packages:'../itinerary/packages'
 },
 "PlaceSide":{
  dashboard:'../property/dashboard',
@@ -841,7 +842,8 @@ extraguestcharge:'../property/extraguestcharges',
 inbox:'../property/inbox',
 places:'../places',
 addons:'../itinerary/addons',
-providers:'../itinerary/providers'
+providers:'../itinerary/providers',
+packages:'../itinerary/packages'
 },
 
 
@@ -873,7 +875,8 @@ extraguestcharge:'../extraguestcharges',
 inbox:'../inbox',
 places:'../../places',
 addons:'../../itinerary/addons',
-providers:'../../itinerary/providers'
+providers:'../../itinerary/providers',
+packages:'../../itinerary/packages'
  },
  
  "Side2":{
@@ -903,7 +906,8 @@ modification:'../../modifications',
 extraguestcharge:'../../extraguestcharges',
 inbox:'../../inbox',
 addons:'../../itinerary/addons',
-providers:'../itinerary/providers'
+providers:'../itinerary/providers',
+packages:'../itinerary/packages'
  },
  "Foot":{
   termsandconditions:'./termsandconditions',

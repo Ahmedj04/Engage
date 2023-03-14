@@ -26,12 +26,7 @@ module.exports = withAxiom(
     return config;
   },
 
- 
-  
-   
-  
-
-  resolve: {
+ resolve: {
     fallback: {
      "os": require.resolve("os-browserify/browser"),
       "assert": require.resolve("assert"),

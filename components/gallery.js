@@ -32,10 +32,8 @@ function Gallery({
   };
 
   const [selectedImage, setSelectedImage] = useState(false);
-
   const [image, setImage] = useState({});
   const [insertImage, setInsertImage] = useState(0);
-
   const [editImage, setEditImage] = useState(0);
   const [deleteImage, setdeleteImage] = useState(0);
   const [actionImage, setActionImage] = useState({});

@@ -265,6 +265,13 @@ const Sidebar = (args) => {
                           {language?.providers}</a>
                       </Link></li>
 
+                      <li className={`${args?.color?.text} ${args?.color?.sidebar} group text-base font-normal rounded-lg flex items-center p-2 pl-11`}>
+                      <Link href={{ pathname: args?.Primary?.packages, query: { id: 1 } }}>
+                        <a
+                        >
+                          {language?.packages}</a>
+                      </Link></li>
+
                   </ul></div>
               </li>
 
