@@ -104,6 +104,7 @@ const Place = () => {
         firstfun();
     }, [])
 
+    //authorization
     useEffect(() => {
         if (JSON.stringify(currentLogged) === 'null') {
             router?.push(window.location.origin)
@@ -174,9 +175,9 @@ const Place = () => {
 
     }
     //edit attraction
-    function attractionEdit(){
-        let unChangedAttractions=placeAttractions.filter(item=>item.attraction_id!=attraction.attraction_id)
-        setPlaceAttractions([...unChangedAttractions,attraction])
+    function attractionEdit() {
+        let unChangedAttractions = placeAttractions.filter(item => item.attraction_id != attraction.attraction_id)
+        setPlaceAttractions([...unChangedAttractions, attraction])
         setDisp(2);
     }
     //delete season
@@ -1944,9 +1945,8 @@ const Place = () => {
                                 <div className="p-6 space-y-6">
                                     <form id="newAttraction">
                                         <div className="flex flex-wrap">
-                                            {/* milestone name */}
+                                            {/* attraction name  */}
                                             <div className=" w-full lg:w-6/12  px-4">
-                                                {/* attraction name  */}
                                                 <div className="relative w-full mb-3">
                                                     <label
                                                         className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -1970,9 +1970,9 @@ const Place = () => {
 
                                                 </div>
                                             </div>
-                                            {/* milestone description */}
+
+                                            {/* attraction description*/}
                                             <div className=" w-full lg:w-6/12  px-4">
-                                                {/* attraction name  */}
                                                 <div className="relative w-full mb-3">
                                                     <label
                                                         className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -1994,6 +1994,83 @@ const Place = () => {
                                                     {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
                                                              {error?.property_name}
                                                         </p> */}
+
+                                                </div>
+                                            </div>
+
+                                             {/* attraction latitude  */}
+                                             <div className=" w-full lg:w-6/12  px-4">
+                                                <div className="relative w-full mb-3">
+                                                    <label
+                                                        className={`text-sm font-medium ${color?.text} block mb-2`}
+                                                        htmlFor="grid-password">
+                                                        Attraction Latitude
+                                                        <span style={{ color: "#ff0000" }}>*</span>
+                                                    </label>
+                                                    <input
+                                                        type="text" data-testid="test_property_name"
+                                                        className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                                        defaultValue={attraction.latitude}
+                                                        required
+                                                        onChange={
+                                                            (e) => (
+                                                                setAttraction({ ...attraction, latitude: e.target.value })
+                                                            )
+                                                        } />
+                                                    {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                                             {error?.property_name}
+                                                             </p> */}
+
+                                                </div>
+                                            </div>
+                                             {/* attraction longitude  */}
+                                             <div className=" w-full lg:w-6/12  px-4">
+                                                <div className="relative w-full mb-3">
+                                                    <label
+                                                        className={`text-sm font-medium ${color?.text} block mb-2`}
+                                                        htmlFor="grid-password">
+                                                        Attraction Longitude
+                                                        <span style={{ color: "#ff0000" }}>*</span>
+                                                    </label>
+                                                    <input
+                                                        type="text" data-testid="test_property_name"
+                                                        className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                                        defaultValue={attraction.longitude}
+                                                        required
+                                                        onChange={
+                                                            (e) => (
+                                                                setAttraction({ ...attraction,longitude: e.target.value })
+                                                            )
+                                                        } />
+                                                    {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                                             {error?.property_name}
+                                                             </p> */}
+
+                                                </div>
+                                            </div>
+
+                                             {/* attraction open hours  */}
+                                             <div className=" w-full lg:w-6/12  px-4">
+                                                <div className="relative w-full mb-3">
+                                                    <label
+                                                        className={`text-sm font-medium ${color?.text} block mb-2`}
+                                                        htmlFor="grid-password">
+                                                        Open Hours
+                                                        <span style={{ color: "#ff0000" }}>*</span>
+                                                    </label>
+                                                    <input
+                                                        type="text" data-testid="test_property_name"
+                                                        className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                                        defaultValue={attraction.open_hours}
+                                                        required
+                                                        onChange={
+                                                            (e) => (
+                                                                setAttraction({ ...attraction, open_hours: e.target.value })
+                                                            )
+                                                        } />
+                                                    {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                                             {error?.property_name}
+                                                             </p> */}
 
                                                 </div>
                                             </div>
