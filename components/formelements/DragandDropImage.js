@@ -1,5 +1,5 @@
 import { useState } from "react";
-export default function DragandDropImage({onChangePhoto,color}) {
+function DragandDropImage({onChangePhoto,color}) {
   const [files, setFile] = useState([]);
   const [message, setMessage] = useState();
   const handleFile = (e) => {
@@ -41,8 +41,7 @@ export default function DragandDropImage({onChangePhoto,color}) {
           />
           <div className={`h-full w-full ${color?.greybackground} absolute z-1 flex justify-center items-center top-0`}>
             <div className={`flex flex-col ${color?.text}`}>
-              <i className="mdi mdi-folder-open text-[30px] text-gray-400 text-center"></i>
-              <span className="text-[12px]">{`Drag and Drop a file`}</span>
+             <span className="text-[12px]">{`Drag and Drop a file`}</span>
             </div>
           </div>
         </div>:<></>}
@@ -96,3 +95,5 @@ export default function DragandDropImage({onChangePhoto,color}) {
     </>
   );
 }
+
+export default DragandDropImage;

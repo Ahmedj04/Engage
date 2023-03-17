@@ -43,7 +43,6 @@ function Packages() {
       attractions: [1, 2, 3, 4]
     }, "gulmarg"],
     attraction: [
-      { id 1}, {}
     ]
 
   },
