@@ -62,6 +62,7 @@ export default function DragandDropImage({onChangePhoto,color}) {
                       <img
                         className="w-full h-full rounded"
                         src={URL.createObjectURL(file)}
+                        alt="uploaded image"
                       />
                     </div>
                     {/* <span className="truncate w-44">{file.name}</span> */}
