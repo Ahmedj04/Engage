@@ -47,6 +47,10 @@ module.exports = withAxiom(
       {
         source: '/api/:path*',
         destination: 'http://103.136.36.27:7860/:path*' // Proxy to Backend
+      },
+      {
+        source: '/api2/:path*',
+        destination: 'https://hangul-core.hasura.app/api/rest/:path*' // Proxy to Backend
       }
     ]
   },

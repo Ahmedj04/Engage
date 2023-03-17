@@ -3,6 +3,7 @@ import Button from "./Button";
 import Loader from "./loaders/imageloader";
 import validationGalleryEdit from "./validation/gallery/galleryedit";
 import ProgressStatus from "./progressStatus";
+import DragandDropImage from "./formelements/DragandDropImage";
 let check = [];
 
 function Gallery({
@@ -14,7 +15,7 @@ function Gallery({
   color,
   spinner,
   spin,
-  uploadImage
+  uploadImage,
 }) {
   const handlecheckbox = (e) => {
     console.log(images.length);
@@ -32,8 +33,10 @@ function Gallery({
   };
 
   const [selectedImage, setSelectedImage] = useState(false);
+
   const [image, setImage] = useState({});
   const [insertImage, setInsertImage] = useState(0);
+
   const [editImage, setEditImage] = useState(0);
   const [deleteImage, setdeleteImage] = useState(0);
   const [actionImage, setActionImage] = useState({});
@@ -62,13 +65,18 @@ function Gallery({
 
     setShowSearchedImages(1);
   };
+
+  const onChangePhoto = (e, imageFile) => {
+    alert("function called");
+    setImage({ ...image, imageFile: e.target.files[0] });
+  };
+
   return (
     <div>
-              
       {/* Gallery */}
       <div id="2" className={"block"}>
         <div
-           className={`${color?.whitebackground} rounded-lg sm:p-6 xl:p-8  2xl:col-span-2 my-3`}
+          className={`${color?.whitebackground} rounded-lg sm:p-6 xl:p-8  2xl:col-span-2 my-3`}
         >
           <div className="sm:flex py-2 ">
             <div className="hidden sm:flex items-center sm:divide-x sm:divide-gray-100 mb-3 ml-5 sm:mb-0">
@@ -86,7 +94,7 @@ function Gallery({
                   ></input>
                 </div>
               </form>
-       {/*  icons to delete , clear , setting */}
+              {/*  icons to delete , clear , setting */}
 
               <div className="flex space-x-1 pl-0 sm:pl-2 mt-3 sm:mt-0">
                 <a
@@ -633,7 +641,7 @@ function Gallery({
         </div>
 
         {/* Modal Add */}
-                
+
         <div className={addImage === 1 ? "block" : "hidden"}>
           <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
             <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
@@ -673,71 +681,46 @@ function Gallery({
                 </div>
 
                 <div className={insertImage === 0 ? "block" : "hidden"}>
-                <ProgressStatus name={['Upload Image','Image Details']} selected={1} color={color}/>
+                  <ProgressStatus
+                    name={["Upload Image", "Image Details"]}
+                    selected={1}
+                    color={color}
+                  />
                   <form id="addgallery">
-                
-                    <div className="p-6 space-y-6">
-                      <div className="grid grid-cols-6 gap-6">
-                        <div className="col-span-6 sm:col-span-3">
-                          <label
-                            className={`text-sm ${color?.text} font-medium  block mb-2`}
-                            htmlFor="grid-password"
-                          >
-                            {language?.imageupload}
-                            <span style={{ color: "#ff0000" }}>*</span>
-                          </label>
-
-                          <div className="flex">
-                            <input
-                              type="file"
-                              name="myImage"
-                              accept="image/png, image/gif, image/jpeg, image/jpg"
-                              onChange={(e) => {
-                                onChangePhoto(e, "imageFile");
-                              }}
-                              className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg 
-                                              focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                              defaultValue=""
-                            />
-                          </div>
-                          <div className="col-span-6 sm:col-span-3 mt-2">
-                            <p className="text-sm text-sm text-red-700 font-light">
-                              {error?.image_link}
-                            </p>
-                            
-                          </div>
-                        </div>
-                        <div className="col-span-6 sm:col-span-3 mt-2">
-                          <img
-                            className={` ${color?.text}`}
-                            src={image?.image_link}
-                            alt="Image Preview"
-                            style={{ height: "150px", width: "250px" }}
-                          />
-                        </div>
-                      </div>
-                    </div>
+                    <DragandDropImage
+                      onChangePhoto={(e) => {
+                        onChangePhoto(e, "imageFile");
+                      }}
+                      color={color}
+                    />
                   </form>
-                <div className='flex justify-end gap-2 mr-7'>
-                  {/* upload image button */}
-                {spin === 0 ? (
-                            
-                            <Button 
-                              Primary={language?.Upload}
-                              onClick={uploadImage}
-                            />
-                          ) : (
-                            <Button Primary={language?.SpinnerUpload} />
-                          )}
+                  <div className="flex justify-end gap-2 mr-7">
+                    {/* upload image button */}
+                    {spin === 0 ? (
+                      <Button
+                        Primary={language?.Upload}
+                        onClick={uploadImage}
+                      />
+                    ) : (
+                      <Button Primary={language?.SpinnerUpload} />
+                    )}
 
-                            {/* change widget button next */}
+                    {/* change widget button next */}
 
-                  <Button  Primary={language?.Next}
-                                 onClick={() => setInsertImage(1)}>Next</Button>
-                                 </div>
+                    <Button
+                      Primary={language?.Next}
+                      onClick={() => setInsertImage(1)}
+                    >
+                      Next
+                    </Button>
+                  </div>
                 </div>
                 <div className={insertImage === 1 ? "block" : "hidden"}>
-                <ProgressStatus name={['Upload Image','Image Details']} selected={'2'} color={color}/>
+                  <ProgressStatus
+                    name={["Upload Image", "Image Details"]}
+                    selected={"2"}
+                    color={color}
+                  />
                   <form id="addgallery">
                     <div className="p-6 space-y-6">
                       <div className="grid grid-cols-6 gap-6">
@@ -796,47 +779,48 @@ function Gallery({
                       </div>
                     </div>
                   </form>
-                 
+
                   <div className="">
-                
-                    <div className='flex justify-end mr-7'>
-                   
-                  <Button Primary={language?.Previous} onClick={() => setInsertImage(0)}>Previous</Button>
-                  <div className={insertImage === 1 ? "block" : "hidden"}>
-                  <div
-                      className={
-                        flag !== 1 && spinner === 0 ? "block" : "hidden"
-                      }
-                    >
-                      <Button Primary={language?.AddDisabled} />
-                    </div>
-                    <div
-                      className={
-                        spinner === 0 && flag === 1 ? "block" : "hidden"
-                      }
-                    >
-                      <Button 
-                        Primary={language?.Add}
-                        onClick={() => {
-                          validationGallery();
-                        }}
-                      />
-                    </div>
-                    <div
-                      className={
-                        spinner === 1 && flag === 1 ? "block" : "hidden"
-                      }
-                    >
-                      <Button Primary={language?.SpinnerAdd} />
+                    <div className="flex justify-end mr-7">
+                      <Button
+                        Primary={language?.Previous}
+                        onClick={() => setInsertImage(0)}
+                      >
+                        Previous
+                      </Button>
+                      <div className={insertImage === 1 ? "block" : "hidden"}>
+                        <div
+                          className={
+                            flag !== 1 && spinner === 0 ? "block" : "hidden"
+                          }
+                        >
+                          <Button Primary={language?.AddDisabled} />
+                        </div>
+                        <div
+                          className={
+                            spinner === 0 && flag === 1 ? "block" : "hidden"
+                          }
+                        >
+                          <Button
+                            Primary={language?.Add}
+                            onClick={() => {
+                              validationGallery();
+                            }}
+                          />
+                        </div>
+                        <div
+                          className={
+                            spinner === 1 && flag === 1 ? "block" : "hidden"
+                          }
+                        >
+                          <Button Primary={language?.SpinnerAdd} />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-                  </div>
-                </div>
-
-                
           </div>
         </div>
 

@@ -19,7 +19,7 @@ function Packages() {
   const [mode, setMode] = useState();
   const [color, setColor] = useState({});
   const [visible, setVisible] = useState(1);
-  const [editaddon, setEditaddon] = useState(0);
+  const [editpackage, setEditPackage] = useState(0);
   const [property_name, setProperty_name] = useState('')
   const [activeAddon, setActiveAddon] = useState({})
 
@@ -34,9 +34,18 @@ function Packages() {
   }, [])
 
   const [packageItenarary, setPackageItenarary] = useState([{
-    package_itenarary_id: "pkgit001",
+    pkg_itenarary_id: "pkgit001",
     package_itenarary_name: "Srinagar Surfers",
     package_itenarary_description: "some description for the destination to be covered",
+    location: "j&k",
+    places: [{
+      place: "srinagar",
+      attractions: [1, 2, 3, 4]
+    }, "gulmarg"],
+    attraction: [
+      { id 1}, {}
+    ]
+
   },
   {
     package_itenarary_id: "pkgit002",
@@ -75,7 +84,7 @@ function Packages() {
         Primary={english.PlaceSide}
         Type={currentLogged?.user_type} />
       {/* view addons */}
-      {editaddon === 0 ?
+      {editpackage === 0 ?
         <div id="main-content"
           className={`${color?.greybackground} px-4 pt-24 pb-2 relative overflow-y-auto h-screen lg:ml-64`}>
           {/* Navbar */}
@@ -287,12 +296,12 @@ function Packages() {
         </div>
         : <></>}
       {/* edit addons */}
-      {editaddon === 1 ?
-        <EditAddons activeAddon={activeAddon} setActiveAddon={setActiveAddon} set={editAddOn} theme={color} reset={() => setEditaddon(0)} />
+      {editpackage === 1 ?
+        <EditAddons activePackage={activePackage} setActivePackage={setActivePackage} set={editPackage} theme={color} reset={() => setEditPackage(0)} />
         : <></>}
       {/* add addons */}
-      {editaddon === 2 ?
-        <NewAddon activeAddon={activeAddon} setActiveAddon={setActiveAddon} set={newAddOn} theme={color} reset={() => setEditaddon(0)} /> : <></>}
+      {editpackage === 2 ?
+        <NewAddon activePackage={activePackage} setActivePackage={setActivePackage} set={newPackage} theme={color} reset={() => setEditPackage(0)} /> : <></>}
 
       <Footer color={color} Primary={english.Foot} />
     </>

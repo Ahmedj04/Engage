@@ -79,6 +79,7 @@ export default function BasicDetails() {
     try {
       const { address_province, address_city, property_category, property_id } = currentProperty;
       const url = `/api/${address_province.replace(/\s+/g, "-")}/${address_city}/${property_category}s/${property_id}`;
+      //  const url = `/api2/property/t2k001`;
       const response = await axios.get(url);
       setBasicDetails(response.data);
       setAllHotelDetails(response.data);
