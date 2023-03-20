@@ -971,7 +971,7 @@ function Index() {
             <div className="ml-auto">
               <button className="bg-gradient-to-r bg-cyan-600 mr-2 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
                 onClick={() => { alert('add aditional info') }}>Add Additional Info </button>
-              <button className="bg-gradient-to-r bg-cyan-600  hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+              <button className="bg-gradient-to-r bg-cyan-600 mt-1 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
                 onClick={() => { alert('add place') }}>Add Place</button>
             </div>
 
