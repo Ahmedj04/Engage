@@ -13,7 +13,8 @@ import { ToastContainer, toast } from "react-toastify";
 import searchFunction from '../../components/searchFunction';
 import EditAddons from '../../components/addons/editAddons';
 import NewAddon from '../../components/addons/newAddon';
-
+import EditPackageItenarary from '../../components/packageItenarary/EditPackageItenarary';
+import PackageItenarary from '../../components/devlopmentjson/PackageItenarary.json';
 let language, currentLogged, currentProperty, colorToggle;
 function Packages() {
   const [mode, setMode] = useState();
@@ -21,7 +22,7 @@ function Packages() {
   const [visible, setVisible] = useState(1);
   const [editpackage, setEditPackage] = useState(0);
   const [property_name, setProperty_name] = useState('')
-  const [activeAddon, setActiveAddon] = useState({})
+  const [activePackage, setActivePackage] = useState({})
 
   useEffect(() => {
     const resp = InitialActions({ setColor, setMode })
@@ -33,33 +34,17 @@ function Packages() {
 
   }, [])
 
-  const [packageItenarary, setPackageItenarary] = useState([{
-    pkg_itenarary_id: "pkgit001",
-    package_itenarary_name: "Srinagar Surfers",
-    package_itenarary_description: "some description for the destination to be covered",
-    location: "j&k",
-    places: [{
-      place: "srinagar",
-      attractions: [1, 2, 3, 4]
-    }, "gulmarg"],
-    attraction: [
-    ]
-
-  },
-  {
-    package_itenarary_id: "pkgit002",
-    package_itenarary_name: "Gulmarg",
-    package_itenarary_description: "some description for the destination to be covered",
-  }])
+  const [packageItenarary, setPackageItenarary] = useState(PackageItenarary);
+ 
   //edit addon
   function editAddOn() {
     let unchangedAddons = addons.filter((item) => item.addon_id != activeAddon.addon_id);
     setPackageItenarary([...unchangedAddons, activeAddon]);
-    setActiveAddon({});
-    setEditaddon(0);
+    setActivePackage({});
+    setEditPackage(0);
   }
   //new addon
-  function newAddOn() {
+  function newPackage() {
     setPackageItenarary([...addons, activeAddon]);
     setActiveAddon({});
     setEditaddon(0);
@@ -112,7 +97,7 @@ function Packages() {
                 <div className="flex items-center">
                   <div className={`${color?.textgray} text-base font-medium  inline-flex items-center`}>
                     <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-                    <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">{language?.packages} {language?.itinerary}</span>
+                    <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">Package Itenararies</span>
                   </div>
                 </div>
               </li>
@@ -161,7 +146,7 @@ function Packages() {
                 <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex  
                              font-semibold
                                     rounded-lg text-sm px-5 py-2 text-center 
-                              items-center ease-linear transition-all duration-150" onClick={() => setEditaddon(2)} >
+                              items-center ease-linear transition-all duration-150" onClick={() => setEditPackage(2)} >
                   ADD</button>
 
               </div>
@@ -186,6 +171,7 @@ function Packages() {
                           </th>
                           <th scope="col" className={`p-4 text-left text-xs font-semibold ${color?.text} uppercase`}>Package Itinerary Name</th>
                           <th scope="col" className={`p-4 text-left text-xs font-semibold ${color?.text} uppercase`}>Package Itinerary Description</th>
+                          <th scope="col" className={`p-4 text-left text-xs font-semibold ${color?.text} uppercase`}>Location</th>
                           <th scope="col" className={`p-4 text-left text-xs font-semibold ${color?.text} uppercase`}>Actions</th>
                         </tr>
                       </thead>
@@ -201,13 +187,14 @@ function Packages() {
                                   <label htmlFor="checkbox-1" className="sr-only" />
                                 </span>
                               </td>
-                              <td className={`${color?.text} p-4 whitespace-nowrap capitalize text-base font-normal`}>{it.package_itenarary_name}</td>
-                              <td className={`${color?.text} p-4 whitespace-nowrap capitalize text-base font-normal`}>{it.package_itenarary_description.slice(0, 30)}...</td>
+                              <td className={`${color?.text} p-4 whitespace-nowrap capitalize text-base font-normal`}>{it?.package_name}</td>
+                              <td className={`${color?.text} p-4 whitespace-nowrap capitalize text-base font-normal`}>{it?.description?.slice(0, 30)}...</td>
+                              <td className={`${color?.text} p-4 whitespace-nowrap capitalize text-base font-normal`}>{it?.location}</td>
 
                               <td className="py-4 whitespace-nowrap capitalize">
                                 <div>
                                   <button
-                                    onClick={() => { setActiveAddon(addon); setEditaddon(1) }}
+                                    onClick={() => { setActivePackage(it); setEditPackage(1) }}
                                     className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
                                   >Edit </button>
                                 </div>
@@ -296,11 +283,11 @@ function Packages() {
         : <></>}
       {/* edit addons */}
       {editpackage === 1 ?
-        <EditAddons activePackage={activePackage} setActivePackage={setActivePackage} set={editPackage} theme={color} reset={() => setEditPackage(0)} />
+        <EditPackageItenarary activePackage={activePackage} setActivePackage={setActivePackage} update={newPackage} theme={color} reset={() => setEditPackage(0)} />
         : <></>}
       {/* add addons */}
       {editpackage === 2 ?
-        <NewAddon activePackage={activePackage} setActivePackage={setActivePackage} set={newPackage} theme={color} reset={() => setEditPackage(0)} /> : <></>}
+        <NewAddon activePackage={activePackage} setActivePackage={setActivePackage} set={editPackage} theme={color} reset={() => setEditPackage(0)} /> : <></>}
 
       <Footer color={color} Primary={english.Foot} />
     </>

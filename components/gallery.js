@@ -67,7 +67,6 @@ function Gallery({
   };
 
   const onChangePhoto = (e, imageFile) => {
-    alert("function called");
     setImage({ ...image, imageFile: e.target.files[0] });
   };
 
