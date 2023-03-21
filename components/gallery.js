@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Button from "./Button";
 import Loader from "./loaders/imageloader";
 import validationGalleryEdit from "./validation/gallery/galleryedit";
-import ProgressStatus from "./progressStatus";
+import WidgetStatus from "./widgetStatus";
 import DragandDropImage from "./formelements/DragandDropImage";
 let check = [];
 
@@ -680,7 +680,7 @@ function Gallery({
                 </div>
 
                 <div className={insertImage === 0 ? "block" : "hidden"}>
-                  <ProgressStatus
+                  <WidgetStatus
                     name={["Upload Image", "Image Details"]}
                     selected={1}
                     color={color}
@@ -715,7 +715,7 @@ function Gallery({
                   </div>
                 </div>
                 <div className={insertImage === 1 ? "block" : "hidden"}>
-                  <ProgressStatus
+                  <WidgetStatus
                     name={["Upload Image", "Image Details"]}
                     selected={"2"}
                     color={color}

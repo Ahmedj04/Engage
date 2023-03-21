@@ -22,7 +22,7 @@ var currentLogged;
 let colorToggle;
 import Router from "next/router";
 import Button from '../../components/Button';
-import ProgressStatus from '../../components/progressStatus';
+import WidgetStatus from '../../components/widgetStatus';
 import PackageItenarary from '../../components/devlopmentjson/PackageItenarary.json';
 
 function Index() {
@@ -40,6 +40,7 @@ function Index() {
 
   const [visibleDay, setVisibleDay] = useState({})
   const [attraction, setAttraction] = useState([])
+  const [activeMilestone, setActiveMilestone] = useState({})
   const [attractionInfo, setAttractionInfo] = useState([])
   const [actionDay, setActionDay] = useState(0)
 
@@ -711,7 +712,7 @@ function Index() {
     firstfun();
     router.push('../itinerary')
   }
-  const name = ['Itinerary', 'Details', 'Places', 'Attractions']
+  const name = ['Itinerary', 'Details', 'Places', 'Attractions', 'Activities','Milestones','Details']
   return (
     <div>
       <Header color={color} Primary={english.Side} Type={currentLogged?.user_type} Sec={colorToggler} mode={mode} setMode={setMode} />
@@ -758,7 +759,7 @@ function Index() {
           <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
 
             <div>
-              <ProgressStatus name={name} selected={1} color={color} />
+              <WidgetStatus name={name} selected={1} color={color} />
             </div>
             <div className="pt-6 ">
               <div className=" md:px-4 mx-auto w-full">
@@ -898,7 +899,7 @@ function Index() {
           <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
             {/* progress bar */}
             <div>
-              <ProgressStatus name={name} selected={2} color={color} />
+              <WidgetStatus name={name} selected={2} color={color} />
             </div>
             {/* progress bar end */}
             <div className='flex justify-end'>
@@ -961,7 +962,7 @@ function Index() {
         <div id='2' className={disp === 2 ? `${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2 block` : 'hidden'}>
           {/* progress bar */}
           <div>
-            <ProgressStatus name={name} selected={3} color={color} /> <widgetBar name={['Itinerary Description', 'Details', 'Places', 'Attractions']} selected={1} color={color} />
+            <WidgetStatus name={name} selected={3} color={color} /> <widgetBar name={['Itinerary Description', 'Details', 'Places', 'Attractions']} selected={1} color={color} />
           </div>
           {/* progress bar end */}
 
@@ -1038,7 +1039,7 @@ function Index() {
         <div id='3' className={disp === 3 ? `${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2 block` : 'hidden'}>
           {/* progress bar */}
           <div>
-            <ProgressStatus name={name} selected={4} color={color} /> <widgetBar name={['Itinerary Description', 'Details', 'Places', 'Attractions']} selected={1} color={color} />
+            <WidgetStatus name={name} selected={4} color={color} />
           </div>
           {/* progress bar end */}
 
@@ -1064,6 +1065,7 @@ function Index() {
                         </th>
                         <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-600 uppercase">Attractions</th>
                         <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-600 uppercase">Actions</th>
+                        <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-600 uppercase"></th>
                       </tr>
                     </thead>
                     <tbody className=" bg-white divide-y  divide-gray-200" id="TableList">
@@ -1086,6 +1088,14 @@ function Index() {
 
                               </div>
                             </td>
+
+                            <td className="py-4 whitespace-nowrap capitalize">
+                              <div>
+                                <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                  onClick={() => { setAttractionInfo(attraction); setDisp(5) }}>Milestones </button>
+
+                              </div>
+                            </td>
                           </tr>
                         )
                       })}
@@ -1094,7 +1104,7 @@ function Index() {
                   </table>
 
                   <div className='flex items-center justify-end space-x-2  sm:space-x-3 ml-auto'>
-                    
+
                     <Button Primary={language?.Previous} onClick={() => { setDisp(2) }} />
                   </div>
 
@@ -1107,10 +1117,338 @@ function Index() {
         </div>
 
         {/* activity widget */}
-                    <div className={disp===4?'block':'hidden'}>
-                      {JSON.stringify(attractionInfo)}
-                    </div>
 
+        <div id='4' className={disp === 4 ? 'block' : 'hidden'}>
+
+          <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
+            {/* progress bar */}
+            <div>
+              <WidgetStatus name={name} selected={5} color={color} />
+            </div>
+            {/* progress bar end */}
+            {/* activities of selected day display */}
+            <div className="pt-6">
+              <div className=" md:px-4 mx-auto w-full">
+                <div className="flex flex-wrap">
+                  {/* activity name field */}
+                  <div className="w-full lg:w-6/12  px-4">
+                    <div className="relative w-full mb-3">
+                      <label
+                        className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password">
+                        Activity Name
+                        <span style={{ color: "#ff0000" }}>*</span>
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                        <input
+                          type="text" data-testid="test_property_name"
+                          className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                          defaultValue={attractionInfo?.activity_name} required
+                        // onChange={(e) => ()} 
+                        />
+                        <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                          {/* for error messages{error?.property_name}*/}</p>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  {/* borading point field */}
+                  <div className="w-full lg:w-6/12  px-4">
+                    <div className="relative w-full mb-3">
+                      <label
+                        className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password">
+                        Boarding Point
+                        <span style={{ color: "#ff0000" }}>*</span>
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                        <input
+                          type="text" data-testid="test_property_name"
+                          className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                          defaultValue={attractionInfo?.boarding_point} required
+                        // onChange={(e) => ()} 
+                        />
+                        <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                          {/* for error messages{error?.property_name}*/}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/*Tour capacity */}
+                  <div className="w-full lg:w-6/12  px-4 ">
+                    <div className="relative w-full mb-3">
+                      <label
+                        className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password">
+                        Tour Capacity
+                        <span style={{ color: "#ff0000" }}>*</span>
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                      <div className={visible === 1 ? 'block flex flex-wrap' : 'hidden'}>
+                        <label
+                          className={`text-sm  font-medium ${color?.text} block mb-2 px-2 mt-2`}
+                          htmlFor="grid-password">
+                          Adults
+                          <span style={{ color: "#ff0000" }}>*</span>
+                        </label>
+                        <input
+                          type="text" data-testid="test_property_name"
+                          className={`shadow-sm ${color?.greybackground} w-12 mx-4 border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5 mt-2`}
+                          defaultValue={attractionInfo?.capacity?.adult} required
+                        // onChange={(e) => ()} 
+                        />
+                        <label
+                          className={`text-sm font-medium ${color?.text} block mb-2 mt-2`}
+                          htmlFor="grid-password">
+                          Children
+                          <span style={{ color: "#ff0000" }}>*</span>
+                        </label>
+                        <input
+                          type="text" data-testid="test_property_name"
+                          className={`shadow-sm ${color?.greybackground} border w-12 mx-4 border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5 mt-2`}
+                          defaultValue={attractionInfo?.capacity?.children} required
+                        // onChange={(e) => ()} 
+                        />
+                        <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                          {/* for error messages{error?.property_name}*/}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* guided tour field */}
+                  <div className="w-full lg:w-6/12  px-4">
+                    <div className="relative w-full mb-3">
+                      <label
+                        className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password">
+                        Guided Tour
+                        <span style={{ color: "#ff0000" }}>*</span>
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                        <input
+                          type="text" data-testid="test_property_name"
+                          className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                          defaultValue={attractionInfo?.Guided_tour} required
+                        // onChange={(e) => ()} 
+                        />
+                        <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                          {/* for error messages{error?.property_name}*/}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* time of ride field */}
+                  <div className="w-full lg:w-6/12  px-4">
+                    <div className="relative w-full mb-3">
+                      <label
+                        className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password">
+                        Time Of Ride
+                        <span style={{ color: "#ff0000" }}>*</span>
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                        <input
+                          type="text" data-testid="test_property_name"
+                          className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                          defaultValue={attractionInfo?.time_of_ride} required
+                        // onChange={(e) => ()} 
+                        />
+                        <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                          {/* for error messages{error?.property_name}*/}</p>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  {/* distance */}
+                  <div className="w-full lg:w-6/12  px-4">
+                    <div className="relative w-full mb-3">
+                      <label
+                        className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password">
+                        Distance
+                        <span style={{ color: "#ff0000" }}>*</span>
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                        <input
+                          type="text" data-testid="test_property_name"
+                          className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                          defaultValue={attractionInfo?.distance} required
+                        // onChange={(e) => ()} 
+                        />
+                        <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                          {/* for error messages{error?.property_name}*/}</p>
+                      </div>
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+            </div>
+
+            <div className='flex items-center justify-end space-x-2 sm:space-x-3 ml-auto'>
+              <Button Primary={language?.Update} onClick={() => { alert('update clicked') }} />
+              <Button Primary={language?.Previous} onClick={() => { setDisp(3) }} />
+            </div>
+
+
+          </div>
+        </div>
+
+        {/* milestone widget-list of milestones */}
+
+        <div id='5' className={disp === 5 ? 'block' : 'hidden'}>
+        
+          <div>
+              <WidgetStatus name={name} selected={6} color={color} />
+            </div>
+          {/*content of div*/}
+          <div className='flex '>
+            <span className={`p-2 text-left text-lg font-bold text-gray-900 uppercase`}>Day : {visibleDay.day}</span>
+            <button className="ml-auto bg-gradient-to-r bg-cyan-600  hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+              onClick={() => { alert('add milestone') }}>Add Milestone</button>
+          </div>
+          {/* table of activities for day */}
+          <div className="flex flex-col mt-8 lg:mr-0 sm:mr-0 ">
+            <div className="overflow-x-auto">
+              <div className="align-middle inline-block min-w-full">
+                <div className="shadow overflow-hidden">
+                  <table className="table data table-fixed min-w-full divide-y divide-gray-200" id="myTable">
+                    <thead className=" bg-gray-100">
+                      <tr>
+                        <th scope="col" className="p-4">
+                          <div className="flex items-center">
+                            <input id="checkbox-all" aria-describedby="checkbox-1" type="checkbox" name="allSelect" className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                            <label htmlFor="checkbox-all" className="sr-only">checkbox</label>
+                          </div>
+                        </th>
+                        <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-600 uppercase">Milestone</th>
+                        <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-600 uppercase">Actions</th>
+
+                      </tr>
+                    </thead>
+                    <tbody className=" bg-white divide-y  divide-gray-200" id="TableList">
+                      {attractionInfo?.milestones?.map((milestone, id) => {
+                        return (
+                          <tr key={id}>
+                            <td className="p-4 w-4">
+                              <span className="flex items-center">
+                                <input id="checkbox-1" name="r0091" aria-describedby="checkbox-1" type="checkbox"
+                                  className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                                <label htmlFor="checkbox-1" className="sr-only" />
+                              </span>
+                            </td>
+                            <td className="p-4 whitespace-nowrap capitalize text-base font-normal text-gray-700">{milestone?.milestone_name}</td>
+
+                            <td className="py-4 whitespace-nowrap capitalize">
+                              <div>
+                                <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                  onClick={() => { setActiveMilestone(milestone); setDisp(6) }}>Edit </button>
+
+                              </div>
+                            </td>
+
+
+                          </tr>
+                        )
+                      })}
+
+                    </tbody>
+                  </table>
+
+                  <div className='flex items-center justify-end space-x-2  sm:space-x-3 ml-auto'>
+
+                    <Button Primary={language?.Previous} onClick={() => { setDisp(3) }} />
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        {/* edit milestone widget */}
+        <div className={disp === 6 ? 'block' : 'hidden'}>
+        <div>
+              <WidgetStatus name={name} selected={7} color={color} />
+            </div>
+        <span className={`p-2 text-left text-lg font-bold text-gray-900 uppercase`}>{activeMilestone.milestone_name}</span>
+        
+          <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
+            
+            <div className="pt-6">
+              <div className=" md:px-4 mx-auto w-full">
+                <div className="flex flex-wrap">
+                  {/* milestone name */}
+                  <div className="w-full lg:w-6/12  px-4">
+                    <div className="relative w-full mb-3">
+                      <label
+                        className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password">
+                        Milestone Name
+                        <span style={{ color: "#ff0000" }}>*</span>
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                        <input
+                          type="text" data-testid="test_property_name"
+                          className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                          defaultValue={activeMilestone?.milestone_name} required
+                        // onChange={(e) => ()} 
+                        />
+                        <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                          {/* for error messages{error?.property_name}*/}</p>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  {/* milestone description */}
+                  <div className="w-full lg:w-6/12  px-4">
+                    <div className="relative w-full mb-3">
+                      <label
+                        className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password">
+                        Milestone Description
+                        <span style={{ color: "#ff0000" }}>*</span>
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                        <input
+                          type="text" data-testid="test_property_name"
+                          className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                          defaultValue={activeMilestone?.milestone_name} required
+                        // onChange={(e) => ()} 
+                        />
+                        <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                          {/* for error messages{error?.property_name}*/}</p>
+                      </div>
+                    </div>
+                  </div>
+
+
+
+
+
+
+                </div>
+              </div>
+            </div>
+
+            <div className='flex items-center justify-end space-x-2 sm:space-x-3 ml-auto'>
+              <Button Primary={language?.Update} onClick={() => { alert('update clicked') }} />
+              <Button Primary={language?.Previous} onClick={() => { setDisp(5) }} />
+            </div>
+          </div>
+        </div>
       </div >
       <Footer color={color} Primary={english.Foot} />
     </div>

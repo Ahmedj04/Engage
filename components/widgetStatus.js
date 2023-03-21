@@ -1,6 +1,6 @@
-// ProgressStatus.js is used to show Upload image & image details option depending on the state of the widget.
+// WidgetStatus.js is used to show Progress state of widget
 
-// In this file we created the function progressStatus which consists the arguments Name,Selected,Color.
+// In this file we created the function WidgetStatus which consists the arguments Name,Selected,Color.
 //  name : this is an array type , it will hold name of labels to be displayed.
 //  selected: this should be of the type integer, which is to be shown as selected
 //  color: this will consist of color which is currently active {dark or light}
@@ -8,14 +8,14 @@
 //  We make use of map with the arguments items & index  to specify the tailwind for different devices.
 
 
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 
-function ProgressStatus({ name, selected, color }) {
+function WidgetStatus({ name, selected, color }) {
   const [select,setSelect]=useState(selected-1)
   return (
-    <div data-testid='main'className="md:flex lg:flex w-full justify-center px-4" > 
+    <div data-testid='main'className="md:flex lg:flex w-full lg:w-full justify-center px-4" > 
     {name?.map((item, index) => { return (
-              <div data-testid={`child${index}`} className={`${name.length<6?`w-1/${name.length}`:`w-1/12`}`} key={index}> 
+              <div data-testid={`child${index}`} className={`${index===0?`ml-2`:``} ${index===name.length-1?`mr-4`:``} ${name.length<4?`w-1/${name.length}`:`w-1/6`}`} key={index}> 
             <div className={`relative before:hidden before:lg:block before:absolute   
               before:h-[3px] before:top-0 before:bottom-0 before:mt-4 
               ${index===0 || (name.length)-1===index ?`before:w-[64%] ${index===0?`before:ml-36`:`before:mr-36`}`:`before:w-[200%]`}
@@ -42,4 +42,4 @@ function ProgressStatus({ name, selected, color }) {
   );
 }
 
-export default ProgressStatus;
+export default WidgetStatus;
