@@ -30,7 +30,7 @@ function DragandDropImage({onChangePhoto,color}) {
           </span>
           
           {files.length === 0 ?
-          <div className="h-full w-full overflow-hidden relative shadow-md border-2 items-center rounded-md cursor-pointer   border-gray-400 border-dotted">
+          <div className="h-32 w-full overflow-hidden relative shadow-md border-2 items-center rounded-md cursor-pointer   border-gray-400 border-dotted">
           <input
             type="file"
             onChange={handleFile}
@@ -39,7 +39,7 @@ function DragandDropImage({onChangePhoto,color}) {
             name="files[]"
             disabled={files.length!=0?true:false}
           />
-          <div className={`h-24 w-full ${color?.greybackground} absolute z-1 flex justify-center items-center top-0`}>
+          <div className={`h-full w-full ${color?.greybackground} absolute z-1 flex justify-center items-center top-0`}>
             <div className={`flex flex-col ${color?.text}`}>
              <span className="text-[12px]">{`Drag and Drop a file`}</span>
             </div>
