@@ -65,6 +65,7 @@
                 ],
                 "milestones": [
                   {
+                    "milestone_id":"mile001",
                     "milestone_name": "Tangmarg",
                     "description": "Tangmarg is gateway of gulmarg which is just 13kms away, also drung waterfall is 3kms away which makes tangmarg most crowded place in the evening due to clean & fresh environment. ",
                     "addons": [
@@ -80,6 +81,7 @@
                     ]
                   },
                   {
+                    "milestone_id":"mile002",
                     "milestone_name": "Drang waterfall",
                     "description": "The Drung Waterfall is an extremely popular tourist attraction located in the Tangmarg tehsil of Gulmarg, Baramulla. A cascading waterfall set amidst majestic mountains, it freezes completely during winter due to the extremely low temperature. This frozen waterfall is a must-visit in the area.",
                     "addons": [
@@ -95,6 +97,7 @@
                     ]
                   },
                   {
+                    "milestone_id":"mile003",
                     "milestone_name": "Baba Reshi Shrine ",
                     "description": "The Ziarat of Baba Reshi is a popular shrine of Baramula, situated near the Alpather Lake at 13 km from Gulmarg and belongs to saint Baba payam-Din.",
                     "addons": [
@@ -160,6 +163,7 @@
                 ],
                 "milestones": [
                   {
+                    "milestone_id":"mile003",
                     "milestone_name": "kongdori-phase",
                     "description": "It starts at a height of 2,990 m following which there is a vertical rise of 400m.",
                     "addons": [
@@ -175,6 +179,7 @@
                     ]
                   },
                   {
+                    "milestone_id":"mile004",
                     "milestone_name": "Apharwat - Phase II",
                     "description": "it makes a further ascent of 1,330 vertical meters and takes you to a total height of almost 4,000 m",
                     "addons": [
@@ -190,6 +195,7 @@
                     ]
                   },
                   {
+                    "milestone_id":"mile005",
                     "milestone_name": "Phase III",
                     "description": "Once here, you can trek a further 30 minutes and reach the top of the mountain to catch a glimpse of the Line of Control (LOC) which is visible from here. ",
                     "addons": [
@@ -225,6 +231,7 @@
                 "place": "Gulmarg",
                 "milestones": [
                   {
+                    "milestone_id":"mile006",
                     "milestone_name": "Apharwat-peak",
                     "description": "Best slopes in Asia for best skiing experience.",
                     "addons": [

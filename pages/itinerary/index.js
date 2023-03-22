@@ -46,616 +46,14 @@ function Index() {
 
   const [itenary, setItenary] = useState(PackageItenarary[0])
 
-  const [addons, setAddons] = useState([
-    {
-      "addon_id": "addon001",
-      "name": "First aid kit",
-      "provider": "service provider",
-      "description": "The first kit will be available on board",
-      "price": "",
-      "serves": "5",
-      "quantity": "2"
-    },
-    {
-      "addon_id": "addon002",
-      "name": "Refreshment on the way to gulmarg",
-      "provider": "Restaurant NH-1, Shalteng",
-      "description": "The guest will be served with the refreshment i.e. chai pakauda and snacks",
-      "price": "150",
-      "serves": "1",
-      "quantity": "20"
-    },
-    {
-      "addon_id": "addon003",
-      "name": "Gandola",
-      "provider": "gulmarg gondola corp",
-      "description": "The guest will get the gondola tickets once they reach at boarding point",
-      "price": "1500",
-      "serves": "1",
-      "quantity": "20"
-    },
-    {
-      "addon_id": "addon004",
-      "name": "Skiing Gears",
-      "provider": "Gulmarg Slopes",
-      "description": "The guest will get the Skiing gears from the vendor",
-      "price": "1500",
-      "serves": "1",
-      "quantity": "20"
-    },
-    {
-      "addon_id": "addon005",
-      "name": "Skiing Instructor",
-      "provider": "Gulmarg Slopes",
-      "description": "The guest will be able to learn from experienced instructor",
-      "price": "1500",
-      "serves": "1",
-      "quantity": "20"
-    },
-    {
-      "addon_id": "addon006",
-      "name": "Dinner",
-      "provider": "Hotel",
-      "description": "The guest will be able to have veg as well as non veg food at hotel as per their choice",
-      "price": "1500",
-      "serves": "1",
-      "quantity": "20"
-    },
-    {
-      "addon_id": "addon007",
-      "name": "welcome drink",
-      "provider": "Hotel",
-      "description": "The guest will be served with authentic kashmiri kehwa as soon as they check in",
-      "price": "150",
-      "serves": "1",
-      "quantity": "20"
-    },
-    {
-      "addon_id": "addon008",
-      "name": "BreakFast",
-      "provider": "Hotel",
-      "description": "The guest will be able to have veg as well as non veg food at hotel as per their choice",
-      "price": "250",
-      "serves": "1",
-      "quantity": "20"
-    },
-    {
-      "addon_id": "addon0010",
-      "name": "Horse ride gear",
-      "provider": "Horse riding company",
-      "description": "The rider will get riding gears",
-      "price": "1250",
-      "serves": "6",
-      "quantity": "20"
-    },
-    {
-      "addon_id": "addon0010",
-      "name": "Horse ride",
-      "provider": "Horse riding company",
-      "description": "The rider will get ride with instructor",
-      "price": "1250",
-      "serves": "6",
-      "quantity": "20"
-    },
-    {
-      "addon_id": "addon0012",
-      "name": "Lunch at betab valley",
-      "provider": "valley view restaurants",
-      "description": "The Guest will get veg as well as non veg options",
-      "price": "650",
-      "serves": "2",
-      "quantity": "20"
-    },
-    {
-      "addon_id": "addon0013",
-      "name": "Kehwa at pampore",
-      "provider": "Saffron field",
-      "description": "The Guest authentic kehwa at saffron fields",
-      "price": "150",
-      "serves": "1",
-      "quantity": "20"
-    },
-    {
-      "addon_id": "addon0014",
-      "name": "Life saving equipments",
-      "provider": "Shikara walla",
-      "description": "the life saving equipments will be present onboard",
-      "price": "150",
-      "serves": "1",
-      "quantity": "20"
-    },
-    {
-      "addon_id": "addon0017",
-      "name": "Local taxi",
-      "provider": "Taxi stand no 4",
-      "description": "Sedan,Suv and hatchbacks available for guest",
-      "price": "1500",
-      "serves": "4",
-      "quantity": "20"
-    },
-    {
-      "addon_id": "addon0018",
-      "name": "Photographer",
-      "provider": "Photography club nishat",
-      "description": "A4 size photographs will be provided to guest apart from other softcopy of photos",
-      "price": "150",
-      "serves": "1",
-      "quantity": "20"
-    }
-  ])
-
-  const [providers, setProviders] = useState([
-    {
-      "provider_id": "provider001",
-      "provider_category": "Food",
-      "Name": "M/s NH 1 Restautant",
-      "Company": "NH 1 Restautant pvt ltd",
-      "languageOptions": [
-        "English",
-        "Hindi",
-        "kannad"
-      ],
-      "guideExperience": {
-        "years": 10,
-        "certifications": [
-          "Certified Asian Chef",
-          "Certified Muglai Chef"
-        ],
-        "specializations": [
-          "Muglai food",
-          "South Indian Food"
-        ]
-      },
-      "groupSize": {
-        "min": 2,
-        "max": 20
-      },
-      "servicesOffered": {
-        "Veg Food": true,
-        "Non-Veg Food": true,
-      },
-      "contactInformation": {
-        "email": "NH1@t2k.com",
-        "phone": "101102911",
-        "website": "www.NH1.t2k.com"
-      },
-      "reviews": [
-        {
-          "name": "Raman Iyer",
-          "rating": 5,
-          "review": "They serve authentic South indian food."
-        }
-      ]
-    },
-    {
-      "provider_id": "provider002",
-      "provider_category": "Transport",
-      "Name": "Mr. Aziz mir",
-      "Company": "Airpot taxi drivers assosciation",
-      "languageOptions": [
-        "English",
-        "Hindi",
-        "kannad"
-      ],
-      "guideExperience": {
-        "years": 10,
-        "certifications": [
-
-        ],
-        "specializations": [
-          "SUV",
-          "Sedan",
-          "Hatchback"
-        ]
-      },
-      "groupSize": {
-        "min": 2,
-        "max": 7
-      },
-      "servicesOffered": {
-        "site seeing": true,
-        "guiding": true,
-      },
-      "contactInformation": {
-        "email": "taxi@t2k.com",
-        "phone": "101102911",
-        "website": "www.airport-taxi.t2k.com"
-      },
-      "reviews": [
-        {
-          "name": "Raman Iyer",
-          "rating": 5,
-          "review": "They serve authentic South indian food."
-        }
-      ]
-    },
-    {
-      "provider_id": "provider004",
-      "provider_category": "Transport",
-      "Name": "M/s Cable car corporation",
-      "Company": "Cabe car corporation",
-      "languageOptions": [
-        "English",
-        "Hindi",
-        "kannad",
-        "French",
-        "Spanish"
-      ],
-      "Experience": {
-        "years": 30,
-        "certifications": [
-        ],
-        "specializations": [
-          "Asia's highest gondolla ",
-          "Chair carriages for skiers"
-        ]
-      },
-      "groupSize": {
-        "min": 2,
-        "max": 20
-      },
-      "servicesOffered": {
-        "Chair carriage": true,
-        "Closed carriage": true,
-      },
-      "contactInformation": {
-        "email": "gulamrg gonadola@t2k.com",
-        "phone": "1011029111",
-        "website": "www.gg.t2k.com"
-      },
-      "reviews": [
-        {
-          "name": "Raman Iyer",
-          "rating": 5,
-          "review": "They serve authentic South indian food."
-        }
-      ]
-    },
-    {
-      "provider_id": "provider003",
-      "provider_category": "Activity",
-      "Name": "M/s Gulmarg slopes",
-      "Company": "M/s Gulmarg slopes",
-      "languageOptions": [
-        "English",
-        "Hindi",
-        "kannad",
-        "French",
-        "Spanish"
-      ],
-      "Experience": {
-        "years": 30,
-        "certifications": [
-        ],
-        "specializations": [
-
-        ]
-      },
-      "groupSize": {
-        "min": 2,
-        "max": 20
-      },
-      "servicesOffered": {
-        "Skiing gears": true,
-        "Skiing instructor": true,
-      },
-      "contactInformation": {
-        "email": "gulamrgSlopes@t2k.com",
-        "phone": "1011029111",
-        "website": "www.slopes.t2k.com"
-      },
-      "reviews": [
-        {
-          "name": "Raman Iyer",
-          "rating": 5,
-          "review": "They serve authentic South indian food."
-        }
-      ]
-    },
-    {
-      "provider_id": "provider005",
-      "provider_category": "Hotel",
-      "Name": "Gulmarg peaks",
-      "Company": "M/s Raddison pvt ltd",
-      "languageOptions": [
-        "English",
-        "Hindi",
-        "kannad",
-        "French",
-        "Spanish"
-      ],
-      "Experience": {
-        "years": 30,
-        "certifications": [
-        ],
-        "specializations": [
-          "3 star king size room",
-
-        ]
-      },
-      "groupSize": {
-        "min": 2,
-        "max": 20
-      },
-      "servicesOffered": {
-        "bon fire": "true",
-        "food": "true",
-        "room service": "true",
-        "vallet parking": "true"
-      },
-      "contactInformation": {
-        "email": "Hotel@t2k.com",
-        "phone": "1011029111",
-        "website": "www.hotel.t2k.com"
-      },
-      "reviews": [
-        {
-          "name": "Raman Iyer",
-          "rating": 5,
-          "review": "They serve authentic South indian food."
-        }
-      ]
-    },
-    {
-      "provider_id": "provider006",
-      "provider_category": "Horse ride",
-      "Name": "Pehalgam pony association",
-      "Company": "",
-      "languageOptions": [
-        "English",
-        "Hindi",
-        "kannad",
-        "French",
-        "Spanish"
-      ],
-      "Experience": {
-        "years": 30,
-        "certifications": [
-        ],
-        "specializations": [
-          "3 star king size room",
-
-        ]
-      },
-      "groupSize": {
-        "min": 2,
-        "max": 20
-      },
-      "servicesOffered": {
-        "horse ride": "true",
-        "riding gears": "true",
-        "riding instuctor": "true"
-      },
-      "contactInformation": {
-        "email": "Horse@t2k.com",
-        "phone": "1011029111",
-        "website": "www.horse.t2k.com"
-      },
-      "reviews": [
-        {
-          "name": "Raman Iyer",
-          "rating": 5,
-          "review": "They serve authentic South indian food."
-        }
-      ]
-    },
-    {
-      "provider_id": "provider007",
-      "provider_category": "Food",
-      "Name": "Valley view restautant",
-      "Company": "",
-      "languageOptions": [
-        "English",
-        "Hindi",
-        "kannad",
-        "French",
-        "Spanish"
-      ],
-      "Experience": {
-        "years": 3,
-        "certifications": [
-        ],
-        "specializations": [
-          "Asian food",
-          "South indian food",
-          "authentic kashmiri wazwaan"
-        ]
-      },
-      "groupSize": {
-        "min": 2,
-        "max": 20
-      },
-      "servicesOffered": {
-        "veg food": "true",
-        "non-veg food": "true",
-      },
-      "contactInformation": {
-        "email": "Horse@t2k.com",
-        "phone": "1011029111",
-        "website": "www.horse.t2k.com"
-      },
-      "reviews": [
-        {
-          "name": "Raman Iyer",
-          "rating": 5,
-          "review": "They serve authentic South indian food."
-        }
-      ]
-    },
-    {
-      "provider_id": "provider007",
-      "provider_category": "Hotel",
-      "Name": "Highland hotel",
-      "Company": "M/s Raddison pvt ltd",
-      "languageOptions": [
-        "English",
-        "Hindi",
-        "kannad",
-        "French",
-        "Spanish"
-      ],
-      "Experience": {
-        "years": 30,
-        "certifications": [
-        ],
-        "specializations": [
-          "3 star king size room",
-
-        ]
-      },
-      "groupSize": {
-        "min": 2,
-        "max": 20
-      },
-      "servicesOffered": {
-        "bon fire": "true",
-        "food": "true",
-        "room service": "true",
-        "vallet parking": "true"
-      },
-      "contactInformation": {
-        "email": "Hotel@t2k.com",
-        "phone": "1011029111",
-        "website": "www.hotel.t2k.com"
-      },
-      "reviews": [
-        {
-          "name": "Raman Iyer",
-          "rating": 5,
-          "review": "They serve authentic South indian food."
-        }
-      ]
-    },
-    {
-      "provider_id": "provider008",
-      "provider_category": "Food",
-      "Name": "Pampore saffron field cafe",
-      "Company": "M/s JKTDC",
-      "languageOptions": [
-        "English",
-        "Hindi",
-        "kannad",
-        "French",
-        "Spanish"
-      ],
-      "Experience": {
-        "years": 30,
-        "certifications": [
-        ],
-        "specializations": [
-          "Authentic kehwa",
-          "noon chai and sot",
-          "samavar chai"
-
-        ]
-      },
-      "groupSize": {
-        "min": 2,
-        "max": 20
-      },
-      "servicesOffered": {
-        "food": "true",
-        "photography": "true",
-        "vallet parking": "true"
-      },
-      "contactInformation": {
-        "email": "safronfield@t2k.com",
-        "phone": "1011029111",
-        "website": "www.safronfield.t2k.com"
-      },
-      "reviews": [
-        {
-          "name": "Raman Iyer",
-          "rating": 5,
-          "review": "They serve authentic South indian food."
-        }
-      ]
-    },
-    {
-      "provider_id": "provider009",
-      "provider_category": "Travel",
-      "Name": "Dal Shikara",
-      "Company": "M/s JKTDC",
-      "languageOptions": [
-        "English",
-        "Hindi",
-        "kannad",
-        "French",
-        "Spanish"
-      ],
-      "Experience": {
-        "years": 30,
-        "certifications": [
-        ],
-        "specializations": [
-          "shikara ride",
-          "life saving equipment",
-          "guiding services"
-        ]
-      },
-      "groupSize": {
-        "min": 2,
-        "max": 20
-      },
-      "servicesOffered": {
-        "photography": "true"
-      },
-      "contactInformation": {
-        "email": "dalshikara@t2k.com",
-        "phone": "1011029111",
-        "website": "www.Dalshikara.t2k.com"
-      },
-      "reviews": [
-        {
-          "name": "Raman Iyer",
-          "rating": 5,
-          "review": "They serve authentic South indian food."
-        }
-      ]
-    },
-    {
-      "provider_id": "provider0010",
-      "provider_category": "Photography",
-      "Name": "Photography club",
-      "Company": "M/s Photography club association",
-      "languageOptions": [
-        "English",
-        "Hindi",
-        "kannad",
-        "French",
-        "Spanish"
-      ],
-      "Experience": {
-        "years": 30,
-        "certifications": [
-        ],
-        "specializations": [
-          "Kashur dress photo",
-          "couple photoshoot",
-          "adventure photoshoot"
-        ]
-      },
-      "groupSize": {
-        "min": 2,
-        "max": 20
-      },
-      "servicesOffered": {
-        "photography": "true"
-      },
-      "contactInformation": {
-        "email": "photographyclub@t2k.com",
-        "phone": "1011029111",
-        "website": "www.Photography.t2k.com"
-      },
-      "reviews": [
-        {
-          "name": "Raman Iyer",
-          "rating": 5,
-          "review": "They serve authentic South indian food."
-        }
-      ]
-    }
-  ])
+  function editMilestone(){
+    let temp = attractionInfo?.milestones.filter(i=>i.attraction_id!=activeMilestone.attraction_id)
+    const data=[...temp,activeMilestone];
+    console.log(temp);
+    setAttractionInfo({...attractionInfo,milestones:data})
+    document.getElementById('editmilestones').reset();
+    setDisp(5);
+  }
 
   /** Fetching language from the local storage **/
   useEffect(() => {
@@ -711,6 +109,12 @@ function Index() {
     }
     firstfun();
     router.push('../itinerary')
+  }
+  function addMilestone(){
+    const temp=[...attractionInfo?.milestones,activeMilestone];
+    console.log(temp);
+    setAttractionInfo({...attractionInfo,milestones:temp})
+    setDisp(5);
   }
   const name = ['Itinerary', 'Details', 'Places', 'Attractions', 'Activities', 'Milestones', 'Details']
   return (
@@ -1313,7 +717,7 @@ function Index() {
             <div className='flex '>
               <span className={`p-2 text-left text-lg font-bold text-gray-900 uppercase`}>Day : {visibleDay.day}</span>
               <button className="ml-auto bg-gradient-to-r bg-cyan-600  hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-                onClick={() => { alert('add milestone') }}>Add Milestone</button>
+                onClick={() => { setDisp(7) }}>Add Milestone</button>
             </div>
             {/* table of activities for day */}
             <div className="flex flex-col mt-8 lg:mr-0 sm:mr-0 ">
@@ -1384,7 +788,7 @@ function Index() {
               <WidgetStatus name={name} selected={7} color={color} />
             </div>
             <span className={`p-2 text-left text-lg font-bold text-gray-900 uppercase`}>{activeMilestone.milestone_name}</span>
-
+              <form id="editmilestones">
             <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
 
               <div className="pt-6">
@@ -1405,7 +809,7 @@ function Index() {
                             type="text" data-testid="test_property_name"
                             className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                             defaultValue={activeMilestone?.milestone_name} required
-                          // onChange={(e) => ()} 
+                          onChange={(e) => (setActiveMilestone({...activeMilestone,milestone_name:e.target.value}))} 
                           />
                           <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
                             {/* for error messages{error?.property_name}*/}</p>
@@ -1428,27 +832,122 @@ function Index() {
                           <input
                             type="text" data-testid="test_property_name"
                             className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                            defaultValue={activeMilestone?.milestone_name} required
-                          // onChange={(e) => ()} 
+                            defaultValue={activeMilestone?.description} required
+                            onChange={(e) => (setActiveMilestone({...activeMilestone,description:e.target.value}))} 
                           />
                           <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
                             {/* for error messages{error?.property_name}*/}</p>
                         </div>
                       </div>
                     </div>
-
-
-
-
-
-
                   </div>
                 </div>
               </div>
 
               <div className='flex items-center justify-end space-x-2 sm:space-x-3 ml-auto'>
-                <Button Primary={language?.Update} onClick={() => { alert('update clicked') }} />
-                <Button Primary={language?.Previous} onClick={() => { setDisp(5) }} />
+                <Button Primary={language?.Update} onClick={() => { editMilestone() }} />
+                <Button Primary={language?.Previous} onClick={() => { document.getElementById('editmilestones').reset(); setDisp(5) }} />
+              </div>
+            </div>
+            </form>
+          </div>
+        </div >
+
+        {/* add milestone */}
+
+        <div className={disp === 7 ? 'block' : 'hidden'}>
+          <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
+            <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
+              <div
+                className={`${color?.whitebackground} rounded-lg shadow relative`}
+              >
+                <div className="flex items-start justify-between p-5 border-b rounded-t">
+                  <h3 className={`${color?.text} text-xl font-semibold`}>
+                    Add New Milestone
+                  </h3>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      document.getElementById("newmilestone").reset();
+                      setDisp(5);
+                      setActiveMilestone({});
+                      // setError({});
+                    }}
+                    className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                  >
+                    <svg
+                      className="w-5 h-5"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+                <div className="pt-6">
+                  <div className=" md:px-4 mx-auto w-full">
+                    <form id="newmilestone">
+                      <div className="flex flex-wrap">
+                        {/* milestone name */}
+                        <div className="w-full lg:w-6/12  px-4">
+                          <div className="relative w-full mb-3">
+                            <label
+                              className={`text-sm font-medium ${color?.text} block mb-2`}
+                              htmlFor="grid-password">
+                              Milestone Name
+                              <span style={{ color: "#ff0000" }}>*</span>
+                            </label>
+                            <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                            <div className={visible === 1 ? 'block' : 'hidden'}>
+                              <input
+                                type="text" data-testid="test_property_name"
+                                className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                required
+                                onChange={(e) => setActiveMilestone({ ...activeMilestone, milestone_name: e.target.value })}
+                              />
+                              <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                {/* for error messages{error?.property_name}*/}</p>
+                            </div>
+                          </div>
+                        </div>
+
+
+                        {/* milestone description */}
+                        <div className="w-full lg:w-6/12  px-4">
+                          <div className="relative w-full mb-3">
+                            <label
+                              className={`text-sm font-medium ${color?.text} block mb-2`}
+                              htmlFor="grid-password">
+                              Milestone Description
+                              <span style={{ color: "#ff0000" }}>*</span>
+                            </label>
+                            <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                            <div className={visible === 1 ? 'block' : 'hidden'}>
+                              <input
+                                type="text" data-testid="test_property_name"
+                                className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                required
+                                onChange={(e) => setActiveMilestone({ ...activeMilestone, description: e.target.value })}
+                              />
+                              <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                                {/* for error messages{error?.property_name}*/}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+
+                <div className='flex items-center justify-end space-x-2 sm:space-x-3 ml-auto'>
+                  <Button Primary={language?.Update} onClick={() => { addMilestone() }} />
+                  <Button Primary={language?.Previous} onClick={() => { setDisp(5) }} />
+                </div>
               </div>
             </div>
           </div>
