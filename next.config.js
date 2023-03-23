@@ -50,7 +50,7 @@ module.exports = withAxiom(
       },
       {
         source: '/api2/:path*',
-        destination: 'https://hangul-core.hasura.app/api/rest/:path*' // Proxy to Backend
+        destination: 'https://places.hasura.app/api/rest/:path*' // Proxy to Backend
       }
     ]
   },

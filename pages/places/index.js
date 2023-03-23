@@ -77,7 +77,7 @@ function Index() {
   const [places, setPlaces] = useState([])
   function fetchPlaces() {
     let url = `/api2/places`;
-    console.log(process.env.NEXT_PUBLIC_PASS)
+   
     axios.get(url, {
       headers: {
         "x-hasura-admin-secret": process.env.NEXT_PUBLIC_PASS
