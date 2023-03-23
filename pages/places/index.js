@@ -5,7 +5,7 @@ import Sidebar from "../../components/Sidebar";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import Link from 'next/link';
-import React, { useEffect, useState,useMemo} from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import english from "../../components/Languages/en";
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
@@ -70,16 +70,29 @@ function Index() {
     }
     else {
       //will call fetch data call, when implemented
-      //fetchBasicDetails();
+      fetchPlaces();
     }
 
   }, []);
+  const [places, setPlaces] = useState([])
+  function fetchPlaces() {
+    let url = `/api2/places`;
+    console.log(process.env.NEXT_PUBLIC_PASS)
+    axios.get(url, {
+      headers: {
+        "x-hasura-admin-secret": process.env.NEXT_PUBLIC_PASS
+      }
+    }).then((response) => { setPlaces(response.data.places) }).catch((error) => {
+      alert(error.message)
+      console.log(error.message)
+    })
+  }
 
   const displayData = useMemo(() => {
     // const start = (page - 1) * itemsPerPage;
     // return args?.gen.slice(start, start + itemsPerPage);
     return 1;
-}, []);
+  }, []);
 
   const colorToggler = (newColor) => {
     if (newColor === 'system') {
@@ -144,7 +157,7 @@ function Index() {
               <form className="lg:pr-3" action="#" method="GET">
                 <label htmlFor="users-search" className="sr-only">Search</label>
                 <div className="mt-1 relative lg:w-64 xl:w-96">
-                  <input type="text" name="email" id="placesInput" onKeyUp={()=>searchFunction('placesInput','placesTable')}
+                  <input type="text" name="email" id="placesInput" onKeyUp={() => searchFunction('placesInput', 'placesTable')}
                     className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} placeholder="Search">
                   </input>
                 </div>
@@ -190,47 +203,52 @@ function Index() {
             <div className="overflow-x-auto">
               <div className="align-middle inline-block min-w-full">
                 <div className="shadow overflow-hidden">
-                  <table className="table data table-fixed lg:min-w-full divide-y divide-gray-200 min-w-screen" id="placesTable"> 
-                  <thead className={`${color?.tableheader}`}>
-                    <tr>
-                      <th scope="col" className={`p-4 ${color?.textgray}`}>
-                        <div className="flex items-center">
-                          <input id="checkbox-all" aria-describedby="checkbox-1" type="checkbox" name="allSelect" className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
-                          <label htmlFor="checkbox-all" className="sr-only">checkbox</label>
-                        </div>
-                      </th>
-                      <th scope="col" className={`p-4 text-left text-xs font-semibold ${color?.text} uppercase`}>Places Name</th>
-                      <th scope="col" className={`p-4 text-left text-xs font-semibold ${color?.text} uppercase`}>Actions</th>
-                    </tr>
-                  </thead>
+                  <table className="table data table-fixed lg:min-w-full divide-y divide-gray-200 min-w-screen" id="placesTable">
+                    <thead className={`${color?.tableheader}`}>
+                      <tr>
+                        <th scope="col" className={`p-4 ${color?.textgray}`}>
+                          <div className="flex items-center">
+                            <input id="checkbox-all" aria-describedby="checkbox-1" type="checkbox" name="allSelect" className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                            <label htmlFor="checkbox-all" className="sr-only">checkbox</label>
+                          </div>
+                        </th>
+                        <th scope="col" className={`p-4 text-left text-xs font-semibold ${color?.text} uppercase`}>Places Name</th>
+                        <th scope="col" className={`p-4 text-left text-xs font-semibold ${color?.text} uppercase`}>Actions</th>
+                      </tr>
+                    </thead>
                     <tbody className={` ${color?.whitebackground} divide-y  divide-gray-200`} id="TableList">
 
 
-                      <tr >
-                        <td className="p-4 w-4">
-                          <span className="flex items-center">
-                            <input id="checkbox-1" name="r0091" aria-describedby="checkbox-1" type="checkbox"
-                              className={`bg-gray-50 ${color?.text} text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded`} />
-                            <label htmlFor="checkbox-1" className="sr-only" />
-                          </span>
-                        </td>
-                        <td className={`${color?.text} p-4 whitespace-nowrap capitalize text-base font-normal`}>Srinagar</td>
+                      {places?.map((place, index) => {
+                        return (
+                          <tr key={index}>
+                            <td className="p-4 w-4">
+                              <span className="flex items-center">
+                                <input id="checkbox-1" name={index} aria-describedby="checkbox-1" type="checkbox"
+                                  className={`bg-gray-50 ${color?.text} text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded`} />
+                                <label htmlFor="checkbox-1" className="sr-only" />
+                              </span>
+                            </td>
+                            <td className={`${color?.text} p-4 whitespace-nowrap capitalize text-base font-normal`}>{place?.name}</td>
 
-                        <td className="py-4 whitespace-nowrap capitalize">
-                          <div> <Link href="../places/place">
-                            <a> <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-                            >Edit </button>
-                            </a>
-                          </Link>
+                            <td className="py-4 whitespace-nowrap capitalize">
+                              <div onClick={() => localStorage.setItem("places_id", place.places_id)}> <Link href="../places/place">
+                                <a> <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                >Edit </button>
+                                </a>
+                              </Link>
 
-                          </div>
-                        </td>
-                      </tr>
+                              </div>
+                            </td>
+                          </tr>
 
+                        )
+                      })}
 
 
                     </tbody>
                   </table>
+
 
                   {/* Pagination */}
                   <div className={`${color?.whitebackground} sticky sm:flex items-center w-full sm:justify-between bottom-0 right-0 border-t border-gray-200 p-4`}>
@@ -259,23 +277,23 @@ function Index() {
 
                         <span className={`${color?.text} font-semibold mx-1`}>
                           {/* {page} */} 1
-                          </span> 
-                          of{/* {common?.Of} */}
-                           <span className={`${color?.text} font-semibold mx-1`}>
-                            1
+                        </span>
+                        of{/* {common?.Of} */}
+                        <span className={`${color?.text} font-semibold mx-1`}>
+                          1
                           {/* {Math.ceil(gen?.length / itemsPerPage)} */}
-                          </span></span>
+                        </span></span>
 
                     </div>
 
                     <div className="flex items-center w-42 space-x-3">
                       <span className={`text-sm font-normal ${color?.textgray}`}>Entries per page</span>
-                      <select 
-                      // onChange={(e) => ItemShow(e)} 
-                      className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block mr-2 w-12 px-3  py-1`}>
+                      <select
+                        // onChange={(e) => ItemShow(e)} 
+                        className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block mr-2 w-12 px-3  py-1`}>
                         <option selected disabled>
-                         5{/* {itemsPerPage} */}
-                          </option>
+                          5{/* {itemsPerPage} */}
+                        </option>
                         <option value="5">5</option>
                         <option value="10">10</option>
                         <option value="15">15</option>

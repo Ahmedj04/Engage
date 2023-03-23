@@ -70,7 +70,8 @@
                     "description": "Tangmarg is gateway of gulmarg which is just 13kms away, also drung waterfall is 3kms away which makes tangmarg most crowded place in the evening due to clean & fresh environment. ",
                     "addons": [
                       {
-                        "addon_id": "addon001"
+                        "addon_id": "add001",
+                        "addon_name": "kehwa"
                       }
                     ],
                     "additional_info": [

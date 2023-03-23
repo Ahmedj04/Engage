@@ -13,7 +13,7 @@ import { ToastContainer, toast } from "react-toastify";
 import searchFunction from '../../components/searchFunction';
 import EditAddons from '../../components/addons/editAddons';
 import NewAddon from '../../components/addons/newAddon';
-
+import addonData from '../../components/devlopmentjson/addonData.json'
 let language, currentLogged, currentProperty, colorToggle;
 function Addons() {
     const [mode, setMode] = useState();
@@ -33,26 +33,7 @@ function Addons() {
 
     }, [])
 
-    const [addons, setAddons] = useState([{
-        addon_id: "add001",
-        addon_name: "kehwa",
-        addon_description: "some description",
-        addon_for: "place",
-        price_per_unit: 100,
-        serves_to: 2,
-        external_link: "p001",
-        provider_id: "provider001"
-    },
-    {
-        addon_id: "add002",
-        addon_name: "halwa",
-        addon_description: "some description",
-        addon_for: "place",
-        price_per_unit: 150,
-        serves_to: 1,
-        external_link: "p001",
-        provider_id: "provider002"
-    }])
+    const [addons, setAddons] = useState(addonData)
     //edit addon
     function editAddOn() {
         let unchangedAddons = addons.filter((item) => item.addon_id != activeAddon.addon_id);

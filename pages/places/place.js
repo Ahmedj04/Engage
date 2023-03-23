@@ -17,6 +17,7 @@ import Multiselect from 'multiselect-react-dropdown';
 import GlobalData from '../../components/GlobalData'
 import Gallery from '../../components/gallery';
 import searchFunction from '../../components/searchFunction';
+
 let colorToggle;
 let language;
 let currentProperty;
@@ -194,28 +195,35 @@ const Place = () => {
     }
     //    function to fetch data
     const fetchPlace = async () => {
-        axios.get('/api/places/srinagar').then((response) => {
-            setPlace(response?.data);
-            let tempInfo = []
-            response?.data?.additional_information.map((add_inf, id) => { tempInfo.push({ ...add_inf, 'isChecked': false }) })
-            setExtraInfo(tempInfo)
+    let places_id=localStorage.getItem('places_id');
+    let url=`/api2/places/${places_id}`;
+    axios.get(url, {
+    headers: {
+    "x-hasura-admin-secret" : process.env.NEXT_PUBLIC_PASS }
+    }).then((response) => {
+        console.log(response)
+            setPlace(response?.data?.places[0]);
+            console.log('data');
+            console.log(response?.data?.places[0]);
+            // let tempInfo = []
+            // response?.data?.places[0].additional_information.map((add_inf, id) => { tempInfo.push({ ...add_inf, 'isChecked': false }) })
+            // setExtraInfo(tempInfo)
+            // setCategories(response?.data?.places[0].place_category)
 
-
-            setCategories(response?.data?.place_category)
-            //setLanguages(response?.data?.place_languages)
-            setLanguages((response?.data?.place_languages?.map(lang => GlobalData.LanguageData.filter(i => i.language_code === lang.language))).flat())
-            let tempSeason = []
-            response?.data?.place_seasons.map((season, id) => { tempSeason.push({ ...season, 'isChecked': false }) })
-            setSeasons(tempSeason)
-            let images = []
-            response?.data?.images.map((image, id) => { images.push({ ...image, 'image_idx': id, 'isChecked': false }) })
-            setPlaceImage(images)
-            let att = []
-            response?.data?.attractions.map((attraction, id) => { att.push({ ...attraction, 'isChecked': false }) })
-
-            setPlaceAttractions(att)
+            // //setLanguages(response?.data?.places[0].place_languages)
+            setLanguages((response?.data?.places[0].languages_spoken?.map(lang => GlobalData.LanguageData.filter(i => i.language_name === lang.language))).flat())
+            // let tempSeason = []
+            // response?.data?.places[0].place_seasons.map((season, id) => { tempSeason.push({ ...season, 'isChecked': false }) })
+            // setSeasons(tempSeason)
+            // let images = []
+            // response?.data?.places[0].images.map((image, id) => { images.push({ ...image, 'image_idx': id, 'isChecked': false }) })
+            // setPlaceImage(images)
+            // let att = []
+            // response?.data?.places[0].attractions.map((attraction, id) => { att.push({ ...attraction, 'isChecked': false }) })
+            // setPlaceAttractions(att)
             setVisible(1);
         }).catch((err) => {
+            alert("error");
             alert(JSON.stringify(err))
         })
 
@@ -436,7 +444,7 @@ const Place = () => {
                 <h6 className={`${color?.text} capitalize text-xl flex leading-none pl-6 lg:pt-2 pt-6 mb-2 font-bold`}>
                     {place?.name}
                 </h6>
-
+        {JSON.stringify(place)}
 
                 {/* place definition */}
                 <div id='0' className={disp === 0 ? 'block' : 'hidden'}>

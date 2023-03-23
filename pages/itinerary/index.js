@@ -16,6 +16,7 @@ import { useRouter } from "next/router"
 import Headloader from "../../components/loaders/headloader";
 import LineLoader from '../../components/loaders/lineloader';
 import Footer from '../../components/Footer';
+import Multiselect from 'multiselect-react-dropdown';
 var language;
 var currentProperty;
 var currentLogged;
@@ -24,7 +25,7 @@ import Router from "next/router";
 import Button from '../../components/Button';
 import WidgetStatus from '../../components/widgetStatus';
 import PackageItenarary from '../../components/devlopmentjson/PackageItenarary.json';
-
+import addonData from '../../components/devlopmentjson/addonData.json'
 function Index() {
   const router = useRouter();
   const [visible, setVisible] = useState(1);
@@ -46,11 +47,11 @@ function Index() {
 
   const [itenary, setItenary] = useState(PackageItenarary[0])
 
-  function editMilestone(){
-    let temp = attractionInfo?.milestones.filter(i=>i.attraction_id!=activeMilestone.attraction_id)
-    const data=[...temp,activeMilestone];
+  function editMilestone() {
+    let temp = attractionInfo?.milestones.filter(i => i.attraction_id != activeMilestone.attraction_id)
+    const data = [...temp, activeMilestone];
     console.log(temp);
-    setAttractionInfo({...attractionInfo,milestones:data})
+    setAttractionInfo({ ...attractionInfo, milestones: data })
     document.getElementById('editmilestones').reset();
     setDisp(5);
   }
@@ -110,11 +111,18 @@ function Index() {
     firstfun();
     router.push('../itinerary')
   }
-  function addMilestone(){
-    const temp=[...attractionInfo?.milestones,activeMilestone];
+  function addMilestone() {
+    const temp = [...attractionInfo?.milestones, activeMilestone];
     console.log(temp);
-    setAttractionInfo({...attractionInfo,milestones:temp})
+    setAttractionInfo({ ...attractionInfo, milestones: temp })
     setDisp(5);
+  }
+  function Addonschange(event){
+    console.log(event);
+    setActiveMilestone({...activeMilestone,addons:event})
+  }
+  function addAddon(){
+    setDisp(6);
   }
   const name = ['Itinerary', 'Details', 'Places', 'Attractions', 'Activities', 'Milestones', 'Details']
   return (
@@ -549,7 +557,7 @@ function Index() {
                           type="text" data-testid="test_property_name"
                           className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           defaultValue={attractionInfo?.activity_name} required
-                        // onChange={(e) => ()} 
+                          onChange={(e) => (setAttractionInfo({ ...attractionInfo, activity_name: e.target.value }))}
                         />
                         <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
                           {/* for error messages{error?.property_name}*/}</p>
@@ -573,7 +581,7 @@ function Index() {
                           type="text" data-testid="test_property_name"
                           className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           defaultValue={attractionInfo?.boarding_point} required
-                        // onChange={(e) => ()} 
+                          onChange={(e) => (setAttractionInfo({ ...attractionInfo, boarding_point: e.target.value }))}
                         />
                         <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
                           {/* for error messages{error?.property_name}*/}</p>
@@ -602,7 +610,7 @@ function Index() {
                           type="text" data-testid="test_property_name"
                           className={`shadow-sm ${color?.greybackground} w-12 mx-4 border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5 mt-2`}
                           defaultValue={attractionInfo?.capacity?.adult} required
-                        // onChange={(e) => ()} 
+                          onChange={(e) => (setAttractionInfo({ ...attractionInfo.capacity, adult: e.target.value }))}
                         />
                         <label
                           className={`text-sm font-medium ${color?.text} block mb-2 mt-2`}
@@ -614,7 +622,7 @@ function Index() {
                           type="text" data-testid="test_property_name"
                           className={`shadow-sm ${color?.greybackground} border w-12 mx-4 border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5 mt-2`}
                           defaultValue={attractionInfo?.capacity?.children} required
-                        // onChange={(e) => ()} 
+                          onChange={(e) => (setAttractionInfo({ ...attractionInfo.capacity, children: e.target.value }))}
                         />
                         <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
                           {/* for error messages{error?.property_name}*/}</p>
@@ -637,7 +645,7 @@ function Index() {
                           type="text" data-testid="test_property_name"
                           className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           defaultValue={attractionInfo?.Guided_tour} required
-                        // onChange={(e) => ()} 
+                          onChange={(e) => (setAttractionInfo({ ...attractionInfo, Guided_tour: e.target.value }))}
                         />
                         <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
                           {/* for error messages{error?.property_name}*/}</p>
@@ -787,68 +795,111 @@ function Index() {
             <div>
               <WidgetStatus name={name} selected={7} color={color} />
             </div>
-            <span className={`p-2 text-left text-lg font-bold text-gray-900 uppercase`}>{activeMilestone.milestone_name}</span>
-              <form id="editmilestones">
-            <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
+            <div className='flex flex-row'>
+              <span className={`p-2 text-left text-lg font-bold text-gray-900 uppercase`}>{activeMilestone.milestone_name}</span>
+              <button className="ml-auto bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                    onClick={() => {setDisp(8) }}>Add Addons</button>
+            </div>
+            <form id="editmilestones">
+              <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
 
-              <div className="pt-6">
-                <div className=" md:px-4 mx-auto w-full">
-                  <div className="flex flex-wrap">
-                    {/* milestone name */}
-                    <div className="w-full lg:w-6/12  px-4">
-                      <div className="relative w-full mb-3">
-                        <label
-                          className={`text-sm font-medium ${color?.text} block mb-2`}
-                          htmlFor="grid-password">
-                          Milestone Name
-                          <span style={{ color: "#ff0000" }}>*</span>
-                        </label>
-                        <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
-                        <div className={visible === 1 ? 'block' : 'hidden'}>
-                          <input
-                            type="text" data-testid="test_property_name"
-                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                            defaultValue={activeMilestone?.milestone_name} required
-                          onChange={(e) => (setActiveMilestone({...activeMilestone,milestone_name:e.target.value}))} 
-                          />
-                          <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
-                            {/* for error messages{error?.property_name}*/}</p>
+                <div className="pt-6">
+                  <div className=" md:px-4 mx-auto w-full">
+                    <div className="flex flex-wrap">
+                      {/* milestone name */}
+                      <div className="w-full lg:w-6/12  px-4">
+                        <div className="relative w-full mb-3">
+                          <label
+                            className={`text-sm font-medium ${color?.text} block mb-2`}
+                            htmlFor="grid-password">
+                            Milestone Name
+                            <span style={{ color: "#ff0000" }}>*</span>
+                          </label>
+                          <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                          <div className={visible === 1 ? 'block' : 'hidden'}>
+                            <input
+                              type="text" data-testid="test_property_name"
+                              className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                              defaultValue={activeMilestone?.milestone_name} required
+                              onChange={(e) => (setActiveMilestone({ ...activeMilestone, milestone_name: e.target.value }))}
+                            />
+                            <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                              {/* for error messages{error?.property_name}*/}</p>
+                          </div>
                         </div>
                       </div>
-                    </div>
 
 
-                    {/* milestone description */}
-                    <div className="w-full lg:w-6/12  px-4">
-                      <div className="relative w-full mb-3">
-                        <label
-                          className={`text-sm font-medium ${color?.text} block mb-2`}
-                          htmlFor="grid-password">
-                          Milestone Description
-                          <span style={{ color: "#ff0000" }}>*</span>
-                        </label>
-                        <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
-                        <div className={visible === 1 ? 'block' : 'hidden'}>
-                          <input
-                            type="text" data-testid="test_property_name"
-                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                            defaultValue={activeMilestone?.description} required
-                            onChange={(e) => (setActiveMilestone({...activeMilestone,description:e.target.value}))} 
-                          />
-                          <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
-                            {/* for error messages{error?.property_name}*/}</p>
+                      {/* milestone description */}
+                      <div className="w-full lg:w-6/12  px-4">
+                        <div className="relative w-full mb-3">
+                          <label
+                            className={`text-sm font-medium ${color?.text} block mb-2`}
+                            htmlFor="grid-password">
+                            Milestone Description
+                            <span style={{ color: "#ff0000" }}>*</span>
+                          </label>
+                          <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                          <div className={visible === 1 ? 'block' : 'hidden'}>
+                            <input
+                              type="text" data-testid="test_property_name"
+                              className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                              defaultValue={activeMilestone?.description} required
+                              onChange={(e) => (setActiveMilestone({ ...activeMilestone, description: e.target.value }))}
+                            />
+                            <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
+                              {/* for error messages{error?.property_name}*/}</p>
+                          </div>
                         </div>
                       </div>
+
+                      {/*addon multiselect*/}
+                      <div className="w-full lg:w-6/12  px-4">
+                          <div className="relative w-full mb-3">
+                            <label
+                              className={`text-sm font-medium ${color?.text} block mb-2`}
+                              htmlFor="grid-password">
+                              Addons
+                              <span style={{ color: "#ff0000" }}>*</span>
+                            </label>
+                            <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                            <div className={visible === 1 ? 'block' : 'hidden'}>
+                                            <Multiselect
+                                                isObject={true}
+                                                options={addonData}
+                                                onRemove={(event) => { Addonschange(event) }}
+                                                onSelect={(event) => { Addonschange(event) }}
+                                                selectedValues={activeMilestone?.addons}
+                                                displayValue="addon_name"
+                                                placeholder="Search"
+                                                closeIcon='circle'
+                                                style={{
+                                                    chips: {
+                                                        background: '#0891b2',
+                                                        'font-size': '0.875 rem'
+                                                    },
+                                                    searchBox: {
+                                                        border: 'none',
+                                                        'border-bottom': 'none',
+                                                        'border-radius': '0px'
+                                                    }
+                                                }}
+
+                                            />
+                                            <p className="text-sm text-sm text-red-700 font-light">
+                                                {error?.view}</p>
+                                        </div>
+                          </div>
+                        </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              <div className='flex items-center justify-end space-x-2 sm:space-x-3 ml-auto'>
-                <Button Primary={language?.Update} onClick={() => { editMilestone() }} />
-                <Button Primary={language?.Previous} onClick={() => { document.getElementById('editmilestones').reset(); setDisp(5) }} />
+                <div className='flex items-center justify-end space-x-2 sm:space-x-3 ml-auto'>
+                  <Button Primary={language?.Update} onClick={() => { editMilestone() }} />
+                  <Button Primary={language?.Previous} onClick={() => { document.getElementById('editmilestones').reset(); setDisp(5) }} />
+                </div>
               </div>
-            </div>
             </form>
           </div>
         </div >
@@ -947,6 +998,100 @@ function Index() {
                 <div className='flex items-center justify-end space-x-2 sm:space-x-3 ml-auto'>
                   <Button Primary={language?.Update} onClick={() => { addMilestone() }} />
                   <Button Primary={language?.Previous} onClick={() => { setDisp(5) }} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div >
+        {/* add addon */}
+
+        <div className={disp === 8 ? 'block' : 'hidden'}>
+          <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
+            <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
+              <div
+                className={`${color?.whitebackground} rounded-lg shadow relative`}
+              >
+                <div className="flex items-start justify-between p-5 border-b rounded-t">
+                  <h3 className={`${color?.text} text-xl font-semibold`}>
+                    Add New Addons
+                  </h3>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      document.getElementById("newaddons").reset();
+                      setDisp(6);
+                      setActiveMilestone({});
+                      // setError({});
+                    }}
+                    className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                  >
+                    <svg
+                      className="w-5 h-5"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+                <div className="pt-6">
+                  <div className=" md:px-4 mx-auto w-full">
+                    <form id="newaddons">
+                      <div className="flex flex-wrap">
+                       
+
+
+                        {/*addon multiselect*/}
+                        <div className="w-full lg:w-6/12  px-4">
+                          <div className="relative w-full mb-3">
+                            <label
+                              className={`text-sm font-medium ${color?.text} block mb-2`}
+                              htmlFor="grid-password">
+                              Addons
+                              <span style={{ color: "#ff0000" }}>*</span>
+                            </label>
+                            <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                            <div className={visible === 1 ? 'block' : 'hidden'}>
+                                            <Multiselect
+                                                isObject={true}
+                                                options={addonData}
+                                                onRemove={(event) => { Addonschange(event) }}
+                                                onSelect={(event) => { Addonschange(event) }}
+                                                selectedValues={activeMilestone?.addons}
+                                                displayValue="addon_name"
+                                                placeholder="Search"
+                                                closeIcon='circle'
+                                                style={{
+                                                    chips: {
+                                                        background: '#0891b2',
+                                                        'font-size': '0.875 rem'
+                                                    },
+                                                    searchBox: {
+                                                        border: 'none',
+                                                        'border-bottom': 'none',
+                                                        'border-radius': '0px'
+                                                    }
+                                                }}
+
+                                            />
+                                            <p className="text-sm text-sm text-red-700 font-light">
+                                                {error?.view}</p>
+                                        </div>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+
+                <div className='flex items-center justify-end space-x-2 sm:space-x-3 ml-auto'>
+                  <Button Primary={language?.Update} onClick={() => { addAddon() }} />
+                  <Button Primary={language?.Previous} onClick={() => { setDisp(6) }} />
                 </div>
               </div>
             </div>
