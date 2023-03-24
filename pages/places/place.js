@@ -18,6 +18,7 @@ import GlobalData from '../../components/GlobalData'
 import Gallery from '../../components/gallery';
 import searchFunction from '../../components/searchFunction';
 
+
 let colorToggle;
 let language;
 let currentProperty;
@@ -65,7 +66,7 @@ const Place = () => {
     const [allCheckInfo, setAllCheckInfo] = useState(0)
     const [allCheckAttractions, setAllCheckAttractions] = useState(0)
     const [placeAttractions, setPlaceAttractions] = useState([])
-
+    const [editedPlace, setEditedPlace] = useState({})
     // to execute as soon as page loads
 
     // first function to be executed
@@ -201,10 +202,8 @@ const Place = () => {
     headers: {
     "x-hasura-admin-secret" : process.env.NEXT_PUBLIC_PASS }
     }).then((response) => {
-        console.log(response)
             setPlace(response?.data?.places[0]);
-            console.log('data');
-            console.log(response?.data?.places[0]);
+            setEditedPlace(response?.data?.places[0]);
             // let tempInfo = []
             // response?.data?.places[0].additional_information.map((add_inf, id) => { tempInfo.push({ ...add_inf, 'isChecked': false }) })
             // setExtraInfo(tempInfo)
@@ -402,12 +401,24 @@ const Place = () => {
     { category_name: 'camping' },
     { category_name: 'honey-moon' }]
     const selectedCategory = [{ category_name: 'Adventure' }]
+    function updatePlaces(){
+        delete editedPlace.languages_spoken;
+        delete editedPlace.categories;
+        let data={
+            "data":editedPlace}
+        let url=`/api2/place`;
+        axios.put(url,data, {
+         headers: {
+         "x-hasura-admin-secret":process.env.NEXT_PUBLIC_PASS }
+         }).then((response)=>{
+            alert("API: Place Updated Sucessfully");
+         }).catch(()=>{alert("Some Error Happened");})
+                }
     return (
         <div>
             <Title name={`Engage |  ${language?.places}`} />
             <Header color={color} Primary={english.PlaceSide} Type={currentLogged?.user_type} Sec={colorToggler} mode={mode} setMode={setMode} />
             <Sidebar color={color} Primary={english.PlaceSide} Type={currentLogged?.user_type} />
-
             <div className={`${color?.greybackground} px-4 pt-24 pb-2  relative overflow-y-auto  lg:ml-64`}>
                 {/* Navbar */}
                 <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
@@ -444,8 +455,7 @@ const Place = () => {
                 <h6 className={`${color?.text} capitalize text-xl flex leading-none pl-6 lg:pt-2 pt-6 mb-2 font-bold`}>
                     {place?.name}
                 </h6>
-        {JSON.stringify(place)}
-
+    
                 {/* place definition */}
                 <div id='0' className={disp === 0 ? 'block' : 'hidden'}>
                     {/* main display div */}
@@ -456,8 +466,6 @@ const Place = () => {
                                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
                                 <div className={`${color.crossbg} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>Place</div>
                             </div>
-
-
                             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
                                 <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Climate</div>
@@ -504,8 +512,8 @@ const Place = () => {
                                                 className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                                                 defaultValue={place?.name} required
                                                 onChange={
-                                                    (e) => (
-                                                        {}
+                                                    (e) =>setEditedPlace(
+                                                      {...editedPlace,name:e.target.value}
                                                     )
                                                 } />
                                             {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
@@ -531,9 +539,9 @@ const Place = () => {
                                             <textarea data-testid="test_property_name"
                                                 className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                                                 defaultValue={place?.description} required
-                                                onChange={
-                                                    (e) => (
-                                                        {}
+                                                  onChange={
+                                                    (e) =>setEditedPlace(
+                                                      {...editedPlace,description:e.target.value}
                                                     )
                                                 } />
                                             {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
@@ -558,9 +566,9 @@ const Place = () => {
                                                 type="text" data-testid="test_property_name"
                                                 className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                                                 defaultValue={place?.latitude} required
-                                                onChange={
-                                                    (e) => (
-                                                        {}
+                                                  onChange={
+                                                    (e) =>setEditedPlace(
+                                                      {...editedPlace,latitude:e.target.value}
                                                     )
                                                 } />
                                             {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
@@ -586,9 +594,9 @@ const Place = () => {
                                                 type="text" data-testid="test_property_name"
                                                 className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                                                 defaultValue={place?.longitude} required
-                                                onChange={
-                                                    (e) => (
-                                                        {}
+                                                  onChange={
+                                                    (e) =>setEditedPlace(
+                                                      {...editedPlace,longitude:e.target.value}
                                                     )
                                                 } />
                                             {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
@@ -612,9 +620,9 @@ const Place = () => {
                                                 type="text" data-testid="test_property_name"
                                                 className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                                                 defaultValue={place?.best_time_to_visit} required
-                                                onChange={
-                                                    (e) => (
-                                                        {}
+                                                   onChange={
+                                                    (e) =>setEditedPlace(
+                                                      {...editedPlace,best_time_to_visit:e.target.value}
                                                     )
                                                 } />
                                             {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
@@ -703,10 +711,12 @@ const Place = () => {
 
                             </div>
                         </div>
-                        {/* button div */}
-                        <div className='flex justify-end mt-2 '>
+                        {/* Update & Next button */}
+                        <div className='flex justify-end mt-2'>
+                        <button className="bg-gradient-to-r mb-4 mr-4 bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                onClick={()=>updatePlaces()}>Update</button>
                             <button className="bg-gradient-to-r mb-4 bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-                                onClick={() => setDisp(5)}>Next </button>
+                                onClick={()=>setDisp(5)}>Next</button>
                         </div>
 
                     </div>
@@ -1032,7 +1042,7 @@ const Place = () => {
                                     </div>
                                 </form>
                                 {/* search form end */}
-                                {/* icons start */}
+                                {/* icons start  */}
                                 <div className="flex space-x-1 pl-0 sm:pl-2 mt-3 sm:mt-0">
                                     <span className={`${color?.textgray} hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}>
                                         <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd"></path></svg>
@@ -2424,11 +2434,12 @@ const Place = () => {
                         </div>
                     </div>
                 </div>
-
+          
             </div>
-
+            {/* Toast Container */}
+         
             <Footer color={color} Primary={english.PlaceSide} />
-        </div>
+         </div>
 
 
 

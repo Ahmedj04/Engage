@@ -25,7 +25,8 @@ import Router from "next/router";
 import Button from '../../components/Button';
 import WidgetStatus from '../../components/widgetStatus';
 import PackageItenarary from '../../components/devlopmentjson/PackageItenarary.json';
-import addonData from '../../components/devlopmentjson/addonData.json'
+import AddonData from '../../components/devlopmentjson/AddonData.json';
+import AttractionData from '../../components/devlopmentjson/AttractionData.json';
 function Index() {
   const router = useRouter();
   const [visible, setVisible] = useState(1);
@@ -39,13 +40,16 @@ function Index() {
   const [imageLogo, setImageLogo] = useState()
   const [uploadImageSpin, setUploadImageSpin] = useState(false)
 
+  const [activePlace, setActivePlace] = useState({})
   const [visibleDay, setVisibleDay] = useState({})
   const [attraction, setAttraction] = useState([])
   const [activeMilestone, setActiveMilestone] = useState({})
   const [attractionInfo, setAttractionInfo] = useState([])
+  const [unSelectedAttraction, setUnSelectedAttraction] = useState([])
   const [actionDay, setActionDay] = useState(0)
 
   const [itenary, setItenary] = useState(PackageItenarary[0])
+  const [addNewAttraction,setAddNewAttraction] = useState({})
 
   function editMilestone() {
     let temp = attractionInfo?.milestones.filter(i => i.attraction_id != activeMilestone.attraction_id)
@@ -117,13 +121,26 @@ function Index() {
     setAttractionInfo({ ...attractionInfo, milestones: temp })
     setDisp(5);
   }
-  function Addonschange(event){
+  function Addonschange(event) {
     console.log(event);
-    setActiveMilestone({...activeMilestone,addons:event})
+    setActiveMilestone({ ...activeMilestone, addons: event })
   }
-  function addAddon(){
+  function addAddon() {
     setDisp(6);
   }
+  function addAttraction() {
+    alert(JSON.stringify([...attraction,addNewAttraction]))
+    setAttraction([...attraction,addNewAttraction])
+    setDisp(3);
+  }
+
+  function generateAttractionData(){
+    let all_place_attraction=AttractionData.filter((i)=>i.place===activePlace).[0].attractions
+    let presentAttraction=attraction.map(i=>i.attraction_id);
+    let unselectedAttraction=all_place_attraction?.filter(i=>!presentAttraction.includes(i.attraction_id))
+    setUnSelectedAttraction(unselectedAttraction)
+  }
+
   const name = ['Itinerary', 'Details', 'Places', 'Attractions', 'Activities', 'Milestones', 'Details']
   return (
     <div>
@@ -424,7 +441,7 @@ function Index() {
                             <td className="py-4 whitespace-nowrap capitalize">
                               <div>
                                 <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-                                  onClick={() => { setAttraction(place.attractions); setDisp(3) }}>Edit </button>
+                                  onClick={() => { setAttraction(place.attractions); setActivePlace(place.place_name); setDisp(3) }}>Edit </button>
 
                               </div>
                             </td>
@@ -459,7 +476,7 @@ function Index() {
           <div className='flex '>
             <span className={`p-2 text-left text-lg font-bold text-gray-900 uppercase`}>Day : {visibleDay.day}</span>
             <button className="ml-auto bg-gradient-to-r bg-cyan-600  hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-              onClick={() => { alert('add attraction') }}>Add Attraction</button>
+              onClick={() => { generateAttractionData(); setDisp(9); }}>Add Attraction</button>
           </div>
           {/* table of activities for day */}
           <div className="flex flex-col mt-8 lg:mr-0 sm:mr-0 ">
@@ -725,7 +742,7 @@ function Index() {
             <div className='flex '>
               <span className={`p-2 text-left text-lg font-bold text-gray-900 uppercase`}>Day : {visibleDay.day}</span>
               <button className="ml-auto bg-gradient-to-r bg-cyan-600  hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-                onClick={() => { setDisp(7) }}>Add Milestone</button>
+                onClick={() => { setDisp(7) }}>Add Additional Info</button>
             </div>
             {/* table of activities for day */}
             <div className="flex flex-col mt-8 lg:mr-0 sm:mr-0 ">
@@ -798,7 +815,7 @@ function Index() {
             <div className='flex flex-row'>
               <span className={`p-2 text-left text-lg font-bold text-gray-900 uppercase`}>{activeMilestone.milestone_name}</span>
               <button className="ml-auto bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-                                    onClick={() => {setDisp(8) }}>Add Addons</button>
+                onClick={() => { setDisp(8) }}>Add Addons</button>
             </div>
             <form id="editmilestones">
               <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
@@ -855,42 +872,42 @@ function Index() {
 
                       {/*addon multiselect*/}
                       <div className="w-full lg:w-6/12  px-4">
-                          <div className="relative w-full mb-3">
-                            <label
-                              className={`text-sm font-medium ${color?.text} block mb-2`}
-                              htmlFor="grid-password">
-                              Addons
-                              <span style={{ color: "#ff0000" }}>*</span>
-                            </label>
-                            <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
-                            <div className={visible === 1 ? 'block' : 'hidden'}>
-                                            <Multiselect
-                                                isObject={true}
-                                                options={addonData}
-                                                onRemove={(event) => { Addonschange(event) }}
-                                                onSelect={(event) => { Addonschange(event) }}
-                                                selectedValues={activeMilestone?.addons}
-                                                displayValue="addon_name"
-                                                placeholder="Search"
-                                                closeIcon='circle'
-                                                style={{
-                                                    chips: {
-                                                        background: '#0891b2',
-                                                        'font-size': '0.875 rem'
-                                                    },
-                                                    searchBox: {
-                                                        border: 'none',
-                                                        'border-bottom': 'none',
-                                                        'border-radius': '0px'
-                                                    }
-                                                }}
+                        <div className="relative w-full mb-3">
+                          <label
+                            className={`text-sm font-medium ${color?.text} block mb-2`}
+                            htmlFor="grid-password">
+                            Addons
+                            <span style={{ color: "#ff0000" }}>*</span>
+                          </label>
+                          <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                          <div className={visible === 1 ? 'block' : 'hidden'}>
+                            <Multiselect
+                              isObject={true}
+                              options={AddonData}
+                              onRemove={(event) => { Addonschange(event) }}
+                              onSelect={(event) => { Addonschange(event) }}
+                              selectedValues={activeMilestone?.addons}
+                              displayValue="addon_name"
+                              placeholder="Search"
+                              closeIcon='circle'
+                              style={{
+                                chips: {
+                                  background: '#0891b2',
+                                  'font-size': '0.875 rem'
+                                },
+                                searchBox: {
+                                  border: 'none',
+                                  'border-bottom': 'none',
+                                  'border-radius': '0px'
+                                }
+                              }}
 
-                                            />
-                                            <p className="text-sm text-sm text-red-700 font-light">
-                                                {error?.view}</p>
-                                        </div>
+                            />
+                            <p className="text-sm text-sm text-red-700 font-light">
+                              {error?.view}</p>
                           </div>
                         </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1004,7 +1021,6 @@ function Index() {
           </div>
         </div >
         {/* add addon */}
-
         <div className={disp === 8 ? 'block' : 'hidden'}>
           <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
             <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
@@ -1043,7 +1059,7 @@ function Index() {
                   <div className=" md:px-4 mx-auto w-full">
                     <form id="newaddons">
                       <div className="flex flex-wrap">
-                       
+
 
 
                         {/*addon multiselect*/}
@@ -1057,31 +1073,31 @@ function Index() {
                             </label>
                             <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
                             <div className={visible === 1 ? 'block' : 'hidden'}>
-                                            <Multiselect
-                                                isObject={true}
-                                                options={addonData}
-                                                onRemove={(event) => { Addonschange(event) }}
-                                                onSelect={(event) => { Addonschange(event) }}
-                                                selectedValues={activeMilestone?.addons}
-                                                displayValue="addon_name"
-                                                placeholder="Search"
-                                                closeIcon='circle'
-                                                style={{
-                                                    chips: {
-                                                        background: '#0891b2',
-                                                        'font-size': '0.875 rem'
-                                                    },
-                                                    searchBox: {
-                                                        border: 'none',
-                                                        'border-bottom': 'none',
-                                                        'border-radius': '0px'
-                                                    }
-                                                }}
+                              <Multiselect
+                                isObject={true}
+                                options={AddonData}
+                                onRemove={(event) => { Addonschange(event) }}
+                                onSelect={(event) => { Addonschange(event) }}
+                                selectedValues={activeMilestone?.addons}
+                                displayValue="addon_name"
+                                placeholder="Search"
+                                closeIcon='circle'
+                                style={{
+                                  chips: {
+                                    background: '#0891b2',
+                                    'font-size': '0.875 rem'
+                                  },
+                                  searchBox: {
+                                    border: 'none',
+                                    'border-bottom': 'none',
+                                    'border-radius': '0px'
+                                  }
+                                }}
 
-                                            />
-                                            <p className="text-sm text-sm text-red-700 font-light">
-                                                {error?.view}</p>
-                                        </div>
+                              />
+                              <p className="text-sm text-sm text-red-700 font-light">
+                                {error?.view}</p>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -1092,6 +1108,86 @@ function Index() {
                 <div className='flex items-center justify-end space-x-2 sm:space-x-3 ml-auto'>
                   <Button Primary={language?.Update} onClick={() => { addAddon() }} />
                   <Button Primary={language?.Previous} onClick={() => { setDisp(6) }} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div >
+
+        {/* add attraction */}
+        <div className={disp === 9 ? 'block' : 'hidden'}>
+          <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
+            <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
+              <div
+                className={`${color?.whitebackground} rounded-lg shadow relative`}
+              >
+                <div className="flex items-start justify-between p-5 border-b rounded-t">
+                  <h3 className={`${color?.text} text-xl font-semibold`}>
+                    Add New Attraction
+                  </h3>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      document.getElementById("newattractions").reset();
+                      setDisp(3);
+                      // setError({});
+                    }}
+                    className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                  >
+                    <svg
+                      className="w-5 h-5"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+                <div className="pt-6">
+                  <div className=" md:px-4 mx-auto w-full">
+                    <form id="newattractions">
+                      <div className="flex flex-wrap">
+
+                        {/*Select Attraction*/}
+                        <div className="w-full lg:w-6/12  px-4">
+                          <div className="relative w-full mb-3">
+                            <label
+                              className={`text-sm font-medium ${color?.text} block mb-2`}
+                              htmlFor="grid-password">
+                              Attractions
+                              <span style={{ color: "#ff0000" }}>*</span>
+                            </label>
+                            <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
+                            <div className={visible === 1 ? 'block' : 'hidden'}>
+                            <select data-testid="test_attractions" className={`shadow-sm ${color?.greybackground} capitalize border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                        onChange={
+                          (e) => {
+                            setAddNewAttraction(JSON.parse(e.target.value));
+                          }
+                        } required
+                      >
+                        <option value=''>Select Activity</option>
+                        {unSelectedAttraction?.map((i,index)=>{return(<option value={JSON.stringify(i)} key={index}>{i.activity_name}</option>)})}
+                      </select>
+                     
+                              <p className="text-sm text-sm text-red-700 font-light">
+                                {error?.view}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+
+                <div className='flex items-center justify-end space-x-2 sm:space-x-3 ml-auto'>
+                  <Button Primary={language?.Update} onClick={() => { addAttraction() }} />
+                  <Button Primary={language?.Previous} onClick={() => { setDisp(3) }} />
                 </div>
               </div>
             </div>

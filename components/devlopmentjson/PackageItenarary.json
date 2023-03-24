@@ -46,6 +46,7 @@
             ],
             "attractions": [
               {
+                "attraction_id":"attr00",
                 "activity_name": "Transfer From Srinagar airport to Gulmarg",
                 "time_of_ride": "3 Hrs",
                 "distance": "60km",
@@ -145,6 +146,7 @@
             ],
             "attractions": [
               {
+                "attraction_id":"attr009",
                 "activity_name": "Gondolla ride",
                 "time_of_ride": "30 min",
                 "distance": "10km",
@@ -226,6 +228,7 @@
                 }
               },
               {
+                "attraction_id":"attr0010",
                 "activity_name": "Skiing on Apharwat Peaks",
                 "time_of_ride": "1 Hr",
                 "distance": "6km",
@@ -269,6 +272,7 @@
                 ]
               },
               {
+                "attraction_id":"attr0011",
                 "activity_name": "Night Stay In Gulmarg",
                 "time_of_ride": "",
                 "distance": "",
