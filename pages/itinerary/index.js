@@ -847,7 +847,7 @@ function Index() {
                       </div>
 
 
-                      {/* milestone description */}
+                      {/* Information Detail */}
                       <div className="w-full lg:w-6/12  px-4">
                         <div className="relative w-full mb-3">
                           <label
@@ -921,7 +921,7 @@ function Index() {
           </div>
         </div >
 
-        {/* add milestone */}
+        {/* add Additional Info*/}
 
         <div className={disp === 7 ? 'block' : 'hidden'}>
           <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
@@ -931,12 +931,12 @@ function Index() {
               >
                 <div className="flex items-start justify-between p-5 border-b rounded-t">
                   <h3 className={`${color?.text} text-xl font-semibold`}>
-                    Add New Milestone
+                    Add New Additional Info
                   </h3>
                   <button
                     type="button"
                     onClick={() => {
-                      document.getElementById("newmilestone").reset();
+                      document.getElementById("newAdditionalInfo").reset();
                       setDisp(5);
                       setActiveMilestone({});
                       // setError({});
@@ -959,7 +959,7 @@ function Index() {
                 </div>
                 <div className="pt-6">
                   <div className=" md:px-4 mx-auto w-full">
-                    <form id="newmilestone">
+                    <form id="newAdditionalInfo">
                       <div className="flex flex-wrap">
                         {/* milestone name */}
                         <div className="w-full lg:w-6/12  px-4">
@@ -967,7 +967,7 @@ function Index() {
                             <label
                               className={`text-sm font-medium ${color?.text} block mb-2`}
                               htmlFor="grid-password">
-                              Milestone Name
+                              Information Title
                               <span style={{ color: "#ff0000" }}>*</span>
                             </label>
                             <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
@@ -991,7 +991,7 @@ function Index() {
                             <label
                               className={`text-sm font-medium ${color?.text} block mb-2`}
                               htmlFor="grid-password">
-                              Milestone Description
+                              Information Detail
                               <span style={{ color: "#ff0000" }}>*</span>
                             </label>
                             <div className={visible === 0 ? 'block' : 'hidden'}><LineLoader /></div>
@@ -1020,6 +1020,9 @@ function Index() {
             </div>
           </div>
         </div >
+
+
+
         {/* add addon */}
         <div className={disp === 8 ? 'block' : 'hidden'}>
           <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
