@@ -13,7 +13,7 @@ import { ToastContainer, toast } from "react-toastify";
 import searchFunction from '../../components/searchFunction';
 import EditAddons from '../../components/addons/editAddons';
 import NewAddon from '../../components/addons/newAddon';
-import addonData from '../../components/devlopmentjson/addonData.json'
+import AddonData from '../../components/devlopmentjson/AddonData.json'
 let language, currentLogged, currentProperty, colorToggle;
 function Addons() {
     const [mode, setMode] = useState();
@@ -33,7 +33,7 @@ function Addons() {
 
     }, [])
 
-    const [addons, setAddons] = useState(addonData)
+    const [addons, setAddons] = useState(AddonData)
     //edit addon
     function editAddOn() {
         let unchangedAddons = addons.filter((item) => item.addon_id != activeAddon.addon_id);
