@@ -1,5 +1,13 @@
+// WE Created scaffold for date description for basic details
+// In this file we created a function DateInput with attributes color,label,req,initialValue,onChangeAction,error,visible,max
+// We applied the same css here present in BasicDetails for every Component & declared the attributes correctly with their specific values
+
 import React from 'react'
+import { Component } from 'react'
+import BasicDetails from '../../pages/property/basicdetails'
 import LineLoader from '../loaders/lineloader'
+
+
 function DateInput({color,label,req,initialValue,onChangeAction,error,visible,max}) {
   return (
     <div className="w-full lg:w-6/12 px-4">

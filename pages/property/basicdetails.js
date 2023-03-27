@@ -27,6 +27,7 @@ let colorToggle;
 import InputText from "../../components/utils/InputText";
 import InputTextBox from "../../components/utils/InputTextBox";
 import DateInput from "../../components/utils/DateInput";
+import DropDown from "../../components/utils/DropDown";
 export default function BasicDetails() {
   const router = useRouter();
   const [visible, setVisible] = useState(0);
@@ -446,52 +447,27 @@ export default function BasicDetails() {
                 <div className="w-full lg:w-6/12 px-4">
                   <img src={imageLogo} width="164px" height="40px" />
                 </div>
-
-                {/* property category drop down */}
-                <div className="w-full lg:w-6/12 px-4">
-                  <div className="relative w-full mb-3">
-                    <label
-                      className={`text-sm font-medium ${color?.text} block mb-2`}
-                      htmlFor="grid-password"
-                    >
-                      {language?.propertycategory}
-                      <span style={{ color: "#ff0000" }}>*</span>
-                    </label>
-                    <div className={visible === 0 ? "block" : "hidden"}>
-                      <Lineloader />
-                    </div>
-                    <div className={visible === 1 ? "block" : "hidden"}>
-                      <select
-                        data-testid="test_property_category"
-                        className={`shadow-sm ${color?.greybackground} capitalize border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                        onChange={(e) =>
-                          setAllHotelDetails(
-                            {
-                              ...allHotelDetails,
-                              property_category: e.target.value,
-                            },
-                            setFlag(1)
-                          )
-                        }
-                        required
-                      >
-                        <option
-                          defaultValue={basicDetails?.property_category}
-                          disabled
-                        >
-                          {basicDetails?.property_category}
-                        </option>
-                        <option value="hotel">Hotel</option>
-                        <option value="resort">Resort</option>
-                        <option value="motel">Motel</option>
-                      </select>
-                      <p className="text-sm text-sm text-red-700 font-light">
-                        {error?.property_brand}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                {/* property brand */}
+                {/*  dropdown for Property Category */}
+                <DropDown
+                  label={language?.propertycategory}
+                  visible={visible}
+                  defaultValue={basicDetails?.property_category}
+                  onChangeAction={(e) =>
+                    setAllHotelDetails(
+                      { ...allHotelDetails, property_category: e.target.value },
+                      setFlag(1)
+                    )
+                  }
+                  error={error?.propertycategory}
+                  color={color}
+                  req={true}
+                  options={[
+                    {value: "hotel", label:"Hotel"},
+                    {value: "resort", label:"Resort"},
+                    {value: "motel", label:"Motel"},
+                  ]}
+                />
+ {/* property brand */}
 
                 <InputText
                   label={language?.propertybrand}
@@ -527,53 +503,33 @@ export default function BasicDetails() {
                   visible={visible}
                   max={descriptionDate}
                 />
+                  
+                  
+                  {/*star Rating*/}
 
-                <div className="w-full lg:w-6/12 px-4">
-                  <div className="relative w-full mb-3">
-                    <label
-                      className={`text-sm font-medium ${color?.text} block mb-2`}
-                      htmlFor="grid-password"
-                    >
-                      {language?.starrating}
-                      <span style={{ color: "#ff0000" }}>*</span>
-                    </label>
-                    <div className={visible === 0 ? "block" : "hidden"}>
-                      <Lineloader />
-                    </div>
-                    <div className={visible === 1 ? "block" : "hidden"}>
-                      <select
-                        data-testid="test_star_rating"
-                        className={`shadow-sm ${color?.greybackground} capitalize border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                        required
-                        onChange={(e) =>
-                          setAllHotelDetails(
-                            {
-                              ...allHotelDetails,
-                              star_rating: parseInt(e.target.value),
-                            },
-                            setFlag(1)
-                          )
-                        }
-                      >
-                        <option
-                          defaultValue={basicDetails?.star_rating}
-                          selected
-                          disabled
-                        >
-                          {basicDetails?.star_rating}
-                        </option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                      </select>
-                      <p className="text-sm text-sm text-red-700 font-light">
-                        {error?.star_rating}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                           <DropDown
+                  label={language?.starrating}
+                  visible={visible}
+                  defaultValue={basicDetails?.star_rating}
+                  onChangeAction={(e) =>
+                    setAllHotelDetails(
+                      { ...allHotelDetails, starrating: e.target.value },
+                      setFlag(1)
+                    )
+                  }
+                  error={error?.starrating}
+                  color={color}
+                  req={true}
+                  options={[
+                    {value: 0, label:0},
+                    {value: 1, label:1},
+                    {value: 2, label:2},
+                    {value: 3, label:3},
+                    {value: 4, label:4},
+                    {value: 5, label:5},
+                  ]}
+                />
+              
 
                 {/* description_title */}
                 <InputText
@@ -594,8 +550,7 @@ export default function BasicDetails() {
                   req={true}
                 />
 
-                {/*  description date*/}
-
+                {/*description date*/}
                 <InputTextBox
                   label={language?.description}
                   visible={visible}
@@ -614,6 +569,7 @@ export default function BasicDetails() {
                   req={true}
                 />
 
+                {/* description date read only */}
                 <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <label
@@ -623,7 +579,6 @@ export default function BasicDetails() {
                       {language?.descriptiondate}
                       <span style={{ color: "#ff0000" }}>*</span>
                     </label>
-
                     <div className={visible === 0 ? "block" : "hidden"}>
                       <Lineloader />
                     </div>
