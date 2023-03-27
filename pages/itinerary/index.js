@@ -181,7 +181,7 @@ function Index() {
           </ol>
         </nav>
 
-
+          {/* itinerary detail */}
         <div id='0' className={disp === 0 ? 'block' : 'hidden'}>
           {/* progress bar */}
 
@@ -323,7 +323,7 @@ function Index() {
         </div>
 
 
-        {/* itinerary basic functionality */}
+        {/* Days Details */}
         <div id='1' className={disp === 1 ? 'block' : 'hidden'}>
           <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
             {/* progress bar */}
@@ -387,7 +387,7 @@ function Index() {
         </div>
 
 
-        {/* Show Daily Activity */}
+        {/* places for day */}
         <div id='2' className={disp === 2 ? `${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2 block` : 'hidden'}>
           {/* progress bar */}
           <div>
@@ -464,7 +464,7 @@ function Index() {
 
         </div>
 
-        {/* Attractions */}
+        {/* Attractions of places */}
         <div id='3' className={disp === 3 ? `${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2 block` : 'hidden'}>
           {/* progress bar */}
           <div>
@@ -545,7 +545,7 @@ function Index() {
 
         </div>
 
-        {/* activity widget */}
+        {/*place activity widget */}
 
         <div id='4' className={disp === 4 ? 'block' : 'hidden'}>
 
@@ -920,6 +920,7 @@ function Index() {
             </form>
           </div>
         </div >
+        
 
         {/* add Additional Info*/}
 
