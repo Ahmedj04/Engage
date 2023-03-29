@@ -67,6 +67,8 @@ const Place = () => {
     const [allCheckAttractions, setAllCheckAttractions] = useState(0)
     const [placeAttractions, setPlaceAttractions] = useState([])
     const [editedPlace, setEditedPlace] = useState({})
+   
+
     // to execute as soon as page loads
 
     // first function to be executed
@@ -112,7 +114,9 @@ const Place = () => {
             router?.push(window.location.origin)
         }
         else {
-            fetchPlace()
+            fetchPlace();
+            fetchSeason();
+
         }
 
     }, []);
@@ -142,12 +146,25 @@ const Place = () => {
         setEditRow({ edit: 0, id: undefined })
 
     }
-    //edit season
+//edit season
     function editSeasonDetails() {
-        let otherSeasons = seasons.filter(i => i.season_id != editSeason.season_id)
-        setSeasons([...otherSeasons, editSeason]);
-        setEditSeason({});
-        setEditRow({ edit: 0, id: undefined })
+        const tempData=editSeason
+        delete tempData.place
+            let data={
+                "data":tempData
+            }
+            
+            let url=`/api2/season`;
+            axios.put(url,data, {
+             headers: {
+             "x-hasura-admin-secret":process.env.NEXT_PUBLIC_PASS }
+             }).then(()=>{
+                let otherSeasons = seasons.filter(i => i.season_id != editSeason.season_id)
+                setSeasons([...otherSeasons, editSeason]);
+                setEditSeason({});
+                setEditRow({ edit: 0, id: undefined });
+                alert("API: Season Updated Sucessfully");
+             }).catch(()=>{alert("Some Error Happened");})
     }
     //add season
     function addSeasonDetails() {
@@ -194,6 +211,25 @@ const Place = () => {
         document.getElementById("newInfo").reset();
         setShowNewInfo(0);
     }
+        //    function to fetch data
+        const fetchSeason = async () => {
+            let places_id=localStorage.getItem('places_id');
+            let url=`/api2/seasons/${places_id}`;
+            axios.get(url, {
+            headers: {
+            "x-hasura-admin-secret" : process.env.NEXT_PUBLIC_PASS }
+            }).then((response) => {
+                    setSeasons(response?.data?.place_seasons);
+                    // setEditedPlace(response?.data?.places[0]);
+                    // setLanguages((response?.data?.places[0].languages_spoken?.map(lang => GlobalData.LanguageData.filter(i => i.language_name === lang.language))).flat())
+                    setVisible(1);
+                }).catch((err) => {
+                    alert("error");
+                    alert(JSON.stringify(err))
+                })
+        
+                console.log("Place Data fetched");
+            }
     //    function to fetch data
     const fetchPlace = async () => {
     let places_id=localStorage.getItem('places_id');
@@ -405,15 +441,19 @@ const Place = () => {
         delete editedPlace.languages_spoken;
         delete editedPlace.categories;
         let data={
-            "data":editedPlace}
+            "data":editedPlace
+        }
         let url=`/api2/place`;
         axios.put(url,data, {
          headers: {
          "x-hasura-admin-secret":process.env.NEXT_PUBLIC_PASS }
-         }).then((response)=>{
+         }).then(
+            (response)=>{
             alert("API: Place Updated Sucessfully");
-         }).catch(()=>{alert("Some Error Happened");})
+         }).catch(
+            ()=>{alert("Some Error Happened");})
                 }
+            
     return (
         <div>
             <Title name={`Engage |  ${language?.places}`} />
@@ -496,7 +536,6 @@ const Place = () => {
                         <div className=" md:px-4 mx-auto w-full">
                             <div className={`flex ${color?.whitebackground} flex-wrap`}>
                                 {/* place name */}
-
                                 <div className="w-full lg:w-6/12  px-4">
                                     <div className="relative w-full mb-3">
                                         <label
@@ -662,7 +701,6 @@ const Place = () => {
                                                         'border-radius': '0px'
                                                     }
                                                 }}
-
                                             />
                                             <p className="text-sm text-sm text-red-700 font-light">
                                                 {error?.view}</p>
@@ -2440,14 +2478,7 @@ const Place = () => {
          
             <Footer color={color} Primary={english.PlaceSide} />
          </div>
-
-
-
-
-
-
-
-    )
+)
 }
 
 export default Place

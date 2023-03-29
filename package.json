@@ -88,6 +88,8 @@
     "yarn": "^1.22.18"
   },
   "devDependencies": {
+    "@event-calendar/core": "^0.17.0",
+    "@event-calendar/time-grid": "^0.17.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "14.4.3",

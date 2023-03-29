@@ -132,9 +132,8 @@ export default function BasicDetails() {
 
   const current = new Date();
   let month = current.getMonth() + 1;
-  const descriptionDate = `${current.getDate()}/${
-    month < +10 ? `0${month}` : `${month + 1}`
-  }/${current.getFullYear()}`;
+  const descriptionDate = `${current.getDate()}/${month < +10 ? `0${month}` : `${month + 1}`
+    }/${current.getFullYear()}`;
   const [allHotelDetails, setAllHotelDetails] = useState([]);
 
   /* Edit Basic Details Function */
@@ -416,12 +415,8 @@ export default function BasicDetails() {
         </nav>
 
         {/* Basic Details Form */}
-        <div
-          className={`${color?.whitebackground} shadow rounded-lg px-12  sm:p-6 xl:p-8  2xl:col-span-2`}
-        >
-          <h6
-            className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}
-          >
+        <div className={`${color?.whitebackground} shadow rounded-lg px-12  sm:p-6 xl:p-8  2xl:col-span-2`}>
+          <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}>
             {language?.basicdetails}
           </h6>
           <div className="pt-6">
@@ -447,6 +442,7 @@ export default function BasicDetails() {
                 <div className="w-full lg:w-6/12 px-4">
                   <img src={imageLogo} width="164px" height="40px" />
                 </div>
+
                 {/*  dropdown for Property Category */}
                 <DropDown
                   label={language?.propertycategory}
@@ -462,13 +458,12 @@ export default function BasicDetails() {
                   color={color}
                   req={true}
                   options={[
-                    {value: "hotel", label:"Hotel"},
-                    {value: "resort", label:"Resort"},
-                    {value: "motel", label:"Motel"},
+                    { value: "hotel", label: "Hotel" },
+                    { value: "resort", label: "Resort" },
+                    { value: "motel", label: "Motel" },
                   ]}
                 />
- {/* property brand */}
-
+                {/* property brand */}
                 <InputText
                   label={language?.propertybrand}
                   visible={visible}
@@ -503,11 +498,9 @@ export default function BasicDetails() {
                   visible={visible}
                   max={descriptionDate}
                 />
-                  
-                  
-                  {/*star Rating*/}
 
-                           <DropDown
+                {/*star Rating*/}
+                <DropDown
                   label={language?.starrating}
                   visible={visible}
                   defaultValue={basicDetails?.star_rating}
@@ -521,15 +514,14 @@ export default function BasicDetails() {
                   color={color}
                   req={true}
                   options={[
-                    {value: 0, label:0},
-                    {value: 1, label:1},
-                    {value: 2, label:2},
-                    {value: 3, label:3},
-                    {value: 4, label:4},
-                    {value: 5, label:5},
+                    { value: 0, label: 0 },
+                    { value: 1, label: 1 },
+                    { value: 2, label: 2 },
+                    { value: 3, label: 3 },
+                    { value: 4, label: 4 },
+                    { value: 5, label: 5 },
                   ]}
                 />
-              
 
                 {/* description_title */}
                 <InputText
@@ -627,6 +619,7 @@ export default function BasicDetails() {
                   </div>
                 </div>
 
+                {/* buttons */}
                 <div className="flex mr-2 items-center justify-end space-x-2 sm:space-x-3 ml-auto">
                   <div
                     className={flag !== 1 && spinner === 0 ? "block" : "hidden"}
