@@ -1,4 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { Calendar, momentLocalizer } from 'react-big-calendar'
+import moment from 'moment'
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+
+
+
 // import FullCalendar from '@fullcalendar/react'
 // must go before plugins
 // import dayGridPlugin from '@fullcalendar/daygrid'
@@ -108,10 +114,52 @@ import React, { useState, useEffect } from 'react';
 // }
 
 // export default Calendar
-function Calendar() {
+function CalendarView() {
+  const localizer = momentLocalizer(moment)
+  const events = [
+    {
+      start: new Date(`2023/03/30 13:00:00 +5:30`),
+      end: new Date(`2023/03/30 16:30:00 +5:30`),
+      title: 'Arrival and road trip to gulmarg',
+      allDay: false
+    },
+    {
+      start: new Date(`2023/03/30 16:30:00 +5:30`),
+      end: new Date(`2023/03/30 18:00:00 +5:30`),
+      title: 'visit to Gulmarg meusum',
+      allDay: false
+    },
+    {
+      start: new Date(`2023/03/30 18:00:00 +5:30`),
+      end: new Date(`2023/03/30 20:00:00 +5:30`),
+      title: 'Dinner at Restaurant',
+      allDay: false
+    },
+    {
+      start: new Date(`2023/03/30 20:00:00 +5:30`),
+      end: new Date(`2023/03/30 23:59:00 +5:30`),
+      title: 'Stay at hotel Khyber',
+      allDay: false
+    },
+    {
+      start: new Date(`2023/03/31 00:00:00 +5:30`),
+      end: new Date(`2023/03/31 10:00:00 +5:30`),
+      title: 'Stay at hotel Khyber',
+      allDay: false
+    }
+  ]
+
   return (
-    <div>calendar</div>
-  )
+    <div>
+      <Calendar
+        localizer={localizer}
+        events={events}
+        startAccessor="start"
+        endAccessor="end"
+        style={{ height:'100%' }}
+      />
+    </div>
+  )
 }
 
-export default Calendar
+export default CalendarView

@@ -163,12 +163,12 @@ function Accomodations() {
                                 <span className="flex items-center">
                                   <input
                                     type="checkbox"
-                                    id={editSeason?.season_id}
+                                    id={stay?.accomodation_id}
                                     tooltip
                                     disabled
                                     title="Click here to delete image."
-                                    name={editSeason?.season_id}
-                                    checked={editSeason.isChecked || false}
+                                    name={stay?.accomodation_id}
+                                    checked={stay?.isChecked || false}
 
                                     aria-describedby="checkbox-1"
                                     className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
@@ -186,14 +186,14 @@ function Accomodations() {
 
                               <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
                                 <input type="text" className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
-                                  defaultValue={stay?.property_id}
+                                  defaultValue={stay?.property_name}
                                 // onChange={(e) => setEditSeason({ ...editSeason, period: e.target.value })} 
                                 />
 
                               </td>
                               <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
                                 <input type="text" className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
-                                  defaultValue={stay?.room_id}
+                                  defaultValue={stay?.room_name}
                                 // onChange={(e) => setEditSeason({ ...editSeason, max_temp: e.target.value })} 
                                 />
 
@@ -244,11 +244,11 @@ function Accomodations() {
 
                               <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
 
-                                {stay?.property_id}
+                                {stay?.property_name}
                               </td>
                               <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
 
-                                {stay?.room_id}
+                                {stay?.room_name}
                               </td>
 
                               <td>

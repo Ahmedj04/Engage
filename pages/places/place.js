@@ -1,12 +1,12 @@
 import axios from 'axios'
+import objChecker from "lodash";
 import Sidebar from "../../components/Sidebar";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
-import english from "../../components/Languages/en";
-import french from "../../components/Languages/fr"
-import arabic from "../../components/Languages/ar"
+import { InitialActions, ColorToggler } from '../../components/initalActions';
+import { english, french, arabic } from '../../components/Languages/Languages';
 import { useRouter } from "next/router"
 import Headloader from "../../components/loaders/headloader";
 import LineLoader from '../../components/loaders/lineloader';
@@ -34,6 +34,7 @@ const Place = () => {
     const [place, setPlace] = useState({})
     const [seasons, setSeasons] = useState([])
     const [languages, setLanguages] = useState([])
+    const [editedLanguages, setEditedLanguages] = useState([])
     const [categories, setCategories] = useState([])
     const [extraInfo, setExtraInfo] = useState([])
     const [color, setColor] = useState({})
@@ -67,46 +68,23 @@ const Place = () => {
     const [allCheckAttractions, setAllCheckAttractions] = useState(0)
     const [placeAttractions, setPlaceAttractions] = useState([])
     const [editedPlace, setEditedPlace] = useState({})
-   
+    const [editedCat,setEditedCat] = useState({})
+    const [selectedCategory,setSelectedCategory] = useState({})
+    const [property_name, setProperty_name] = useState('')
+
 
     // to execute as soon as page loads
 
     // first function to be executed
-    const firstfun = () => {
-        if (typeof window !== 'undefined') {
-            var locale = localStorage.getItem("Language");
-            colorToggle = localStorage.getItem("colorToggle");
-            if (colorToggle === "" || colorToggle === undefined || colorToggle === null || colorToggle === "system") {
-                window.matchMedia("(prefers-color-scheme:dark)").matches === true ? setColor(colorFile?.dark) : setColor(colorFile?.light)
-                setMode(window.matchMedia("(prefers-color-scheme:dark)").matches === true ? true : false);
-            }
-            else if (colorToggle === "true" || colorToggle === "false") {
-                setColor(colorToggle === "true" ? colorFile?.dark : colorFile?.light);
-                setMode(colorToggle === "true" ? true : false)
-            }
-            {
-                if (locale === "ar") {
-                    language = arabic;
-                }
-                if (locale === "en") {
-                    language = english;
-                }
-                if (locale === "fr") {
-                    language = french;
-
-                }
-            }
-            /** Current Property Details fetched from the local storage **/
-            currentProperty = JSON.parse(localStorage.getItem("property"));
-            currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
-
-        }
-    }
-
-    //will run as soon as page loads
     useEffect(() => {
-        firstfun();
-    }, [])
+        const resp = InitialActions({ setColor, setMode })
+        language = resp?.language;
+        currentLogged = resp?.currentLogged;
+        currentProperty = resp?.currentProperty
+        setProperty_name(resp?.currentProperty?.property_name);
+        colorToggle = resp?.colorToggle
+    
+      }, [])
 
     //authorization
     useEffect(() => {
@@ -121,23 +99,7 @@ const Place = () => {
 
     }, []);
 
-    const colorToggler = (newColor) => {
-        if (newColor === 'system') {
-            window.matchMedia("(prefers-color-scheme:dark)").matches === true ? setColor(colorFile?.dark)
-                : setColor(colorFile?.light)
-            localStorage.setItem("colorToggle", newColor)
-        }
-        else if (newColor === 'light') {
-            setColor(colorFile?.light)
-            localStorage.setItem("colorToggle", false)
-        }
-        else if (newColor === 'dark') {
-            setColor(colorFile?.dark)
-            localStorage.setItem("colorToggle", true)
-        }
-        firstfun();
-        router.push('../places/place')
-    }
+  
     //new info
     function saveInfoChanges(e) {
         e.preventDefault();
@@ -146,25 +108,26 @@ const Place = () => {
         setEditRow({ edit: 0, id: undefined })
 
     }
-//edit season
+    //edit season
     function editSeasonDetails() {
-        const tempData=editSeason
+        const tempData = editSeason
         delete tempData.place
-            let data={
-                "data":tempData
+        let data = {
+            "data": tempData
+        }
+
+        let url = `/api2/season`;
+        axios.put(url, data, {
+            headers: {
+                "x-hasura-admin-secret": process.env.NEXT_PUBLIC_PASS
             }
-            
-            let url=`/api2/season`;
-            axios.put(url,data, {
-             headers: {
-             "x-hasura-admin-secret":process.env.NEXT_PUBLIC_PASS }
-             }).then(()=>{
-                let otherSeasons = seasons.filter(i => i.season_id != editSeason.season_id)
-                setSeasons([...otherSeasons, editSeason]);
-                setEditSeason({});
-                setEditRow({ edit: 0, id: undefined });
-                alert("API: Season Updated Sucessfully");
-             }).catch(()=>{alert("Some Error Happened");})
+        }).then(() => {
+            let otherSeasons = seasons.filter(i => i.season_id != editSeason.season_id)
+            setSeasons([...otherSeasons, editSeason]);
+            setEditSeason({});
+            setEditRow({ edit: 0, id: undefined });
+            alert("API: Season Updated Sucessfully");
+        }).catch(() => { alert("Some Error Happened"); })
     }
     //add season
     function addSeasonDetails() {
@@ -211,42 +174,50 @@ const Place = () => {
         document.getElementById("newInfo").reset();
         setShowNewInfo(0);
     }
-        //    function to fetch data
-        const fetchSeason = async () => {
-            let places_id=localStorage.getItem('places_id');
-            let url=`/api2/seasons/${places_id}`;
-            axios.get(url, {
+    //    function to fetch data
+    const fetchSeason = async () => {
+        let places_id = localStorage.getItem('places_id');
+        let url = `/api2/seasons/${places_id}`;
+        axios.get(url, {
             headers: {
-            "x-hasura-admin-secret" : process.env.NEXT_PUBLIC_PASS }
-            }).then((response) => {
-                    setSeasons(response?.data?.place_seasons);
-                    // setEditedPlace(response?.data?.places[0]);
-                    // setLanguages((response?.data?.places[0].languages_spoken?.map(lang => GlobalData.LanguageData.filter(i => i.language_name === lang.language))).flat())
-                    setVisible(1);
-                }).catch((err) => {
-                    alert("error");
-                    alert(JSON.stringify(err))
-                })
-        
-                console.log("Place Data fetched");
+                "x-hasura-admin-secret": process.env.NEXT_PUBLIC_PASS
             }
+        }).then((response) => {
+            setSeasons(response?.data?.place_seasons);
+            // setEditedPlace(response?.data?.places[0]);
+            // setLanguages((response?.data?.places[0].languages_spoken?.map(lang => GlobalData.LanguageData.filter(i => i.language_name === lang.language))).flat())
+            setVisible(1);
+        }).catch((err) => {
+            alert("error");
+            alert(JSON.stringify(err))
+        })
+
+        console.log("Place Data fetched");
+    }
     //    function to fetch data
     const fetchPlace = async () => {
-    let places_id=localStorage.getItem('places_id');
-    let url=`/api2/places/${places_id}`;
-    axios.get(url, {
-    headers: {
-    "x-hasura-admin-secret" : process.env.NEXT_PUBLIC_PASS }
-    }).then((response) => {
+        let places_id = localStorage.getItem('places_id');
+        let url = `/api2/places/${places_id}`;
+        axios.get(url, {
+            headers: {
+                "x-hasura-admin-secret": process.env.NEXT_PUBLIC_PASS
+            }
+        }).then((response) => {
             setPlace(response?.data?.places[0]);
             setEditedPlace(response?.data?.places[0]);
+            console.log(response?.data?.places[0]);
             // let tempInfo = []
             // response?.data?.places[0].additional_information.map((add_inf, id) => { tempInfo.push({ ...add_inf, 'isChecked': false }) })
             // setExtraInfo(tempInfo)
             // setCategories(response?.data?.places[0].place_category)
 
             // //setLanguages(response?.data?.places[0].place_languages)
-            setLanguages((response?.data?.places[0].languages_spoken?.map(lang => GlobalData.LanguageData.filter(i => i.language_name === lang.language))).flat())
+
+            setLanguages(response?.data?.places[0].languages_spoken?.map(lang => GlobalData.LanguageData.filter(i => i.language_name === lang.language)).flat().map(i => ({ "language_name": i.language_name })));
+            setEditedLanguages(response?.data?.places[0].languages_spoken?.map(lang => GlobalData.LanguageData.filter(i => i.language_name === lang.language)).flat().map(i => ({ "language_name": i.language_name })));
+            setSelectedCategory(response?.data?.places[0].categories)
+            setEditedCat(response?.data?.places[0].categories)
+
             // let tempSeason = []
             // response?.data?.places[0].place_seasons.map((season, id) => { tempSeason.push({ ...season, 'isChecked': false }) })
             // setSeasons(tempSeason)
@@ -368,18 +339,34 @@ const Place = () => {
         check = tempInf
     }
     //changing multiselected data
-    const languageViews = (viewData) => {
+    const languageViews = (languageData) => {
         console.log("multiselect data changed")
-        // setFinalView([]);
-        // var final_view_data = []
-        // viewData.map(item => {
-        //   var temp = {
-        //     view: item?.view
-        //   }
-        //   final_view_data.push(temp)
-        // });
-        // setFinalView(final_view_data);
-        // setRoomView(1)
+        let langs = []
+        languageData.map((item => {
+            let temp = {
+                "language": item.language_name
+            }
+            langs.push(temp)
+
+        }
+        ));
+        setEditedLanguages(langs)
+    }
+    //changing multiselected category data
+    const catViews = (catData) => {
+        console.log("multiselect data changed")
+        let cat = [];
+        catData.map((item => {
+            let temp = {
+                "cat_name": item.cat_name,
+                "type":"PLACE"
+            }
+            cat.push(temp)
+
+        }
+        ));
+        console.log(cat);
+        setEditedCat(cat);
     }
 
     //delete All seasons
@@ -422,42 +409,107 @@ const Place = () => {
         setPlaceAttractions(tempCon);
         check = tempCon
     }
-
-
-
-
-    //catgory
-    const category = [{ category_name: 'Adventure' },
-    { category_name: 'Theatre, Music and Culture' },
-    { category_name: 'Lottery Booth' },
-    { category_name: 'Mountain or Hill' },
-    { category_name: 'biking' },
-    { category_name: 'horse ride' },
-    { category_name: 'skiing' },
-    { category_name: 'camping' },
-    { category_name: 'honey-moon' }]
-    const selectedCategory = [{ category_name: 'Adventure' }]
-    function updatePlaces(){
+ //catgory
+    const category = [{ cat_name: 'Adventure' },
+    { cat_name: 'Theatre, Music and Culture' },
+    { cat_name: 'Lottery Booth' },
+    { cat_name: 'Mountain or Hill' },
+    { cat_name: 'biking' },
+    { cat_name: 'horse ride' },
+    { cat_name: 'skiing' },
+    { cat_name: 'camping' },
+    { cat_name: 'honey-moon' }]
+    
+    //update places 
+    function updatePlaces() {
+        let change=false;
         delete editedPlace.languages_spoken;
         delete editedPlace.categories;
-        let data={
-            "data":editedPlace
+        let data = {
+            "data": editedPlace
         }
-        let url=`/api2/place`;
-        axios.put(url,data, {
-         headers: {
-         "x-hasura-admin-secret":process.env.NEXT_PUBLIC_PASS }
-         }).then(
-            (response)=>{
-            alert("API: Place Updated Sucessfully");
-         }).catch(
-            ()=>{alert("Some Error Happened");})
+        //if place language has changes then only n/w call
+        if(!objChecker.isEqual(editedLanguages, languages))
+        {updateLanguages();
+        change=true;}
+        //if place cat has changes then only n/w call
+        if(!objChecker.isEqual(editedCat,selectedCategory))
+        {updateCat();
+        change=true;}
+        const tempPlace=place;
+        delete tempPlace.languages_spoken;
+        delete tempPlace.categories;
+        //if place has changes then only n/w call
+        if(!objChecker.isEqual(editedPlace,tempPlace))
+        {
+        change=true;
+        let url = `/api2/place`;
+        axios.put(url, data, {
+            headers: {
+                "x-hasura-admin-secret": process.env.NEXT_PUBLIC_PASS
+            }
+        }).then(
+            (response) => {
+               alert("API: Place Updated Sucessfully") ;
+            }
+        ).catch(
+            () => { alert("Some Error Happened In Places"); })
+        }
+        if(change==false)
+        {
+            alert("No Change In Data");
+        }
+    }
+
+    //language updates
+    function updateLanguages() {
+        let data = {
+            "data": {
+                ...editedPlace, "languages_spoken": {
+                    "data": editedLanguages}
+            }
+        }
+        console.log(JSON.stringify(data))
+        let url = `/api2/place`;
+        axios.post(url, data, {
+            headers: {
+                "x-hasura-admin-secret": process.env.NEXT_PUBLIC_PASS
+            }
+        }).then(
+            (response) => {
+                alert("API: Place Languages Updated Sucessfully")
+            }
+        ).catch(
+            (error) => { console.log(error); alert("Some Error Happened in Languages"); })
+    }
+
+    //category updates
+    function updateCat() {
+        let data = {
+            "data": {
+                ...editedPlace, "categories": {
+                    "data": editedCat
                 }
-            
+            }
+        }
+        console.log('cat'+JSON.stringify(data))
+        let url = `/api2/place`;
+        axios.post(url, data, {
+            headers: {
+                "x-hasura-admin-secret": process.env.NEXT_PUBLIC_PASS
+            }
+        }).then(
+            (response) => {
+                alert("API: Place Categories Updated")
+            }
+        ).catch(
+            (error) => { console.log(error); alert("Some Error Happened In Place Categories"); })
+    }
+
     return (
         <div>
             <Title name={`Engage |  ${language?.places}`} />
-            <Header color={color} Primary={english.PlaceSide} Type={currentLogged?.user_type} Sec={colorToggler} mode={mode} setMode={setMode} />
+            <Header color={color} setColor={setColor} Primary={english.PlaceSide} Type={currentLogged?.user_type} Sec={ColorToggler} mode={mode} setMode={setMode} />
             <Sidebar color={color} Primary={english.PlaceSide} Type={currentLogged?.user_type} />
             <div className={`${color?.greybackground} px-4 pt-24 pb-2  relative overflow-y-auto  lg:ml-64`}>
                 {/* Navbar */}
@@ -495,7 +547,7 @@ const Place = () => {
                 <h6 className={`${color?.text} capitalize text-xl flex leading-none pl-6 lg:pt-2 pt-6 mb-2 font-bold`}>
                     {place?.name}
                 </h6>
-    
+
                 {/* place definition */}
                 <div id='0' className={disp === 0 ? 'block' : 'hidden'}>
                     {/* main display div */}
@@ -551,8 +603,8 @@ const Place = () => {
                                                 className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                                                 defaultValue={place?.name} required
                                                 onChange={
-                                                    (e) =>setEditedPlace(
-                                                      {...editedPlace,name:e.target.value}
+                                                    (e) => setEditedPlace(
+                                                        { ...editedPlace, name: e.target.value }
                                                     )
                                                 } />
                                             {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
@@ -578,9 +630,9 @@ const Place = () => {
                                             <textarea data-testid="test_property_name"
                                                 className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                                                 defaultValue={place?.description} required
-                                                  onChange={
-                                                    (e) =>setEditedPlace(
-                                                      {...editedPlace,description:e.target.value}
+                                                onChange={
+                                                    (e) => setEditedPlace(
+                                                        { ...editedPlace, description: e.target.value }
                                                     )
                                                 } />
                                             {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
@@ -605,9 +657,9 @@ const Place = () => {
                                                 type="text" data-testid="test_property_name"
                                                 className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                                                 defaultValue={place?.latitude} required
-                                                  onChange={
-                                                    (e) =>setEditedPlace(
-                                                      {...editedPlace,latitude:e.target.value}
+                                                onChange={
+                                                    (e) => setEditedPlace(
+                                                        { ...editedPlace, latitude: e.target.value }
                                                     )
                                                 } />
                                             {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
@@ -633,9 +685,9 @@ const Place = () => {
                                                 type="text" data-testid="test_property_name"
                                                 className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                                                 defaultValue={place?.longitude} required
-                                                  onChange={
-                                                    (e) =>setEditedPlace(
-                                                      {...editedPlace,longitude:e.target.value}
+                                                onChange={
+                                                    (e) => setEditedPlace(
+                                                        { ...editedPlace, longitude: e.target.value }
                                                     )
                                                 } />
                                             {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
@@ -659,9 +711,9 @@ const Place = () => {
                                                 type="text" data-testid="test_property_name"
                                                 className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                                                 defaultValue={place?.best_time_to_visit} required
-                                                   onChange={
-                                                    (e) =>setEditedPlace(
-                                                      {...editedPlace,best_time_to_visit:e.target.value}
+                                                onChange={
+                                                    (e) => setEditedPlace(
+                                                        { ...editedPlace, best_time_to_visit: e.target.value }
                                                     )
                                                 } />
                                             {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
@@ -721,10 +773,10 @@ const Place = () => {
                                             <Multiselect
                                                 isObject={true}
                                                 options={category}
-                                                onRemove={(event) => { languageViews(event) }}
-                                                onSelect={(event) => { languageViews(event) }}
+                                                onRemove={(event) => { catViews(event) }}
+                                                onSelect={(event) => { catViews(event) }}
                                                 selectedValues={selectedCategory}
-                                                displayValue="category_name"
+                                                displayValue="cat_name"
                                                 placeholder="Search"
                                                 id="css_custom"
                                                 closeIcon='circle'
@@ -751,10 +803,10 @@ const Place = () => {
                         </div>
                         {/* Update & Next button */}
                         <div className='flex justify-end mt-2'>
-                        <button className="bg-gradient-to-r mb-4 mr-4 bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-                                onClick={()=>updatePlaces()}>Update</button>
+                            <button className="bg-gradient-to-r mb-4 mr-4 bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                onClick={() => updatePlaces()}>Update</button>
                             <button className="bg-gradient-to-r mb-4 bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-                                onClick={()=>setDisp(5)}>Next</button>
+                                onClick={() => setDisp(5)}>Next</button>
                         </div>
 
                     </div>
@@ -2054,8 +2106,8 @@ const Place = () => {
                                                 </div>
                                             </div>
 
-                                             {/* attraction latitude  */}
-                                             <div className=" w-full lg:w-6/12  px-4">
+                                            {/* attraction latitude  */}
+                                            <div className=" w-full lg:w-6/12  px-4">
                                                 <div className="relative w-full mb-3">
                                                     <label
                                                         className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -2079,8 +2131,8 @@ const Place = () => {
 
                                                 </div>
                                             </div>
-                                             {/* attraction longitude  */}
-                                             <div className=" w-full lg:w-6/12  px-4">
+                                            {/* attraction longitude  */}
+                                            <div className=" w-full lg:w-6/12  px-4">
                                                 <div className="relative w-full mb-3">
                                                     <label
                                                         className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -2095,7 +2147,7 @@ const Place = () => {
                                                         required
                                                         onChange={
                                                             (e) => (
-                                                                setAttraction({ ...attraction,longitude: e.target.value })
+                                                                setAttraction({ ...attraction, longitude: e.target.value })
                                                             )
                                                         } />
                                                     {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
@@ -2105,8 +2157,8 @@ const Place = () => {
                                                 </div>
                                             </div>
 
-                                             {/* attraction open hours  */}
-                                             <div className=" w-full lg:w-6/12  px-4">
+                                            {/* attraction open hours  */}
+                                            <div className=" w-full lg:w-6/12  px-4">
                                                 <div className="relative w-full mb-3">
                                                     <label
                                                         className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -2472,13 +2524,13 @@ const Place = () => {
                         </div>
                     </div>
                 </div>
-          
+
             </div>
             {/* Toast Container */}
-         
+
             <Footer color={color} Primary={english.PlaceSide} />
-         </div>
-)
+        </div>
+    )
 }
 
 export default Place

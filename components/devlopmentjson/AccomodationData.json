@@ -7,23 +7,28 @@
               "night": 1,
               "accomodation_id": "acc001",
               "property_id": "t2k001",
-              "property_name":"petal",
+              "property_name":"Rose petal",
               "room_id": "r001",
-"isChecked":false
+              "room_name":"Super Delux Room",
+              "isChecked":false
             },
             {
               "night": 2,
               "accomodation_id": "acc001",
               "property_id": "t2k001",
-              "room_id": "r001",
-"isChecked":false
+              "property_name":"Rose petal",
+              "room_id": "r002",
+              "room_name":"Executive Room",
+              "isChecked":false
             },
             {
               "night": 3,
               "accomodation_id": "acc001",
               "property_id": "t2k001",
-              "room_id": "r001",
-"isChecked":false
+              "property_name":"Rose petal",
+              "room_id": "r003",
+              "room_name":"Luxury Suite",
+              "isChecked":false
             }
           ]
         },
@@ -32,45 +37,57 @@
             "accomodation": [
               {
                 "night": 1,
-                "accomodation_id": "acc001",
+                "accomodation_id": "acc002",
                 "property_id": "t2k001",
-                "room_id": "r001",
-"isChecked":false
+                "property_name":"Rose petal",
+                "room_id": "r002",
+                "room_name":"Executive Room",
+                "isChecked":false
               },
               {
                 "night": 2,
-                "accomodation_id": "acc001",
+                "accomodation_id": "acc002",
                 "property_id": "t2k001",
-                "room_id": "r001",
-"isChecked":false
+                "property_name":"Rose petal",
+                "room_id": "r004",
+                "room_name":"Family Room",
+                "isChecked":false
               },
               {
-                "night": 3,
-                "accomodation_id": "acc001",
+                "night": 3 ,
+                "accomodation_id": "acc002",
                 "property_id": "t2k001",
-                "room_id": "r001",
-"isChecked":false
+                "property_name":"Rose petal",
+                "room_id": "r002",
+                "room_name":"Executive Room",
+                "isChecked":false
               },
               {
                 "night": 4,
-                "accomodation_id": "acc001",
+                "accomodation_id": "acc002",
                 "property_id": "t2k001",
-                "room_id": "r001",
-"isChecked":false
+                "property_name":"Rose petal",
+                "room_id": "r002",
+                "room_name":"Executive Room",
+                "isChecked":false
               },
               {
                 "night": 5,
-                "accomodation_id": "acc001",
+                "accomodation_id": "acc002",
                 "property_id": "t2k001",
-                "room_id": "r001",
-"isChecked":false
+                "property_name":"Rose petal",
+                "room_id": "r003",
+                "room_name":"Executive Room",
+                "isChecked":false
               },
               {
                 "night": 6,
-                "accomodation_id": "acc001",
+                "accomodation_id": "acc002",
                 "property_id": "t2k001",
+                "property_name":"Rose petal",
                 "room_id": "r001",
-"isChecked":false
+                "room_name":"Family Executive Room",
+                "isChecked":false
               }
             ]
           },
@@ -79,17 +96,21 @@
             "accomodation": [
               {
                 "night": 1,
-                "accomodation_id": "acc001",
+                "accomodation_id": "acc002",
                 "property_id": "t2k001",
+                "property_name":"Rose petal",
                 "room_id": "r001",
-"isChecked":false
+                "room_name":"Friends Room",
+                "isChecked":false
               },
               {
                 "night": 2,
-                "accomodation_id": "acc001",
+                "accomodation_id": "acc002",
                 "property_id": "t2k001",
+                "property_name":"Rose petal",
                 "room_id": "r001",
-"isChecked":false
+                "room_name":"Executive Room",
+                "isChecked":false
               }
             ]
           }

@@ -16,7 +16,7 @@ function InputText({label,visible,defaultValue,onChangeAction,error,color,req}) 
                       <input
                         type="text" data-testid="test_property_name"
                         className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                        defaultValue={defaultValue} required
+                        defaultValue={defaultValue} title='input text' required
                         onChange={
                           (e) => (
                             onChangeAction(e)
