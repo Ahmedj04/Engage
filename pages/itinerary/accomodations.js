@@ -157,7 +157,7 @@ function Accomodations() {
                     <tbody className={` ${color?.whitebackground} divide-y  divide-gray-200`}>
                       {accomodations?.accomodation?.map((stay, index) => {
                         return (<>
-                          {(editRow?.edit === 1 && editRow.id === index) ?
+                          {(editRow?.edit === 1 && editRow?.id === index) ?
                             <tr key={index}>
                               <td className="p-4 w-4">
                                 <span className="flex items-center">
