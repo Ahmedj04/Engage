@@ -122,6 +122,7 @@ export default {
   guests:"Guests",
   facilities:"Facilities",
   itinerary:"Itinerary",
+  itineraries:"Itineraries",
   customer:"Customer",
   booking:"Booking",
   basicservices:"Basic Services",
@@ -812,7 +813,8 @@ inbox:'./inbox',
 places:'../places',
 addons:'../itinerary/addons',
 providers:'../itinerary/providers',
-packages:'../itinerary/packages'
+packages:'../itinerary/packages',
+itineraries:'../itineraries'
 },
 "PlaceSide":{
  dashboard:'../property/dashboard',
@@ -843,7 +845,8 @@ inbox:'../property/inbox',
 places:'../places',
 addons:'../itinerary/addons',
 providers:'../itinerary/providers',
-packages:'../itinerary/packages'
+packages:'../itinerary/packages',
+itineraries:'../../itineraries'
 },
 
 
@@ -876,7 +879,8 @@ inbox:'../inbox',
 places:'../../places',
 addons:'../../itinerary/addons',
 providers:'../../itinerary/providers',
-packages:'../../itinerary/packages'
+packages:'../../itinerary/packages',
+itineraries:'../../itineraries'
  },
  
  "Side2":{
@@ -907,7 +911,8 @@ extraguestcharge:'../../extraguestcharges',
 inbox:'../../inbox',
 addons:'../../itinerary/addons',
 providers:'../itinerary/providers',
-packages:'../itinerary/packages'
+packages:'../itinerary/packages',
+itineraries:'../../itineraries'
  },
  "Foot":{
   termsandconditions:'./termsandconditions',

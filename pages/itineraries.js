@@ -112,7 +112,10 @@ function Itineraries() {
                 Sec={ColorToggler}
                 mode={mode}
                 setMode={setMode} />
-            <Sidebar color={color} Primary={english.PlaceSide} Type={currentLogged?.user_type} />
+                
+            <Sidebar color={color}
+             Primary={english.PlaceSide}
+             Type={currentLogged?.user_type} />
 
             <div
                 className={`${color?.whitebackground} min-h-screen pt-24 relative overflow-y-auto lg:ml-64`}

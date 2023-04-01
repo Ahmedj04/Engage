@@ -137,6 +137,7 @@ export default {
  guests:"Invités",
  facilities:"Installations",
  itinerary:"Itinéraire",
+ itineraries:"Itinéraires",
 
   "ContactCols":{
     name:"Contacter",

@@ -42,7 +42,7 @@ function Accomodations() {
   }, [])
 
   return (
-    <div suppressHydrationWarning={true}>
+    <>
       <Title name={`Engage |  ${language?.places}`} />
       <Header color={color} Primary={english.PlaceSide} Type={currentLogged?.user_type} Sec={ColorToggler} mode={mode} setMode={setMode} />
       <Sidebar color={color} Primary={english.PlaceSide} Type={currentLogged?.user_type} />
@@ -284,7 +284,7 @@ function Accomodations() {
 
 
         </div></div>
-    </div>
+    </>
 
   )
 }

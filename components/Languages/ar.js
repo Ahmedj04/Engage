@@ -131,6 +131,7 @@ export default {
   facilities:"مرافق",
   available:"متوفرة",
   itinerary:"مسار الرحلة",
+  itineraries:"مسارات الرحلة",
   "CheckInCols":{
     name:"تحقق في",
    col1 : "تاريخ البدء",
