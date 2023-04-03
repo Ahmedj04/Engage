@@ -118,32 +118,32 @@ function CalendarView() {
   const localizer = momentLocalizer(moment)
   const events = [
     {
-      start: new Date(`2023/03/30 13:00:00 +5:30`),
-      end: new Date(`2023/03/30 16:30:00 +5:30`),
+      start: new Date(`2023/04/06 13:00:00 +5:30`),
+      end: new Date(`2023/04/06 16:30:00 +5:30`),
       title: 'Arrival and road trip to gulmarg',
       allDay: false
     },
     {
-      start: new Date(`2023/03/30 16:30:00 +5:30`),
-      end: new Date(`2023/03/30 18:00:00 +5:30`),
+      start: new Date(`2023/04/06 16:30:00 +5:30`),
+      end: new Date(`2023/04/06 18:00:00 +5:30`),
       title: 'visit to Gulmarg meusum',
       allDay: false
     },
     {
-      start: new Date(`2023/03/30 18:00:00 +5:30`),
-      end: new Date(`2023/03/30 20:00:00 +5:30`),
+      start: new Date(`2023/04/06 18:00:00 +5:30`),
+      end: new Date(`2023/04/06 20:00:00 +5:30`),
       title: 'Dinner at Restaurant',
       allDay: false
     },
     {
-      start: new Date(`2023/03/30 20:00:00 +5:30`),
-      end: new Date(`2023/03/30 23:59:00 +5:30`),
+      start: new Date(`2023/04/06 20:00:00 +5:30`),
+      end: new Date(`2023/04/06 23:59:00 +5:30`),
       title: 'Stay at hotel Khyber',
       allDay: false
     },
     {
-      start: new Date(`2023/03/31 00:00:00 +5:30`),
-      end: new Date(`2023/03/31 10:00:00 +5:30`),
+      start: new Date(`2023/04/07 00:00:00 +5:30`),
+      end: new Date(`2023/04/07 10:00:00 +5:30`),
       title: 'Stay at hotel Khyber',
       allDay: false
     }
@@ -151,12 +151,20 @@ function CalendarView() {
 
   return (
     <div>
+      {/* <Calendar
+      localizer={localizer}
+      events={myEventsList}
+      startAccessor="start"
+      endAccessor="end"
+      style={{ height: 500 }}
+    /> */}
+
       <Calendar
         localizer={localizer}
         events={events}
         startAccessor="start"
         endAccessor="end"
-        style={{ height:'100%' }}
+        style={{ height:'100vh' }}
       />
     </div>
   )
