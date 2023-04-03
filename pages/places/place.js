@@ -60,6 +60,7 @@ const Place = () => {
     const [showNewAtt, setShowNewAtt] = useState(0)
     const [addSeason, setAddSeason] = useState(0)
     const [newSeason, setNewSeason] = useState({})
+    const [orginalSeason, setOrginalSeason] = useState({})
     const [newInfo, setNewInfo] = useState({})
     const [editInfo, setEditInfo] = useState({})
     const [showNewInfo, setShowNewInfo] = useState(0)
@@ -110,7 +111,9 @@ const Place = () => {
     }
     //edit season
     function editSeasonDetails() {
-        const tempData = editSeason
+        if(!objChecker.isEqual(orginalSeason, editSeason))
+        {
+            const tempData = editSeason
         delete tempData.place
         let data = {
             "data": tempData
@@ -128,6 +131,13 @@ const Place = () => {
             setEditRow({ edit: 0, id: undefined });
             alert("API: Season Updated Sucessfully");
         }).catch(() => { alert("Some Error Happened"); })
+        }
+        else{
+            setEditSeason({});
+            setEditRow({ edit: 0, id: undefined });
+            alert("NO Change In Data");
+        }
+        
     }
     //add season
     function addSeasonDetails() {
@@ -174,7 +184,7 @@ const Place = () => {
         document.getElementById("newInfo").reset();
         setShowNewInfo(0);
     }
-    //    function to fetch data
+    //    function to fetch season data
     const fetchSeason = async () => {
         let places_id = localStorage.getItem('places_id');
         let url = `/api2/seasons/${places_id}`;
@@ -184,8 +194,6 @@ const Place = () => {
             }
         }).then((response) => {
             setSeasons(response?.data?.place_seasons);
-            // setEditedPlace(response?.data?.places[0]);
-            // setLanguages((response?.data?.places[0].languages_spoken?.map(lang => GlobalData.LanguageData.filter(i => i.language_name === lang.language))).flat())
             setVisible(1);
         }).catch((err) => {
             alert("error");
@@ -997,6 +1005,7 @@ const Place = () => {
                                                                     <button className={`bg-gradient-to-r my-1 bg-gray-400 hover:${color?.greybackground}0 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}
                                                                         onClick={() => {
                                                                             setEditSeason({});
+                                                                            setOrginalSeason({});
                                                                             setEditRow({ edit: 0, id: undefined })
                                                                         }}
                                                                     >
@@ -1048,6 +1057,7 @@ const Place = () => {
                                                                 <td>
                                                                     <button className="bg-gradient-to-r mt-1 mr-2 bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
                                                                         onClick={() => {
+                                                                            setOrginalSeason(season)
                                                                             setEditSeason(season);
                                                                             setEditRow({ edit: 1, id: index })
                                                                         }}
