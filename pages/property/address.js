@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Country, State, City } from "country-state-city";
-import lang from '../../components/GlobalData'
+import globalData from '../../components/GlobalData'
 import axios from "axios";
 import colorFile from '../../components/colors/Color'
 import objChecker, { filter } from "lodash";
@@ -22,6 +22,8 @@ import Footer from '../../components/Footer';
 import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
+import InputText from "../../components/utils/InputText";
+import DropDown from "../../components/utils/DropDown";
 var i = 0;
 var country;
 var currentLogged;
@@ -41,9 +43,12 @@ function Address() {
   const [error, setError] = useState({})
   const [allHotelDetails, setAllHotelDetails] = useState([]);
   const [address, setAddress] = useState([]);
-
+  const [countries,setCountries]=useState(globalData?.CountryData?.map(i => {return ({"value":`${i?.country_code}`,
+  "label":`${i?.country_name}`})
+}))
   useEffect(() => {
     firstfun();
+    
   }, [])
 
   const firstfun = () => {
@@ -213,7 +218,7 @@ function Address() {
 
   // Filter Country
   const filterCountry = (props) => {
-    country = lang?.CountryData.filter(el => {
+    country = globalData?.CountryData.filter(el => {
       return props.address_country.toUpperCase() === el.country_code;
     });
   }
@@ -282,7 +287,23 @@ function Address() {
           <div className="pt-6">
             <div className=" md:px-4 mx-auto w-full">
               <div className="flex flex-wrap">
-                <div className="w-full lg:w-6/12 px-4">
+{/* //streetaddress */}
+              <InputText
+                  label={language?.streetaddress}
+                  visible={visible}
+                  defaultValue={address?.address_street_address}
+                  onChangeAction={(e) =>
+                    setAllHotelDetails(
+                      { ...allHotelDetails,
+                        address_street_address: e.target.value },
+                      setFlag(1)
+                    )
+                  }
+                  error={error?.address_street_address}
+                  color={color}
+                  req={true}
+                />
+                {/* <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <label
                       className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -307,8 +328,28 @@ function Address() {
                       <p className="text-sm text-sm text-red-700 font-light">
                         {error?.address_street_address}</p></div>
                   </div>
-                </div>
-                <div className="w-full lg:w-6/12 px-4">
+                </div> */}
+
+
+
+    {/* Landmark */}
+             
+    <InputText
+                  label={language?.landmark}
+                  visible={visible}
+                  defaultValue={address?.address_landmark}
+                  onChangeAction={(e) =>
+                    setAllHotelDetails(
+                      {  ...allHotelDetails,
+                        address_landmark: e.target.value,},
+                      setFlag(1)
+                    )
+                  }
+                  error={error?.address_landmark}
+                  color={color}
+                  req={true}
+                />
+                {/* <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <label
                       className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -334,8 +375,30 @@ function Address() {
                       <p className="text-sm text-sm text-red-700 font-light">
                         {error?.address_landmark}</p></div>
                   </div>
-                </div>
-                <div className="w-full lg:w-6/12 px-4">
+                </div> */}
+
+                {/* country */}
+                <DropDown
+                  label={language?.country}
+                  visible={visible}
+                  defaultValue={country?.[i]?.country_name}
+                  onChangeAction={(e) =>
+                    setAllHotelDetails(
+                      { ...allHotelDetails, address_country: e.target.value,
+                        address_province: "",
+                        address_city: "",
+                        address_zipcode: "" },
+                      setFlag(1)
+                    )
+                  }
+                  error={error?.propertycategory}
+                  color={color}
+                  req={true}
+                  options={countries}
+                 
+                />
+                
+                {/* <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <label data-testid="country"
                       className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -361,7 +424,7 @@ function Address() {
                         <>
 
                           <option selected value={country?.[i]?.country_code}>{country?.[i]?.country_name}</option>
-                          {lang?.CountryData?.map(i => {
+                          {globalData?.CountryData?.map(i => {
                             return (
                               <option key={i.country_code} value={i.country_code}>{i?.country_name}</option>)
                           }
@@ -370,7 +433,7 @@ function Address() {
                       <p className="text-sm text-sm text-red-700 font-light">
                         {error?.address_country}</p></div>
                   </div>
-                </div>
+                </div> */}
                 <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <label
@@ -413,6 +476,9 @@ function Address() {
                         {error?.address_province}</p></div>
                   </div>
                 </div>
+
+
+
                 <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <label data-testid="city"
@@ -452,6 +518,10 @@ function Address() {
                     </div>
                   </div>
                 </div>
+
+
+
+
                 <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <label
