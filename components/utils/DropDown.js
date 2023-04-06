@@ -9,24 +9,24 @@ const DropDown = ({
   color,
   req,
   options = [],
+  toolTip
 
 }) => {
   return (
-    <div className="w-full lg:w-6/12 px-4">
-      <div className="relative w-full mb-3">
-        <label
+    <div data-testid ="main"  title={toolTip} className="w-full lg:w-6/12 px-4">
+      <div data-testid ="child0" className="relative w-full mb-3">
+        <label data-testid ="checkingcolor"
           className={`text-sm font-medium ${color?.text} block mb-2`}
           htmlFor="grid-password"
         >
           {label} 
           {req === true ? <span style={{ color: "#ff0000" }}>*</span> : <></>}
         </label>
-        <div className={visible === 0 ? "block w-auto" : "hidden"}>
+        <div data-testid="vis0" className={visible === 0 ? "block w-auto" : "hidden"}>
           <LineLoader />
         </div>
-        <div className={visible === 1 ? "block" : "hidden"}>
-          <select
-            data-testid="test_property_category"
+        <div data-testid="vis1" className={visible === 1 ? "block" : "hidden"}>
+          <select data-testid="input"
             className={`shadow-sm ${color?.greybackground} capitalize border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
             onChange={(e) =>
              onChangeAction(e)
