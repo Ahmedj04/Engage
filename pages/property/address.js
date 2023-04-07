@@ -395,8 +395,7 @@ function Address() {
                   color={color}
                   req={true}
                   options={countries}
-                 
-                />
+                  />
                 
                 {/* <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
@@ -434,7 +433,34 @@ function Address() {
                         {error?.address_country}</p></div>
                   </div>
                 </div> */}
-                <div className="w-full lg:w-6/12 px-4">
+                {/* province */}
+                <DropDown
+                  label={language?.province}
+                  visible={visible}
+                  defaultValue={countryInitial === allHotelDetails?.address_country ? 
+                   <> {allHotelDetails?.address_province}</>: <>{`Select province`}</>}
+                  onChangeAction={(e) =>
+                    { 
+                    setAllHotelDetails(
+                      { ...allHotelDetails,
+                        address_province: JSON.parse(e.target.value).name,
+                        address_province_code: JSON.parse(e.target.value).isoCode,
+                        address_city: "",
+                        address_zipcode: "" },
+                      setFlag(1)
+                    )}
+                  }
+                  error={error?.propertycategory}
+                  color={color}
+                  req={true}
+                  options={states?.map(i => 
+                    (
+                      {"value":`${JSON.stringify(i)}`,"label":`${i?.name}`}
+                      )
+                  
+                  )}
+                  /> 
+                {/* <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <label
                       className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -475,11 +501,39 @@ function Address() {
                       <p className="text-sm text-sm text-red-700 font-light">
                         {error?.address_province}</p></div>
                   </div>
-                </div>
+                </div> */}
 
+          {/*CITY*/}
 
+          <DropDown
+                  label={language?.city}
+                  visible={visible}
+                  defaultValue= {(countryInitial === allHotelDetails?.address_country) && (provinceInitial === allHotelDetails?.address_province) ? <>
+                    {`${address?.address_city}`}
+                  </> : <>
+                    {`${language?.select}`}
+                  </>}
+                  onChangeAction={(e) =>
+                    { 
+                    setAllHotelDetails(
+                      {   ...allHotelDetails,
+                        address_city: e.target.value,
+                        address_zipcode: "" },
+                      setFlag(1)
+                    )}
+                  }
+                  error={error?.propertycategory}
+                  color={color}
+                  req={true}
+                  options={cities?.map(i => 
+                    (
+                      {"value":`${JSON.stringify(i)}`,"label":`${i?.name}`}
+                      )
+                  
+                  )}
+                  /> 
 
-                <div className="w-full lg:w-6/12 px-4">
+                {/* <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <label data-testid="city"
                       className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -517,12 +571,27 @@ function Address() {
                         {error?.address_city}</p>
                     </div>
                   </div>
-                </div>
+                </div> */}
+                          {/* POSTAL CODE */}
+                          <InputText
+                  label={language?.postalcode}
+                  visible={visible}
+                  defaultValue={allHotelDetails.address_zipcode != '' ? allHotelDetails.address_zipcode : ''}
+                  onChangeAction={(e) => {
+                    setAllHotelDetails({
+                      ...allHotelDetails,
+                      address_zipcode: e.target.value,
+                    });
+                    setFlag(1);
+                  }
+                  }
+                  error={error?.address_zipcode}
+                  color={color}
+                  req={true}
+                />
 
 
-
-
-                <div className="w-full lg:w-6/12 px-4">
+                {/* <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <label
                       className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -551,8 +620,27 @@ function Address() {
                       <p className="text-sm text-sm text-red-700 font-light">
                         {error?.address_zipcode}</p></div>
                   </div>
-                </div>
-                <div className="w-full lg:w-6/12 px-4">
+                </div> */}
+
+                {/* Latitude */}
+
+                <InputText
+                  label={language?.latitude}
+                  visible={visible}
+                  defaultValue={address?.address_latitude}
+                  onChangeAction={(e) => {
+                    setAllHotelDetails({
+                      ...allHotelDetails,
+                      address_latitude: parseFloat(e.target.value),
+                    });
+                    setFlag(1);
+                  }
+                  }
+                  error={error?.address_latitude}
+                  color={color}
+                  req={true}
+                />
+                {/* <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <label
                       className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -578,8 +666,27 @@ function Address() {
                       <p className="text-sm text-sm text-red-700 font-light">
                         {error?.address_latitude}</p></div>
                   </div>
-                </div>
-                <div className="w-full lg:w-6/12 px-4">
+                </div> */}
+
+                {/* Longitude */}
+
+                <InputText
+                  label={language?.longitude}
+                  visible={visible}
+                  defaultValue={address?.address_longitude}
+                  onChangeAction={(e) => {
+                    setAllHotelDetails({
+                      ...allHotelDetails,
+                            address_longitude: parseFloat(e.target.value),
+                    });
+                    setFlag(1);
+                  }
+                  }
+                  error={error?.address_longitude}
+                  color={color}
+                  req={true}
+                />
+                {/* <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <label
                       className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -606,8 +713,24 @@ function Address() {
                       <p className="text-sm text-sm text-red-700 font-light">
                         {error?.address_longitude}</p></div>
                   </div>
-                </div>
-
+                </div> */}
+               {/* PRECISION */}
+               <InputText
+                  label={`${language?.precision}(${language?.inmeters})`}
+                  visible={visible}
+                  defaultValue={address?.address_precision}
+                  onChangeAction={(e) => {
+                    setAllHotelDetails({
+                      ...allHotelDetails,
+                            address_precision: parseInt(e.target.value)
+                    });
+                    setFlag(1);
+                  }
+                  }
+                  error={error?.address_precision}
+                  color={color}
+                  req={true}
+                />
                 <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <label
