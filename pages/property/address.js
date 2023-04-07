@@ -731,7 +731,7 @@ function Address() {
                   color={color}
                   req={true}
                 />
-                <div className="w-full lg:w-6/12 px-4">
+                {/* <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <label
                       className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -758,7 +758,7 @@ function Address() {
                       <p className="text-sm text-sm text-red-700 font-light">
                         {error?.address_precision}</p></div>
                   </div>
-                </div>
+                </div> */}
 
                 <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
