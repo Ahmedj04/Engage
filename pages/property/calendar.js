@@ -151,14 +151,6 @@ function CalendarView() {
 
   return (
     <div>
-      {/* <Calendar
-      localizer={localizer}
-      events={myEventsList}
-      startAccessor="start"
-      endAccessor="end"
-      style={{ height: 500 }}
-    /> */}
-
       <Calendar
         localizer={localizer}
         events={events}

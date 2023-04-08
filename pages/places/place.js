@@ -69,9 +69,10 @@ const Place = () => {
     const [allCheckAttractions, setAllCheckAttractions] = useState(0)
     const [placeAttractions, setPlaceAttractions] = useState([])
     const [editedPlace, setEditedPlace] = useState({})
-    const [editedCat,setEditedCat] = useState({})
-    const [selectedCategory,setSelectedCategory] = useState({})
+    const [editedCat, setEditedCat] = useState({})
+    const [selectedCategory, setSelectedCategory] = useState({})
     const [property_name, setProperty_name] = useState('')
+    const [delInf, setDelInf] = useState(0)
 
 
     // to execute as soon as page loads
@@ -84,8 +85,8 @@ const Place = () => {
         currentProperty = resp?.currentProperty
         setProperty_name(resp?.currentProperty?.property_name);
         colorToggle = resp?.colorToggle
-    
-      }, [])
+
+    }, [])
 
     //authorization
     useEffect(() => {
@@ -95,49 +96,69 @@ const Place = () => {
         else {
             fetchPlace();
             fetchSeason();
-
+            fetchAdditionalInfo();
         }
-
     }, []);
 
-  
-    //new info
+
+    //edit info
     function saveInfoChanges(e) {
         e.preventDefault();
+        console.log("edited info " + JSON.stringify(editInfo))
         let infoTemp = extraInfo.filter(info => info?.info_id != editInfo?.info_id)
-        setExtraInfo([...infoTemp, editInfo])
-        setEditRow({ edit: 0, id: undefined })
+        let newInfo = [...infoTemp, editInfo]
+        if (!objChecker.isEqual(extraInfo, newInfo)) {
+            let temp=editInfo
+            delete temp.isChecked
+            let data = {
+                "data": temp
+            }
+            let url = `/api2/places/addInfo`;
+            axios.put(url, data, {
+                headers: {
+                    "x-hasura-admin-secret": process.env.NEXT_PUBLIC_PASS
+                }
+            }).then(() => {
+                setExtraInfo([...infoTemp, editInfo])
+                setEditRow({ edit: 0, id: undefined })
+                alert("API: Additional Info Updated Sucessfully");
+            }).catch(() => { alert("Some Error Happened In Additional Info"); })
+
+        }
+        else {
+            alert("No Changes In Additional Info");
+            setEditRow({ edit: 0, id: undefined })
+        }
 
     }
     //edit season
     function editSeasonDetails() {
-        if(!objChecker.isEqual(orginalSeason, editSeason))
-        {
+        if (!objChecker.isEqual(orginalSeason, editSeason)) {
             const tempData = editSeason
-        delete tempData.place
-        let data = {
-            "data": tempData
-        }
-
-        let url = `/api2/season`;
-        axios.put(url, data, {
-            headers: {
-                "x-hasura-admin-secret": process.env.NEXT_PUBLIC_PASS
+            delete tempData.place
+            let data = {
+                "data": tempData
             }
-        }).then(() => {
-            let otherSeasons = seasons.filter(i => i.season_id != editSeason.season_id)
-            setSeasons([...otherSeasons, editSeason]);
-            setEditSeason({});
-            setEditRow({ edit: 0, id: undefined });
-            alert("API: Season Updated Sucessfully");
-        }).catch(() => { alert("Some Error Happened"); })
+
+            let url = `/api2/season`;
+            axios.put(url, data, {
+                headers: {
+                    "x-hasura-admin-secret": process.env.NEXT_PUBLIC_PASS
+                }
+            }).then(() => {
+                let otherSeasons = seasons.filter(i => i.season_id != editSeason.season_id)
+                setSeasons([...otherSeasons, editSeason]);
+                setEditSeason({});
+                setEditRow({ edit: 0, id: undefined });
+                alert("API: Season Updated Sucessfully");
+            }).catch(() => { alert("Some Error Happened"); })
         }
-        else{
+        else {
             setEditSeason({});
             setEditRow({ edit: 0, id: undefined });
             alert("NO Change In Data");
         }
-        
+
     }
     //add season
     function addSeasonDetails() {
@@ -180,9 +201,29 @@ const Place = () => {
     }
     //add info
     function infoAdd() {
-        setExtraInfo([...extraInfo, newInfo])
-        document.getElementById("newInfo").reset();
-        setShowNewInfo(0);
+       
+        let places_id = localStorage.getItem('places_id');
+        let data = {
+            "data":  {
+                "type": "PLACE",
+                "key": `${newInfo?.key}`,
+                "external_link": `${places_id}`,
+                "value": `${newInfo?.value}`
+            }
+        }
+        let url = `/api2/places/addInfo`;
+        axios.post(url, data, {
+            headers: {
+                "x-hasura-admin-secret": process.env.NEXT_PUBLIC_PASS
+            }
+        }).then((response) => {
+            response?.data?.insert_additional_info_one
+            setExtraInfo([...extraInfo,response?.data?.insert_additional_info_one])
+            document.getElementById("newInfo").reset();
+            setShowNewInfo(0);
+            alert("API: Additional Info Added Sucessfully");
+        }).catch(() => { alert("Some Error Happened In Additional Info"); })
+
     }
     //    function to fetch season data
     const fetchSeason = async () => {
@@ -238,6 +279,27 @@ const Place = () => {
             setVisible(1);
         }).catch((err) => {
             alert("error");
+            alert(JSON.stringify(err))
+        })
+
+        console.log("Place Data fetched");
+    }
+    //    function to fetch Additional info data
+    const fetchAdditionalInfo = async () => {
+        let places_id = localStorage.getItem('places_id');
+        let url = `/api2/places/${places_id}/addInfo`;
+        axios.get(url, {
+            headers: {
+                "x-hasura-admin-secret": process.env.NEXT_PUBLIC_PASS
+            }
+        }).then((response) => {
+            console.log(response?.data?.additional_info);
+            let tempInfo = []
+            response?.data?.additional_info.map((add_inf, id) => { tempInfo.push({ ...add_inf, 'isChecked': false }) })
+            setExtraInfo(tempInfo)
+
+        }).catch((err) => {
+            alert("error in fetching additional info");
             alert(JSON.stringify(err))
         })
 
@@ -367,7 +429,7 @@ const Place = () => {
         catData.map((item => {
             let temp = {
                 "cat_name": item.cat_name,
-                "type":"PLACE"
+                "type": "PLACE"
             }
             cat.push(temp)
 
@@ -392,8 +454,17 @@ const Place = () => {
 
     //delete info
     function deleteInfo(e, infoRow) {
-        let remainingInfo = extraInfo.filter(inf => inf.info_id != infoRow.info_id);
-        setExtraInfo(remainingInfo);
+        let url= `/api2/places/addInfo/${infoRow?.info_id}`;
+        axios.delete(url, {
+            headers: {
+                "x-hasura-admin-secret": process.env.NEXT_PUBLIC_PASS
+            }
+        }).then(() => {
+            let remainingInfo = extraInfo.filter(inf => inf.info_id != infoRow.info_id);
+            setExtraInfo(remainingInfo);
+            alert("API: Additional Info Deleted Sucessfully");
+        }).catch(() => { alert("Some Error Happened"); })
+        
     }
     //delete attractions
     function deleteAttractions() {
@@ -417,7 +488,7 @@ const Place = () => {
         setPlaceAttractions(tempCon);
         check = tempCon
     }
- //catgory
+    //catgory
     const category = [{ cat_name: 'Adventure' },
     { cat_name: 'Theatre, Music and Culture' },
     { cat_name: 'Lottery Booth' },
@@ -427,44 +498,44 @@ const Place = () => {
     { cat_name: 'skiing' },
     { cat_name: 'camping' },
     { cat_name: 'honey-moon' }]
-    
+
     //update places 
     function updatePlaces() {
-        let change=false;
+        let change = false;
         delete editedPlace.languages_spoken;
         delete editedPlace.categories;
         let data = {
             "data": editedPlace
         }
         //if place language has changes then only n/w call
-        if(!objChecker.isEqual(editedLanguages, languages))
-        {updateLanguages();
-        change=true;}
+        if (!objChecker.isEqual(editedLanguages, languages)) {
+            updateLanguages();
+            change = true;
+        }
         //if place cat has changes then only n/w call
-        if(!objChecker.isEqual(editedCat,selectedCategory))
-        {updateCat();
-        change=true;}
-        const tempPlace=place;
+        if (!objChecker.isEqual(editedCat, selectedCategory)) {
+            updateCat();
+            change = true;
+        }
+        const tempPlace = place;
         delete tempPlace.languages_spoken;
         delete tempPlace.categories;
         //if place has changes then only n/w call
-        if(!objChecker.isEqual(editedPlace,tempPlace))
-        {
-        change=true;
-        let url = `/api2/place`;
-        axios.put(url, data, {
-            headers: {
-                "x-hasura-admin-secret": process.env.NEXT_PUBLIC_PASS
-            }
-        }).then(
-            (response) => {
-               alert("API: Place Updated Sucessfully") ;
-            }
-        ).catch(
-            () => { alert("Some Error Happened In Places"); })
+        if (!objChecker.isEqual(editedPlace, tempPlace)) {
+            change = true;
+            let url = `/api2/place`;
+            axios.put(url, data, {
+                headers: {
+                    "x-hasura-admin-secret": process.env.NEXT_PUBLIC_PASS
+                }
+            }).then(
+                (response) => {
+                    alert("API: Place Updated Sucessfully");
+                }
+            ).catch(
+                () => { alert("Some Error Happened In Places"); })
         }
-        if(change==false)
-        {
+        if (change == false) {
             alert("No Change In Data");
         }
     }
@@ -474,7 +545,8 @@ const Place = () => {
         let data = {
             "data": {
                 ...editedPlace, "languages_spoken": {
-                    "data": editedLanguages}
+                    "data": editedLanguages
+                }
             }
         }
         console.log(JSON.stringify(data))
@@ -500,7 +572,7 @@ const Place = () => {
                 }
             }
         }
-        console.log('cat'+JSON.stringify(data))
+        console.log('cat' + JSON.stringify(data))
         let url = `/api2/place`;
         axios.post(url, data, {
             headers: {
@@ -973,24 +1045,24 @@ const Place = () => {
 
                                                                 </td>
                                                                 <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
-                                                                    <input type="text" className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
+                                                                    <input type="number" className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
                                                                         defaultValue={editSeason?.max_temp}
-                                                                        onChange={(e) => setEditSeason({ ...editSeason, max_temp: e.target.value })} />
+                                                                        onChange={(e) => setEditSeason({ ...editSeason, max_temp: Number(e.target.value) })} />
 
                                                                 </td>
                                                                 <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
-                                                                    <input type="text"
+                                                                    <input type="number"
                                                                         className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
                                                                         defaultValue={editSeason?.min_temp}
-                                                                        onChange={(e) => setEditSeason({ ...editSeason, min_temp: e.target.value })} />
+                                                                        onChange={(e) => setEditSeason({ ...editSeason, min_temp: Number(e.target.value) })} />
 
                                                                 </td>
                                                                 <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
-                                                                    <select onChange={(e) => setEditSeason({ ...editSeason, unit: e.target.value })}
+                                                                    <select onChange={(e) => { setTimeout(500); setEditSeason({ ...editSeason, unit: e.target.value }) }}
                                                                         className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
                                                                     >
-                                                                        <option value={editSeason?.unit}>{editSeason?.unit}</option>
-                                                                        <option value={'Farenhiet'}>Farenhiet</option>
+                                                                        <option value={season?.unit}>{season?.unit}</option>
+                                                                        {season?.unit == '°C' ? <option value={'°F'}>°F</option> : <option value={'°C'}>°C</option>}
 
                                                                     </select>
                                                                 </td>
@@ -1270,7 +1342,7 @@ const Place = () => {
                                                                         {row?.value}
                                                                     </td>
 
-                                                                    <td>
+                                                                    {delInf==0?<td>
                                                                         <button className="bg-gradient-to-r mt-1 mr-2 bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
                                                                             onClick={() => {
                                                                                 setEditInfo(row);
@@ -1281,12 +1353,29 @@ const Place = () => {
                                                                             Edit</button>
                                                                         <button className="bg-gradient-to-r my-1 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
                                                                             onClick={(e) => {
-                                                                                deleteInfo(e, row);
+                                                                                setDelInf(1);
                                                                             }}
                                                                         >
 
                                                                             Delete</button>
-                                                                    </td>
+                                                                    </td>:
+                                                                    <td>
+                                                                    <button
+                                                                    className="lg:mr-2 bg-gradient-to-r my-1 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                                                        onClick={() => {
+                                                                            deleteInfo(e, row);
+                                                                        }}
+                                                                    >Yes,Delete</button>
+                                                                    <button className={`bg-gradient-to-r my-1 bg-gray-400 hover:${color?.greybackground}0 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}
+                                                                        onClick={(e) => {
+                                                                            setDelInf(0)
+                                                                        }}
+                                                                    >
+
+                                                                        Cancel</button>
+                                                                </td>}
+                                                                    
+                                                                    
                                                                 </tr>}
                                                         </>
 
