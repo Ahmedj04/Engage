@@ -422,6 +422,7 @@ export default function BasicDetails() {
           <div className="pt-6">
             <div className=" md:px-4 mx-auto w-full">
               <div className="flex flex-wrap">
+
                 {/* property name */}
                 <InputText
                   label={language?.propertyname}
@@ -463,6 +464,7 @@ export default function BasicDetails() {
                     { value: "motel", label: "Motel" },
                   ]}
                 />
+
                 {/* property brand */}
                 <InputText
                   label={language?.propertybrand}
