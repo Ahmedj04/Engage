@@ -25,6 +25,9 @@ import Imageloader from '../../../components/loaders/imageloader';
 import Lineloader from '../../../components/loaders/lineloader';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import InputText from '../../../components/utils/InputText';
+import InputTextBox from '../../../components/utils/InputTextBox';
+import DropDown from '../../../components/utils/DropDown';
 var language;
 var currentProperty;
 var currentroom;
@@ -1254,7 +1257,22 @@ const allDelete = async () => {
                 <div className=" md:px-2 mx-auto w-full">
                   <div className="flex flex-wrap">
                        {/* room name */}
-                    <div className="w-full lg:w-6/12 px-4">
+                       <InputText
+                  label={`${language?.room} ${language?.name}`}
+                  visible={visible}
+                  defaultValue={allRoomDetails?.room_name}
+                  onChangeAction={(e) => {
+                    setAllRoomDetails({
+                      ...allRoomDetails, room_name: e.target.value,
+                    });
+                    setFlag(1);
+                  }
+                  }
+                  error={error?.room_name}
+                  color={color}
+                  req={true}
+                />
+                    {/* <div className="w-full lg:w-6/12 px-4">
                      <div className="relative w-full mb-3">
                         <label
                           className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -1278,9 +1296,31 @@ const allDelete = async () => {
                           <p className="text-sm text-sm text-red-700 font-light">
                             {error?.room_name}</p></div>
                       </div>
-                    </div>
+                    </div> */}
                     {/* room type */}
-                    <div className="w-full lg:w-6/12 px-4">
+                    <DropDown
+                  label={`${language?.room} ${language?.type}`}
+                  visible={visible}
+                  defaultValue={roomDetails?.room_type}
+                  onChangeAction={(e) =>
+                    setAllRoomDetails(
+                      { ...allRoomDetails, room_type_id: e.target.value },
+                      setFlag(1)
+                    )
+                  }
+                  error={error?.propertycategory}
+                  color={color}
+                  req={true}
+                  options={[
+                    { value: "king", label: "King" },
+                    { value: "queen", label: "Queen" }, 
+                    { value: "single", label: "Single" },
+                    { value: "double", label: "Double" },
+                    { value: "semi_double", label: "Semi Double" },
+                    { value: "studio_room", label: "Studio Room" },
+                  ]}
+                />
+                    {/* <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password">
@@ -1307,9 +1347,22 @@ const allDelete = async () => {
                            }
                         </div>
                       </div>
-                    </div>
+                    </div> */}
                     {/* room description */}
-                    <div className="w-full lg:w-6/12 px-4">
+                    <InputText
+                  label={`${language?.room} ${language?.description}`}
+                  visible={visible}
+                  defaultValue={allRoomDetails?.room_description}
+                  onChange={
+                    (e) => (
+                      setAllRoomDetails({ ...allRoomDetails, room_description: e.target.value }, setFlag(1))
+                    )
+                  }
+                  error={error?.room_description}
+                  color={color}
+                  req={true}
+                />
+                    {/* <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
                           className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -1332,9 +1385,22 @@ const allDelete = async () => {
                           <p className="text-sm text-sm text-red-700 font-light">
                             {error?.room_description}</p></div>
                       </div>
-                    </div>
+                    </div> */}
                       {/* room capacity */}
-                    <div className="w-full lg:w-6/12 px-4">
+                      <InputText
+                  label={`${language?.room} ${language?.capacity}`}
+                  visible={visible}
+                  defaultValue={allRoomDetails?.room_capacity}
+                  onChangeAction={
+                    (e) => (
+                      setAllRoomDetails({ ...allRoomDetails, room_capacity: e.target.value }, setFlag(1))
+                    )
+                  }
+                  error={error?.room_capacity}
+                  color={color}
+                  req={true}
+                />
+                    {/* <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
                           className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -1358,9 +1424,22 @@ const allDelete = async () => {
                           <p className="text-sm text-sm text-red-700 font-light">
                             {error?.room_capacity}</p></div>
                       </div>
-                    </div>
+                    </div> */}
                     {/* max number of occupants */}
-                    <div className="w-full lg:w-6/12 px-4">
+                    <InputText
+                  label={`${language?.maximum} ${language?.number} ${language?.of} ${language?.occupants}`}
+                  visible={visible}
+                  defaultValue={allRoomDetails?.maximum_number_of_occupants}
+                  onChange={
+                    (e) => (
+                      setAllRoomDetails({ ...allRoomDetails, maximum_number_of_occupants: e.target.value }, setFlag(1))
+                    )
+                  }
+                  error= {error?.maximum_number_of_occupants}
+                  color={color}
+                  req={true}
+                />
+                    {/* <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
                           className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -1383,9 +1462,22 @@ const allDelete = async () => {
                           <p className="text-sm text-sm text-red-700 font-light">
                             {error?.maximum_number_of_occupants}</p></div>
                       </div>
-                    </div>
+                    </div> */}
                     {/* minimum number of occupants */}
-                    <div className="w-full lg:w-6/12 px-4">
+                    <InputText
+                  label={`${language?.minimum} ${language?.number} ${language?.of} ${language?.occupants}`}
+                  visible={visible}
+                  defaultValue={allRoomDetails?.maximum_number_of_occupants}
+                  onChange={
+                    (e) => (
+                      setAllRoomDetails({ ...allRoomDetails, maximum_number_of_occupants: e.target.value }, setFlag(1))
+                    )
+                  }
+                  error= {error?.maximum_number_of_occupants}
+                  color={color}
+                  req={true}
+                />
+                    {/* <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
                           className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -1409,9 +1501,22 @@ const allDelete = async () => {
                           <p className="text-sm text-sm text-red-700 font-light">
                             {error?.minimum_number_of_occupants}</p></div>
                       </div>
-                    </div>
-                    {/* age of occupants */}
-                    <div className="w-full lg:w-6/12 px-4">
+                    </div> */}
+                    {/* Maximum age of occupants */}
+                    <InputText
+                  label={`${language?.maximum} ${language?.age} ${language?.of} ${language?.occupants}`}
+                  visible={visible}
+                  defaultValue={allRoomDetails?.minimum_age_of_occupants}
+                  onChangeAction={
+                    (e) => (
+                      setAllRoomDetails({ ...allRoomDetails, minimum_age_of_occupants: e.target.value }, setFlag(1))
+                    )
+                  }
+                  error= {error?.maximum_number_of_occupants}
+                  color={color}
+                  req={true}
+                />
+                    {/* <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
                           className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -1435,7 +1540,7 @@ const allDelete = async () => {
                           <p className="text-sm text-sm text-red-700 font-light">
                             {error?.minimum_age_of_occupants}</p></div>
                       </div>
-                    </div>
+                    </div> */}
                     {/* views room */}
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
@@ -1462,7 +1567,21 @@ const allDelete = async () => {
                         </div>
                       </div>
                     </div>
-                    <div className="w-full lg:w-6/12 px-4">
+{/* Room height */}
+<InputText
+                  label={`${language?.room} ${language?.length} (${language?.infeet})`}
+                  visible={visible}
+                  defaultValue={allRoomDetails?.room_length}
+                  onChangeAction={
+                    (e) => (
+                      setAllRoomDetails({ ...allRoomDetails, room_length: e.target.value }, setFlag(1))
+                    )
+                  }
+                  error= {error?.room_length}
+                  color={color}
+                  req={true}
+                />
+                    {/* <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
                           className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -1484,9 +1603,23 @@ const allDelete = async () => {
                           />
                           <p className="text-sm text-sm text-red-700 font-light">
                             {error?.room_length}</p></div></div>
-                    </div>
+                    </div> */}
+ {/* Room Breadth */}
 
-                    <div className="w-full lg:w-6/12 px-4">
+ <InputText
+                  label={`${language?.room} ${language?.breadth} (${language?.infeet})`}
+                  visible={visible}
+                  defaultValue={allRoomDetails?.room_width}
+                  onChangeAction={
+                    (e) => (
+                      setAllRoomDetails({ ...allRoomDetails, room_width: e.target.value }, setFlag(1))
+                    )
+                  }
+                  error= {error?.room_width}
+                  color={color}
+                  req={true}
+                />
+                    {/* <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
                           className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -1510,8 +1643,22 @@ const allDelete = async () => {
                           <p className="text-sm text-sm text-red-700 font-light">
                             {error?.room_width}</p></div>
                       </div>
-                    </div>
-                    <div className="w-full lg:w-6/12 px-4">
+                    </div> */}
+                    {/* Room Height */}
+                    <InputText
+                  label={`${language?.room} ${language?.height} (${language?.infeet})`}
+                  visible={visible}
+                  defaultValue={allRoomDetails?.room_height}
+                  onChangeAction={
+                    (e) => (
+                      setAllRoomDetails({ ...allRoomDetails, room_height: e.target.value }, setFlag(1))
+                    )
+                  }
+                  error={error?.room_height}
+                  color={color}
+                  req={true}
+                />
+                    {/* <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
                           className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -1534,7 +1681,8 @@ const allDelete = async () => {
                           <p className="text-sm text-sm text-red-700 font-light">
                             {error?.room_height}</p></div>
                       </div>
-                    </div>
+                    </div> */}
+                    {/* Room Area Read only */}
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
@@ -1553,6 +1701,7 @@ const allDelete = async () => {
                           /></div>
                       </div>
                     </div>
+                     {/* Room Volume Read only */}
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
@@ -1569,7 +1718,26 @@ const allDelete = async () => {
                             defaultValue={allRoomDetails?.room_volume} readOnly="readonly" />
                         </div></div>
                     </div>
-                    <div className="w-full lg:w-6/12 px-4">
+                     {/* Room Style*/}
+                     <DropDown
+                  label={language?.roomstyle}
+                  visible={visible}
+                  defaultValue={allRoomDetails?.room_style?.replaceAll("_", " ")}
+                  onChangeAction={
+                    (e) => (
+                      setAllRoomDetails({ ...allRoomDetails, room_style: e.target.value }, setFlag(1))
+                    )
+                  }
+                  error={error?.room_style}
+                  color={color}
+                  req={true}
+                  options={[
+                    { value: "western", label: "Western" },
+                    { value: "japanese", label: "Japanese" }, 
+                    { value: "japanese_western", label: "Japanese Western" },
+                  ]}
+                />
+                    {/* <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password">
@@ -1594,8 +1762,27 @@ const allDelete = async () => {
                             {error?.room_style}</p>
                         </div>
                       </div>
-                    </div>
-                    <div className="w-full lg:w-6/12 px-4">
+                    </div> */}
+                    {/* Is Room Shared */}
+                    <DropDown
+                  label={language?.isroomshared}
+                  visible={visible}
+                  defaultValue={allRoomDetails?.is_room_sharing === "shared" ? "Yes" : "No"}
+                  onChangeAction={
+                    (e) => (
+                      setAllRoomDetails({ ...allRoomDetails, is_room_sharing: e.target.value }, setFlag(1))
+                    )
+                  }
+                  error={error?.is_room_sharing}
+                  color={color}
+                  req={true}
+                  options={[
+                    { value: "yes", label: "Yes" },
+                    { value: "no", label: "No" }, 
+                    
+                  ]}
+                />
+                    {/* <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password">
@@ -1619,8 +1806,27 @@ const allDelete = async () => {
                             {error?.is_room_sharing}</p>
                         </div>
                       </div>
-                    </div>
-                    <div className="w-full lg:w-6/12 px-4">
+                    </div> */}
+                    {/* Is Room Outdoor Or Indoor */}
+                  <DropDown
+                  label={language?.isroom}
+                  visible={visible}
+                  defaultValue={allRoomDetails?.is_room}
+                  onChangeAction={
+                    (e) => (
+                      setAllRoomDetails({ ...allRoomDetails, is_room: e.target.value }, setFlag(1))
+                    )
+                  }
+                  error={error?.is_room_sharing}
+                  color={color}
+                  req={true}
+                  options={[
+                    { value: "indoor", label: "Indoor" },
+                    { value: "outdoor", label: "Outdoor" }, 
+                    
+                  ]}
+                />
+                    {/* <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password">
@@ -1644,7 +1850,7 @@ const allDelete = async () => {
                             {error?.is_room}</p>
                         </div>
                       </div>
-                    </div>
+                    </div> */}
                     <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
                       <div className={(spinner === 0 && (flag !== 1 && roomView != 1)) ? 'block' : 'hidden'}>
                         <Button Primary={language?.UpdateDisabled} />
