@@ -118,6 +118,11 @@ function CalendarView() {
   const localizer = momentLocalizer(moment)
   const events = [
     {
+      start: new Date(`2023/04/08 13:00:00 +5:30`),
+      end: new Date(`2023/04/08 16:30:00 +5:30`),
+      title: 'Standar Room - Rs 1000 per night',
+      allDay: true
+    },{
       start: new Date(`2023/04/06 13:00:00 +5:30`),
       end: new Date(`2023/04/06 16:30:00 +5:30`),
       title: 'Arrival and road trip to gulmarg',
@@ -150,7 +155,59 @@ function CalendarView() {
   ]
 
   return (
-    <div>
+    <div className='flex'>
+      <div className='w-1/6 h-screen bg-gray-200 border border-2 border-blue-500'>
+        
+        <div className='h-1/6 border border-black mt-16'>
+          <ul>
+            <li>Standard Room</li>
+            <li>King Room</li>
+            <li>Queen Room</li>
+            <li>Suite</li>
+          </ul>
+        </div>
+        <div className='h-1/6 border border-black'>
+          <ul>
+            <li>Standard Room</li>
+            <li>King Room</li>
+            <li>Queen Room</li>
+            <li>Suite</li>
+          </ul>
+        </div>
+        <div className='h-1/6 border border-black'>
+          <ul>
+            <li>Standard Room</li>
+            <li>King Room</li>
+            <li>Queen Room</li>
+            <li>Suite</li>
+          </ul>
+        </div>
+        <div className='h-1/6 border border-black'>
+          <ul>
+            <li>Standard Room</li>
+            <li>King Room</li>
+            <li>Queen Room</li>
+            <li>Suite</li>
+          </ul>
+        </div>
+        <div className='h-1/6 border border-black'>
+          <ul>
+            <li>Standard Room</li>
+            <li>King Room</li>
+            <li>Queen Room</li>
+            <li>Suite</li>
+          </ul>
+        </div>
+        <div className='h-1/6 border border-black'>
+          <ul>
+            <li>Standard Room</li>
+            <li>King Room</li>
+            <li>Queen Room</li>
+            <li>Suite</li>
+          </ul>
+        </div>
+      </div>
+      <div className='w-5/6 h-screen '>
       <Calendar
         localizer={localizer}
         events={events}
@@ -158,6 +215,7 @@ function CalendarView() {
         endAccessor="end"
         style={{ height:'100vh' }}
       />
+      </div>
     </div>
   )
 }

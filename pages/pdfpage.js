@@ -31,16 +31,10 @@ async function Pdfmaker({ size, elapsed, percentage, download,
     import('html2canvas').then(html2canvas => {
         html2canvas.default(document.getElementById('themePage'))
             .then(canvas => {
-
-                console.log(1);
-                // document.getElementById('themePage').appendChild(canvas);
-                console.log(2);
                 const doc = new jsPDF();
-                console.log(3);
                 doc.addImage(canvas, 'JPEG', 0, 0, 200, 300);
-                console.log(4);
                 doc.save('sample-file.pdf');
-                console.log(5);
+               
             }).catch(e => { console.log("load failed"); console.log(e) })
     })
 
