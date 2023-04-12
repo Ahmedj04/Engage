@@ -14,7 +14,7 @@ import Sidebar from '../../../components/Sidebar';
 import Header from '../../../components/Header';
 import Headloader from '../../../components/loaders/headloader';
 import Link from "next/link";
-import validateInventory from '../../../components/Validation/inventory';
+import validateInventory from '../../../components/Validation/validateInventory';
 import { InitialActions, ColorToggler } from '../../../components/initalActions';
 import Title from '../../../components/title';
 var language;
@@ -100,10 +100,7 @@ function Inventory() {
     }
 
   }, []);
-  // useEffect(() => {
-  //     setColor(DarkModeLogic(darkModeSwitcher))
-  // }, [darkModeSwitcher])
-
+ 
 // Inventory
  const submitInventory = () => {
     const current = new Date();
@@ -194,7 +191,7 @@ const validationInventory = () => {
       }
   return (
     <>
-     <Title name={`Engage |  Inventory`} />
+     <Title name={`Engage | Add Inventory`} />
             <Header color={color} setColor={setColor} Primary={english?.Side} Type={currentLogged?.user_type} Sec={ColorToggler} mode={mode} setMode={setMode} />
             <Sidebar color={color} Primary={english?.Side} Type={currentLogged?.user_type} />
 

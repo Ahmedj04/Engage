@@ -17,7 +17,7 @@ import Header from '../../../components/Header';
 import Headloader from '../../../components/loaders/headloader';
 import objChecker from "lodash";
 import Link from "next/link";
-import validateInventory from '../../../components/Validation/inventory';
+import validateInventory from '../../../components/Validation/validateInventory';
 import Title from '../../../components/title';
 import { InitialActions, ColorToggler } from '../../../components/initalActions';
 var language;
