@@ -2,7 +2,7 @@ import React from 'react'
 
 function DayCard({day,rooms_price}) {
   return (
-    <div className='h-full w-auto bg-gray-200 boder border-black border-2'>
+    <div className='h-full  w-auto bg-gray-200 boder border-black border-2'>
     Day:{`${day}`}<br/>
     <table>
         <thead>
