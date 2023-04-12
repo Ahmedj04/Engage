@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import DayCard from '../../components/customCalendar/DayCard'
 import getDatesBetween from '../../components/customCalendar/DatesBetweenDays'
-import { light as color } from "../../components/colors/Color";
+import { light  } from "../../components/colors/Color";
 function Index() {
     const [month, setMonth] = useState([])
     const [initialMonth, setInitialMonth] = useState(1);
@@ -69,7 +69,7 @@ function Index() {
         <div className={large.l === 1 ? "block" : "hidden"}>
             <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
                 <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
-                    <div className={`${color?.whitebackground} rounded-lg shadow relative`}>
+                    <div className={`${light?.whitebackground} rounded-lg shadow relative`}>
                         <div className="flex items-start justify-between p-5 border-b rounded-t">
                        
                             <div className='h-96 w-96'>
