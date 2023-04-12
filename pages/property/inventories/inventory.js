@@ -14,7 +14,7 @@ import Sidebar from '../../../components/Sidebar';
 import Header from '../../../components/Header';
 import Headloader from '../../../components/loaders/headloader';
 import Link from "next/link";
-import validateInventory from '../../../components/Validation/validateInventory';
+import validateInventory from '../../../components/validation/validateInventory';
 import { InitialActions, ColorToggler } from '../../../components/initalActions';
 import Title from '../../../components/title';
 var language;

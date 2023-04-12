@@ -19,7 +19,7 @@ import objChecker from "lodash";
 import Link from "next/link";
 import Title from '../../../components/title';
 import { InitialActions, ColorToggler } from '../../../components/initalActions';
-import validateInventory from '../../../components/Validation/validateInventory';
+import validateInventory from '../../../components/validation/validateInventory';
 var language;
 var currentProperty;
 var currentRoom;
