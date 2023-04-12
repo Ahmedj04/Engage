@@ -17,9 +17,9 @@ import Header from '../../../components/Header';
 import Headloader from '../../../components/loaders/headloader';
 import objChecker from "lodash";
 import Link from "next/link";
-import validateInventory from '../../../components/Validation/validateInventory';
 import Title from '../../../components/title';
 import { InitialActions, ColorToggler } from '../../../components/initalActions';
+import validateInventory from '../../../components/Validation/validateInventory';
 var language;
 var currentProperty;
 var currentRoom;
@@ -73,8 +73,7 @@ function Inventory() {
     const url = `/api/ari/inventory/${currentProperty?.property_id}/${currentRoom}`;
     axios.get(url)
       .then((response) => {
-        alert(JSON.stringify(response.data[0]))
-        setRoom(response.data[0]);
+       setRoom(response.data[0]);
         setInventory(response.data[0]);
         createDays(response.data[0].days_of_week);
         setVisible(1);
