@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import objChecker from "lodash";
 import Table from '../../../components/Table';
-import LoaderTable from '../loaderTable'
+import LoaderTable from '../../../components/loadertable'
 import DarkModeLogic from "../../../components/darkmodelogic";
 import Lineloader from '../../../components/loaders/lineloader';
 import Sidebar from "../../../components/Sidebar";
