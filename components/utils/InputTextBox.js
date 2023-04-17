@@ -1,11 +1,15 @@
 import React from 'react'
-function InputTextBox({label,visible,defaultValue,onChangeAction,error,color,req,toolTip}) 
+import info from '../../public/info.svg'
+import Image from 'next/image' 
+import Tooltip from "./Tooltip";
+function InputTextBox({label,visible,defaultValue,onChangeAction,error,color,req,title}) 
 
 {
   return (
     
-                <div data-testid ="main" title={toolTip} className="w-full lg:w-6/12 px-4">
+                <div data-testid ="main" className="w-full lg:w-6/12 px-4">
                   <div  data-testid ="child0" className="relative w-full mb-3">
+                  <div className="flex">
                     <label
                       className={`text-sm font-medium ${color?.text} block mb-2`}
                       htmlFor="grid-password"
@@ -13,6 +17,12 @@ function InputTextBox({label,visible,defaultValue,onChangeAction,error,color,req
                       {label}
                       {req===true?<span style={{ color: "#ff0000" }}>*</span>:<></>}
                     </label>
+                    <div className="ml-2 mt-1 ">
+        <Tooltip message={title?title:label}color={color}>
+          <Image src={info} alt="info" height={10} width={10}/>
+        </Tooltip>
+        </div>
+        </div>
                     <div data-testid ="vis0" className={visible === 0 ? "block w-auto" : "hidden"}>
                       
                     </div>
