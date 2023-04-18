@@ -231,11 +231,11 @@ function Index() {
                                <DayCard day={`${enlarged?.day?.toUpperCase()},${enlarged?.date} ${enlarged?.month}`} rooms_price={rooms_price} color={color} edit={1}/>
                                </div>
                                 
-                                <div className='flex justify-end'>
+                                {/* <div className='flex justify-end'>
                                 <button
                                     className='bg-cyan-600 hover:bg-cyan-800 h-8 w-24 text-white border border-none rounded-md '
                                     onClick={() => { alert("no functionality added") }}>Book Now</button>
-                                </div>
+                                </div> */}
                                 
                             </div>
 
