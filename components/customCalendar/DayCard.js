@@ -4,31 +4,34 @@ import DropDown from '../utils/DropDown';
 
 function DayCard({day,rooms_price,color,edit}) {
   return (
-    <div className={`p-0.5 h-full w-auto  ${color?.greybackground} ${color?.text} border border-grey-300 rounded-sm`}>
+    <div className={`p-0.5 h-full lg:w-auto w-full  ${color?.whitebackground} ${color?.text} border border-grey-200  hover:drop-shadow-2xl`}>
     <span className='font-bold'>{`${day}`}</span><br/>
-    <table className='w-11/12'>
-        <thead className='w-11/12'>
-            <tr>
-                <th className='font-medium'>Room</th>
-                <th className='font-medium'>Price</th>
-                <th className='font-medium'>Action</th>
+    <table>
+        <thead className=' border-grey-200 border-y-2 border-x-0' >
+            <tr className=''>
+                <th className='font-semibold'>Room</th>
+                <th className='font-semibold'>Price</th>
+              {edit===1?<th className='font-semibold'>Action</th>:<></>}  
             </tr>
         </thead>
-        <tbody className='w-11/12'>
+        <tbody >
          {edit===1?
          <>{rooms_price.map((room_price,i)=>
-          <tr className='border border-black' key={i}>
-          <td className='w-1/2'>
-            <DropDown visible={1} defaultValue={room_price?.room_name} color={color} onChangeAction={(e)=>alert(e.target.name)} options={[]}/>
+          <tr  key={i}>
+          <td>
+            <DropDown visible={1} defaultValue={room_price?.room_name} color={color} onChangeAction={(e)=>alert(e.target.name)} options={[]} tableForm={true}/>
           </td>
-          <td className='w-1/2'>
-            <InputText visible={1} defaultValue={room_price?.price} onChangeAction={(e)=>console.log(e.target.value)} color={color} />
+          <td>
+          <InputText visible={1} defaultValue={room_price?.price} onChangeAction={(e)=>console.log(e.target.value)} color={color} tableForm={true}/>  
           </td>
           <td><button
-          className='bg-cyan-600 hover:bg-cyan-800 h-8 w-16 text-white border border-none rounded-md '>Save</button></td>
+          className='mx-2 mt-2 bg-cyan-600 hover:bg-cyan-800 h-8 w-16 text-white border border-none rounded-md '>Save</button>
+          <button
+          className='mx-2 mt-2 bg-red-600 hover:bg-red-800 h-8 w-16 text-white border border-none rounded-md '>Delete</button>
+          </td>
       </tr>)}</>:<>{rooms_price.map((room_price,i)=>
-        <tr key={i}>
-        <td>{room_price?.room_name}</td>
+        <tr key={i} >
+        <td  className='border-grey-200 border-y-0 border-x-0 border-r-2'>{room_price?.room_name}</td>
         <td>{room_price?.price}</td>
     </tr>)}</>}   
         </tbody>

@@ -168,11 +168,11 @@ function Index() {
                     </ol>
                 </nav>
 
-                <h3 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6 mb-2 font-bold`}>
-                    {months[initialMonth - 1]}
+                <h3 className={`${color?.text} text-3xl flex justify-center leading-none pl-6 lg:pt-2 pt-6 mb-2 font-bold`}>
+                    {months[initialMonth - 1]}-{initialYear}
                 </h3>
                 <div className={`${color?.whitebackground} shadow rounded-lg p-2 `}>
-                    <div className={`h-auto grid grid-cols-2 lg:grid-cols-7 md:grid-cols-4 gap-2 m-2 p-2`}>
+                    <div className={`h-auto w-full grid grid-cols-2 lg:grid-cols-7 md:grid-cols-4 p-2`}>
                         {month.map((i, index) =>
                             <div key={index} onClick={() => { setLarge({ ...large, index: index, l: 1 }); setEnlarged(i) }}>
                                 <DayCard day={`${i?.day?.toUpperCase()},${i?.date} ${i?.month}`} rooms_price={rooms_price} color={color} />
@@ -182,10 +182,10 @@ function Index() {
                     <div className='flex justify-end gap-2'>
                         <button
                             className='bg-cyan-600 hover:bg-cyan-800 h-8 w-24 text-white border border-none rounded-md'
-                            onClick={() => { setInitialMonth(initialMonth <= 1 ? 12 : initialMonth - 1); }}>Prev Month</button>
+                            onClick={() => { setInitialYear(initialMonth <= 1?initialYear-1:initialYear);setInitialMonth(initialMonth <= 1 ? 12 : initialMonth - 1); }}>Prev Month</button>
                         <button
                             className='bg-cyan-600 hover:bg-cyan-800 h-8 w-24 text-white border border-none rounded-md'
-                            onClick={() => { setInitialMonth(initialMonth >= 12 ? 1 : initialMonth + 1); }}>Next Month</button>
+                            onClick={() => {setInitialYear(initialMonth >= 12?initialYear+1:initialYear); setInitialMonth(initialMonth >= 12 ? 1 : initialMonth + 1); }}>Next Month</button>
 
                     </div>
                 </div>
@@ -200,7 +200,11 @@ function Index() {
                         <div className="flex items-start justify-between p-5 border-b rounded-t">
 
                             <div className='flex flex-col flex-wrap h-max w-max p-4 m-2'>
-                               <span className='items-center flex justify-end'>
+                            <div className='flex'>
+                                <h3 className={`${color?.text} text-xl lg:pt-2 pt-6 mb-2 font-bold`}>
+                                    Edit Rate
+                                </h3>
+                               <span className='ml-auto items-center flex justify-end'>
                                <button
                                     type="button"
                                     onClick={() => {
@@ -222,8 +226,11 @@ function Index() {
                                     </svg>
                                 </button>
                                </span>
-                               
-                                <DayCard day={`${enlarged?.day?.toUpperCase()},${enlarged?.date} ${enlarged?.month}`} rooms_price={rooms_price} color={color} edit={1}/>
+                               </div>
+                               <div className='-mx-10 lg:mx-0 md:mx-0'>
+                               <DayCard day={`${enlarged?.day?.toUpperCase()},${enlarged?.date} ${enlarged?.month}`} rooms_price={rooms_price} color={color} edit={1}/>
+                               </div>
+                                
                                 <div className='flex justify-end'>
                                 <button
                                     className='bg-cyan-600 hover:bg-cyan-800 h-8 w-24 text-white border border-none rounded-md '
