@@ -5,16 +5,19 @@ import DropDown from '../utils/DropDown';
 function DayCard({day,rooms_price,color,edit}) {
   return (
     <div className={`p-0.5 h-full lg:w-auto w-full  ${color?.whitebackground} ${color?.text} border border-grey-200  hover:drop-shadow-2xl`}>
+    {/* day label */}
     <span className='font-bold'>{`${day}`}</span><br/>
     <table>
-        <thead className=' border-grey-200 border-y-2 border-x-0' >
-            <tr className=''>
+      {/* head of table */}
+        <thead className='border-grey-200 border-y-2 border-x-0'>
+            <tr>
                 <th className='font-semibold'>Room</th>
                 <th className='font-semibold'>Price</th>
               {edit===1?<th className='font-semibold'>Action</th>:<></>}  
             </tr>
         </thead>
         <tbody >
+          {/* edit===1 means enlarged body */}
          {edit===1?
          <>{rooms_price.map((room_price,i)=>
           <tr  key={i}>
