@@ -167,10 +167,20 @@ function Index() {
                         </li>
                     </ol>
                 </nav>
+                <div className='flex justify-between items-center'>
+                    <h3 className={`${color?.text} text-3xl flex justify-center leading-none pl-6 lg:pt-2 pt-6 mb-2 font-bold`}>
+                        {months[initialMonth - 1]}-{initialYear}
+                    </h3>
+                    <div className='flex justify-end gap-2'>
+                        <button
+                            className='bg-cyan-600 hover:bg-cyan-800 h-8 w-24 text-white border border-none rounded-md'
+                            onClick={() => { setInitialYear(initialMonth <= 1 ? initialYear - 1 : initialYear); setInitialMonth(initialMonth <= 1 ? 12 : initialMonth - 1); }}>Prev Month</button>
+                        <button
+                            className='bg-cyan-600 hover:bg-cyan-800 h-8 w-24 text-white border border-none rounded-md'
+                            onClick={() => { setInitialYear(initialMonth >= 12 ? initialYear + 1 : initialYear); setInitialMonth(initialMonth >= 12 ? 1 : initialMonth + 1); }}>Next Month</button>
 
-                <h3 className={`${color?.text} text-3xl flex justify-center leading-none pl-6 lg:pt-2 pt-6 mb-2 font-bold`}>
-                    {months[initialMonth - 1]}-{initialYear}
-                </h3>
+                    </div>
+                </div>
                 <div className={`${color?.whitebackground} shadow rounded-lg p-2 `}>
                     <div className={`h-auto w-full grid grid-cols-2 lg:grid-cols-7 md:grid-cols-4 p-2`}>
                         {month.map((i, index) =>
@@ -179,15 +189,7 @@ function Index() {
                             </div>
                         )}
                     </div>
-                    <div className='flex justify-end gap-2'>
-                        <button
-                            className='bg-cyan-600 hover:bg-cyan-800 h-8 w-24 text-white border border-none rounded-md'
-                            onClick={() => { setInitialYear(initialMonth <= 1?initialYear-1:initialYear);setInitialMonth(initialMonth <= 1 ? 12 : initialMonth - 1); }}>Prev Month</button>
-                        <button
-                            className='bg-cyan-600 hover:bg-cyan-800 h-8 w-24 text-white border border-none rounded-md'
-                            onClick={() => {setInitialYear(initialMonth >= 12?initialYear+1:initialYear); setInitialMonth(initialMonth >= 12 ? 1 : initialMonth + 1); }}>Next Month</button>
 
-                    </div>
                 </div>
             </div>
         </div>
@@ -200,43 +202,43 @@ function Index() {
                         <div className="flex items-start justify-between p-5 border-b rounded-t">
 
                             <div className='flex flex-col flex-wrap h-max w-max p-4 m-2'>
-                            <div className='flex'>
-                                <h3 className={`${color?.text} text-xl lg:pt-2 pt-6 mb-2 font-bold`}>
-                                    Edit Rate
-                                </h3>
-                               <span className='ml-auto items-center flex justify-end'>
-                               <button
-                                    type="button"
-                                    onClick={() => {
-                                        setLarge({ ...large, l: 0 });
-                                    }}
-                                    className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5  inline-flex "
-                                >
-                                    <svg
-                                        className="w-5 h-5"
-                                        fill="currentColor"
-                                        viewBox="0 0 20 20"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                        <path
-                                            fillRule="evenodd"
-                                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                            clipRule="evenodd"
-                                        ></path>
-                                    </svg>
-                                </button>
-                               </span>
-                               </div>
-                               <div className='-mx-10 lg:mx-0 md:mx-0'>
-                               <DayCard day={`${enlarged?.day?.toUpperCase()},${enlarged?.date} ${enlarged?.month}`} rooms_price={rooms_price} color={color} edit={1}/>
-                               </div>
-                                
+                                <div className='flex'>
+                                    <h3 className={`${color?.text} text-xl lg:pt-2 pt-6 mb-2 font-bold`}>
+                                        Edit Rate
+                                    </h3>
+                                    <span className='ml-auto items-center flex justify-end'>
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setLarge({ ...large, l: 0 });
+                                            }}
+                                            className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5  inline-flex "
+                                        >
+                                            <svg
+                                                className="w-5 h-5"
+                                                fill="currentColor"
+                                                viewBox="0 0 20 20"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <path
+                                                    fillRule="evenodd"
+                                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                                    clipRule="evenodd"
+                                                ></path>
+                                            </svg>
+                                        </button>
+                                    </span>
+                                </div>
+                                <div className='-mx-10 lg:mx-0 md:mx-0'>
+                                    <DayCard day={`${enlarged?.day?.toUpperCase()},${enlarged?.date} ${enlarged?.month}`} rooms_price={rooms_price} color={color} edit={1} />
+                                </div>
+
                                 {/* <div className='flex justify-end'>
                                 <button
                                     className='bg-cyan-600 hover:bg-cyan-800 h-8 w-24 text-white border border-none rounded-md '
                                     onClick={() => { alert("no functionality added") }}>Book Now</button>
                                 </div> */}
-                                
+
                             </div>
 
                         </div>
