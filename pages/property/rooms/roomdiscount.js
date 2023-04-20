@@ -118,7 +118,7 @@ function RoomPricing() {
 
                 <div className='flex items-center justify-between'>
                     <h3 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6 pb-2  font-bold`}>
-                        {language?.room} Pricing
+                        {language?.room} Discount
                     </h3>
                     
                         <Button
