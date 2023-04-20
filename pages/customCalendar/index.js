@@ -28,7 +28,7 @@ function Index() {
     const [allRooms, setAllRooms] = useState([])
   function FetchAllRooms() {
     let url = `api/room-types`;
-    axios.get(url).then((response) => { setAllRooms(response?.data); alert("daycard"+JSON.stringify(response?.data)) }).catch((error) => { alert(error.name) })
+    axios.get(url).then((response) => { setAllRooms(response?.data); }).catch((error) => { alert(error.name) })
 }
 useEffect(()=>{
   FetchAllRooms();

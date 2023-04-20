@@ -14,12 +14,12 @@ import lang from '../../../components/GlobalData'
 import axios from "axios";
 import Link from "next/link";
 import Button from '../../../components/Button';
-import english from "../../../components/Languages/en"
 import Footer from "../../../components/Footer";
 import Sidebar from '../../../components/Sidebar'
 import Header from '../../../components/Header'
-import french from "../../../components/Languages/fr"
-import arabic from "../../../components/Languages/ar";
+import { InitialActions, ColorToggler } from '../../../components/initalActions';
+import Title from '../../../components/title';
+import { english, french, arabic } from "../../../components/Languages/Languages"
 import Headloader from '../../../components/loaders/headloader';
 import Imageloader from '../../../components/loaders/imageloader';
 import Lineloader from '../../../components/loaders/lineloader';
@@ -82,6 +82,7 @@ function Room() {
   const [updateImage, setUpdateImage] = useState({});
 
   const [actionEnlargeImage, setActionEnlargeImage] = useState({})
+  const [property_name,setProperty_name]=useState("")
 
   
   /* Function Multiple Delete*/
@@ -152,9 +153,6 @@ function Room() {
         });
     };
   
-
-
-    
   // function to search image
   const [searchedImages, setSearchedImages] = useState([{}]);
   const [showSearchedImages, setShowSearchedImages] = useState(0);
@@ -174,38 +172,27 @@ function Room() {
 
   /** Use Effect to fetch details from the Local Storage **/
   useEffect(() => {
-    firstfun();
+    const resp = InitialActions({ setColor, setMode })
+    language = resp?.language;
+    currentLogged = resp?.currentLogged;
+    currentProperty = resp?.currentProperty;
+    currentroom = localStorage.getItem('RoomId');
+    setProperty_name(resp?.currentProperty?.property_name);
+    colorToggle = resp?.colorToggle
+  
   }, [])
 
-  const firstfun = () => {
-    if (typeof window !== 'undefined') {
-      var locale = localStorage.getItem("Language");
-      const colorToggle = localStorage.getItem("colorToggle");
-      if (colorToggle === "" || colorToggle === undefined || colorToggle === null || colorToggle === "system") {
-          window.matchMedia("(prefers-color-scheme:dark)").matches === true ? setColor(colorFile?.dark) : setColor(colorFile?.light)
-          setMode(window.matchMedia("(prefers-color-scheme:dark)").matches === true ? true : false);
-        }
-      else if (colorToggle === "true" || colorToggle === "false") {
-          setColor(colorToggle === "true" ? colorFile?.dark : colorFile?.light);
-          setMode(colorToggle === "true" ? true : false)
-      }
-     { if (locale === "ar") {
-        language = arabic;
-      }
-      if (locale === "en") {
-        language = english;
-      }
-      if (locale === "fr") {
-        language = french;
-      }}
-      /** Current Property Basic Details fetched from the local storage **/
-      currentroom = localStorage.getItem('RoomId');
-      /** Current Property Details fetched from the local storage **/
-      currentProperty = JSON.parse(localStorage.getItem("property"));
-      currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
+  /* Function to load Room Details when page loads */
+  useEffect(() => {
+    if (JSON.stringify(currentLogged) === 'null') {
+      Router.push(window.location.origin)
     }
-  }
-
+    else {
+      fetchRoomtypes();
+      fetchImages();
+      fetchDetails();
+    }
+  }, [])
   // Fetch Room Details
   const fetchDetails = async () => {
     const url = `/api/${currentProperty.address_province.replace(/\s+/g, '-')}/${currentProperty.address_city}/${currentProperty.property_category}s/${currentProperty.property_id}/${currentroom}`
@@ -277,23 +264,7 @@ function Room() {
       })
       .catch((error) => { logger.error("url to fetch roomtypes, failed") });
   }
-  const colorToggler = (newColor) => {
-    if (newColor === 'system') {
-      window.matchMedia("(prefers-color-scheme:dark)").matches === true ? setColor(colorFile?.dark)
-      : setColor(colorFile?.light)
-      localStorage.setItem("colorToggle", newColor)
-    }
-    else if (newColor === 'light') {
-      setColor(colorFile?.light)
-      localStorage.setItem("colorToggle", false)
-    }
-    else if (newColor === 'dark') {
-      setColor(colorFile?.dark)
-      localStorage.setItem("colorToggle", true)
-    }
-   firstfun();
-   Router.push('./editroom')
-  }
+
 
   // Room Images
   const fetchImages = async () => {
@@ -324,19 +295,7 @@ function Room() {
       .catch((error) => { logger.error("url to fetch roomtypes, failed") });
   }
 
-  /* Function to load Room Details when page loads */
-  useEffect(() => {
-    if (JSON.stringify(currentLogged) === 'null') {
-      Router.push(window.location.origin)
-    }
-    else {
-      fetchRoomtypes();
-      fetchImages();
-      fetchDetails();
-
-    }
-  }, [])
-
+  
   const onChangePhoto = (e, i) => {
     setImage({ ...image, imageFile: e.target.files[0] })
   }
@@ -502,6 +461,8 @@ function Room() {
                  
       }
     }
+
+    //useEffect to catch key press
     useEffect(() => {
       document.onkeydown = checkKey;
       function checkKey(e) {
@@ -1166,7 +1127,8 @@ const allDelete = async () => {
 
   return (
     <>
-      <Header Primary={english?.Side1} color={color}Sec={colorToggler} mode={mode} setMode={setMode} Type={currentLogged?.user_type} />
+     <Title name={`Engage | Edit Room`} />
+     <Header color={color} setColor={setColor} Primary={english?.Side1} Type={currentLogged?.user_type} Sec={ColorToggler} mode={mode} setMode={setMode} />
       <Sidebar Primary={english?.Side1} Type={currentLogged?.user_type} color={color}  />
 
       <div id="main-content"
@@ -1190,7 +1152,7 @@ const allDelete = async () => {
                   <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
                   <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
                   <div className={visible === 1 ? 'block' : 'hidden'}>   <Link href="../propertysummary" className={`text-gray-700 text-sm ml-1 md:ml-2  font-medium hover:${color?.text} `}>
-                    <a>{currentProperty?.property_name}</a>
+                    <a>{property_name}</a>
                   </Link>
                   </div></div>
 
