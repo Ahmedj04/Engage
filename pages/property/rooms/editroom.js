@@ -71,20 +71,20 @@ function Room() {
   const [services, setServices] = useState([])
   const [add, setAdd] = useState(0)
   const [gen, setGen] = useState([])
-  
+
   const [selectedImage, setSelectedImage] = useState(false);
   const [indexImage, setIndexImage] = useState();
-  
+
   const [enlargeImage, setEnlargeImage] = useState(0)
   const [enlargedImage, setEnlargedImage] = useState();
 
-  const[mode,setMode] = useState()
+  const [mode, setMode] = useState()
   const [updateImage, setUpdateImage] = useState({});
 
   const [actionEnlargeImage, setActionEnlargeImage] = useState({})
-  const [property_name,setProperty_name]=useState("")
+  const [property_name, setProperty_name] = useState("")
 
-  
+
   /* Function Multiple Delete*/
   function deleteMultiple() {
     const data = check?.map((item) => {
@@ -126,33 +126,33 @@ function Room() {
       });
   }
 
-    // Edit Validation Gallery
-    const validationGalleryEdit = () => {
-      setError({});
-      var result = validateEditGallery(actionImage);
-      console.log("Result" + JSON.stringify(result));
-      if (result === true) {
-        updateImageDetails();
-      } else {
-        setError(result);
-      }
-    };
-  
-    const handlecheckbox = (e) => {
-      console.log(images.length);
-      const { name, checked } = e.target;
-  
-      let tempCon = images.map((item) =>
-        item.image_id === name ? { ...item, isChecked: checked } : item
-      );
-      setImages(tempCon);
-      check = tempCon
-        .filter((i) => i.isChecked === true)
-        .map((j) => {
-          return j.image_id;
-        });
-    };
-  
+  // Edit Validation Gallery
+  const validationGalleryEdit = () => {
+    setError({});
+    var result = validateEditGallery(actionImage);
+    console.log("Result" + JSON.stringify(result));
+    if (result === true) {
+      updateImageDetails();
+    } else {
+      setError(result);
+    }
+  };
+
+  const handlecheckbox = (e) => {
+    console.log(images.length);
+    const { name, checked } = e.target;
+
+    let tempCon = images.map((item) =>
+      item.image_id === name ? { ...item, isChecked: checked } : item
+    );
+    setImages(tempCon);
+    check = tempCon
+      .filter((i) => i.isChecked === true)
+      .map((j) => {
+        return j.image_id;
+      });
+  };
+
   // function to search image
   const [searchedImages, setSearchedImages] = useState([{}]);
   const [showSearchedImages, setShowSearchedImages] = useState(0);
@@ -179,7 +179,7 @@ function Room() {
     currentroom = localStorage.getItem('RoomId');
     setProperty_name(resp?.currentProperty?.property_name);
     colorToggle = resp?.colorToggle
-  
+
   }, [])
 
   /* Function to load Room Details when page loads */
@@ -208,7 +208,7 @@ function Room() {
         if (response.data.room_facilities !== undefined) {
           setServices(response.data.room_facilities);
         }
-          
+
         setRoomDetails(response.data);
         if (response.data.room_facilities == undefined) {
           fetchServices();
@@ -231,28 +231,27 @@ function Room() {
         logger.info("url  to fetch room hitted successfully");
         setVisible(1)
       })
-      .catch((error) => { logger.error("url to fetch room, failed");  });
+      .catch((error) => { logger.error("url to fetch room, failed"); });
   }
 
-  const filterCurrency = (props) => 
-  {
-    if(props != undefined)
-  {
-    currency = lang?.CurrencyData.filter(el => {
-      return props.baserate_currency.toUpperCase() === el.currency_code;
-    });
-    const rate={
-      "currency":currency?.[i]?.currency_name,
-      "baserate_amount": props.baserate_amount,
-      "tax_amount":props.tax_amount,
-      "otherfees_amount":props.otherfees_amount,
-      "room_id":props.room_id,
-      "un_rate_id":props.un_rate_id
+  const filterCurrency = (props) => {
+    if (props != undefined) {
+      currency = lang?.CurrencyData.filter(el => {
+        return props.baserate_currency.toUpperCase() === el.currency_code;
+      });
+      const rate = {
+        "currency": currency?.[i]?.currency_name,
+        "baserate_amount": props.baserate_amount,
+        "tax_amount": props.tax_amount,
+        "otherfees_amount": props.otherfees_amount,
+        "room_id": props.room_id,
+        "un_rate_id": props.un_rate_id
       }
-    //setAllRoomRates({ props., currency: currency?.[i]?.currency_name })
-    setAllRoomRates(rate)
+      //setAllRoomRates({ props., currency: currency?.[i]?.currency_name })
+      setAllRoomRates(rate)
 
-  }}
+    }
+  }
 
   // Room Services
   const fetchServices = async () => {
@@ -272,10 +271,10 @@ function Room() {
     console.log("url " + url)
     axios.get(url)
       .then((response) => {
-        const imgs= response.data.map((img,idx)=>{
-          return({...img,idx})
+        const imgs = response.data.map((img, idx) => {
+          return ({ ...img, idx })
         })
-        
+
         setRoomimages(imgs);
         logger.info("url  to fetch room images hitted successfully")
       })
@@ -295,7 +294,7 @@ function Room() {
       .catch((error) => { logger.error("url to fetch roomtypes, failed") });
   }
 
-  
+
   const onChangePhoto = (e, i) => {
     setImage({ ...image, imageFile: e.target.files[0] })
   }
@@ -425,57 +424,57 @@ function Room() {
       })
   }
 
-    /*function for keyboard keys */
-    function left(key) {
-      if (document.getElementById("enlarge").className == "block") {
-        setActionEnlargeImage(roomimages?.filter((i,idx) => i.idx === indexImage - 1)
+  /*function for keyboard keys */
+  function left(key) {
+    if (document.getElementById("enlarge").className == "block") {
+      setActionEnlargeImage(roomimages?.filter((i, idx) => i.idx === indexImage - 1)
         .map((j) => {
           return {
             image_id: j?.image_id,
             image_title: j?.image_title,
-            idx: indexImage-1,
+            idx: indexImage - 1,
             image_description: j?.image_description,
             image_link: j?.image_link,
           };
         })?.[0]);
-        setIndexImage(indexImage - 1);
-     
-        //functionality
-      }
-    }
-  
-    function right(key) {
-      if (document.getElementById("enlarge").className == "block") {
-                  console.log('right');
-                  setActionEnlargeImage(roomimages?.filter((i,idx) => i.idx === indexImage + 1)
-                  .map((j) => {
-                    return {
-                      image_id: j?.image_id,
-                      image_title: j?.image_title,
-                      idx: indexImage+1,
-                      image_description: j?.image_description,
-                      image_link: j?.image_link,
-                    };
-                  })?.[0]);
-                  setIndexImage(indexImage + 1);
-                 
-      }
-    }
+      setIndexImage(indexImage - 1);
 
-    //useEffect to catch key press
-    useEffect(() => {
-      document.onkeydown = checkKey;
-      function checkKey(e) {
-        e = e || window.event;
-        console.log(e.key);
-       if (e.keyCode == "37") {
+      //functionality
+    }
+  }
+
+  function right(key) {
+    if (document.getElementById("enlarge").className == "block") {
+      console.log('right');
+      setActionEnlargeImage(roomimages?.filter((i, idx) => i.idx === indexImage + 1)
+        .map((j) => {
+          return {
+            image_id: j?.image_id,
+            image_title: j?.image_title,
+            idx: indexImage + 1,
+            image_description: j?.image_description,
+            image_link: j?.image_link,
+          };
+        })?.[0]);
+      setIndexImage(indexImage + 1);
+
+    }
+  }
+
+  //useEffect to catch key press
+  useEffect(() => {
+    document.onkeydown = checkKey;
+    function checkKey(e) {
+      e = e || window.event;
+      console.log(e.key);
+      if (e.keyCode == "37") {
         // left(e.key); // left arrow
-        } else if (e.keyCode == "39") {
-         // right(e.key); // right arrow
-        }
+      } else if (e.keyCode == "39") {
+        // right(e.key); // right arrow
       }
-    }, []);
-  
+    }
+  }, []);
+
 
 
   /* Function to add images*/
@@ -487,7 +486,7 @@ function Room() {
         image_title: actionImage?.image_title,
         image_description: actionImage?.image_description,
         image_category: "room",
-        room_id:currentroom
+        room_id: currentroom
       }]
       const finalImage = { "images": imagedata }
       setSpinner(1);
@@ -506,7 +505,7 @@ function Room() {
           setActionImage([])
           setError({});
           setFlag([])
-         // submitImageLink(response?.data?.image_id);
+          // submitImageLink(response?.data?.image_id);
         })
         .catch(error => {
           setSpinner(0);
@@ -591,80 +590,81 @@ function Room() {
         "un_rate_id": roomDetails?.unconditional_rates?.[0]?.un_rate_id
       }
       setSpinner(1);
-      
+
       //const method=final_data?.un_rate_id? `put`:`post`
-      if(final_data.un_rate_id!= undefined){
+      if (final_data.un_rate_id != undefined) {
         const url = '/api/unconditional_rates'
         axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
-        ((response) => {
-          setSpinner(0)
-          toast.success("Room rates update Success.", {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-          setFlag([])
-          fetchDetails();
-          setError({});
-          setAllRoomRates([]);
-          Router.push("./editroom");
+          ((response) => {
+            setSpinner(0)
+            toast.success("Room rates update Success.", {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+            setFlag([])
+            fetchDetails();
+            setError({});
+            setAllRoomRates([]);
+            Router.push("./editroom");
 
 
-        })
-        .catch((error) => {
-          setSpinner(0);
-          setError({});
-          toast.error("Room rates update error.", {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-        })
+          })
+          .catch((error) => {
+            setSpinner(0);
+            setError({});
+            toast.error("Room rates update error.", {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          })
       }
-      else{const url = '/api/room_unconditional_rates'
+      else {
+        const url = '/api/room_unconditional_rates'
         axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
-        ((response) => {
-          setSpinner(0)
-          toast.success("Room rates update Success.", {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-          setFlag([])
-          fetchDetails();
-          setError({});
-          setAllRoomRates([]);
-          Router.push("./editroom");
+          ((response) => {
+            setSpinner(0)
+            toast.success("Room rates update Success.", {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+            setFlag([])
+            fetchDetails();
+            setError({});
+            setAllRoomRates([]);
+            Router.push("./editroom");
 
 
-        })
-        .catch((error) => {
-          setSpinner(0);
-          setError({});
-          toast.error("Room rates update error.", {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-        })
+          })
+          .catch((error) => {
+            setSpinner(0);
+            setError({});
+            toast.error("Room rates update error.", {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          })
       }
-      
+
     }
   }
 
@@ -810,7 +810,7 @@ function Room() {
       const current = new Date();
       const currentDateTime = current.toISOString();
       const final_data = {
-        "beds": [{  
+        "beds": [{
           "timestamp": currentDateTime,
           "room_id": currentroom,
           "length": modified.bed_length,
@@ -939,12 +939,12 @@ function Room() {
       }
     }
   }
-/* function for multiple delete */
-const allDelete = async () => {
-  // checked = images.filter(i => i.isChecked === true).map(j => { return (j.image_id) })
-  // alert(checked?.length)
-  setdeleteImage(1);
-};
+  /* function for multiple delete */
+  const allDelete = async () => {
+    // checked = images.filter(i => i.isChecked === true).map(j => { return (j.image_id) })
+    // alert(checked?.length)
+    setdeleteImage(1);
+  };
 
 
   function deleteMultiple() {
@@ -1116,7 +1116,7 @@ const allDelete = async () => {
 
   // Validate Rates
   const validationRates = () => {
-   var result = validateRoomRates(allRoomRates)
+    var result = validateRoomRates(allRoomRates)
     if (result === true) {
       submitRoomRatesEdit()
     }
@@ -1127,9 +1127,9 @@ const allDelete = async () => {
 
   return (
     <>
-     <Title name={`Engage | Edit Room`} />
-     <Header color={color} setColor={setColor} Primary={english?.Side1} Type={currentLogged?.user_type} Sec={ColorToggler} mode={mode} setMode={setMode} />
-      <Sidebar Primary={english?.Side1} Type={currentLogged?.user_type} color={color}  />
+      <Title name={`Engage | Edit Room`} />
+      <Header color={color} setColor={setColor} Primary={english?.Side1} Type={currentLogged?.user_type} Sec={ColorToggler} mode={mode} setMode={setMode} />
+      <Sidebar Primary={english?.Side1} Type={currentLogged?.user_type} color={color} />
 
       <div id="main-content"
         className={`${color?.greybackground} px-4 pt-24 relative overflow-y-auto lg:ml-64`}>
@@ -1218,22 +1218,22 @@ const allDelete = async () => {
               <div className="pt-6">
                 <div className=" md:px-2 mx-auto w-full">
                   <div className="flex flex-wrap">
-                       {/* room name */}
-                       <InputText
-                  label={`${language?.room} ${language?.name}`}
-                  visible={visible}
-                  defaultValue={allRoomDetails?.room_name}
-                  onChangeAction={(e) => {
-                    setAllRoomDetails({
-                      ...allRoomDetails, room_name: e.target.value,
-                    });
-                    setFlag(1);
-                  }
-                  }
-                  error={error?.room_name}
-                  color={color}
-                  req={true}
-                />
+                    {/* room name */}
+                    <InputText
+                      label={`${language?.room} ${language?.name}`}
+                      visible={visible}
+                      defaultValue={allRoomDetails?.room_name}
+                      onChangeAction={(e) => {
+                        setAllRoomDetails({
+                          ...allRoomDetails, room_name: e.target.value,
+                        });
+                        setFlag(1);
+                      }
+                      }
+                      error={error?.room_name}
+                      color={color}
+                      req={true}
+                    />
                     {/* <div className="w-full lg:w-6/12 px-4">
                      <div className="relative w-full mb-3">
                         <label
@@ -1261,27 +1261,27 @@ const allDelete = async () => {
                     </div> */}
                     {/* room type */}
                     <DropDown
-                  label={`${language?.room} ${language?.type}`}
-                  visible={visible}
-                  defaultValue={roomDetails?.room_type}
-                  onChangeAction={(e) =>
-                    setAllRoomDetails(
-                      { ...allRoomDetails, room_type_id: e.target.value },
-                      setFlag(1)
-                    )
-                  }
-                  error={error?.propertycategory}
-                  color={color}
-                  req={true}
-                  options={[
-                    { value: "king", label: "King" },
-                    { value: "queen", label: "Queen" }, 
-                    { value: "single", label: "Single" },
-                    { value: "double", label: "Double" },
-                    { value: "semi_double", label: "Semi Double" },
-                    { value: "studio_room", label: "Studio Room" },
-                  ]}
-                />
+                      label={`${language?.room} ${language?.type}`}
+                      visible={visible}
+                      defaultValue={roomDetails?.room_type}
+                      onChangeAction={(e) =>
+                        setAllRoomDetails(
+                          { ...allRoomDetails, room_type_id: e.target.value },
+                          setFlag(1)
+                        )
+                      }
+                      error={error?.propertycategory}
+                      color={color}
+                      req={true}
+                      options={[
+                        { value: "king", label: "King" },
+                        { value: "queen", label: "Queen" },
+                        { value: "single", label: "Single" },
+                        { value: "double", label: "Double" },
+                        { value: "semi_double", label: "Semi Double" },
+                        { value: "studio_room", label: "Studio Room" },
+                      ]}
+                    />
                     {/* <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -1312,18 +1312,18 @@ const allDelete = async () => {
                     </div> */}
                     {/* room description */}
                     <InputText
-                  label={`${language?.room} ${language?.description}`}
-                  visible={visible}
-                  defaultValue={allRoomDetails?.room_description}
-                  onChange={
-                    (e) => (
-                      setAllRoomDetails({ ...allRoomDetails, room_description: e.target.value }, setFlag(1))
-                    )
-                  }
-                  error={error?.room_description}
-                  color={color}
-                  req={true}
-                />
+                      label={`${language?.room} ${language?.description}`}
+                      visible={visible}
+                      defaultValue={allRoomDetails?.room_description}
+                      onChange={
+                        (e) => (
+                          setAllRoomDetails({ ...allRoomDetails, room_description: e.target.value }, setFlag(1))
+                        )
+                      }
+                      error={error?.room_description}
+                      color={color}
+                      req={true}
+                    />
                     {/* <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
@@ -1348,20 +1348,20 @@ const allDelete = async () => {
                             {error?.room_description}</p></div>
                       </div>
                     </div> */}
-                      {/* room capacity */}
-                      <InputText
-                  label={`${language?.room} ${language?.capacity}`}
-                  visible={visible}
-                  defaultValue={allRoomDetails?.room_capacity}
-                  onChangeAction={
-                    (e) => (
-                      setAllRoomDetails({ ...allRoomDetails, room_capacity: e.target.value }, setFlag(1))
-                    )
-                  }
-                  error={error?.room_capacity}
-                  color={color}
-                  req={true}
-                />
+                    {/* room capacity */}
+                    <InputText
+                      label={`${language?.room} ${language?.capacity}`}
+                      visible={visible}
+                      defaultValue={allRoomDetails?.room_capacity}
+                      onChangeAction={
+                        (e) => (
+                          setAllRoomDetails({ ...allRoomDetails, room_capacity: e.target.value }, setFlag(1))
+                        )
+                      }
+                      error={error?.room_capacity}
+                      color={color}
+                      req={true}
+                    />
                     {/* <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
@@ -1389,18 +1389,18 @@ const allDelete = async () => {
                     </div> */}
                     {/* max number of occupants */}
                     <InputText
-                  label={`${language?.maximum} ${language?.number} ${language?.of} ${language?.occupants}`}
-                  visible={visible}
-                  defaultValue={allRoomDetails?.maximum_number_of_occupants}
-                  onChange={
-                    (e) => (
-                      setAllRoomDetails({ ...allRoomDetails, maximum_number_of_occupants: e.target.value }, setFlag(1))
-                    )
-                  }
-                  error= {error?.maximum_number_of_occupants}
-                  color={color}
-                  req={true}
-                />
+                      label={`${language?.maximum} ${language?.number} ${language?.of} ${language?.occupants}`}
+                      visible={visible}
+                      defaultValue={allRoomDetails?.maximum_number_of_occupants}
+                      onChange={
+                        (e) => (
+                          setAllRoomDetails({ ...allRoomDetails, maximum_number_of_occupants: e.target.value }, setFlag(1))
+                        )
+                      }
+                      error={error?.maximum_number_of_occupants}
+                      color={color}
+                      req={true}
+                    />
                     {/* <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
@@ -1427,18 +1427,18 @@ const allDelete = async () => {
                     </div> */}
                     {/* minimum number of occupants */}
                     <InputText
-                  label={`${language?.minimum} ${language?.number} ${language?.of} ${language?.occupants}`}
-                  visible={visible}
-                  defaultValue={allRoomDetails?.maximum_number_of_occupants}
-                  onChange={
-                    (e) => (
-                      setAllRoomDetails({ ...allRoomDetails, maximum_number_of_occupants: e.target.value }, setFlag(1))
-                    )
-                  }
-                  error= {error?.maximum_number_of_occupants}
-                  color={color}
-                  req={true}
-                />
+                      label={`${language?.minimum} ${language?.number} ${language?.of} ${language?.occupants}`}
+                      visible={visible}
+                      defaultValue={allRoomDetails?.maximum_number_of_occupants}
+                      onChange={
+                        (e) => (
+                          setAllRoomDetails({ ...allRoomDetails, maximum_number_of_occupants: e.target.value }, setFlag(1))
+                        )
+                      }
+                      error={error?.maximum_number_of_occupants}
+                      color={color}
+                      req={true}
+                    />
                     {/* <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
@@ -1466,18 +1466,18 @@ const allDelete = async () => {
                     </div> */}
                     {/* Maximum age of occupants */}
                     <InputText
-                  label={`${language?.maximum} ${language?.age} ${language?.of} ${language?.occupants}`}
-                  visible={visible}
-                  defaultValue={allRoomDetails?.minimum_age_of_occupants}
-                  onChangeAction={
-                    (e) => (
-                      setAllRoomDetails({ ...allRoomDetails, minimum_age_of_occupants: e.target.value }, setFlag(1))
-                    )
-                  }
-                  error= {error?.maximum_number_of_occupants}
-                  color={color}
-                  req={true}
-                />
+                      label={`${language?.maximum} ${language?.age} ${language?.of} ${language?.occupants}`}
+                      visible={visible}
+                      defaultValue={allRoomDetails?.minimum_age_of_occupants}
+                      onChangeAction={
+                        (e) => (
+                          setAllRoomDetails({ ...allRoomDetails, minimum_age_of_occupants: e.target.value }, setFlag(1))
+                        )
+                      }
+                      error={error?.maximum_number_of_occupants}
+                      color={color}
+                      req={true}
+                    />
                     {/* <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
@@ -1529,20 +1529,20 @@ const allDelete = async () => {
                         </div>
                       </div>
                     </div>
-{/* Room height */}
-<InputText
-                  label={`${language?.room} ${language?.length} (${language?.infeet})`}
-                  visible={visible}
-                  defaultValue={allRoomDetails?.room_length}
-                  onChangeAction={
-                    (e) => (
-                      setAllRoomDetails({ ...allRoomDetails, room_length: e.target.value }, setFlag(1))
-                    )
-                  }
-                  error= {error?.room_length}
-                  color={color}
-                  req={true}
-                />
+                    {/* Room height */}
+                    <InputText
+                      label={`${language?.room} ${language?.length} (${language?.infeet})`}
+                      visible={visible}
+                      defaultValue={allRoomDetails?.room_length}
+                      onChangeAction={
+                        (e) => (
+                          setAllRoomDetails({ ...allRoomDetails, room_length: e.target.value }, setFlag(1))
+                        )
+                      }
+                      error={error?.room_length}
+                      color={color}
+                      req={true}
+                    />
                     {/* <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
@@ -1566,21 +1566,21 @@ const allDelete = async () => {
                           <p className="text-sm text-sm text-red-700 font-light">
                             {error?.room_length}</p></div></div>
                     </div> */}
- {/* Room Breadth */}
+                    {/* Room Breadth */}
 
- <InputText
-                  label={`${language?.room} ${language?.breadth} (${language?.infeet})`}
-                  visible={visible}
-                  defaultValue={allRoomDetails?.room_width}
-                  onChangeAction={
-                    (e) => (
-                      setAllRoomDetails({ ...allRoomDetails, room_width: e.target.value }, setFlag(1))
-                    )
-                  }
-                  error= {error?.room_width}
-                  color={color}
-                  req={true}
-                />
+                    <InputText
+                      label={`${language?.room} ${language?.breadth} (${language?.infeet})`}
+                      visible={visible}
+                      defaultValue={allRoomDetails?.room_width}
+                      onChangeAction={
+                        (e) => (
+                          setAllRoomDetails({ ...allRoomDetails, room_width: e.target.value }, setFlag(1))
+                        )
+                      }
+                      error={error?.room_width}
+                      color={color}
+                      req={true}
+                    />
                     {/* <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
@@ -1608,18 +1608,18 @@ const allDelete = async () => {
                     </div> */}
                     {/* Room Height */}
                     <InputText
-                  label={`${language?.room} ${language?.height} (${language?.infeet})`}
-                  visible={visible}
-                  defaultValue={allRoomDetails?.room_height}
-                  onChangeAction={
-                    (e) => (
-                      setAllRoomDetails({ ...allRoomDetails, room_height: e.target.value }, setFlag(1))
-                    )
-                  }
-                  error={error?.room_height}
-                  color={color}
-                  req={true}
-                />
+                      label={`${language?.room} ${language?.height} (${language?.infeet})`}
+                      visible={visible}
+                      defaultValue={allRoomDetails?.room_height}
+                      onChangeAction={
+                        (e) => (
+                          setAllRoomDetails({ ...allRoomDetails, room_height: e.target.value }, setFlag(1))
+                        )
+                      }
+                      error={error?.room_height}
+                      color={color}
+                      req={true}
+                    />
                     {/* <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
@@ -1663,7 +1663,7 @@ const allDelete = async () => {
                           /></div>
                       </div>
                     </div>
-                     {/* Room Volume Read only */}
+                    {/* Room Volume Read only */}
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
@@ -1680,25 +1680,25 @@ const allDelete = async () => {
                             defaultValue={allRoomDetails?.room_volume} readOnly="readonly" />
                         </div></div>
                     </div>
-                     {/* Room Style*/}
-                     <DropDown
-                  label={language?.roomstyle}
-                  visible={visible}
-                  defaultValue={allRoomDetails?.room_style?.replaceAll("_", " ")}
-                  onChangeAction={
-                    (e) => (
-                      setAllRoomDetails({ ...allRoomDetails, room_style: e.target.value }, setFlag(1))
-                    )
-                  }
-                  error={error?.room_style}
-                  color={color}
-                  req={true}
-                  options={[
-                    { value: "western", label: "Western" },
-                    { value: "japanese", label: "Japanese" }, 
-                    { value: "japanese_western", label: "Japanese Western" },
-                  ]}
-                />
+                    {/* Room Style*/}
+                    <DropDown
+                      label={language?.roomstyle}
+                      visible={visible}
+                      defaultValue={allRoomDetails?.room_style?.replaceAll("_", " ")}
+                      onChangeAction={
+                        (e) => (
+                          setAllRoomDetails({ ...allRoomDetails, room_style: e.target.value }, setFlag(1))
+                        )
+                      }
+                      error={error?.room_style}
+                      color={color}
+                      req={true}
+                      options={[
+                        { value: "western", label: "Western" },
+                        { value: "japanese", label: "Japanese" },
+                        { value: "japanese_western", label: "Japanese Western" },
+                      ]}
+                    />
                     {/* <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -1727,23 +1727,23 @@ const allDelete = async () => {
                     </div> */}
                     {/* Is Room Shared */}
                     <DropDown
-                  label={language?.isroomshared}
-                  visible={visible}
-                  defaultValue={allRoomDetails?.is_room_sharing === "shared" ? "Yes" : "No"}
-                  onChangeAction={
-                    (e) => (
-                      setAllRoomDetails({ ...allRoomDetails, is_room_sharing: e.target.value }, setFlag(1))
-                    )
-                  }
-                  error={error?.is_room_sharing}
-                  color={color}
-                  req={true}
-                  options={[
-                    { value: "yes", label: "Yes" },
-                    { value: "no", label: "No" }, 
-                    
-                  ]}
-                />
+                      label={language?.isroomshared}
+                      visible={visible}
+                      defaultValue={allRoomDetails?.is_room_sharing === "shared" ? "Yes" : "No"}
+                      onChangeAction={
+                        (e) => (
+                          setAllRoomDetails({ ...allRoomDetails, is_room_sharing: e.target.value }, setFlag(1))
+                        )
+                      }
+                      error={error?.is_room_sharing}
+                      color={color}
+                      req={true}
+                      options={[
+                        { value: "yes", label: "Yes" },
+                        { value: "no", label: "No" },
+
+                      ]}
+                    />
                     {/* <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -1770,24 +1770,24 @@ const allDelete = async () => {
                       </div>
                     </div> */}
                     {/* Is Room Outdoor Or Indoor */}
-                  <DropDown
-                  label={language?.isroom}
-                  visible={visible}
-                  defaultValue={allRoomDetails?.is_room}
-                  onChangeAction={
-                    (e) => (
-                      setAllRoomDetails({ ...allRoomDetails, is_room: e.target.value }, setFlag(1))
-                    )
-                  }
-                  error={error?.is_room_sharing}
-                  color={color}
-                  req={true}
-                  options={[
-                    { value: "indoor", label: "Indoor" },
-                    { value: "outdoor", label: "Outdoor" }, 
-                    
-                  ]}
-                />
+                    <DropDown
+                      label={language?.isroom}
+                      visible={visible}
+                      defaultValue={allRoomDetails?.is_room}
+                      onChangeAction={
+                        (e) => (
+                          setAllRoomDetails({ ...allRoomDetails, is_room: e.target.value }, setFlag(1))
+                        )
+                      }
+                      error={error?.is_room_sharing}
+                      color={color}
+                      req={true}
+                      options={[
+                        { value: "indoor", label: "Indoor" },
+                        { value: "outdoor", label: "Outdoor" },
+
+                      ]}
+                    />
                     {/* <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -2049,11 +2049,11 @@ const allDelete = async () => {
 
                               <td className={`${color.text} px-4 py-4 whitespace-nowrap text-base font-normal `}>
                                 <div className="flex">
-                                  <div  className="form-check ml-4 form-check-inline">
+                                  <div className="form-check ml-4 form-check-inline">
 
                                     <label htmlFor={"default-toggle" + idx} className="inline-flex relative items-center cursor-pointer">
 
-                                      <input  type="checkbox" value={item?.service_value} checked={item?.service_value == true}
+                                      <input type="checkbox" value={item?.service_value} checked={item?.service_value == true}
                                         onChange={() => {
                                           setServices(services?.map((i) => {
 
@@ -2104,7 +2104,7 @@ const allDelete = async () => {
           {/* Room Gallery */}
           <div id='2' className={disp === 2 ? 'block' : 'hidden'}>
             <div className={`${color?.whitebackground} shadow-xl rounded-lg sm:p-6 xl:p-8  2xl:col-span-2 my-3`}>
-              
+
               {/* header */}
               <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
                 <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
@@ -2136,120 +2136,120 @@ const allDelete = async () => {
               </h6>
               <div className="sm:flex py-2 ">
                 <div className="hidden sm:flex items-center sm:divide-x sm:divide-gray-100 mb-3 ml-5 sm:mb-0">
-                <form className="lg:pr-3" id="imageSearchBox">
-                  <label htmlFor="users-search" className="sr-only">
-                    {language?.search}
-                  </label>
-                  <div className="mt-1 relative lg:w-64 xl:w-96">
-                    <input
-                      type="text"
-                      name="imageSearch"
-                      onChange={(e) => searchImage(e.target.value)}
-                      className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                      placeholder={language?.searchforimages}
-                    ></input>
-                  </div>
-                </form>
+                  <form className="lg:pr-3" id="imageSearchBox">
+                    <label htmlFor="users-search" className="sr-only">
+                      {language?.search}
+                    </label>
+                    <div className="mt-1 relative lg:w-64 xl:w-96">
+                      <input
+                        type="text"
+                        name="imageSearch"
+                        onChange={(e) => searchImage(e.target.value)}
+                        className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                        placeholder={language?.searchforimages}
+                      ></input>
+                    </div>
+                  </form>
                   {/*  icons to delete , clear , setting */}
-                  
+
                   <div className="flex space-x-1 pl-0 sm:pl-2 mt-3 sm:mt-0">
-                  {showSearchedImages === 1 ? (
+                    {showSearchedImages === 1 ? (
+                      <a
+                        href="#"
+                        onClick={() => {
+                          setShowSearchedImages(0);
+                          clearSearchField();
+                        }}
+                        className={`${color?.textgray}  hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          title="clear search"
+                          width="26"
+                          height="26"
+                          fill="currentColor"
+                          className="bi bi-eraser-fill"
+                          viewBox="0 0 16 16"
+                        >
+                          {" "}
+                          <path d="M8.086 2.207a2 2 0 0 1 2.828 0l3.879 3.879a2 2 0 0 1 0 2.828l-5.5 5.5A2 2 0 0 1 7.879 15H5.12a2 2 0 0 1-1.414-.586l-2.5-2.5a2 2 0 0 1 0-2.828l6.879-6.879zm.66 11.34L3.453 8.254 1.914 9.793a1 1 0 0 0 0 1.414l2.5 2.5a1 1 0 0 0 .707.293H7.88a1 1 0 0 0 .707-.293l.16-.16z" />{" "}
+                        </svg>
+                      </a>
+                    ) : (
+                      <></>
+                    )}
                     <a
                       href="#"
-                      onClick={() => {
-                        setShowSearchedImages(0);
-                        clearSearchField();
-                      }}
                       className={`${color?.textgray}  hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}
                     >
                       <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        title="clear search"
-                        width="26"
-                        height="26"
+                        className="w-6 h-6"
                         fill="currentColor"
-                        className="bi bi-eraser-fill"
-                        viewBox="0 0 16 16"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
                       >
-                        {" "}
-                        <path d="M8.086 2.207a2 2 0 0 1 2.828 0l3.879 3.879a2 2 0 0 1 0 2.828l-5.5 5.5A2 2 0 0 1 7.879 15H5.12a2 2 0 0 1-1.414-.586l-2.5-2.5a2 2 0 0 1 0-2.828l6.879-6.879zm.66 11.34L3.453 8.254 1.914 9.793a1 1 0 0 0 0 1.414l2.5 2.5a1 1 0 0 0 .707.293H7.88a1 1 0 0 0 .707-.293l.16-.16z" />{" "}
+                        <path
+                          fillRule="evenodd"
+                          d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
+                          clipRule="evenodd"
+                        ></path>
                       </svg>
                     </a>
-                  ) : (
-                    <></>
-                  )}
-                  <a
-                    href="#"
-                    className={`${color?.textgray}  hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}
-                  >
-                    <svg
-                      className="w-6 h-6"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
-                        clipRule="evenodd"
-                      ></path>
-                    </svg>
-                  </a>
-                  <a
-                    onClick={allDelete}
-                    className={
-                      check?.length === 0 || undefined
-                        ? `${color?.textgray} cursor-pointer p-1 ${color?.hover} rounded inline-flex
+                    <a
+                      onClick={allDelete}
+                      className={
+                        check?.length === 0 || undefined
+                          ? `${color?.textgray} cursor-pointer p-1 ${color?.hover} rounded inline-flex
                                 justify-center`
-                        : `${color?.textgray} bg-red-600 cursor-pointer p-1 ${color?.hover} rounded inline-flex
+                          : `${color?.textgray} bg-red-600 cursor-pointer p-1 ${color?.hover} rounded inline-flex
                                 justify-center`
-                    }
-                  >
-                    <svg
-                      className="w-6 h-6"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
+                      }
                     >
-                      <path
-                        fillRule="evenodd"
-                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                        clipRule="evenodd"
-                      ></path>
-                    </svg>
-                  </a>
-                  <a
-                    href="#"
-                    className={`${color?.textgray} hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}
-                  >
-                    <svg
-                      className="w-6 h-6"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
+                      <svg
+                        className="w-6 h-6"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                          clipRule="evenodd"
+                        ></path>
+                      </svg>
+                    </a>
+                    <a
+                      href="#"
+                      className={`${color?.textgray} hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}
                     >
-                      <path
-                        fillRule="evenodd"
-                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                        clipRule="evenodd"
-                      ></path>
-                    </svg>
-                  </a>
-                  <a
-                    href="#"
-                    className={`${color?.textgray} hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}
-                  >
-                    <svg
-                      className="w-6 h-6"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
+                      <svg
+                        className="w-6 h-6"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                          clipRule="evenodd"
+                        ></path>
+                      </svg>
+                    </a>
+                    <a
+                      href="#"
+                      className={`${color?.textgray} hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}
                     >
-                      <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path>
-                    </svg>
-                  </a>
+                      <svg
+                        className="w-6 h-6"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path>
+                      </svg>
+                    </a>
+                  </div>
                 </div>
-              </div>
                 <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
 
                   <Button Primary={language?.Add} onClick={() => setAddImage(1)} />
@@ -2264,69 +2264,70 @@ const allDelete = async () => {
                 <div className={visible === 0 ? 'block w-auto h-auto m-6 w-32 flex' : 'hidden'}><Imageloader /> <Imageloader /><Imageloader /></div>
                 <div className={visible === 1 ? 'block flex flex-wrap' : 'hidden'}>
                   <div className="flex-wrap container grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    
-                    
-                    
-                  {roomimages.map((item, idx) => {
+
+
+
+                    {roomimages.map((item, idx) => {
                       return (
-                      
-                  <>
-                      <div
-                        className="block text-blueGray-600  text-xs font-bold "
-                        key={idx}
-                      >
-                        <div
-                          className="relative cursor-pointer"
-                          tooltip
-                          title="Click here to view or edit."
-                        >
-                          <a href="#" className="relative flex">
-                            <input
-                              type="checkbox"
-                              id={item?.image_id}
+
+                        <>
+                          <div
+                            className="block text-blueGray-600  text-xs font-bold "
+                            key={idx}
+                          >
+                            <div
+                              className="relative cursor-pointer"
                               tooltip
-                              title="Click here to delete image."
-                              name={item?.image_id}
-                              checked={item.isChecked || false}
-                              onChange={(e) => {
-                                handlecheckbox(e);
-                              }}
-                              className="bottom-0 right-0 cursor-pointer absolute bg-gray-30 opacity-30 m-1 border-gray-300 text-cyan-600  checked:opacity-100 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded-full"
-                              onClick={() => {
-                                setSelectedImage(!selectedImage);
-                              }}
-                            />
-                            {check?.length === 0 || undefined ? (
-                              <img
-                                htmlFor={item?.image_id}
-                                className={`rounded-lg`}
-                                src={item.image_link}
-                                alt="Room Image"
-                                style={{ height: "170px", width: "450px" }}
-                                onClick={() => {
-                                  setEnlargeImage(1);
-                                  setActionEnlargeImage(item);
-                                  setIndexImage(item?.idx);
-                                }}
-                              />
-                            ) : (
-                              <img
-                                htmlFor={item?.image_id}
-                                className={`rounded-lg`}
-                                src={item.image_link}
-                                alt="Room Image"
-                                style={{ height: "170px", width: "450px" }}
-                              />
-                            )}
-                          </a>
-                        </div>
-                      </div>
-                    </>
-                      )})}
-                    
-                    
-                    
-                    
+                              title="Click here to view or edit."
+                            >
+                              <a href="#" className="relative flex">
+                                <input
+                                  type="checkbox"
+                                  id={item?.image_id}
+                                  tooltip
+                                  title="Click here to delete image."
+                                  name={item?.image_id}
+                                  checked={item.isChecked || false}
+                                  onChange={(e) => {
+                                    handlecheckbox(e);
+                                  }}
+                                  className="bottom-0 right-0 cursor-pointer absolute bg-gray-30 opacity-30 m-1 border-gray-300 text-cyan-600  checked:opacity-100 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded-full"
+                                  onClick={() => {
+                                    setSelectedImage(!selectedImage);
+                                  }}
+                                />
+                                {check?.length === 0 || undefined ? (
+                                  <img
+                                    htmlFor={item?.image_id}
+                                    className={`rounded-lg`}
+                                    src={item.image_link}
+                                    alt="Room Image"
+                                    style={{ height: "170px", width: "450px" }}
+                                    onClick={() => {
+                                      setEnlargeImage(1);
+                                      setActionEnlargeImage(item);
+                                      setIndexImage(item?.idx);
+                                    }}
+                                  />
+                                ) : (
+                                  <img
+                                    htmlFor={item?.image_id}
+                                    className={`rounded-lg`}
+                                    src={item.image_link}
+                                    alt="Room Image"
+                                    style={{ height: "170px", width: "450px" }}
+                                  />
+                                )}
+                              </a>
+                            </div>
+                          </div>
+                        </>
+                      )
+                    })}
+
+
+
+
                     {/* {roomDetails?.room_images?.map((item, index) => {
                       return (
                         <div className="block text-blueGray-600 text-xs pt-2 px-2 " key={index}>
@@ -2394,6 +2395,18 @@ const allDelete = async () => {
               </h6>
               <div className="pt-6">
                 <div className=" md:px-2 mx-auto w-full">
+                  <div className='flex justify-end mx-auto mb-2'>
+                  <button className="mx-2 bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex  
+                             font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                             onClick={()=>{localStorage.setItem("roomId",currentroom); Router.push('./roomdiscount');}}>
+                    Add Discount</button>
+                  <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex  
+                             font-semibold rounded-lg text-sm px-5 py-2 text-center 
+                              items-center ease-linear transition-all duration-150"
+                              onClick={()=>{localStorage.setItem("roomId",currentroom); Router.push('./roomratemodifcation');}}>
+                    Add Rate Modification</button>
+                    </div>
+
                   <div className="flex flex-wrap">
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
@@ -2528,67 +2541,48 @@ const allDelete = async () => {
 
         </div>
 
-        {/* Modal Image Enlarge 
-        <div className={enlargeImage === 1 ? 'block' : 'hidden'}>
-          <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl sm:inset-0 bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
-            <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
-              <div className={`${color?.whitebackground} rounded-lg shadow relative`}>
-                <div className="flex justify-between p-5 border-b rounded-t">
-                  <h3 className={`${color?.text} text-xl font-semibold`}>
-                    {actionEnlargeImage.image_title}
-                  </h3>
-                  <button type="button"
-                    onClick={() => setEnlargeImage(0)}
-                    className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="user-modal">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
-                  </button> </div>
-                <div> <img src={actionEnlargeImage.image_link} alt='pic_room' height={350} width={650} />
-                </div>
-              </div>
-            </div>
-          </div>
-                      </div>*/}
-                      
-    {/* New image enlarge */}
-<div id="enlarge" className={enlargeImage === 1 ? "block" : "hidden"}>
+      
+
+        {/* New image enlarge */}
+        <div id="enlarge" className={enlargeImage === 1 ? "block" : "hidden"}>
           <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl   sm:inset-0 bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
             <div className="flex justify-start ml-2 mr-auto">
-      {/* //Left arrow symbol*/ }
-      
-              <svg  
+              {/* //Left arrow symbol*/}
+
+              <svg
                 className={indexImage <= 0 ? "hidden" : "block cursor-pointer"}
                 xmlns="http://www.w3.org/2000/svg"
                 height="32px"
                 viewBox="0 0 24 24"
                 width="28px"
-                onClick={() => { 
-                  
-                  setActionEnlargeImage(roomimages?.filter((i,idx) => idx === indexImage - 1)
-                  .map((j) => {
-                    return {
-                      image_id: j?.image_id,
-                      image_title: j?.image_title,
-                      idx: indexImage-1,
-                      image_description: j?.image_description,
-                      image_link: j?.image_link,
-                    };
-                  })?.[0]);
+                onClick={() => {
+
+                  setActionEnlargeImage(roomimages?.filter((i, idx) => idx === indexImage - 1)
+                    .map((j) => {
+                      return {
+                        image_id: j?.image_id,
+                        image_title: j?.image_title,
+                        idx: indexImage - 1,
+                        image_description: j?.image_description,
+                        image_link: j?.image_link,
+                      };
+                    })?.[0]);
                   setIndexImage(indexImage - 1);
-                 
+
                 }}
                 fill="#ffffff"
               >
                 <path d="M0 0h24v24H0V0z" fill="none" opacity=".87" />
                 <path d="M17.51 3.87L15.73 2.1 5.84 12l9.9 9.9 1.77-1.77L9.38 12l8.13-8.13z" />
               </svg>
-             
+
 
             </div>
 
             <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
               <div
                 className={` ${color.tableheader} rounded-lg shadow relative`}
-              >  
+              >
                 <div className="flex justify-between p-5 border-b rounded-t">
                   <h3 className={`text-xl ${color?.text} font-semibold`}>
                     {actionEnlargeImage?.image_title}
@@ -2602,15 +2596,15 @@ const allDelete = async () => {
                     className={` px-1 mr-1  hover:${color?.sidebar} ${color?.text}
                                          cursor-pointer ${color?.hover} rounded`}
                   >
-                    
+
                     <svg
                       className=" h-5  w-5 font-semibold "
                       fill="currentColor"
                       viewBox="0 0 20 20"
                       xmlns="http://www.w3.org/2000/svg"
-                      
+
                     >
-                    
+
                       <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path>
                       <path
                         fillRule="evenodd"
@@ -2619,8 +2613,8 @@ const allDelete = async () => {
                       ></path>
                     </svg>
                   </button>
-               
-                  
+
+
                   <button
                     type="button"
                     onClick={() => {
@@ -2630,13 +2624,13 @@ const allDelete = async () => {
                                      p-1.5 ml-auto inline-flex items-center`}
                     data-modal-toggle="user-modal"
                   >
-                   
+
                     <svg
                       className="w-5 h-5"
                       fill="currentColor"
                       viewBox="0 0 20 20"
                       xmlns="http://www.w3.org/2000/svg"
-                      
+
                     >
                       <path
                         fillRule="evenodd"
@@ -2651,7 +2645,7 @@ const allDelete = async () => {
                     src={actionEnlargeImage?.image_link}
                     alt="pic_room"
                     style={{ height: "350px", width: "650px" }}
-                  /> 
+                  />
                 </div>
               </div>
             </div>
@@ -2659,26 +2653,26 @@ const allDelete = async () => {
 
             {/*Right  button to change next image in carousal*/}
             <div className="flex justify-end mr-2 ml-auto">
-              
+
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className={
                   indexImage <= 0 ? "hidden" : "block cursor-pointer"}
-                
-                onClick={() => { 
-                  
-                  setActionEnlargeImage(roomimages?.filter((i,idx) => idx === indexImage + 1)
-                  .map((j) => {
-                    return {
-                      image_id: j?.image_id,
-                      image_title: j?.image_title,
-                      idx: indexImage+1,
-                      image_description: j?.image_description,
-                      image_link: j?.image_link,
-                    };
-                  })?.[0]);
+
+                onClick={() => {
+
+                  setActionEnlargeImage(roomimages?.filter((i, idx) => idx === indexImage + 1)
+                    .map((j) => {
+                      return {
+                        image_id: j?.image_id,
+                        image_title: j?.image_title,
+                        idx: indexImage + 1,
+                        image_description: j?.image_description,
+                        image_link: j?.image_link,
+                      };
+                    })?.[0]);
                   setIndexImage(indexImage + 1);
-                 
+
                 }}
                 enableBackground="new 0 0 24 24"
                 height="32px"

@@ -215,7 +215,7 @@ function RoomRateModification() {
 
                     }
                     <div className=' flex justify-end'><Button
-                        Primary={language?.Add}
+                        Primary={language?.Submit}
                         onClick={() => alert("submit button clicked")}
                     />
                     </div>

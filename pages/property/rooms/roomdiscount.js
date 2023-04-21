@@ -30,7 +30,7 @@ function RoomPricing() {
     const [property_name, setProperty_name] = useState('')
     const [visible, setVisible] = useState(0)
     let discountTemplate = {
-        "room_id": '',
+        "room_id": currentroom,
         "dateFrom": "",
         "dateTo": "",
         "DiscountType": "",
@@ -48,7 +48,6 @@ function RoomPricing() {
     }
     useEffect(() => {
         const resp = InitialActions({ setColor, setMode })
-
         language = resp?.language;
         currentLogged = resp?.currentLogged;
         currentProperty = resp?.currentProperty;
@@ -241,7 +240,7 @@ function RoomPricing() {
 
                     }
                     <div className=' flex justify-end'><Button
-                        Primary={language?.Add}
+                        Primary={language?.Submit}
                         onClick={() => alert("submit button clicked")}
                     />
                     </div>
