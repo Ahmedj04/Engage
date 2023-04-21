@@ -34,6 +34,7 @@ function RoomRateModification() {
         "dateFrom": "",
         "dateTo": "",
         "rate": "",
+        "orginal_rate":"",
         "modifiedRate": ""
     }
     const [modification, setModification] = useState([modificationTemplate]?.map((i, id) => { return { ...i, index: id } }))
@@ -56,6 +57,16 @@ function RoomRateModification() {
         colorToggle = resp?.colorToggle
         setVisible(1);
     }, [])
+
+    const onModificationChange = (e, index, i) => {
+        setModification(modification?.map((item, id) => {
+          if (item.index === index) {
+            item[i] = e.target.value
+          }
+          return item
+        }))
+      }
+
 
     return (
         <>
@@ -168,7 +179,10 @@ function RoomRateModification() {
                                         label={`From Date`}
                                         visible={1}
                                         onChangeAction={(e) => {
-                                            alert(e.target.value)
+                                            onModificationChange(e, index,"dateFrom");
+                                            let v={"target":{"value":currentroom}};
+                                            onModificationChange(v, index,"room_id");
+
                                         }
                                         }
                                         req={true}
@@ -180,7 +194,7 @@ function RoomRateModification() {
                                         label={`Date To`}
                                         visible={1}
                                         onChangeAction={(e) => {
-                                            alert(e.target.value)
+                                            onModificationChange(e, index,"dateTo");
                                         }
                                         }
                                         req={true}
@@ -191,7 +205,7 @@ function RoomRateModification() {
                                         label={`Orginal Rate`}
                                         visible={1}
                                         onChangeAction={(e) =>
-                                            alert(e.target.value)
+                                            onModificationChange(e, index,"orginal_rate")
                                         }
                                         color={color}
                                         req={true}
@@ -201,7 +215,7 @@ function RoomRateModification() {
                                         label={`Modified Rate`}
                                         visible={1}
                                         onChangeAction={(e) =>
-                                            alert(e.target.value)
+                                            onModificationChange(e, index,"modifiedRate")
                                         }
                                         color={color}
                                         req={true}
@@ -216,7 +230,7 @@ function RoomRateModification() {
                     }
                     <div className=' flex justify-end'><Button
                         Primary={language?.Submit}
-                        onClick={() => alert("submit button clicked")}
+                        onClick={() => alert(JSON.stringify(modification))}
                     />
                     </div>
                 </div>

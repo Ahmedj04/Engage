@@ -30,7 +30,7 @@ function RoomPricing() {
     const [property_name, setProperty_name] = useState('')
     const [visible, setVisible] = useState(0)
     let discountTemplate = {
-        "room_id": currentroom,
+        "room_id": "",
         "dateFrom": "",
         "dateTo": "",
         "DiscountType": "",
@@ -57,7 +57,14 @@ function RoomPricing() {
         setVisible(1);
     }, [])
 
-
+    const onDiscountChange = (e, index, i) => {
+        setDiscount(discount?.map((item, id) => {
+          if (item.index === index) {
+            item[i] = e.target.value
+          }
+          return item
+        }))
+      }
 
     return (
         <>
@@ -172,7 +179,9 @@ function RoomPricing() {
                                         label={`From Date`}
                                         visible={1}
                                         onChangeAction={(e) => {
-                                            alert(e.target.value)
+                                            onDiscountChange(e,index,`dateFrom`);
+                                            let v={"target":{"value":currentroom}}
+                                            onDiscountChange(v,index,`room_id`)
                                         }
                                         }
                                         req={true}
@@ -184,7 +193,7 @@ function RoomPricing() {
                                         label={`Date To`}
                                         visible={1}
                                         onChangeAction={(e) => {
-                                            alert(e.target.value)
+                                            onDiscountChange(e,index,`dateTo`)
                                         }
                                         }
                                         req={true}
@@ -196,7 +205,7 @@ function RoomPricing() {
                                         visible={1}
                                         defaultValue={`percentage`}
                                         onChangeAction={(e) =>
-                                            alert(e.target.value)
+                                            onDiscountChange(e,index,`DiscountType`)
                                         }
                                         color={color}
                                         req={true}
@@ -211,7 +220,7 @@ function RoomPricing() {
                                         visible={1}
                                         defaultValue={`per stay`}
                                         onChangeAction={(e) =>
-                                            alert(e.target.value)
+                                            onDiscountChange(e,index,`Discounton`)
                                         }
                                         color={color}
                                         req={true}
@@ -226,7 +235,7 @@ function RoomPricing() {
                                         label={`Discount`}
                                         visible={1}
                                         onChangeAction={(e) =>
-                                            alert(e.target.value)
+                                            onDiscountChange(e,index,`discount`)
                                         }
                                         color={color}
                                         req={true}
@@ -241,7 +250,7 @@ function RoomPricing() {
                     }
                     <div className=' flex justify-end'><Button
                         Primary={language?.Submit}
-                        onClick={() => alert("submit button clicked")}
+                        onClick={() => alert(JSON.stringify(discount))}
                     />
                     </div>
                 </div>
