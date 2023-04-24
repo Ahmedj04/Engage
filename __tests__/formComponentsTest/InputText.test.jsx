@@ -40,7 +40,7 @@ test('Does Parent div exist',()=>{
       test('Checking The Label',()=>{
         const  content  = render(<InputText
        
-        label={`test case1`}
+        label={`testcase1`}
         req={true}
         defaultValue={'welcome'}
         onChangeAction={testFunction}
@@ -51,7 +51,7 @@ test('Does Parent div exist',()=>{
       />)
   
 
-      expect(screen.getByText(/test case1/i)).toBeInTheDocument();
+      expect(screen.getByText(/testcase1/i)).toBeInTheDocument();
       let firstdivone = screen.getByTestId('main');
           let child0=within(firstdivone).getByTestId("child0")
               expect(firstdivone).toContainElement(child0)
