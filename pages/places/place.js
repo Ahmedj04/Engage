@@ -73,6 +73,7 @@ const Place = () => {
     const [selectedCategory, setSelectedCategory] = useState({})
     const [property_name, setProperty_name] = useState('')
     const [delInf, setDelInf] = useState(0)
+    const [delClimate, setDelClimate] = useState(0)
 
 
     // to execute as soon as page loads
@@ -132,41 +133,56 @@ const Place = () => {
 
     }
     //edit season
-    function editSeasonDetails() {
-        if (!objChecker.isEqual(orginalSeason, editSeason)) {
-            const tempData = editSeason
-            delete tempData.place
-            let data = {
-                "data": tempData
-            }
+function editSeasonDetails() {
+if (!objChecker.isEqual(orginalSeason, editSeason)) {
+const tempData = editSeason
+delete tempData.place
+let data = {
+"data": tempData
+}
 
-            let url = `/api2/season`;
-            axios.put(url, data, {
-                headers: {
-                    "x-hasura-admin-secret": process.env.NEXT_PUBLIC_PASS
-                }
-            }).then(() => {
-                let otherSeasons = seasons.filter(i => i.season_id != editSeason.season_id)
-                setSeasons([...otherSeasons, editSeason]);
-                setEditSeason({});
-                setEditRow({ edit: 0, id: undefined });
-                alert("API: Season Updated Sucessfully");
-            }).catch(() => { alert("Some Error Happened"); })
-        }
-        else {
-            setEditSeason({});
-            setEditRow({ edit: 0, id: undefined });
-            alert("NO Change In Data");
-        }
-
-    }
-    //add season
-    function addSeasonDetails() {
-        setNewSeason({ ...newSeason, 'isChecked': false })
-        setSeasons([...seasons, newSeason])
-        document.getElementById("newSeason").reset();
-        setAddSeason(0);
-    }
+let url = `/api2/season`;
+axios.put(url, data, {
+headers:{
+"x-hasura-admin-secret": process.env.NEXT_PUBLIC_PASS
+}
+}).then(()=>{
+let otherSeasons = seasons.filter(i => i.season_id != editSeason.season_id)
+setSeasons([...otherSeasons, editSeason]);
+setEditSeason({});
+setEditRow({ edit: 0, id: undefined });
+alert("API: Season Updated Sucessfully");
+}).catch(() => { alert("Some Error Happened"); })
+}
+else{
+setEditSeason({});
+setEditRow({ edit: 0, id: undefined });
+alert("NO Change In Data");
+}
+}
+//add season
+function addSeasonDetails() {
+let places_id = localStorage.getItem('places_id');
+delete newSeason.isChecked
+let data = {
+"data":  {
+...newSeason,
+"external_link": `${places_id}`
+}
+}
+let url = `/api2/season/`;
+axios.post(url, data, {
+headers: {
+"x-hasura-admin-secret": process.env.NEXT_PUBLIC_PASS
+}
+}).then((response) => {  
+setSeasons([...seasons, response?.data?.insert_place_seasons_one])
+document.getElementById("newSeason").reset();
+setAddSeason(0);
+alert("API: Season Added Sucessfully");
+}).catch(() => { alert("Some Error Happened In Add Seasons"); })
+setNewSeason({ ...newSeason, 'isChecked': false })  
+}
     //remove milestone
     function removeMileStone(itemMile, idx) {
         //network call to delete milestone after sucess do below task
@@ -185,7 +201,6 @@ const Place = () => {
         setPlace({ ...place, attractions: [...place?.attractions, newAttraction] })
         document.getElementById("newAttraction").reset();
         setShowNewAtt(0);
-
     }
     //edit attraction
     function attractionEdit() {
@@ -195,9 +210,20 @@ const Place = () => {
     }
     //delete season
     function deleteSeason(season) {
-        //network call
-        let remainingSeasons = seasons.filter(i => i.season_id != season.season_id)
+       let url= `/api2/season/${season?.season_id}`;
+            axios.delete(url, {
+                headers: {
+                    "x-hasura-admin-secret": process.env.NEXT_PUBLIC_PASS
+                }
+            }).then(() => {
+               let remainingSeasons = seasons.filter(i => i.season_id != season.season_id)
         setSeasons(remainingSeasons);
+         alert("API: Season Deleted Sucessfully");
+            }).catch(() => { alert("Some Error Happened"); })
+            
+       
+        //network call
+        
     }
     //add info
     function infoAdd() {
@@ -907,9 +933,6 @@ const Place = () => {
                                 <div className={`${color.crossbg} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>Climate</div>
                             </div>
 
-
-
-
                             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
                                 <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>More Info</div>
@@ -1126,29 +1149,46 @@ const Place = () => {
 
                                                                     {season?.unit}
                                                                 </td>
-                                                                <td>
-                                                                    <button className="bg-gradient-to-r mt-1 mr-2 bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-                                                                        onClick={() => {
-                                                                            setOrginalSeason(season)
-                                                                            setEditSeason(season);
-                                                                            setEditRow({ edit: 1, id: index })
-                                                                        }}
-                                                                    >
+                                                                {delClimate==0?<td>
+{/* 
+                                            EDIT & DELETE                         */}
+<button className="bg-gradient-to-r mt-1 mr-2 bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+onClick={() => {
+setOrginalSeason(season)
+setEditSeason(season);
+setEditRow({ edit: 1, id: index })
+}}
+>
+Edit</button>
+<button className="bg-gradient-to-r my-1 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+onClick={(e) => {
+setDelClimate(1)
+    }}
+    >
 
-                                                                        Edit</button>
-                                                                    <button className="bg-gradient-to-r my-1 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-                                                                        onClick={() => { deleteSeason(season) }} >
+    Delete</button>
+     </td>:
+    <td>
+    <button
+    className="lg:mr-2 bg-gradient-to-r my-1 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+    onClick={() => {
+    deleteSeason(season)
+     }}
+    >Yes,Delete</button>
+    <button className={`bg-gradient-to-r my-1 bg-gray-400 hover:${color?.greybackground}0 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}
+    onClick={(e) => {
+    setDelClimate(0)
+    }}
+    >Cancel</button>
+    </td>}
+    </tr>}
+    </>
+    )
+    })}
 
-                                                                        Delete</button>
-                                                                </td>
-                                                            </tr>}
-                                                    </>
-                                                    )
-                                                })}
-
-                                            </tbody>
-                                        </table>
-                                    </div></div></div></div>
+    </tbody>
+    </table>
+    </div></div></div></div>
                         {/* button div */}
                         <div className='flex justify-end mt-2 '>
                             <button className="mr-4 bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
@@ -2468,9 +2508,9 @@ const Place = () => {
                                                     <select onChange={(e) => setNewSeason({ ...newSeason, unit: e.target.value })}
                                                         className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
                                                     >
-                                                        <option disabled>Select Unit</option>
-                                                        <option value={'Celsius'}>Celsius</option>
-                                                        <option value={'Farenhiet'}>Farenhiet</option>
+                                                        <option disabled selected>Select</option>
+                                                        <option value={'°C'}>°C</option>
+                                                        <option value={'°F'}>°F</option>
 
                                                     </select>
                                                     {/* <p data-testid='label' title={error?.property_name} className="text-sm text-sm text-red-700 font-light">
