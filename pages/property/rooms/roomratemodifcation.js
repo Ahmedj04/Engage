@@ -14,6 +14,9 @@ import InputText from '../../../components/utils/InputText';
 import DateInput from "../../../components/utils/DateInput";
 import DropDown from '../../../components/utils/DropDown';
 import Button from '../../../components/Button';
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
 
 var language;
 var currentProperty;
@@ -29,23 +32,7 @@ function RoomRateModification() {
     const [mode, setMode] = useState()
     const [property_name, setProperty_name] = useState('')
     const [visible, setVisible] = useState(0)
-    let modificationTemplate = {
-        "room_id": '',
-        "dateFrom": "",
-        "dateTo": "",
-        "rate": "",
-        "orginal_rate":"",
-        "modifiedRate": ""
-    }
-    const [modification, setModification] = useState([modificationTemplate]?.map((i, id) => { return { ...i, index: id } }))
-
-    function addDiscountTemplate() {
-        setModification([...modification, modificationTemplate]?.map((i, id) => { return { ...i, index: id } }))
-    }
-    function removeDiscountTemplate(index) {
-        const filteredDiscount = modification.filter((i, id) => i.index !== index)
-        setModification(filteredDiscount)
-    }
+    // runs first in the code
     useEffect(() => {
         const resp = InitialActions({ setColor, setMode })
 
@@ -58,16 +45,65 @@ function RoomRateModification() {
         setVisible(1);
     }, [])
 
+    let modificationTemplate = {
+        "room_id": '',
+        "date_from": "",
+        "date_to": "",
+        "orginal_rate": "",
+        "modified_rate": ""
+    }
+    const [modification, setModification] = useState([modificationTemplate]?.map((i, id) => { return { ...i, index: id } }))
+
+    function addDiscountTemplate() {
+        setModification([...modification, modificationTemplate]?.map((i, id) => { return { ...i, index: id } }))
+    }
+    function removeDiscountTemplate(index) {
+        const filteredDiscount = modification.filter((i, id) => i.index !== index)
+        setModification(filteredDiscount)
+    }
+
+
     const onModificationChange = (e, index, i) => {
         setModification(modification?.map((item, id) => {
-          if (item.index === index) {
-            item[i] = e.target.value
-          }
-          return item
+            if (item.index === index) {
+                item[i] = e.target.value
+            }
+            return item
         }))
-      }
+    }
+
+    function addModification() {
+        alert(JSON.stringify(modification))
+        let url = '/api/room_rate_modification';
+        axios.post(url, modification, { header: { "content-type": "application/json" } })
+            .then((response) => {
+                console.log("Rate Modification Added")
+                toast.success("API: Modification Added Sucessfully", {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+                //   Router.push("./basicdetails");
+                document.getElementById('modificationForm').reset();
+
+            }).catch((err) => {
+                toast.error("API: Failed to save modification", {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            })
 
 
+    }
     return (
         <>
             <Title name={`Engage | Room Rate Modification`} />
@@ -128,19 +164,19 @@ function RoomRateModification() {
                     <h3 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6 pb-2  font-bold`}>
                         {language?.room} Rate Modification
                     </h3>
-                    
-                        <Button
-                            Primary={language?.Add}
-                            onClick={() => addDiscountTemplate()}
-                        />
-                    
+
+                    <Button
+                        Primary={language?.Add}
+                        onClick={() => addDiscountTemplate()}
+                    />
+
                 </div>
 
                 <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
                     <h3 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  pb-2 font-bold`}>
                         Rate Modification
                     </h3>
-
+                    <form id='modificationForm'></form>
                     {modification?.map((disc, index) => {
                         return (<React.Fragment key={index}>
                             {index != 0 ? <div className='h-0.5 w-full bg-gray-200 border-none rounded-xl'></div> : <></>}
@@ -179,9 +215,9 @@ function RoomRateModification() {
                                         label={`From Date`}
                                         visible={1}
                                         onChangeAction={(e) => {
-                                            onModificationChange(e, index,"dateFrom");
-                                            let v={"target":{"value":currentroom}};
-                                            onModificationChange(v, index,"room_id");
+                                            onModificationChange(e, index, "date_from");
+                                            let v = { "target": { "value": currentroom } };
+                                            onModificationChange(v, index, "room_id");
 
                                         }
                                         }
@@ -194,7 +230,7 @@ function RoomRateModification() {
                                         label={`Date To`}
                                         visible={1}
                                         onChangeAction={(e) => {
-                                            onModificationChange(e, index,"dateTo");
+                                            onModificationChange(e, index, "date_to");
                                         }
                                         }
                                         req={true}
@@ -205,7 +241,7 @@ function RoomRateModification() {
                                         label={`Orginal Rate`}
                                         visible={1}
                                         onChangeAction={(e) =>
-                                            onModificationChange(e, index,"orginal_rate")
+                                            onModificationChange(e, index, "orginal_rate")
                                         }
                                         color={color}
                                         req={true}
@@ -215,7 +251,7 @@ function RoomRateModification() {
                                         label={`Modified Rate`}
                                         visible={1}
                                         onChangeAction={(e) =>
-                                            onModificationChange(e, index,"modifiedRate")
+                                            onModificationChange(e, index, "modified_rate")
                                         }
                                         color={color}
                                         req={true}
@@ -230,13 +266,24 @@ function RoomRateModification() {
                     }
                     <div className=' flex justify-end'><Button
                         Primary={language?.Submit}
-                        onClick={() => alert(JSON.stringify(modification))}
+                        onClick={() => addModification()}
                     />
                     </div>
                 </div>
 
             </div>
-
+            {/* Toast Container */}
+            <ToastContainer
+                position="top-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
         </>
     )
 }

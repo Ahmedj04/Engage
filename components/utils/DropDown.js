@@ -48,9 +48,10 @@ const DropDown = ({
             }
             required
           >
+            {defaultValue===''?<></>:
             <option defaultValue={defaultValue} disabled selected>
-              {defaultValue}
-            </option>
+            {defaultValue}
+          </option>}
             {options.map((i, Index) => {
               return (
                 <option key={Index} value={i?.value}>
