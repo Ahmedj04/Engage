@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Title from "../../components/title";
-import objChecker from "lodash";
+import objChecker, { property } from "lodash";
 import Lineloader from "../../components/loaders/lineloader";
 import Sidebar from "../../components/Sidebar";
 import Header from "../../components/Header";
@@ -132,8 +132,9 @@ export default function BasicDetails() {
 
   const current = new Date();
   let month = current.getMonth() + 1;
-  const descriptionDate = `${current.getDate()}/${month < +10 ? `0${month}` : `${month + 1}`
-    }/${current.getFullYear()}`;
+  const descriptionDate = `${current.getDate()}/${
+    month < +10 ? `0${month}` : `${month + 1}`
+  }/${current.getFullYear()}`;
   const [allHotelDetails, setAllHotelDetails] = useState([]);
 
   /* Edit Basic Details Function */
@@ -415,14 +416,17 @@ export default function BasicDetails() {
         </nav>
 
         {/* Basic Details Form */}
-        <div className={`${color?.whitebackground} shadow rounded-lg px-12  sm:p-6 xl:p-8  2xl:col-span-2`}>
-          <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}>
+        <div
+          className={`${color?.whitebackground} shadow rounded-lg px-12  sm:p-6 xl:p-8  2xl:col-span-2`}
+        >
+          <h6
+            className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}
+          >
             {language?.basicdetails}
           </h6>
           <div className="pt-6">
             <div className=" md:px-4 mx-auto w-full">
               <div className="flex flex-wrap">
-
                 {/* property name */}
                 <InputText
                   label={language?.propertyname}
@@ -437,6 +441,7 @@ export default function BasicDetails() {
                   error={error?.property_name}
                   color={color}
                   req={true}
+                  title={language?.propertyname}
                 />
 
                 {/* logo */}
@@ -444,7 +449,7 @@ export default function BasicDetails() {
                   <img src={imageLogo} width="164px" height="40px" />
                 </div>
 
-                {/*  dropdown for Property Category */}
+                {/*  Dropdown for Property Category */}
                 <DropDown
                   label={language?.propertycategory}
                   visible={visible}
@@ -458,6 +463,7 @@ export default function BasicDetails() {
                   error={error?.propertycategory}
                   color={color}
                   req={true}
+                  title={language?.propertycategory}
                   options={[
                     { value: "hotel", label: "Hotel" },
                     { value: "resort", label: "Resort" },
@@ -465,7 +471,7 @@ export default function BasicDetails() {
                   ]}
                 />
 
-                {/* property brand */}
+                {/* Property brand */}
                 <InputText
                   label={language?.propertybrand}
                   visible={visible}
@@ -481,7 +487,7 @@ export default function BasicDetails() {
                   req={false}
                 />
 
-                {/* established date */}
+                {/* Established date */}
                 <DateInput
                   color={color}
                   label={language?.establisheddate}
@@ -499,9 +505,10 @@ export default function BasicDetails() {
                   error={error?.established_year}
                   visible={visible}
                   max={descriptionDate}
+                  title={language?.establisheddate}
                 />
 
-                {/*star Rating*/}
+                {/*Star Rating*/}
                 <DropDown
                   label={language?.starrating}
                   visible={visible}
@@ -525,7 +532,7 @@ export default function BasicDetails() {
                   ]}
                 />
 
-                {/* description_title */}
+                {/* Description_title */}
                 <InputText
                   label={language?.descriptiontitle}
                   visible={visible}
@@ -542,14 +549,15 @@ export default function BasicDetails() {
                   error={error?.description_title}
                   color={color}
                   req={true}
+                  title={language?.descriptiontitle}
                 />
 
-                {/*description date*/}
+                {/*Description */}
                 <InputTextBox
                   label={language?.description}
                   visible={visible}
                   defaultValue={basicDetails?.description_body}
-                  onChange={(e) =>
+                  onChangeAction={(e) =>
                     setAllHotelDetails(
                       {
                         ...allHotelDetails,
@@ -563,7 +571,7 @@ export default function BasicDetails() {
                   req={true}
                 />
 
-                {/* description date read only */}
+                {/* Description date read only */}
                 <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <label
@@ -586,7 +594,7 @@ export default function BasicDetails() {
                         defaultValue={descriptionDate}
                       />
                     </div>
-                  </div>mo
+                  </div>
                 </div>
 
                 {/* LOGO */}
@@ -608,7 +616,7 @@ export default function BasicDetails() {
                           uploadImage(e.target.files[0]);
                         }}
                         className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg 
-                                                focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                        focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                         defaultValue=""
                       />
                     </div>

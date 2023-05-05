@@ -1,5 +1,8 @@
 import React from "react";
 import LineLoader from "../loaders/lineloader";
+import info from '../../public/info.svg'
+import Image from 'next/image' 
+import Tooltip from "./Tooltip";
 
 const DropDown = ({
   label,
@@ -9,13 +12,17 @@ const DropDown = ({
   color,
   req,
   options = [],
-  toolTip,
+
+  title,
+ toolTip,
   tableForm
 
 }) => {
   return (
     <div data-testid ="main"  title={toolTip} className={`w-full ${tableForm===true?``:`lg:w-6/12`} px-4`}>
+
       <div data-testid ="child0" className="relative w-full mb-3">
+        <div className="flex">
         <label data-testid ="checkingcolor"
           className={`text-sm font-medium ${color?.text} block mb-2`}
           htmlFor="grid-password"
@@ -23,6 +30,13 @@ const DropDown = ({
           {label} 
           {req === true ? <span style={{ color: "#ff0000" }}>*</span> : <></>}
         </label>
+        <div className="ml-2 mt-1 ">
+        <Tooltip message={title?title:label}color={color}>
+        <span className='flex justify-center item-center bg-white h-4 w-4 border border-none rounded-full'>
+          <Image src={info} alt="info" height={10} width={10}/></span>
+        </Tooltip>
+        </div>
+        </div>
         <div data-testid="vis0" className={visible === 0 ? "block w-auto" : "hidden"}>
           <LineLoader />
         </div>

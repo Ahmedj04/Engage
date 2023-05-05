@@ -3,11 +3,15 @@
 // We applied the same css here present in BasicDetails for every Component & declared the attributes correctly with their specific values
 import React from 'react'
 import LineLoader from '../loaders/lineloader'
-function DateInput({color,label,req,initialValue,onChangeAction,error,visible,max,toolTip}) {
+import info from '../../public/info.svg'
+import Image from 'next/image' 
+import Tooltip from "./Tooltip";
+function DateInput({color,label,req,initialValue,onChangeAction,error,visible,max,title}) {
   
   return (
-    <div title={toolTip} data-testid ="first" className="w-full lg:w-6/12 px-4">
+    <div data-testid ="first" className="w-full lg:w-6/12 px-4">
     <div data-testid ="child0" className="relative w-full mb-3">
+    <div className="flex">
       <label data-testid ="checkingcolor"
         className={`text-sm font-medium ${color?.text} block mb-2`}
         htmlFor="grid-password"
@@ -15,6 +19,13 @@ function DateInput({color,label,req,initialValue,onChangeAction,error,visible,ma
         {label} 
         {req===true?<span style={{ color: "#ff0000" }}>*</span>:<></>}
       </label>
+      <div className="ml-2 mt-1 ">
+        <Tooltip message={title?title:label}color={color}>
+        <span className='flex justify-center item-center bg-white h-4 w-4 border border-none rounded-full'>
+          <Image src={info} alt="info" height={10} width={10}/></span>
+        </Tooltip>
+        </div>
+        </div>
       <div data-testid ="loader" className={visible === 0 ? "block" : "hidden"}>
         <LineLoader />
       </div>
