@@ -2398,12 +2398,12 @@ function Room() {
                   <div className='flex justify-end mx-auto mb-2'>
                   <button className="mx-2 bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex  
                              font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-                             onClick={()=>{localStorage.setItem("roomId",currentroom); Router.push('./roomdiscount');}}>
+                             onClick={()=>{localStorage.setItem("RoomId",currentroom); Router.push('./roomdiscount');}}>
                     Add Discount</button>
                   <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex  
                              font-semibold rounded-lg text-sm px-5 py-2 text-center 
                               items-center ease-linear transition-all duration-150"
-                              onClick={()=>{localStorage.setItem("roomId",currentroom); Router.push('./roomratemodifcation');}}>
+                              onClick={()=>{localStorage.setItem("RoomId",currentroom); Router.push('./roomratemodifcation');}}>
                     Add Rate Modification</button>
                     </div>
 
