@@ -12,12 +12,15 @@ const DropDown = ({
   color,
   req,
   options = [],
-  title
 
+  title,
+ toolTip,
+  tableForm
 
 }) => {
   return (
-    <div data-testid ="main"  className="w-full lg:w-6/12 px-4">
+    <div data-testid ="main"  title={toolTip} className={`w-full ${tableForm===true?``:`lg:w-6/12`} px-4`}>
+
       <div data-testid ="child0" className="relative w-full mb-3">
         <div className="flex">
         <label data-testid ="checkingcolor"

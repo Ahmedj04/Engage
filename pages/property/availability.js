@@ -9,10 +9,10 @@ import Headloader from "../../components/loaders/headloader";
 import Header from "../../components/Header";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { english,french,arabic } from "../../components/Languages/Languages"
 import Router from "next/router";
 import { InitialActions, ColorToggler } from '../../components/initalActions';
 import Title from '../../components/title';
+import { english,french,arabic } from "../../components/Languages/Languages"
 let colorToggle;
 var language;
 var currentProperty;

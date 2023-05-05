@@ -651,6 +651,7 @@ function Gallery({
                   <h3 className={`${color?.text} text-xl font-semibold`}>
                     {language?.addnewimage}
                   </h3>
+                  
                   {/* cross button */}
                   <button
                     type="button"
