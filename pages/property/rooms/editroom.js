@@ -2568,21 +2568,24 @@ function Room() {
               </div>
               {/* widget progress ends */}
 
-              {/* page label starts */}
-              <h6 className={`${color?.text} text-base  flex leading-none  pt-2 font-semibold`}>
-                {language?.room} {language?.rates} {language?.discount}
-              </h6>
-              {/* page label ends */}
+              <div className='flex justify-between items-center mx-auto mb-2'>
+                {/* page label starts */}
+                <h3 className={`${color?.text}  text-lg  flex leading-none  pt-2 font-semibold`}>
+                  {language?.room} {language?.rates} {language?.discount}
+                </h3>
+                {/* page label ends */}
+
+                <button className="mx-2 bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex  
+                             font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                  onClick={() => { localStorage.setItem("RoomId", currentroom); Router.push('./roomdiscount'); }}>
+                  Add Discount</button>
+
+              </div>
+
               <div className="pt-6">
                 <div className=" md:px-2 mx-auto w-full">
                   {/* add discount and modification buttons start */}
-                  <div className='flex justify-end mx-auto mb-2'>
-                    <button className="mx-2 bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex  
-                             font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-                      onClick={() => { localStorage.setItem("RoomId", currentroom); Router.push('./roomdiscount'); }}>
-                      Add Discount</button>
 
-                  </div>
                   {/* add discount and modification buttons ends */}
                   {/* table */}
                   <div className="flex flex-col mt-8 lg:-mr-20 sm:mr-0 w-full  relative">
