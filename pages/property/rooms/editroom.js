@@ -44,6 +44,7 @@ let colorToggle;
 
 
 function Room() {
+  const [allCheck, setAllCheck] = useState(0)
   const [visible, setVisible] = useState(0)
   const [spinner, setSpinner] = useState(0)
   const [darkModeSwitcher, setDarkModeSwitcher] = useState()
@@ -83,6 +84,12 @@ function Room() {
 
   const [actionEnlargeImage, setActionEnlargeImage] = useState({})
   const [property_name, setProperty_name] = useState("")
+  const [discount, setDiscount] = useState([])
+  const [rateModification, setRateModification] = useState([])
+  const [editRow, setEditRow] = useState({
+    edit: 0,
+    id: undefined
+  })
 
 
   /* Function Multiple Delete*/
@@ -201,6 +208,8 @@ function Room() {
         setAllRoomDetails(response.data);
         setRoomDetails(response.data);
         setFinalView(response?.data?.views);
+        setDiscount(response?.data?.discounts)
+        setRateModification(response?.data?.room_rate_modifications)
         if (response.data?.room_type == 'Single') {
           setBedDetails(response.data.beds?.[i])
         }
@@ -2324,35 +2333,6 @@ function Room() {
                         </>
                       )
                     })}
-
-
-
-
-                    {/* {roomDetails?.room_images?.map((item, index) => {
-                      return (
-                        <div className="block text-blueGray-600 text-xs pt-2 px-2 " key={index}>
-                          <button onClick={() => { setEnlargeImage(1); setActionEnlargeImage(item) }}>
-                            <img src={item.image_link} alt='pic_room' style={{ height: "200px", width: "450px" }} />
-                         
-                          </button>
-                          <table>
-                            <tr>
-                              <td className="flex justify-end">
-                                <button onClick={() => { setActionImage(item); setEditImage(1); }} className="text-gray-500  mt-1 hover:text-gray-900 
-                                           cursor-pointer p-1 hover:bg-gray-100 rounded ">
-                                  <svg className=" h-5  w-5 font-semibold "
-                                    fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd"></path></svg>
-                                </button>
-                                <button onClick={() => { setdeleteImage(1); setActionImage(item) }} className="text-gray-500 mt-1 hover:text-gray-900
-                                           cursor-pointer p-1 hover:bg-gray-100 rounded">
-                                  <svg className="  w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd"></path></svg>
-                                </button>
-                              </td>
-                            </tr>
-                          </table>
-                        </div>
-                      )
-                    })} */}
                   </div>
                 </div>
               </div>
@@ -2367,6 +2347,7 @@ function Room() {
           {/* Room Rates */}
           <div id='3' className={disp === 3 ? 'block' : 'hidden'}>
             <div className={`${color?.whitebackground} shadow-xl rounded-lg  sm:p-6 xl:p-8  2xl:col-span-2`}>
+              {/* widget progress starts */}
               <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
                 <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                   <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
@@ -2390,24 +2371,31 @@ function Room() {
                 </div>
 
               </div>
+              {/* widget progress ends */}
+
+              {/* page label starts */}
               <h6 className={`${color?.text} text-base  flex leading-none  pt-2 font-semibold`}>
                 {language?.room} {language?.rates}
               </h6>
+              {/* page label ends */}
               <div className="pt-6">
                 <div className=" md:px-2 mx-auto w-full">
+                  {/* add discount and modification buttons start */}
                   <div className='flex justify-end mx-auto mb-2'>
-                  <button className="mx-2 bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex  
+                    <button className="mx-2 bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex  
                              font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-                             onClick={()=>{localStorage.setItem("RoomId",currentroom); Router.push('./roomdiscount');}}>
-                    Add Discount</button>
-                  <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex  
+                      onClick={() => { localStorage.setItem("RoomId", currentroom); Router.push('./roomdiscount'); }}>
+                      Add Discount</button>
+                    <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex  
                              font-semibold rounded-lg text-sm px-5 py-2 text-center 
                               items-center ease-linear transition-all duration-150"
-                              onClick={()=>{localStorage.setItem("RoomId",currentroom); Router.push('./roomratemodifcation');}}>
-                    Add Rate Modification</button>
-                    </div>
-
+                      onClick={() => { localStorage.setItem("RoomId", currentroom); Router.push('./roomratemodifcation'); }}>
+                      Add Rate Modification</button>
+                  </div>
+                  {/* add discount and modification buttons ends */}
+                  {/* room rate form starts */}
                   <div className="flex flex-wrap">
+                    {/* currency drop down */}
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
@@ -2438,6 +2426,7 @@ function Room() {
                         </div>
                       </div>
                     </div>
+                    {/* base rate amount  */}
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
@@ -2464,7 +2453,7 @@ function Room() {
                         </div>
                       </div>
                     </div>
-
+                    {/* tax amount */}
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
@@ -2489,7 +2478,7 @@ function Room() {
                             {error?.tax_amount}</p></div>
                       </div>
                     </div>
-
+                    {/* other charges amount */}
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
@@ -2513,10 +2502,12 @@ function Room() {
                             {error?.otherfees_amount}</p></div>
                       </div>
                     </div>
+                    {/* blank */}
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                       </div>
                     </div>
+                    {/* buttons start */}
                     <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
                       <Button Primary={language?.Previous} onClick={() => { setDisp(2) }} />
                       <div className={(spinner === 0 && flag !== 1) ? 'block' : 'hidden'}>
@@ -2532,8 +2523,252 @@ function Room() {
                       <div className={spinner === 1 ? 'block' : 'hidden'}>
                         <Button Primary={language?.SpinnerUpdate} />
                       </div>
+
+                      <Button Primary={language?.Next} onClick={() => { setDisp(6) }} />
+
+                    </div>
+                    {/* buttons end */}
+                  </div>
+                  {/* room rate form ends */}
+
+
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Room Rates Discount */}
+          <div id='6' className={disp === 6 ? 'block' : 'hidden'}>
+            <div className={`${color?.whitebackground} shadow-xl rounded-lg  sm:p-6 xl:p-8  2xl:col-span-2`}>
+              {/* widget progress starts */}
+              <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+                <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                  <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
+                  <div className={`lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto ${color.widget}`}> {language?.room} {language?.description}</div>
+                </div>
+
+                <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                  <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400"
+                  >2</button>
+                  <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>
+                    {language?.room} {language?.services}</div>
+                </div>
+                <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                  <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
+                  <div className={`lg:w-32 font-medium ${color.crossbg} text-base lg:mt-3 ml-3 lg:mx-auto`}> {language?.room} {language?.gallery}</div>
+                </div>
+                <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                  <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary"
+                  >4</button>
+                  <div className={`lg:w-32 font-medium ${color.crossbg} text-base lg:mt-3 ml-3 lg:mx-auto`}> {language?.room} {language?.rates}</div>
+                </div>
+
+              </div>
+              {/* widget progress ends */}
+
+              {/* page label starts */}
+              <h6 className={`${color?.text} text-base  flex leading-none  pt-2 font-semibold`}>
+                {language?.room} {language?.rates} {language?.discount}
+              </h6>
+              {/* page label ends */}
+              <div className="pt-6">
+                <div className=" md:px-2 mx-auto w-full">
+                  {/* add discount and modification buttons start */}
+                  <div className='flex justify-end mx-auto mb-2'>
+                    <button className="mx-2 bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex  
+                             font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                      onClick={() => { localStorage.setItem("RoomId", currentroom); Router.push('./roomdiscount'); }}>
+                      Add Discount</button>
+
+                  </div>
+                  {/* add discount and modification buttons ends */}
+                  {/* table */}
+                  <div className="flex flex-col mt-8 lg:-mr-20 sm:mr-0 w-full  relative">
+                    <div className="overflow-x-auto">
+                      <div className="align-middle inline-block min-w-full">
+                        <div className="shadow overflow-hidden">
+                          <table className="table data table-fixed lg:min-w-full divide-y divide-gray-200 min-w-screen" id="climateTable">
+                            <thead className={` ${color?.tableheader} `}>
+                              <tr>
+                                {/* checkbox */}
+                                <th scope="col" className="p-4">
+                                  <div className="flex items-center">
+                                    <input id="checkbox-all" aria-describedby="checkbox-1" type="checkbox"
+                                      checked={allCheck === 1 || false}
+                                      name="allSelect"
+                                      onChange={(e) => {
+                                        // setAllCheck(allCheck === 1 ? 0 : 1);
+                                        // allCheckbox(e);
+                                      }}
+
+                                      className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                                    <label htmlFor="checkbox-all" className="sr-only">checkbox</label>
+                                  </div>
+                                </th>
+
+                                <th scope="col" className={`p-4 text-left text-xs font-semibold ${color?.textgray} uppercase`}>
+                                  Date From</th>
+                                <th scope="col" className={`p-4 text-left text-xs font-semibold ${color?.textgray} uppercase`}>
+                                  Date To</th>
+                                <th scope="col" className={`p-4 text-left text-xs font-semibold ${color?.textgray} uppercase`}>
+                                  Discount Type</th>
+                                <th scope="col" className={`p-4 text-left text-xs font-semibold ${color?.textgray} uppercase`}>
+                                  Discount On</th>
+                                <th scope="col" className={`p-4 text-left text-xs font-semibold ${color?.textgray} uppercase`}>
+                                  Discount </th>
+                                <th scope="col" className={`p-4 text-left text-xs font-semibold ${color?.textgray} uppercase`}>
+                                  Actions</th>
+                              </tr>
+                            </thead>
+
+                            <tbody className={` ${color?.whitebackground} divide-y  divide-gray-200`}>
+                              {discount?.map((dis, index) => {
+                                return (<>
+                                  {(editRow?.edit === 1 && editRow?.id === index) ?
+                                    <tr key={index}>
+                                      <td className="p-4 w-4">
+                                        <span className="flex items-center">
+                                          <input
+                                            type="checkbox"
+                                            id={dis?.discount_id}
+                                            tooltip
+                                            disabled
+                                            title="Click here to delete image."
+                                            name={dis?.discount_id}
+                                            checked={dis?.isChecked || false}
+                                            aria-describedby="checkbox-1"
+                                            className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                                          <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
+                                        </span>
+                                      </td>
+
+                                      <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                        <input type="date"
+                                          className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
+                                          defaultValue={dis?.date_from}
+                                        // onChange={(e) => setEditSeason({ ...editSeason, season_name: e.target.value })} 
+                                        />
+                                      </td>
+
+                                      <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                        <input type="date" className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
+                                          defaultValue={dis?.date_to}
+                                        // onChange={(e) => setEditSeason({ ...editSeason, period: e.target.value })} 
+                                        />
+
+                                      </td>
+                                      <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                        <select className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
+                                        // onChange={(e) => setEditSeason({ ...editSeason, max_temp: e.target.value })} 
+                                        >
+                                          <option value="Flat">Flat</option>
+                                          <option value="percentage">Percentage</option>
+                                        </select>
+                                      </td>
+
+                                      <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                        <select className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
+                                        // onChange={(e) => setEditSeason({ ...editSeason, max_temp: e.target.value })} 
+                                        >
+                                          <option value="Per Person">Per Person</option>
+                                          <option value="Per Group">Per Group</option>
+                                        </select>
+                                      </td>
+
+                                      <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                        <input type="date" className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
+                                          defaultValue={dis?.date_to}
+                                        // onChange={(e) => setEditSeason({ ...editSeason, period: e.target.value })} 
+                                        />
+
+                                      </td>
+
+                                      <td>
+                                        <button
+                                          onClick={() => {
+                                            alert("edit clicked");
+                                          }}
+                                          className={`bg-gradient-to-r mt-1 bg-green-600 hover:bg-green-700 mr-2 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}>
+
+                                          Save</button>
+                                        <button className={`bg-gradient-to-r my-1 bg-gray-400 hover:${color?.greybackground}0 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}
+                                          onClick={() => {
+                                            // setEditAccomodation({});
+                                            setEditRow({ edit: 0, id: undefined })
+                                          }}
+                                        >
+
+                                          Cancel</button>
+                                      </td>
+                                    </tr> :
+                                    <tr key={index}>
+                                      <td className="p-4 w-4">
+                                        <span className="flex items-center">
+                                          <input
+                                            type="checkbox"
+                                            id={dis?.discount_id}
+                                            tooltip
+                                            title="Click here to delete image."
+                                            name={dis?.discount_id}
+                                            checked={dis.isChecked || false}
+                                            onChange={(e) => {
+
+                                              handlecheckbox(e, season);
+                                            }}
+                                            aria-describedby="checkbox-1"
+                                            className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                                          <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
+                                        </span>
+                                      </td>
+
+                                      <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                        {dis?.date_from}
+                                      </td>
+
+                                      <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                        {dis?.date_to}
+                                      </td>
+                                      <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                        {dis?.discount_type}
+                                      </td>
+                                      <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                        {dis?.discount_on}
+                                      </td>
+                                      <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+
+                                        {dis?.discount}
+                                      </td>
+
+                                      <td>
+                                        <button className="bg-gradient-to-r mt-1 mr-2 bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                          onClick={() => {
+                                            // setEditAccomodation(stay);
+                                            setEditRow({ edit: 1, id: index })
+                                          }}
+                                        >
+
+                                          Edit</button>
+                                        <button className="bg-gradient-to-r my-1 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                        // onClick={() => { deleteSeason(season) }} 
+                                        >
+
+                                          Delete</button>
+                                      </td>
+                                    </tr>}
+                                </>
+                                )
+                              })}
+
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
                     </div>
                   </div>
+                  {/* table end */}
+
                 </div>
               </div>
             </div>
@@ -2541,7 +2776,7 @@ function Room() {
 
         </div>
 
-      
+
 
         {/* New image enlarge */}
         <div id="enlarge" className={enlargeImage === 1 ? "block" : "hidden"}>

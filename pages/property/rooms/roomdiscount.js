@@ -71,7 +71,6 @@ function RoomPricing() {
     }
 
     const addDiscount = () => {
-        alert(JSON.stringify(discount));
         let url = '/api/room_discount';
         axios.post(url, discount, { header: { "content-type": "application/json" } })
         .then((response) => {

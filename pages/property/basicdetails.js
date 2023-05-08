@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Title from "../../components/title";
-import objChecker, { property } from "lodash";
+import objChecker from "lodash";
 import Lineloader from "../../components/loaders/lineloader";
 import Sidebar from "../../components/Sidebar";
 import Header from "../../components/Header";
