@@ -11,7 +11,8 @@ function InputText({
   error,
   color,
   req,
-  title
+  title,
+  tooltip
 }) {
   return (
     <div data-testid="main" className="w-full lg:w-6/12  px-4">
@@ -27,10 +28,12 @@ function InputText({
         </label>
 
         <div className="ml-2 mt-1">
+        {tooltip===true?
         <Tooltip message={title?title:label} color={color}>
         <span className='flex justify-center item-center bg-white h-4 w-4 border border-none rounded-full'>
           <Image src={info} alt="info" height={10} width={10}/></span>
         </Tooltip>
+        :<></>}
         </div>
         </div>
         <div data-testid="vis0" className={visible === 0 ? "block" : "hidden"}>
