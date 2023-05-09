@@ -2,7 +2,7 @@ import React from 'react'
 import info from '../../public/info.svg'
 import Image from 'next/image' 
 import Tooltip from "./Tooltip";
-function InputTextBox({label,visible,defaultValue,onChangeAction,error,color,req,title}) 
+function InputTextBox({label,visible,defaultValue,onChangeAction,error,color,req,title,tooltip}) 
 
 {
   return (
@@ -18,11 +18,14 @@ function InputTextBox({label,visible,defaultValue,onChangeAction,error,color,req
                       {req===true?<span style={{ color: "#ff0000" }}>*</span>:<></>}
                     </label>
                     <div className="ml-2 mt-1">
+                    {tooltip===true?
         <Tooltip message={title?title:label} color={color}>
           <span className='flex justify-center item-center bg-white h-4 w-4 border border-none rounded-full'><Image src={info} alt="info" height={10} width={10}/>
           </span>
-        </Tooltip>
+        </Tooltip>:
+         <></>}
         </div>
+       
         </div>
                     <div data-testid ="vis0" className={visible === 0 ? "block w-auto" : "hidden"}>
                       

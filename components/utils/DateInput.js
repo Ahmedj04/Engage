@@ -6,7 +6,7 @@ import LineLoader from '../loaders/lineloader'
 import info from '../../public/info.svg'
 import Image from 'next/image' 
 import Tooltip from "./Tooltip";
-function DateInput({color,label,req,initialValue,onChangeAction,error,visible,max,title}) {
+function DateInput({color,label,req,initialValue,onChangeAction,error,visible,max,title,tooltip}) {
   
   return (
     <div data-testid ="first" className="w-full lg:w-6/12 px-4">
@@ -20,10 +20,12 @@ function DateInput({color,label,req,initialValue,onChangeAction,error,visible,ma
         {req===true?<span style={{ color: "#ff0000" }}>*</span>:<></>}
       </label>
       <div className="ml-2 mt-1 ">
+      {tooltip===true?
         <Tooltip message={title?title:label}color={color}>
         <span className='flex justify-center item-center bg-white h-4 w-4 border border-none rounded-full'>
           <Image src={info} alt="info" height={10} width={10}/></span>
         </Tooltip>
+        :<></>}
         </div>
         </div>
       <div data-testid ="loader" className={visible === 0 ? "block" : "hidden"}>

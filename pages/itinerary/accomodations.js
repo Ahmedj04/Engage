@@ -273,11 +273,7 @@ function Accomodations() {
 
                     </tbody>
                   </table>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/* table end */}
+                </div></div></div></div>
           {/* button div */}
           <div className='flex justify-end mt-2 '>
             <button className="mr-4 bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"

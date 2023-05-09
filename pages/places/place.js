@@ -829,7 +829,7 @@ setNewSeason({ ...newSeason, 'isChecked': false })
                                     </div>
                                 </div>
 
-                                {/* place languages */}
+                {/* place languages */}
                                 <div className="w-full lg:w-6/12 px-4">
                                     <div className="relative w-full mb-3">
                                         <label className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -1150,8 +1150,8 @@ setNewSeason({ ...newSeason, 'isChecked': false })
                                                                     {season?.unit}
                                                                 </td>
                                                                 {delClimate==0?<td>
-{/* 
-                                            EDIT & DELETE                         */}
+                       {/*       EDIT & DELETE          */}
+                                           
 <button className="bg-gradient-to-r mt-1 mr-2 bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
 onClick={() => {
 setOrginalSeason(season)
