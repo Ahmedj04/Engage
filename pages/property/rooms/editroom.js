@@ -14,12 +14,12 @@ import lang from '../../../components/GlobalData'
 import axios from "axios";
 import Link from "next/link";
 import Button from '../../../components/Button';
-import english from "../../../components/Languages/en"
 import Footer from "../../../components/Footer";
 import Sidebar from '../../../components/Sidebar'
 import Header from '../../../components/Header'
-import french from "../../../components/Languages/fr"
-import arabic from "../../../components/Languages/ar";
+import { InitialActions, ColorToggler } from '../../../components/initalActions';
+import Title from '../../../components/title';
+import { english, french, arabic } from "../../../components/Languages/Languages"
 import Headloader from '../../../components/loaders/headloader';
 import Imageloader from '../../../components/loaders/imageloader';
 import Lineloader from '../../../components/loaders/lineloader';
@@ -28,6 +28,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import InputText from '../../../components/utils/InputText';
 import InputTextBox from '../../../components/utils/InputTextBox';
 import DropDown from '../../../components/utils/DropDown';
+import WidgetStatus from '../../../components/widgetStatus';
 var language;
 var currentProperty;
 var currentroom;
@@ -44,6 +45,7 @@ let colorToggle;
 
 
 function Room() {
+  const [allCheck, setAllCheck] = useState(0)
   const [visible, setVisible] = useState(0)
   const [spinner, setSpinner] = useState(0)
   const [darkModeSwitcher, setDarkModeSwitcher] = useState()
@@ -71,19 +73,25 @@ function Room() {
   const [services, setServices] = useState([])
   const [add, setAdd] = useState(0)
   const [gen, setGen] = useState([])
-  
+
   const [selectedImage, setSelectedImage] = useState(false);
   const [indexImage, setIndexImage] = useState();
-  
+
   const [enlargeImage, setEnlargeImage] = useState(0)
   const [enlargedImage, setEnlargedImage] = useState();
 
-  const[mode,setMode] = useState()
+  const [mode, setMode] = useState()
   const [updateImage, setUpdateImage] = useState({});
 
   const [actionEnlargeImage, setActionEnlargeImage] = useState({})
+  const [property_name, setProperty_name] = useState("")
+  const [discount, setDiscount] = useState([])
+  const [rateModification, setRateModification] = useState([])
+  const [editRow, setEditRow] = useState({
+    edit: 0,
+    id: undefined
+  })
 
-  
   /* Function Multiple Delete*/
   function deleteMultiple() {
     const data = check?.map((item) => {
@@ -125,36 +133,33 @@ function Room() {
       });
   }
 
-    // Edit Validation Gallery
-    const validationGalleryEdit = () => {
-      setError({});
-      var result = validateEditGallery(actionImage);
-      console.log("Result" + JSON.stringify(result));
-      if (result === true) {
-        updateImageDetails();
-      } else {
-        setError(result);
-      }
-    };
-  
-    const handlecheckbox = (e) => {
-      console.log(images.length);
-      const { name, checked } = e.target;
-  
-      let tempCon = images.map((item) =>
-        item.image_id === name ? { ...item, isChecked: checked } : item
-      );
-      setImages(tempCon);
-      check = tempCon
-        .filter((i) => i.isChecked === true)
-        .map((j) => {
-          return j.image_id;
-        });
-    };
-  
+  // Edit Validation Gallery
+  const validationGalleryEdit = () => {
+    setError({});
+    var result = validateEditGallery(actionImage);
+    console.log("Result" + JSON.stringify(result));
+    if (result === true) {
+      updateImageDetails();
+    } else {
+      setError(result);
+    }
+  };
 
+  const handlecheckbox = (e) => {
+    console.log(images.length);
+    const { name, checked } = e.target;
 
-    
+    let tempCon = images.map((item) =>
+      item.image_id === name ? { ...item, isChecked: checked } : item
+    );
+    setImages(tempCon);
+    check = tempCon
+      .filter((i) => i.isChecked === true)
+      .map((j) => {
+        return j.image_id;
+      });
+  };
+
   // function to search image
   const [searchedImages, setSearchedImages] = useState([{}]);
   const [showSearchedImages, setShowSearchedImages] = useState(0);
@@ -174,38 +179,27 @@ function Room() {
 
   /** Use Effect to fetch details from the Local Storage **/
   useEffect(() => {
-    firstfun();
+    const resp = InitialActions({ setColor, setMode })
+    language = resp?.language;
+    currentLogged = resp?.currentLogged;
+    currentProperty = resp?.currentProperty;
+    currentroom = localStorage.getItem('RoomId');
+    setProperty_name(resp?.currentProperty?.property_name);
+    colorToggle = resp?.colorToggle
+
   }, [])
 
-  const firstfun = () => {
-    if (typeof window !== 'undefined') {
-      var locale = localStorage.getItem("Language");
-      const colorToggle = localStorage.getItem("colorToggle");
-      if (colorToggle === "" || colorToggle === undefined || colorToggle === null || colorToggle === "system") {
-          window.matchMedia("(prefers-color-scheme:dark)").matches === true ? setColor(colorFile?.dark) : setColor(colorFile?.light)
-          setMode(window.matchMedia("(prefers-color-scheme:dark)").matches === true ? true : false);
-        }
-      else if (colorToggle === "true" || colorToggle === "false") {
-          setColor(colorToggle === "true" ? colorFile?.dark : colorFile?.light);
-          setMode(colorToggle === "true" ? true : false)
-      }
-     { if (locale === "ar") {
-        language = arabic;
-      }
-      if (locale === "en") {
-        language = english;
-      }
-      if (locale === "fr") {
-        language = french;
-      }}
-      /** Current Property Basic Details fetched from the local storage **/
-      currentroom = localStorage.getItem('RoomId');
-      /** Current Property Details fetched from the local storage **/
-      currentProperty = JSON.parse(localStorage.getItem("property"));
-      currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
+  /* Function to load Room Details when page loads */
+  useEffect(() => {
+    if (JSON.stringify(currentLogged) === 'null') {
+      Router.push(window.location.origin)
     }
-  }
-
+    else {
+      fetchRoomtypes();
+      fetchImages();
+      fetchDetails();
+    }
+  }, [])
   // Fetch Room Details
   const fetchDetails = async () => {
     const url = `/api/${currentProperty.address_province.replace(/\s+/g, '-')}/${currentProperty.address_city}/${currentProperty.property_category}s/${currentProperty.property_id}/${currentroom}`
@@ -214,6 +208,8 @@ function Room() {
         setAllRoomDetails(response.data);
         setRoomDetails(response.data);
         setFinalView(response?.data?.views);
+        setDiscount(response?.data?.discounts)
+        setRateModification(response?.data?.room_rate_modifications)
         if (response.data?.room_type == 'Single') {
           setBedDetails(response.data.beds?.[i])
         }
@@ -221,7 +217,7 @@ function Room() {
         if (response.data.room_facilities !== undefined) {
           setServices(response.data.room_facilities);
         }
-          
+
         setRoomDetails(response.data);
         if (response.data.room_facilities == undefined) {
           fetchServices();
@@ -244,28 +240,27 @@ function Room() {
         logger.info("url  to fetch room hitted successfully");
         setVisible(1)
       })
-      .catch((error) => { logger.error("url to fetch room, failed");  });
+      .catch((error) => { logger.error("url to fetch room, failed"); });
   }
 
-  const filterCurrency = (props) => 
-  {
-    if(props != undefined)
-  {
-    currency = lang?.CurrencyData.filter(el => {
-      return props.baserate_currency.toUpperCase() === el.currency_code;
-    });
-    const rate={
-      "currency":currency?.[i]?.currency_name,
-      "baserate_amount": props.baserate_amount,
-      "tax_amount":props.tax_amount,
-      "otherfees_amount":props.otherfees_amount,
-      "room_id":props.room_id,
-      "un_rate_id":props.un_rate_id
+  const filterCurrency = (props) => {
+    if (props != undefined) {
+      currency = lang?.CurrencyData.filter(el => {
+        return props.baserate_currency.toUpperCase() === el.currency_code;
+      });
+      const rate = {
+        "currency": currency?.[i]?.currency_name,
+        "baserate_amount": props.baserate_amount,
+        "tax_amount": props.tax_amount,
+        "otherfees_amount": props.otherfees_amount,
+        "room_id": props.room_id,
+        "un_rate_id": props.un_rate_id
       }
-    //setAllRoomRates({ props., currency: currency?.[i]?.currency_name })
-    setAllRoomRates(rate)
+      //setAllRoomRates({ props., currency: currency?.[i]?.currency_name })
+      setAllRoomRates(rate)
 
-  }}
+    }
+  }
 
   // Room Services
   const fetchServices = async () => {
@@ -277,23 +272,7 @@ function Room() {
       })
       .catch((error) => { logger.error("url to fetch roomtypes, failed") });
   }
-  const colorToggler = (newColor) => {
-    if (newColor === 'system') {
-      window.matchMedia("(prefers-color-scheme:dark)").matches === true ? setColor(colorFile?.dark)
-      : setColor(colorFile?.light)
-      localStorage.setItem("colorToggle", newColor)
-    }
-    else if (newColor === 'light') {
-      setColor(colorFile?.light)
-      localStorage.setItem("colorToggle", false)
-    }
-    else if (newColor === 'dark') {
-      setColor(colorFile?.dark)
-      localStorage.setItem("colorToggle", true)
-    }
-   firstfun();
-   Router.push('./editroom')
-  }
+
 
   // Room Images
   const fetchImages = async () => {
@@ -301,10 +280,10 @@ function Room() {
     console.log("url " + url)
     axios.get(url)
       .then((response) => {
-        const imgs= response.data.map((img,idx)=>{
-          return({...img,idx})
+        const imgs = response.data.map((img, idx) => {
+          return ({ ...img, idx })
         })
-        
+
         setRoomimages(imgs);
         logger.info("url  to fetch room images hitted successfully")
       })
@@ -324,18 +303,6 @@ function Room() {
       .catch((error) => { logger.error("url to fetch roomtypes, failed") });
   }
 
-  /* Function to load Room Details when page loads */
-  useEffect(() => {
-    if (JSON.stringify(currentLogged) === 'null') {
-      Router.push(window.location.origin)
-    }
-    else {
-      fetchRoomtypes();
-      fetchImages();
-      fetchDetails();
-
-    }
-  }, [])
 
   const onChangePhoto = (e, i) => {
     setImage({ ...image, imageFile: e.target.files[0] })
@@ -466,55 +433,57 @@ function Room() {
       })
   }
 
-    /*function for keyboard keys */
-    function left(key) {
-      if (document.getElementById("enlarge").className == "block") {
-        setActionEnlargeImage(roomimages?.filter((i,idx) => i.idx === indexImage - 1)
+  /*function for keyboard keys */
+  function left(key) {
+    if (document.getElementById("enlarge").className == "block") {
+      setActionEnlargeImage(roomimages?.filter((i, idx) => i.idx === indexImage - 1)
         .map((j) => {
           return {
             image_id: j?.image_id,
             image_title: j?.image_title,
-            idx: indexImage-1,
+            idx: indexImage - 1,
             image_description: j?.image_description,
             image_link: j?.image_link,
           };
         })?.[0]);
-        setIndexImage(indexImage - 1);
-     
-        //functionality
-      }
+      setIndexImage(indexImage - 1);
+
+      //functionality
     }
-  
-    function right(key) {
-      if (document.getElementById("enlarge").className == "block") {
-                  console.log('right');
-                  setActionEnlargeImage(roomimages?.filter((i,idx) => i.idx === indexImage + 1)
-                  .map((j) => {
-                    return {
-                      image_id: j?.image_id,
-                      image_title: j?.image_title,
-                      idx: indexImage+1,
-                      image_description: j?.image_description,
-                      image_link: j?.image_link,
-                    };
-                  })?.[0]);
-                  setIndexImage(indexImage + 1);
-                 
-      }
+  }
+
+  function right(key) {
+    if (document.getElementById("enlarge").className == "block") {
+      console.log('right');
+      setActionEnlargeImage(roomimages?.filter((i, idx) => i.idx === indexImage + 1)
+        .map((j) => {
+          return {
+            image_id: j?.image_id,
+            image_title: j?.image_title,
+            idx: indexImage + 1,
+            image_description: j?.image_description,
+            image_link: j?.image_link,
+          };
+        })?.[0]);
+      setIndexImage(indexImage + 1);
+
     }
-    useEffect(() => {
-      document.onkeydown = checkKey;
-      function checkKey(e) {
-        e = e || window.event;
-        console.log(e.key);
-       if (e.keyCode == "37") {
+  }
+
+  //useEffect to catch key press
+  useEffect(() => {
+    document.onkeydown = checkKey;
+    function checkKey(e) {
+      e = e || window.event;
+      console.log(e.key);
+      if (e.keyCode == "37") {
         // left(e.key); // left arrow
-        } else if (e.keyCode == "39") {
-         // right(e.key); // right arrow
-        }
+      } else if (e.keyCode == "39") {
+        // right(e.key); // right arrow
       }
-    }, []);
-  
+    }
+  }, []);
+
 
 
   /* Function to add images*/
@@ -526,7 +495,7 @@ function Room() {
         image_title: actionImage?.image_title,
         image_description: actionImage?.image_description,
         image_category: "room",
-        room_id:currentroom
+        room_id: currentroom
       }]
       const finalImage = { "images": imagedata }
       setSpinner(1);
@@ -545,7 +514,7 @@ function Room() {
           setActionImage([])
           setError({});
           setFlag([])
-         // submitImageLink(response?.data?.image_id);
+          // submitImageLink(response?.data?.image_id);
         })
         .catch(error => {
           setSpinner(0);
@@ -630,80 +599,81 @@ function Room() {
         "un_rate_id": roomDetails?.unconditional_rates?.[0]?.un_rate_id
       }
       setSpinner(1);
-      
+
       //const method=final_data?.un_rate_id? `put`:`post`
-      if(final_data.un_rate_id!= undefined){
+      if (final_data.un_rate_id != undefined) {
         const url = '/api/unconditional_rates'
         axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
-        ((response) => {
-          setSpinner(0)
-          toast.success("Room rates update Success.", {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-          setFlag([])
-          fetchDetails();
-          setError({});
-          setAllRoomRates([]);
-          Router.push("./editroom");
+          ((response) => {
+            setSpinner(0)
+            toast.success("Room rates update Success.", {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+            setFlag([])
+            fetchDetails();
+            setError({});
+            setAllRoomRates([]);
+            Router.push("./editroom");
 
 
-        })
-        .catch((error) => {
-          setSpinner(0);
-          setError({});
-          toast.error("Room rates update error.", {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-        })
+          })
+          .catch((error) => {
+            setSpinner(0);
+            setError({});
+            toast.error("Room rates update error.", {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          })
       }
-      else{const url = '/api/room_unconditional_rates'
+      else {
+        const url = '/api/room_unconditional_rates'
         axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
-        ((response) => {
-          setSpinner(0)
-          toast.success("Room rates update Success.", {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-          setFlag([])
-          fetchDetails();
-          setError({});
-          setAllRoomRates([]);
-          Router.push("./editroom");
+          ((response) => {
+            setSpinner(0)
+            toast.success("Room rates update Success.", {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+            setFlag([])
+            fetchDetails();
+            setError({});
+            setAllRoomRates([]);
+            Router.push("./editroom");
 
 
-        })
-        .catch((error) => {
-          setSpinner(0);
-          setError({});
-          toast.error("Room rates update error.", {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-        })
+          })
+          .catch((error) => {
+            setSpinner(0);
+            setError({});
+            toast.error("Room rates update error.", {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          })
       }
-      
+
     }
   }
 
@@ -849,7 +819,7 @@ function Room() {
       const current = new Date();
       const currentDateTime = current.toISOString();
       const final_data = {
-        "beds": [{  
+        "beds": [{
           "timestamp": currentDateTime,
           "room_id": currentroom,
           "length": modified.bed_length,
@@ -978,12 +948,12 @@ function Room() {
       }
     }
   }
-/* function for multiple delete */
-const allDelete = async () => {
-  // checked = images.filter(i => i.isChecked === true).map(j => { return (j.image_id) })
-  // alert(checked?.length)
-  setdeleteImage(1);
-};
+  /* function for multiple delete */
+  const allDelete = async () => {
+    // checked = images.filter(i => i.isChecked === true).map(j => { return (j.image_id) })
+    // alert(checked?.length)
+    setdeleteImage(1);
+  };
 
 
   function deleteMultiple() {
@@ -1155,7 +1125,7 @@ const allDelete = async () => {
 
   // Validate Rates
   const validationRates = () => {
-   var result = validateRoomRates(allRoomRates)
+    var result = validateRoomRates(allRoomRates)
     if (result === true) {
       submitRoomRatesEdit()
     }
@@ -1166,8 +1136,9 @@ const allDelete = async () => {
 
   return (
     <>
-      <Header Primary={english?.Side1} color={color}Sec={colorToggler} mode={mode} setMode={setMode} Type={currentLogged?.user_type} />
-      <Sidebar Primary={english?.Side1} Type={currentLogged?.user_type} color={color}  />
+      <Title name={`Engage | Edit Room`} />
+      <Header color={color} setColor={setColor} Primary={english?.Side1} Type={currentLogged?.user_type} Sec={ColorToggler} mode={mode} setMode={setMode} />
+      <Sidebar Primary={english?.Side1} Type={currentLogged?.user_type} color={color} />
 
       <div id="main-content"
         className={`${color?.greybackground} px-4 pt-24 relative overflow-y-auto lg:ml-64`}>
@@ -1190,7 +1161,7 @@ const allDelete = async () => {
                   <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
                   <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
                   <div className={visible === 1 ? 'block' : 'hidden'}>   <Link href="../propertysummary" className={`text-gray-700 text-sm ml-1 md:ml-2  font-medium hover:${color?.text} `}>
-                    <a>{currentProperty?.property_name}</a>
+                    <a>{property_name}</a>
                   </Link>
                   </div></div>
 
@@ -1228,27 +1199,10 @@ const allDelete = async () => {
 
           {/* Room Description */}
           <div id='0' className={disp === 0 ? 'block' : 'hidden'}>
+            
             <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
               {/* progress bar starts */}
-              <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
-                <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-                  <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
-                  <div className={`${color.crossbg} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>Room Description</div>
-                </div>
-
-                <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                  <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-                  <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.room} {language?.services}</div>
-                </div>
-                <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                  <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-                  <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.room} {language?.gallery}</div>
-                </div>
-                <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                  <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
-                  <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.room} {language?.rates}</div>
-                </div>
-              </div>
+              <WidgetStatus name={[`Room Description`,`${language?.room} ${language?.services}`,`${language?.room} ${language?.gallery}`,`${language?.room} ${language?.rates}`,`Rate Discounts`,`Rate Modifications`]} selected={1} color={color}/>
               {/* Progress bar ends */}
               <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  pb-2 font-bold`}>
                 {language?.room} {language?.description}
@@ -1256,291 +1210,122 @@ const allDelete = async () => {
               <div className="pt-6">
                 <div className=" md:px-2 mx-auto w-full">
                   <div className="flex flex-wrap">
-                       {/* room name */}
-                       <InputText
-                  label={`${language?.room} ${language?.name}`}
-                  visible={visible}
-                  defaultValue={allRoomDetails?.room_name}
-                  onChangeAction={(e) => {
-                    setAllRoomDetails({
-                      ...allRoomDetails, room_name: e.target.value,
-                    });
-                    setFlag(1);
-                  }
-                  }
-                  error={error?.room_name}
-                  color={color}
-                  req={true}
-                />
-                    {/* <div className="w-full lg:w-6/12 px-4">
-                     <div className="relative w-full mb-3">
-                        <label
-                          className={`text-sm font-medium ${color?.text} block mb-2`}
-                          htmlFor="grid-password"
-                        >
-                          {language?.room} {language?.name}
-                          <span style={{ color: "#ff0000" }}>*</span>
-                        </label>
-                        <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                        <div className={visible === 1 ? 'block' : 'hidden'}>
-                          <input
-                            type="text"
-                            defaultValue={allRoomDetails?.room_name}
-                            onChange={
-                              (e) => (
-                                setAllRoomDetails({ ...allRoomDetails, room_name: e.target.value }, setFlag(1))
-                              )
-                            }
-                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          />
-                          <p className="text-sm text-sm text-red-700 font-light">
-                            {error?.room_name}</p></div>
-                      </div>
-                    </div> */}
+                    {/* room name */}
+                    <InputText
+                      label={`${language?.room} ${language?.name}`}
+                      visible={visible}
+                      defaultValue={allRoomDetails?.room_name}
+                      onChangeAction={(e) => {
+                        setAllRoomDetails({
+                          ...allRoomDetails, room_name: e.target.value,
+                        });
+                        setFlag(1);
+                      }
+                      }
+                      error={error?.room_name}
+                      color={color}
+                      req={true}
+                    />
+                    
                     {/* room type */}
                     <DropDown
-                  label={`${language?.room} ${language?.type}`}
-                  visible={visible}
-                  defaultValue={roomDetails?.room_type}
-                  onChangeAction={(e) =>
-                    setAllRoomDetails(
-                      { ...allRoomDetails, room_type_id: e.target.value },
-                      setFlag(1)
-                    )
-                  }
-                  error={error?.propertycategory}
-                  color={color}
-                  req={true}
-                  options={[
-                    { value: "king", label: "King" },
-                    { value: "queen", label: "Queen" }, 
-                    { value: "single", label: "Single" },
-                    { value: "double", label: "Double" },
-                    { value: "semi_double", label: "Semi Double" },
-                    { value: "studio_room", label: "Studio Room" },
-                  ]}
-                />
-                    {/* <div className="w-full lg:w-6/12 px-4">
-                      <div className="relative w-full mb-3">
-                        <label className={`text-sm font-medium ${color?.text} block mb-2`}
-                          htmlFor="grid-password">
-                          {language?.room} {language?.type}
-                          <span style={{ color: "#ff0000" }}>*</span>
-                        </label>
-                        <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                        <div className={visible === 1 ? 'block' : 'hidden'}>
-                        {(allRoomDetails?.room_type==='Capsule' || allRoomDetails?.room_type==='Suite')?
-                        <input
-                        disabled
-                            type="text"
-                            defaultValue={allRoomDetails?.room_type?.replaceAll("_", " ")}
-
-                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          />:
-                            <select
-                            defaultValue={roomDetails?.room_type}
-                            onClick={(e) => setAllRoomDetails({ ...allRoomDetails, room_type_id: e.target.value }, setFlag(1))}
-                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} >
-                            <option  disabled selected value={roomDetails?.room_type}>{roomDetails?.room_type}</option>
-                           {roomtypes.filter(i=>i.room_type_name != 'Capsule' && i.room_type_name != 'Suite').map((i)=><option key={i.room_type_id} value={i?.room_type_id}>{i?.room_type_name.replaceAll('_',' ')}</option>)}
-                          </select>
-                           }
-                        </div>
-                      </div>
-                    </div> */}
+                      label={`${language?.room} ${language?.type}`}
+                      visible={visible}
+                      defaultValue={roomDetails?.room_type}
+                      onChangeAction={(e) =>
+                        setAllRoomDetails(
+                          { ...allRoomDetails, room_type_id: e.target.value },
+                          setFlag(1)
+                        )
+                      }
+                      error={error?.propertycategory}
+                      color={color}
+                      req={true}
+                      options={[
+                        { value: "king", label: "King" },
+                        { value: "queen", label: "Queen" },
+                        { value: "single", label: "Single" },
+                        { value: "double", label: "Double" },
+                        { value: "semi_double", label: "Semi Double" },
+                        { value: "studio_room", label: "Studio Room" },
+                      ]}
+                    />
+                    
                     {/* room description */}
                     <InputText
-                  label={`${language?.room} ${language?.description}`}
-                  visible={visible}
-                  defaultValue={allRoomDetails?.room_description}
-                  onChange={
-                    (e) => (
-                      setAllRoomDetails({ ...allRoomDetails, room_description: e.target.value }, setFlag(1))
-                    )
-                  }
-                  error={error?.room_description}
-                  color={color}
-                  req={true}
-                />
-                    {/* <div className="w-full lg:w-6/12 px-4">
-                      <div className="relative w-full mb-3">
-                        <label
-                          className={`text-sm font-medium ${color?.text} block mb-2`}
-                          htmlFor="grid-password"
-                        >
-                          {language?.room} {language?.description}
-                          <span style={{ color: "#ff0000" }}>*</span>
-                        </label>
-                        <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                        <div className={visible === 1 ? 'block' : 'hidden'}>
-                          <textarea rows="2" columns="50"
-                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                            onChange={
-                              (e) => (
-                                setAllRoomDetails({ ...allRoomDetails, room_description: e.target.value }, setFlag(1))
-                              )
-                            }
-                            defaultValue={allRoomDetails?.room_description}
-                          />
-                          <p className="text-sm text-sm text-red-700 font-light">
-                            {error?.room_description}</p></div>
-                      </div>
-                    </div> */}
-                      {/* room capacity */}
-                      <InputText
-                  label={`${language?.room} ${language?.capacity}`}
-                  visible={visible}
-                  defaultValue={allRoomDetails?.room_capacity}
-                  onChangeAction={
-                    (e) => (
-                      setAllRoomDetails({ ...allRoomDetails, room_capacity: e.target.value }, setFlag(1))
-                    )
-                  }
-                  error={error?.room_capacity}
-                  color={color}
-                  req={true}
-                />
-                    {/* <div className="w-full lg:w-6/12 px-4">
-                      <div className="relative w-full mb-3">
-                        <label
-                          className={`text-sm font-medium ${color?.text} block mb-2`}
-                          htmlFor="grid-password"
-                        >
-                          {language?.room} {language?.capacity}
-                          <span style={{ color: "#ff0000" }}>*</span>
-                        </label>
-                        <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                        <div className={visible === 1 ? 'block' : 'hidden'}>
-                          <input
-                            type="text"
-                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                            defaultValue={allRoomDetails?.room_capacity}
-                            onChange={
-                              (e) => (
-                                setAllRoomDetails({ ...allRoomDetails, room_capacity: e.target.value }, setFlag(1))
-                              )
-                            }
-                          />
-                          <p className="text-sm text-sm text-red-700 font-light">
-                            {error?.room_capacity}</p></div>
-                      </div>
-                    </div> */}
+                      label={`${language?.room} ${language?.description}`}
+                      visible={visible}
+                      defaultValue={allRoomDetails?.room_description}
+                      onChange={
+                        (e) => (
+                          setAllRoomDetails({ ...allRoomDetails, room_description: e.target.value }, setFlag(1))
+                        )
+                      }
+                      error={error?.room_description}
+                      color={color}
+                      req={true}
+                    />
+                    
+                    {/* room capacity */}
+                    <InputText
+                      label={`${language?.room} ${language?.capacity}`}
+                      visible={visible}
+                      defaultValue={allRoomDetails?.room_capacity}
+                      onChangeAction={
+                        (e) => (
+                          setAllRoomDetails({ ...allRoomDetails, room_capacity: e.target.value }, setFlag(1))
+                        )
+                      }
+                      error={error?.room_capacity}
+                      color={color}
+                      req={true}
+                    />
+                    
                     {/* max number of occupants */}
                     <InputText
-                  label={`${language?.maximum} ${language?.number} ${language?.of} ${language?.occupants}`}
-                  visible={visible}
-                  defaultValue={allRoomDetails?.maximum_number_of_occupants}
-                  onChange={
-                    (e) => (
-                      setAllRoomDetails({ ...allRoomDetails, maximum_number_of_occupants: e.target.value }, setFlag(1))
-                    )
-                  }
-                  error= {error?.maximum_number_of_occupants}
-                  color={color}
-                  req={true}
-                />
-                    {/* <div className="w-full lg:w-6/12 px-4">
-                      <div className="relative w-full mb-3">
-                        <label
-                          className={`text-sm font-medium ${color?.text} block mb-2`}
-                          htmlFor="grid-password">
-                          <span style={{ color: "#ff0000" }}>*</span>
-                          {language?.maximum} {language?.number} {language?.of} {language?.occupants}
-                        </label>
-                        <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                        <div className={visible === 1 ? 'block' : 'hidden'}>
-                          <input
-                            type="text"
-                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                            defaultValue={allRoomDetails?.maximum_number_of_occupants}
-                            onChange={
-                              (e) => (
-                                setAllRoomDetails({ ...allRoomDetails, maximum_number_of_occupants: e.target.value }, setFlag(1))
-                              )
-                            }
-                          />
-                          <p className="text-sm text-sm text-red-700 font-light">
-                            {error?.maximum_number_of_occupants}</p></div>
-                      </div>
-                    </div> */}
+                      label={`${language?.maximum} ${language?.number} ${language?.of} ${language?.occupants}`}
+                      visible={visible}
+                      defaultValue={allRoomDetails?.maximum_number_of_occupants}
+                      onChange={
+                        (e) => (
+                          setAllRoomDetails({ ...allRoomDetails, maximum_number_of_occupants: e.target.value }, setFlag(1))
+                        )
+                      }
+                      error={error?.maximum_number_of_occupants}
+                      color={color}
+                      req={true}
+                    />
+                    
                     {/* minimum number of occupants */}
                     <InputText
-                  label={`${language?.minimum} ${language?.number} ${language?.of} ${language?.occupants}`}
-                  visible={visible}
-                  defaultValue={allRoomDetails?.maximum_number_of_occupants}
-                  onChange={
-                    (e) => (
-                      setAllRoomDetails({ ...allRoomDetails, maximum_number_of_occupants: e.target.value }, setFlag(1))
-                    )
-                  }
-                  error= {error?.maximum_number_of_occupants}
-                  color={color}
-                  req={true}
-                />
-                    {/* <div className="w-full lg:w-6/12 px-4">
-                      <div className="relative w-full mb-3">
-                        <label
-                          className={`text-sm font-medium ${color?.text} block mb-2`}
-                          htmlFor="grid-password"
-                        >
-                          {language?.minimum} {language?.number} {language?.of} {language?.occupants}
-                          <span style={{ color: "#ff0000" }}>*</span>
-                        </label>
-                        <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                        <div className={visible === 1 ? 'block' : 'hidden'}>
-                          <input
-                            type="text"
-                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                            defaultValue={allRoomDetails?.minimum_number_of_occupants}
-                            onChange={
-                              (e) => (
-                                setAllRoomDetails({ ...allRoomDetails, minimum_number_of_occupants: e.target.value }, setFlag(1))
-                              )
-                            }
-                          />
-                          <p className="text-sm text-sm text-red-700 font-light">
-                            {error?.minimum_number_of_occupants}</p></div>
-                      </div>
-                    </div> */}
+                      label={`${language?.minimum} ${language?.number} ${language?.of} ${language?.occupants}`}
+                      visible={visible}
+                      defaultValue={allRoomDetails?.maximum_number_of_occupants}
+                      onChange={
+                        (e) => (
+                          setAllRoomDetails({ ...allRoomDetails, maximum_number_of_occupants: e.target.value }, setFlag(1))
+                        )
+                      }
+                      error={error?.maximum_number_of_occupants}
+                      color={color}
+                      req={true}
+                    />
+                    
                     {/* Maximum age of occupants */}
                     <InputText
-                  label={`${language?.maximum} ${language?.age} ${language?.of} ${language?.occupants}`}
-                  visible={visible}
-                  defaultValue={allRoomDetails?.minimum_age_of_occupants}
-                  onChangeAction={
-                    (e) => (
-                      setAllRoomDetails({ ...allRoomDetails, minimum_age_of_occupants: e.target.value }, setFlag(1))
-                    )
-                  }
-                  error= {error?.maximum_number_of_occupants}
-                  color={color}
-                  req={true}
-                />
-                    {/* <div className="w-full lg:w-6/12 px-4">
-                      <div className="relative w-full mb-3">
-                        <label
-                          className={`text-sm font-medium ${color?.text} block mb-2`}
-                          htmlFor="grid-password"
-                        >
-                          {language?.maximum} {language?.age} {language?.of} {language?.occupants}
-                          <span style={{ color: "#ff0000" }}>*</span>
-                        </label>
-                        <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                        <div className={visible === 1 ? 'block' : 'hidden'}>
-                          <input
-                            type="text"
-                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                            defaultValue={allRoomDetails?.minimum_age_of_occupants}
-                            onChange={
-                              (e) => (
-                                setAllRoomDetails({ ...allRoomDetails, minimum_age_of_occupants: e.target.value }, setFlag(1))
-                              )
-                            }
-                          />
-                          <p className="text-sm text-sm text-red-700 font-light">
-                            {error?.minimum_age_of_occupants}</p></div>
-                      </div>
-                    </div> */}
+                      label={`${language?.maximum} ${language?.age} ${language?.of} ${language?.occupants}`}
+                      visible={visible}
+                      defaultValue={allRoomDetails?.minimum_age_of_occupants}
+                      onChangeAction={
+                        (e) => (
+                          setAllRoomDetails({ ...allRoomDetails, minimum_age_of_occupants: e.target.value }, setFlag(1))
+                        )
+                      }
+                      error={error?.maximum_number_of_occupants}
+                      color={color}
+                      req={true}
+                    />
+                    
                     {/* views room */}
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
@@ -1567,121 +1352,52 @@ const allDelete = async () => {
                         </div>
                       </div>
                     </div>
-{/* Room height */}
-<InputText
-                  label={`${language?.room} ${language?.length} (${language?.infeet})`}
-                  visible={visible}
-                  defaultValue={allRoomDetails?.room_length}
-                  onChangeAction={
-                    (e) => (
-                      setAllRoomDetails({ ...allRoomDetails, room_length: e.target.value }, setFlag(1))
-                    )
-                  }
-                  error= {error?.room_length}
-                  color={color}
-                  req={true}
-                />
-                    {/* <div className="w-full lg:w-6/12 px-4">
-                      <div className="relative w-full mb-3">
-                        <label
-                          className={`text-sm font-medium ${color?.text} block mb-2`}
-                          htmlFor="grid-password"
-                        >
-                          {language?.room} {language?.length}( {language?.infeet})
-                          <span style={{ color: "#ff0000" }}>*</span>
-                        </label>
-                        <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                        <div className={visible === 1 ? 'block' : 'hidden'}>
-                          <input
-                            type="text" defaultValue={allRoomDetails?.room_length}
-                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                            onChange={
-                              (e) => (
-                                setAllRoomDetails({ ...allRoomDetails, room_length: e.target.value }, setFlag(1))
-                              )
-                            }
-                          />
-                          <p className="text-sm text-sm text-red-700 font-light">
-                            {error?.room_length}</p></div></div>
-                    </div> */}
- {/* Room Breadth */}
+                    {/* Room height */}
+                    <InputText
+                      label={`${language?.room} ${language?.length} (${language?.infeet})`}
+                      visible={visible}
+                      defaultValue={allRoomDetails?.room_length}
+                      onChangeAction={
+                        (e) => (
+                          setAllRoomDetails({ ...allRoomDetails, room_length: e.target.value }, setFlag(1))
+                        )
+                      }
+                      error={error?.room_length}
+                      color={color}
+                      req={true}
+                    />
+                    
+                    {/* Room Breadth */}
 
- <InputText
-                  label={`${language?.room} ${language?.breadth} (${language?.infeet})`}
-                  visible={visible}
-                  defaultValue={allRoomDetails?.room_width}
-                  onChangeAction={
-                    (e) => (
-                      setAllRoomDetails({ ...allRoomDetails, room_width: e.target.value }, setFlag(1))
-                    )
-                  }
-                  error= {error?.room_width}
-                  color={color}
-                  req={true}
-                />
-                    {/* <div className="w-full lg:w-6/12 px-4">
-                      <div className="relative w-full mb-3">
-                        <label
-                          className={`text-sm font-medium ${color?.text} block mb-2`}
-                          htmlFor="grid-password"
-                        >
-                          {language?.room} {language?.breadth}( {language?.infeet})
-                          <span style={{ color: "#ff0000" }}>*</span>
-                        </label>
-                        <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                        <div className={visible === 1 ? 'block' : 'hidden'}>
-                          <input
-                            type="text"
-                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                            defaultValue={allRoomDetails?.room_width}
-                            onChange={
-                              (e) => (
-                                setAllRoomDetails({ ...allRoomDetails, room_width: e.target.value }, setFlag(1))
-                              )
-                            }
-                          />
-                          <p className="text-sm text-sm text-red-700 font-light">
-                            {error?.room_width}</p></div>
-                      </div>
-                    </div> */}
+                    <InputText
+                      label={`${language?.room} ${language?.breadth} (${language?.infeet})`}
+                      visible={visible}
+                      defaultValue={allRoomDetails?.room_width}
+                      onChangeAction={
+                        (e) => (
+                          setAllRoomDetails({ ...allRoomDetails, room_width: e.target.value }, setFlag(1))
+                        )
+                      }
+                      error={error?.room_width}
+                      color={color}
+                      req={true}
+                    />
+                    
                     {/* Room Height */}
                     <InputText
-                  label={`${language?.room} ${language?.height} (${language?.infeet})`}
-                  visible={visible}
-                  defaultValue={allRoomDetails?.room_height}
-                  onChangeAction={
-                    (e) => (
-                      setAllRoomDetails({ ...allRoomDetails, room_height: e.target.value }, setFlag(1))
-                    )
-                  }
-                  error={error?.room_height}
-                  color={color}
-                  req={true}
-                />
-                    {/* <div className="w-full lg:w-6/12 px-4">
-                      <div className="relative w-full mb-3">
-                        <label
-                          className={`text-sm font-medium ${color?.text} block mb-2`}
-                          htmlFor="grid-password"
-                        >
-                          {language?.room} {language?.height}( {language?.infeet})
-                          <span style={{ color: "#ff0000" }}>*</span>
-                        </label>
-                        <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                        <div className={visible === 1 ? 'block' : 'hidden'}>
-                          <input
-                            type="text"
-                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                            onChange={
-                              (e) => (
-                                setAllRoomDetails({ ...allRoomDetails, room_height: e.target.value }, setFlag(1))
-                              )
-                            }
-                            defaultValue={allRoomDetails?.room_height} />
-                          <p className="text-sm text-sm text-red-700 font-light">
-                            {error?.room_height}</p></div>
-                      </div>
-                    </div> */}
+                      label={`${language?.room} ${language?.height} (${language?.infeet})`}
+                      visible={visible}
+                      defaultValue={allRoomDetails?.room_height}
+                      onChangeAction={
+                        (e) => (
+                          setAllRoomDetails({ ...allRoomDetails, room_height: e.target.value }, setFlag(1))
+                        )
+                      }
+                      error={error?.room_height}
+                      color={color}
+                      req={true}
+                    />
+                    
                     {/* Room Area Read only */}
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
@@ -1701,7 +1417,7 @@ const allDelete = async () => {
                           /></div>
                       </div>
                     </div>
-                     {/* Room Volume Read only */}
+                    {/* Room Volume Read only */}
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
@@ -1718,114 +1434,65 @@ const allDelete = async () => {
                             defaultValue={allRoomDetails?.room_volume} readOnly="readonly" />
                         </div></div>
                     </div>
-                     {/* Room Style*/}
-                     <DropDown
-                  label={language?.roomstyle}
-                  visible={visible}
-                  defaultValue={allRoomDetails?.room_style?.replaceAll("_", " ")}
-                  onChangeAction={
-                    (e) => (
-                      setAllRoomDetails({ ...allRoomDetails, room_style: e.target.value }, setFlag(1))
-                    )
-                  }
-                  error={error?.room_style}
-                  color={color}
-                  req={true}
-                  options={[
-                    { value: "western", label: "Western" },
-                    { value: "japanese", label: "Japanese" }, 
-                    { value: "japanese_western", label: "Japanese Western" },
-                  ]}
-                />
-                    {/* <div className="w-full lg:w-6/12 px-4">
-                      <div className="relative w-full mb-3">
-                        <label className={`text-sm font-medium ${color?.text} block mb-2`}
-                          htmlFor="grid-password">
-                          {language?.roomstyle}
-                          <span style={{ color: "#ff0000" }}>*</span>
-                        </label>
-                        <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                        <div className={visible === 1 ? 'block' : 'hidden'}>
-                          <select className={`shadow-sm ${color?.greybackground} capitalize border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                            onChange={
-                              (e) => (
-                                setAllRoomDetails({ ...allRoomDetails, room_style: e.target.value }, setFlag(1))
-                              )
-                            }
-                          >
-                            <option selected disabled >{allRoomDetails?.room_style?.replaceAll("_", " ")}</option>
-                            <option value="western">Western</option>
-                            <option value="japanese">Japanese</option>
-                            <option value="japanese_western">Japanese Western</option>
-                          </select>
-                          <p className="text-sm text-sm text-red-700 font-light">
-                            {error?.room_style}</p>
-                        </div>
-                      </div>
-                    </div> */}
+                    {/* Room Style*/}
+                    <DropDown
+                      label={language?.roomstyle}
+                      visible={visible}
+                      defaultValue={allRoomDetails?.room_style?.replaceAll("_", " ")}
+                      onChangeAction={
+                        (e) => (
+                          setAllRoomDetails({ ...allRoomDetails, room_style: e.target.value }, setFlag(1))
+                        )
+                      }
+                      error={error?.room_style}
+                      color={color}
+                      req={true}
+                      options={[
+                        { value: "western", label: "Western" },
+                        { value: "japanese", label: "Japanese" },
+                        { value: "japanese_western", label: "Japanese Western" },
+                      ]}
+                    />
+                 
                     {/* Is Room Shared */}
                     <DropDown
-                  label={language?.isroomshared}
-                  visible={visible}
-                  defaultValue={allRoomDetails?.is_room_sharing === "shared" ? "Yes" : "No"}
-                  onChangeAction={
-                    (e) => (
-                      setAllRoomDetails({ ...allRoomDetails, is_room_sharing: e.target.value }, setFlag(1))
-                    )
-                  }
-                  error={error?.is_room_sharing}
-                  color={color}
-                  req={true}
-                  options={[
-                    { value: "yes", label: "Yes" },
-                    { value: "no", label: "No" }, 
-                    
-                  ]}
-                />
-                    {/* <div className="w-full lg:w-6/12 px-4">
-                      <div className="relative w-full mb-3">
-                        <label className={`text-sm font-medium ${color?.text} block mb-2`}
-                          htmlFor="grid-password">
-                          {language?.isroomshared}
-                          <span style={{ color: "#ff0000" }}>*</span>
-                        </label>
-                        <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                        <div className={visible === 1 ? 'block' : 'hidden'}>
-                          <select className={`shadow-sm ${color?.greybackground} capitalize border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                            onChange={
-                              (e) => (
-                                setAllRoomDetails({ ...allRoomDetails, is_room_sharing: e.target.value }, setFlag(1))
-                              )
-                            }
-                          >
-                            <option selected disabled >{allRoomDetails?.is_room_sharing === "shared" ? "Yes" : "No"}</option>
-                            <option value="shared" >Yes</option>
-                            <option value="private">No</option>
-                          </select>
-                          <p className="text-sm text-sm text-red-700 font-light">
-                            {error?.is_room_sharing}</p>
-                        </div>
-                      </div>
-                    </div> */}
+                      label={language?.isroomshared}
+                      visible={visible}
+                      defaultValue={allRoomDetails?.is_room_sharing === "shared" ? "Yes" : "No"}
+                      onChangeAction={
+                        (e) => (
+                          setAllRoomDetails({ ...allRoomDetails, is_room_sharing: e.target.value }, setFlag(1))
+                        )
+                      }
+                      error={error?.is_room_sharing}
+                      color={color}
+                      req={true}
+                      options={[
+                        { value: "yes", label: "Yes" },
+                        { value: "no", label: "No" },
+
+                      ]}
+                    />
+                 
                     {/* Is Room Outdoor Or Indoor */}
-                  <DropDown
-                  label={language?.isroom}
-                  visible={visible}
-                  defaultValue={allRoomDetails?.is_room}
-                  onChangeAction={
-                    (e) => (
-                      setAllRoomDetails({ ...allRoomDetails, is_room: e.target.value }, setFlag(1))
-                    )
-                  }
-                  error={error?.is_room_sharing}
-                  color={color}
-                  req={true}
-                  options={[
-                    { value: "indoor", label: "Indoor" },
-                    { value: "outdoor", label: "Outdoor" }, 
-                    
-                  ]}
-                />
+                    <DropDown
+                      label={language?.isroom}
+                      visible={visible}
+                      defaultValue={allRoomDetails?.is_room}
+                      onChangeAction={
+                        (e) => (
+                          setAllRoomDetails({ ...allRoomDetails, is_room: e.target.value }, setFlag(1))
+                        )
+                      }
+                      error={error?.is_room_sharing}
+                      color={color}
+                      req={true}
+                      options={[
+                        { value: "indoor", label: "Indoor" },
+                        { value: "outdoor", label: "Outdoor" },
+
+                      ]}
+                    />
                     {/* <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -1883,25 +1550,7 @@ const allDelete = async () => {
           {/* Multiple Bed */}
           <div id='4' className={disp === 4 ? 'block' : 'hidden'}>
             <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
-              <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
-                <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-                  <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
-                  <div className={`${color.crossbg} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>Room Description</div>
-                </div>
-
-                <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                  <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-                  <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.room} {language?.services}</div>
-                </div>
-                <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                  <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-                  <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.room} {language?.gallery}</div>
-                </div>
-                <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                  <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
-                  <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.room} {language?.rates}</div>
-                </div>
-              </div>
+            <WidgetStatus name={[`Room Description`,`${language?.room} ${language?.services}`,`${language?.room} ${language?.gallery}`,`${language?.room} ${language?.rates}`,`Rate Discounts`,`Rate Modifications`]} selected={1} color={color}/>
               <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  pb-2 font-bold`}>
                 {language?.room} {language?.description}
               </h6>
@@ -1928,25 +1577,7 @@ const allDelete = async () => {
           {/* Single Bed */}
           <div id='5' className={disp === 5 ? 'block' : 'hidden'}>
             <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
-              <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
-                <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-                  <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
-                  <div className={`${color.crossbg} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>Room Description</div>
-                </div>
-
-                <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                  <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-                  <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.room} {language?.services}</div>
-                </div>
-                <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                  <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-                  <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.room} {language?.gallery}</div>
-                </div>
-                <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                  <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
-                  <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.room} {language?.rates}</div>
-                </div>
-              </div>
+            <WidgetStatus name={[`Room Description`,`${language?.room} ${language?.services}`,`${language?.room} ${language?.gallery}`,`${language?.room} ${language?.rates}`,`Rate Discounts`,`Rate Modifications`]} selected={1} color={color}/>
               <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  pb-2 font-bold`}>
                 {language?.room} {language?.description}
               </h6>
@@ -2028,29 +1659,9 @@ const allDelete = async () => {
           {/* Room Services */}
           <div id='1' className={disp === 1 ? 'block' : 'hidden'}>
             <div className={`${color?.whitebackground} shadow rounded-lg mt-2 mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
-              <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
-                <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                  <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
-                  <div className={`lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto ${color.widget}`}> {language?.room} {language?.description}</div>
-                </div>
+            
+            <WidgetStatus name={[`Room Description`,`${language?.room} ${language?.services}`,`${language?.room} ${language?.gallery}`,`${language?.room} ${language?.rates}`,`Rate Discounts`,`Rate Modifications`]} selected={2} color={color}/>
 
-                <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                  <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary"
-                  >2</button>
-                  <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>
-                    {language?.room} {language?.services}</div>
-                </div>
-
-                <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-                  <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-                  <div className={`lg:w-32 font-medium ${color.crossbg} text-base lg:mt-3 ml-3 lg:mx-auto`}> {language?.room} {language?.gallery}</div>
-                </div>
-                <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-                  <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
-                  <div className={`lg:w-32 font-medium ${color.crossbg} text-base lg:mt-3 ml-3 lg:mx-auto`}> {language?.room} {language?.rates}</div>
-                </div>
-
-              </div>
               <h6 className={`${color?.text} text-xl flex leading-none pl-6 pt-2 font-bold  mb-8`}>
                 {language?.room} {language?.services}
               </h6>
@@ -2087,11 +1698,11 @@ const allDelete = async () => {
 
                               <td className={`${color.text} px-4 py-4 whitespace-nowrap text-base font-normal `}>
                                 <div className="flex">
-                                  <div  className="form-check ml-4 form-check-inline">
+                                  <div className="form-check ml-4 form-check-inline">
 
                                     <label htmlFor={"default-toggle" + idx} className="inline-flex relative items-center cursor-pointer">
 
-                                      <input  type="checkbox" value={item?.service_value} checked={item?.service_value == true}
+                                      <input type="checkbox" value={item?.service_value} checked={item?.service_value == true}
                                         onChange={() => {
                                           setServices(services?.map((i) => {
 
@@ -2142,152 +1753,127 @@ const allDelete = async () => {
           {/* Room Gallery */}
           <div id='2' className={disp === 2 ? 'block' : 'hidden'}>
             <div className={`${color?.whitebackground} shadow-xl rounded-lg sm:p-6 xl:p-8  2xl:col-span-2 my-3`}>
-              
-              {/* header */}
-              <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
-                <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                  <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
-                  <div className={`lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto ${color.widget}`}> {language?.room} {language?.description}</div>
-                </div>
 
-                <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                  <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400"
-                  >2</button>
-                  <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>
-                    {language?.room} {language?.services}</div>
-                </div>
-
-                <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-                  <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary"
-                  >3</button>
-                  <div className={`lg:w-32 font-medium ${color.crossbg} text-base lg:mt-3 ml-3 lg:mx-auto`}> {language?.room} {language?.gallery}</div>
-                </div>
-                <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-                  <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
-                  <div className={`lg:w-32 font-medium ${color.crossbg} text-base lg:mt-3 ml-3 lg:mx-auto`}> {language?.room} {language?.rates}</div>
-                </div>
-
-              </div>
-              {/* header end */}
+            <WidgetStatus name={[`Room Description`,`${language?.room} ${language?.services}`,`${language?.room} ${language?.gallery}`,`${language?.room} ${language?.rates}`,`Rate Discounts`,`Rate Modifications`]} selected={3} color={color}/>
               <h6 className={`${color?.text} text-base  flex leading-none mb-2 mx-2 pt-2 font-semibold`}>
                 {language?.room}  {language?.gallery}
               </h6>
               <div className="sm:flex py-2 ">
                 <div className="hidden sm:flex items-center sm:divide-x sm:divide-gray-100 mb-3 ml-5 sm:mb-0">
-                <form className="lg:pr-3" id="imageSearchBox">
-                  <label htmlFor="users-search" className="sr-only">
-                    {language?.search}
-                  </label>
-                  <div className="mt-1 relative lg:w-64 xl:w-96">
-                    <input
-                      type="text"
-                      name="imageSearch"
-                      onChange={(e) => searchImage(e.target.value)}
-                      className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                      placeholder={language?.searchforimages}
-                    ></input>
-                  </div>
-                </form>
+                  <form className="lg:pr-3" id="imageSearchBox">
+                    <label htmlFor="users-search" className="sr-only">
+                      {language?.search}
+                    </label>
+                    <div className="mt-1 relative lg:w-64 xl:w-96">
+                      <input
+                        type="text"
+                        name="imageSearch"
+                        onChange={(e) => searchImage(e.target.value)}
+                        className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                        placeholder={language?.searchforimages}
+                      ></input>
+                    </div>
+                  </form>
                   {/*  icons to delete , clear , setting */}
-                  
+
                   <div className="flex space-x-1 pl-0 sm:pl-2 mt-3 sm:mt-0">
-                  {showSearchedImages === 1 ? (
+                    {showSearchedImages === 1 ? (
+                      <a
+                        href="#"
+                        onClick={() => {
+                          setShowSearchedImages(0);
+                          clearSearchField();
+                        }}
+                        className={`${color?.textgray}  hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          title="clear search"
+                          width="26"
+                          height="26"
+                          fill="currentColor"
+                          className="bi bi-eraser-fill"
+                          viewBox="0 0 16 16"
+                        >
+                          {" "}
+                          <path d="M8.086 2.207a2 2 0 0 1 2.828 0l3.879 3.879a2 2 0 0 1 0 2.828l-5.5 5.5A2 2 0 0 1 7.879 15H5.12a2 2 0 0 1-1.414-.586l-2.5-2.5a2 2 0 0 1 0-2.828l6.879-6.879zm.66 11.34L3.453 8.254 1.914 9.793a1 1 0 0 0 0 1.414l2.5 2.5a1 1 0 0 0 .707.293H7.88a1 1 0 0 0 .707-.293l.16-.16z" />{" "}
+                        </svg>
+                      </a>
+                    ) : (
+                      <></>
+                    )}
                     <a
                       href="#"
-                      onClick={() => {
-                        setShowSearchedImages(0);
-                        clearSearchField();
-                      }}
                       className={`${color?.textgray}  hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}
                     >
                       <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        title="clear search"
-                        width="26"
-                        height="26"
+                        className="w-6 h-6"
                         fill="currentColor"
-                        className="bi bi-eraser-fill"
-                        viewBox="0 0 16 16"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
                       >
-                        {" "}
-                        <path d="M8.086 2.207a2 2 0 0 1 2.828 0l3.879 3.879a2 2 0 0 1 0 2.828l-5.5 5.5A2 2 0 0 1 7.879 15H5.12a2 2 0 0 1-1.414-.586l-2.5-2.5a2 2 0 0 1 0-2.828l6.879-6.879zm.66 11.34L3.453 8.254 1.914 9.793a1 1 0 0 0 0 1.414l2.5 2.5a1 1 0 0 0 .707.293H7.88a1 1 0 0 0 .707-.293l.16-.16z" />{" "}
+                        <path
+                          fillRule="evenodd"
+                          d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
+                          clipRule="evenodd"
+                        ></path>
                       </svg>
                     </a>
-                  ) : (
-                    <></>
-                  )}
-                  <a
-                    href="#"
-                    className={`${color?.textgray}  hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}
-                  >
-                    <svg
-                      className="w-6 h-6"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
-                        clipRule="evenodd"
-                      ></path>
-                    </svg>
-                  </a>
-                  <a
-                    onClick={allDelete}
-                    className={
-                      check?.length === 0 || undefined
-                        ? `${color?.textgray} cursor-pointer p-1 ${color?.hover} rounded inline-flex
+                    <a
+                      onClick={allDelete}
+                      className={
+                        check?.length === 0 || undefined
+                          ? `${color?.textgray} cursor-pointer p-1 ${color?.hover} rounded inline-flex
                                 justify-center`
-                        : `${color?.textgray} bg-red-600 cursor-pointer p-1 ${color?.hover} rounded inline-flex
+                          : `${color?.textgray} bg-red-600 cursor-pointer p-1 ${color?.hover} rounded inline-flex
                                 justify-center`
-                    }
-                  >
-                    <svg
-                      className="w-6 h-6"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
+                      }
                     >
-                      <path
-                        fillRule="evenodd"
-                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                        clipRule="evenodd"
-                      ></path>
-                    </svg>
-                  </a>
-                  <a
-                    href="#"
-                    className={`${color?.textgray} hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}
-                  >
-                    <svg
-                      className="w-6 h-6"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
+                      <svg
+                        className="w-6 h-6"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                          clipRule="evenodd"
+                        ></path>
+                      </svg>
+                    </a>
+                    <a
+                      href="#"
+                      className={`${color?.textgray} hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}
                     >
-                      <path
-                        fillRule="evenodd"
-                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                        clipRule="evenodd"
-                      ></path>
-                    </svg>
-                  </a>
-                  <a
-                    href="#"
-                    className={`${color?.textgray} hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}
-                  >
-                    <svg
-                      className="w-6 h-6"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
+                      <svg
+                        className="w-6 h-6"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                          clipRule="evenodd"
+                        ></path>
+                      </svg>
+                    </a>
+                    <a
+                      href="#"
+                      className={`${color?.textgray} hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}
                     >
-                      <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path>
-                    </svg>
-                  </a>
+                      <svg
+                        className="w-6 h-6"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path>
+                      </svg>
+                    </a>
+                  </div>
                 </div>
-              </div>
                 <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
 
                   <Button Primary={language?.Add} onClick={() => setAddImage(1)} />
@@ -2302,94 +1888,66 @@ const allDelete = async () => {
                 <div className={visible === 0 ? 'block w-auto h-auto m-6 w-32 flex' : 'hidden'}><Imageloader /> <Imageloader /><Imageloader /></div>
                 <div className={visible === 1 ? 'block flex flex-wrap' : 'hidden'}>
                   <div className="flex-wrap container grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    
-                    
-                    
-                  {roomimages.map((item, idx) => {
+
+
+
+                    {roomimages.map((item, idx) => {
                       return (
-                      
-                  <>
-                      <div
-                        className="block text-blueGray-600  text-xs font-bold "
-                        key={idx}
-                      >
-                        <div
-                          className="relative cursor-pointer"
-                          tooltip
-                          title="Click here to view or edit."
-                        >
-                          <a href="#" className="relative flex">
-                            <input
-                              type="checkbox"
-                              id={item?.image_id}
+
+                        <>
+                          <div
+                            className="block text-blueGray-600  text-xs font-bold "
+                            key={idx}
+                          >
+                            <div
+                              className="relative cursor-pointer"
                               tooltip
-                              title="Click here to delete image."
-                              name={item?.image_id}
-                              checked={item.isChecked || false}
-                              onChange={(e) => {
-                                handlecheckbox(e);
-                              }}
-                              className="bottom-0 right-0 cursor-pointer absolute bg-gray-30 opacity-30 m-1 border-gray-300 text-cyan-600  checked:opacity-100 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded-full"
-                              onClick={() => {
-                                setSelectedImage(!selectedImage);
-                              }}
-                            />
-                            {check?.length === 0 || undefined ? (
-                              <img
-                                htmlFor={item?.image_id}
-                                className={`rounded-lg`}
-                                src={item.image_link}
-                                alt="Room Image"
-                                style={{ height: "170px", width: "450px" }}
-                                onClick={() => {
-                                  setEnlargeImage(1);
-                                  setActionEnlargeImage(item);
-                                  setIndexImage(item?.idx);
-                                }}
-                              />
-                            ) : (
-                              <img
-                                htmlFor={item?.image_id}
-                                className={`rounded-lg`}
-                                src={item.image_link}
-                                alt="Room Image"
-                                style={{ height: "170px", width: "450px" }}
-                              />
-                            )}
-                          </a>
-                        </div>
-                      </div>
-                    </>
-                      )})}
-                    
-                    
-                    
-                    
-                    {/* {roomDetails?.room_images?.map((item, index) => {
-                      return (
-                        <div className="block text-blueGray-600 text-xs pt-2 px-2 " key={index}>
-                          <button onClick={() => { setEnlargeImage(1); setActionEnlargeImage(item) }}>
-                            <img src={item.image_link} alt='pic_room' style={{ height: "200px", width: "450px" }} />
-                         
-                          </button>
-                          <table>
-                            <tr>
-                              <td className="flex justify-end">
-                                <button onClick={() => { setActionImage(item); setEditImage(1); }} className="text-gray-500  mt-1 hover:text-gray-900 
-                                           cursor-pointer p-1 hover:bg-gray-100 rounded ">
-                                  <svg className=" h-5  w-5 font-semibold "
-                                    fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd"></path></svg>
-                                </button>
-                                <button onClick={() => { setdeleteImage(1); setActionImage(item) }} className="text-gray-500 mt-1 hover:text-gray-900
-                                           cursor-pointer p-1 hover:bg-gray-100 rounded">
-                                  <svg className="  w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd"></path></svg>
-                                </button>
-                              </td>
-                            </tr>
-                          </table>
-                        </div>
+                              title="Click here to view or edit."
+                            >
+                              <a href="#" className="relative flex">
+                                <input
+                                  type="checkbox"
+                                  id={item?.image_id}
+                                  tooltip
+                                  title="Click here to delete image."
+                                  name={item?.image_id}
+                                  checked={item.isChecked || false}
+                                  onChange={(e) => {
+                                    handlecheckbox(e);
+                                  }}
+                                  className="bottom-0 right-0 cursor-pointer absolute bg-gray-30 opacity-30 m-1 border-gray-300 text-cyan-600  checked:opacity-100 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded-full"
+                                  onClick={() => {
+                                    setSelectedImage(!selectedImage);
+                                  }}
+                                />
+                                {check?.length === 0 || undefined ? (
+                                  <img
+                                    htmlFor={item?.image_id}
+                                    className={`rounded-lg`}
+                                    src={item.image_link}
+                                    alt="Room Image"
+                                    style={{ height: "170px", width: "450px" }}
+                                    onClick={() => {
+                                      setEnlargeImage(1);
+                                      setActionEnlargeImage(item);
+                                      setIndexImage(item?.idx);
+                                    }}
+                                  />
+                                ) : (
+                                  <img
+                                    htmlFor={item?.image_id}
+                                    className={`rounded-lg`}
+                                    src={item.image_link}
+                                    alt="Room Image"
+                                    style={{ height: "170px", width: "450px" }}
+                                  />
+                                )}
+                              </a>
+                            </div>
+                          </div>
+                        </>
                       )
-                    })} */}
+                    })}
                   </div>
                 </div>
               </div>
@@ -2404,35 +1962,20 @@ const allDelete = async () => {
           {/* Room Rates */}
           <div id='3' className={disp === 3 ? 'block' : 'hidden'}>
             <div className={`${color?.whitebackground} shadow-xl rounded-lg  sm:p-6 xl:p-8  2xl:col-span-2`}>
-              <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
-                <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                  <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
-                  <div className={`lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto ${color.widget}`}> {language?.room} {language?.description}</div>
-                </div>
+              {/* widget progress starts */}
+              <WidgetStatus name={[`Room Description`,`${language?.room} ${language?.services}`,`${language?.room} ${language?.gallery}`,`${language?.room} ${language?.rates}`,`Rate Discounts`,`Rate Modifications`]} selected={4} color={color}/>{/* widget progress ends */}
 
-                <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                  <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400"
-                  >2</button>
-                  <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>
-                    {language?.room} {language?.services}</div>
-                </div>
-                <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-                  <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-                  <div className={`lg:w-32 font-medium ${color.crossbg} text-base lg:mt-3 ml-3 lg:mx-auto`}> {language?.room} {language?.gallery}</div>
-                </div>
-                <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-                  <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary"
-                  >4</button>
-                  <div className={`lg:w-32 font-medium ${color.crossbg} text-base lg:mt-3 ml-3 lg:mx-auto`}> {language?.room} {language?.rates}</div>
-                </div>
-
-              </div>
+              {/* page label starts */}
               <h6 className={`${color?.text} text-base  flex leading-none  pt-2 font-semibold`}>
                 {language?.room} {language?.rates}
               </h6>
+              {/* page label ends */}
               <div className="pt-6">
                 <div className=" md:px-2 mx-auto w-full">
+
+                  {/* room rate form starts */}
                   <div className="flex flex-wrap">
+                    {/* currency drop down */}
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
@@ -2463,6 +2006,7 @@ const allDelete = async () => {
                         </div>
                       </div>
                     </div>
+                    {/* base rate amount  */}
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
@@ -2489,7 +2033,7 @@ const allDelete = async () => {
                         </div>
                       </div>
                     </div>
-
+                    {/* tax amount */}
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
@@ -2514,7 +2058,7 @@ const allDelete = async () => {
                             {error?.tax_amount}</p></div>
                       </div>
                     </div>
-
+                    {/* other charges amount */}
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
@@ -2538,10 +2082,12 @@ const allDelete = async () => {
                             {error?.otherfees_amount}</p></div>
                       </div>
                     </div>
+                    {/* blank */}
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                       </div>
                     </div>
+                    {/* buttons start */}
                     <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
                       <Button Primary={language?.Previous} onClick={() => { setDisp(2) }} />
                       <div className={(spinner === 0 && flag !== 1) ? 'block' : 'hidden'}>
@@ -2557,76 +2103,498 @@ const allDelete = async () => {
                       <div className={spinner === 1 ? 'block' : 'hidden'}>
                         <Button Primary={language?.SpinnerUpdate} />
                       </div>
+
+                      <Button Primary={language?.Next} onClick={() => { setDisp(6) }} />
+
+                    </div>
+                    {/* buttons end */}
+                  </div>
+                  {/* room rate form ends */}
+
+
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Room Rates Discount */}
+          <div id='6' className={disp === 6 ? 'block' : 'hidden'}>
+            <div className={`${color?.whitebackground} shadow-xl rounded-lg  sm:p-6 xl:p-8  2xl:col-span-2`}>
+              {/* widget progress starts */}
+              <WidgetStatus name={[`Room Description`,`${language?.room} ${language?.services}`,`${language?.room} ${language?.gallery}`,`${language?.room} ${language?.rates}`,`Rate Discounts`,`Rate Modifications`]} selected={5} color={color}/>
+              {/* widget progress ends */}
+
+              {/* page label starts */}
+              <h6 className={`${color?.text} text-base  flex leading-none  pt-2 font-semibold`}>
+                {language?.room} {language?.rates} {language?.discount}
+              </h6>
+              {/* page label ends */}
+              <div className="pt-6">
+                <div className=" md:px-2 mx-auto w-full">
+                  {/* add discount and modification buttons start */}
+                  <div className='flex justify-end mx-auto mb-2'>
+                    <button className="mx-2 bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex  
+                             font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                      onClick={() => { localStorage.setItem("RoomId", currentroom); Router.push('./roomdiscount'); }}>
+                      Add Discount</button>
+
+                  </div>
+                  {/* add discount and modification buttons ends */}
+                  {/* table */}
+                  <div className="flex flex-col mt-8 lg:-mr-20 sm:mr-0 w-full  relative">
+                    <div className="overflow-x-auto">
+                      <div className="align-middle inline-block min-w-full">
+                        <div className="shadow overflow-hidden">
+                          <table className="table data table-fixed lg:min-w-full divide-y divide-gray-200 min-w-screen" id="climateTable">
+                            <thead className={` ${color?.tableheader} `}>
+                              <tr>
+                                {/* checkbox */}
+                                <th scope="col" className="p-4">
+                                  <div className="flex items-center">
+                                    <input id="checkbox-all" aria-describedby="checkbox-1" type="checkbox"
+                                      checked={allCheck === 1 || false}
+                                      name="allSelect"
+                                      onChange={(e) => {
+                                        // setAllCheck(allCheck === 1 ? 0 : 1);
+                                        // allCheckbox(e);
+                                      }}
+
+                                      className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                                    <label htmlFor="checkbox-all" className="sr-only">checkbox</label>
+                                  </div>
+                                </th>
+
+                                <th scope="col" className={`p-4 text-left text-xs font-semibold ${color?.textgray} uppercase`}>
+                                  Date From</th>
+                                <th scope="col" className={`p-4 text-left text-xs font-semibold ${color?.textgray} uppercase`}>
+                                  Date To</th>
+                                <th scope="col" className={`p-4 text-left text-xs font-semibold ${color?.textgray} uppercase`}>
+                                  Discount Type</th>
+                                <th scope="col" className={`p-4 text-left text-xs font-semibold ${color?.textgray} uppercase`}>
+                                  Discount On</th>
+                                <th scope="col" className={`p-4 text-left text-xs font-semibold ${color?.textgray} uppercase`}>
+                                  Discount </th>
+                                <th scope="col" className={`p-4 text-left text-xs font-semibold ${color?.textgray} uppercase`}>
+                                  Actions</th>
+                              </tr>
+                            </thead>
+
+                            <tbody className={` ${color?.whitebackground} divide-y  divide-gray-200`}>
+                              {discount?.map((dis, index) => {
+                                return (<>
+                                  {(editRow?.edit === 1 && editRow?.id === index) ?
+                                    <tr key={index}>
+                                      <td className="p-4 w-4">
+                                        <span className="flex items-center">
+                                          <input
+                                            type="checkbox"
+                                            id={dis?.discount_id}
+                                            tooltip
+                                            disabled
+                                            title="Click here to delete image."
+                                            name={dis?.discount_id}
+                                            checked={dis?.isChecked || false}
+                                            aria-describedby="checkbox-1"
+                                            className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                                          <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
+                                        </span>
+                                      </td>
+
+                                      <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                        <input type="date"
+                                          className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
+                                          defaultValue={dis?.date_from}
+                                        // onChange={(e) => setEditSeason({ ...editSeason, season_name: e.target.value })} 
+                                        />
+                                      </td>
+
+                                      <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                        <input type="date" className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
+                                          defaultValue={dis?.date_to}
+                                        // onChange={(e) => setEditSeason({ ...editSeason, period: e.target.value })} 
+                                        />
+
+                                      </td>
+                                      <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                        <select className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
+                                        // onChange={(e) => setEditSeason({ ...editSeason, max_temp: e.target.value })} 
+                                        >
+                                          <option value="Flat">Flat</option>
+                                          <option value="percentage">Percentage</option>
+                                        </select>
+                                      </td>
+
+                                      <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                        <select className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
+                                        // onChange={(e) => setEditSeason({ ...editSeason, max_temp: e.target.value })} 
+                                        >
+                                          <option value="Per Person">Per Person</option>
+                                          <option value="Per Group">Per Group</option>
+                                        </select>
+                                      </td>
+
+                                      <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                        <input type="date" className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
+                                          defaultValue={dis?.date_to}
+                                        // onChange={(e) => setEditSeason({ ...editSeason, period: e.target.value })} 
+                                        />
+
+                                      </td>
+
+                                      <td>
+                                        <button
+                                          onClick={() => {
+                                            alert("edit clicked");
+                                          }}
+                                          className={`bg-gradient-to-r mt-1 bg-green-600 hover:bg-green-700 mr-2 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}>
+
+                                          Save</button>
+                                        <button className={`bg-gradient-to-r my-1 bg-gray-400 hover:${color?.greybackground}0 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}
+                                          onClick={() => {
+                                            // setEditAccomodation({});
+                                            setEditRow({ edit: 0, id: undefined })
+                                          }}
+                                        >
+
+                                          Cancel</button>
+                                      </td>
+                                    </tr> :
+                                    <tr key={index}>
+                                      <td className="p-4 w-4">
+                                        <span className="flex items-center">
+                                          <input
+                                            type="checkbox"
+                                            id={dis?.discount_id}
+                                            tooltip
+                                            title="Click here to delete image."
+                                            name={dis?.discount_id}
+                                            checked={dis.isChecked || false}
+                                            onChange={(e) => {
+
+                                              handlecheckbox(e, season);
+                                            }}
+                                            aria-describedby="checkbox-1"
+                                            className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                                          <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
+                                        </span>
+                                      </td>
+
+                                      <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                        {dis?.date_from}
+                                      </td>
+
+                                      <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                        {dis?.date_to}
+                                      </td>
+                                      <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                        {dis?.discount_type}
+                                      </td>
+                                      <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                        {dis?.discount_on}
+                                      </td>
+                                      <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+
+                                        {dis?.discount}
+                                      </td>
+
+                                      <td>
+                                        <button className="bg-gradient-to-r mt-1 mr-2 bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                          onClick={() => {
+                                            // setEditAccomodation(stay);
+                                            setEditRow({ edit: 1, id: index })
+                                          }}
+                                        >
+
+                                          Edit</button>
+                                        <button className="bg-gradient-to-r my-1 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                        // onClick={() => { deleteSeason(season) }} 
+                                        >
+
+                                          Delete</button>
+                                      </td>
+                                    </tr>}
+                                </>
+                                )
+                              })}
+
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
                     </div>
                   </div>
+                  {/* table end */}
+
+                  {/* buttons start */}
+                  <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+                    <Button Primary={language?.Previous} onClick={() => { setDisp(3) }} />
+                    <Button Primary={language?.Next} onClick={() => { setDisp(7) }} />
+
+                  </div>
+                  {/* buttons end */}
+
                 </div>
               </div>
             </div>
           </div>
 
+          {/* Room Rates Discount */}
+          <div id='7' className={disp === 7 ? 'block' : 'hidden'}>
+            <div className={`${color?.whitebackground} shadow-xl rounded-lg  sm:p-6 xl:p-8  2xl:col-span-2`}>
+              {/* widget progress starts */}
+              <WidgetStatus name={[`Room Description`,`${language?.room} ${language?.services}`,`${language?.room} ${language?.gallery}`,`${language?.room} ${language?.rates}`,`Rate Discounts`,`Rate Modifications`]} selected={6} color={color}/>
+              {/* widget progress ends */}
+
+              {/* page label starts */}
+              <h6 className={`${color?.text} text-base  flex leading-none  pt-2 font-semibold`}>
+                {language?.room} {language?.ratemodifications}
+              </h6>
+              {/* page label ends */}
+              <div className="pt-6">
+                <div className=" md:px-2 mx-auto w-full">
+                  {/*  modification buttons start */}
+                  <div className='flex justify-end mx-auto mb-2'>
+                    <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex  
+                             font-semibold rounded-lg text-sm px-5 py-2 text-center 
+                              items-center ease-linear transition-all duration-150"
+                      onClick={() => { localStorage.setItem("RoomId", currentroom); Router.push('./roomratemodifcation'); }}>
+                      Add Rate Modification</button>
+                  </div>
+                  {/* add discount and modification buttons ends */}
+                  {/* table */}
+                  <div className="flex flex-col mt-8 lg:-mr-20 sm:mr-0 w-full  relative">
+                    <div className="overflow-x-auto">
+                      <div className="align-middle inline-block min-w-full">
+                        <div className="shadow overflow-hidden">
+                          <table className="table data table-fixed lg:min-w-full divide-y divide-gray-200 min-w-screen" id="climateTable">
+                            <thead className={` ${color?.tableheader} `}>
+                              <tr>
+                                {/* checkbox */}
+                                <th scope="col" className="p-4">
+                                  <div className="flex items-center">
+                                    <input id="checkbox-all" aria-describedby="checkbox-1" type="checkbox"
+                                      checked={allCheck === 1 || false}
+                                      name="allSelect"
+                                      onChange={(e) => {
+                                        // setAllCheck(allCheck === 1 ? 0 : 1);
+                                        // allCheckbox(e);
+                                      }}
+
+                                      className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                                    <label htmlFor="checkbox-all" className="sr-only">checkbox</label>
+                                  </div>
+                                </th>
+
+                                <th scope="col" className={`p-4 text-left text-xs font-semibold ${color?.textgray} uppercase`}>
+                                  Date From</th>
+                                <th scope="col" className={`p-4 text-left text-xs font-semibold ${color?.textgray} uppercase`}>
+                                  Date To</th>
+                                <th scope="col" className={`p-4 text-left text-xs font-semibold ${color?.textgray} uppercase`}>
+                                  Orginal Rate</th>
+                                <th scope="col" className={`p-4 text-left text-xs font-semibold ${color?.textgray} uppercase`}>
+                                  Modified Rate</th>
+                                <th scope="col" className={`p-4 text-left text-xs font-semibold ${color?.textgray} uppercase`}>
+                                  Actions</th>
+                              </tr>
+                            </thead>
+
+                            <tbody className={` ${color?.whitebackground} divide-y  divide-gray-200`}>
+                              {rateModification?.map((mod, index) => {
+                                return (<>
+                                  {(editRow?.edit === 1 && editRow?.id === index) ?
+                                    <tr key={index}>
+                                      <td className="p-4 w-4">
+                                        <span className="flex items-center">
+                                          <input
+                                            type="checkbox"
+                                            id={mod?.modification_id}
+                                            tooltip
+                                            disabled
+                                            title="Click here to delete image."
+                                            name={mod?.modification_id}
+                                            checked={mod?.isChecked || false}
+                                            aria-describedby="checkbox-1"
+                                            className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                                          <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
+                                        </span>
+                                      </td>
+                                      {/* date from */}
+                                      <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                        <input type="date"
+                                          className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
+                                          defaultValue={mod?.date_from}
+                                        // onChange={(e) => setEditSeason({ ...editSeason, season_name: e.target.value })} 
+                                        />
+                                      </td>
+
+                                      {/* date to */}
+                                      <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                        <input type="date" className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
+                                          defaultValue={mod?.date_to}
+                                        // onChange={(e) => setEditSeason({ ...editSeason, period: e.target.value })} 
+                                        />
+
+                                      </td>
+                                      
+                                      
+                                      {/* orginal rate */}
+                                      <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                        <input type="text" className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
+                                          defaultValue={mod?.orginal_rate}
+                                        // onChange={(e) => setEditSeason({ ...editSeason, period: e.target.value })} 
+                                        />
+
+                                      </td>
+                                       
+                                        
+                                      {/* modified rate */}
+                                      <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                        <input type="text" className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
+                                          defaultValue={mod?.modified_rate}
+                                        // onChange={(e) => setEditSeason({ ...editSeason, period: e.target.value })} 
+                                        />
+
+                                      </td>
+
+                                       {/* buttons */}
+                                      <td>
+                                        <button
+                                          onClick={() => {
+                                            alert("edit clicked");
+                                          }}
+                                          className={`bg-gradient-to-r mt-1 bg-green-600 hover:bg-green-700 mr-2 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}>
+
+                                          Save</button>
+                                        <button className={`bg-gradient-to-r my-1 bg-gray-400 hover:${color?.greybackground}0 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}
+                                          onClick={() => {
+                                            // setEditAccomodation({});
+                                            setEditRow({ edit: 0, id: undefined })
+                                          }}
+                                        >
+
+                                          Cancel</button>
+                                      </td>
+                                    </tr> :
+                                    <tr key={index}>
+                                      <td className="p-4 w-4">
+                                        <span className="flex items-center">
+                                          <input
+                                            type="checkbox"
+                                            id={mod?.modification_id}
+                                            tooltip
+                                            title="Click here to delete image."
+                                            name={mod?.modification_id}
+                                            checked={mod.isChecked || false}
+                                            onChange={(e) => {
+
+                                              handlecheckbox(e, season);
+                                            }}
+                                            aria-describedby="checkbox-1"
+                                            className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                                          <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
+                                        </span>
+                                      </td>
+
+                                      <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                        {mod?.date_from}
+                                      </td>
+
+                                      <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                        {mod?.date_to}
+                                      </td>
+                                      <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                        {mod?.orginal_rate}
+                                      </td>
+                                      <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
+                                        {mod?.modified_rate}
+                                      </td>
+                                      
+                                      <td>
+                                        <button className="bg-gradient-to-r mt-1 mr-2 bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                          onClick={() => {
+                                            // setEditAccomodation(stay);
+                                            setEditRow({ edit: 1, id: index })
+                                          }}
+                                        >
+
+                                          Edit</button>
+                                        <button className="bg-gradient-to-r my-1 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                        // onClick={() => { deleteSeason(season) }} 
+                                        >
+
+                                          Delete</button>
+                                      </td>
+                                    </tr>}
+                                </>
+                                )
+                              })}
+
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {/* table end */}
+
+                  {/* buttons start */}
+                  <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+                    <Button Primary={language?.Previous} onClick={() => { setDisp(6) }} />
+                    {/* <Button Primary={language?.Next} onClick={() => { setDisp(7) }} /> */}
+
+                  </div>
+                  {/* buttons end */}
+
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Modal Image Enlarge 
-        <div className={enlargeImage === 1 ? 'block' : 'hidden'}>
-          <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl sm:inset-0 bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
-            <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
-              <div className={`${color?.whitebackground} rounded-lg shadow relative`}>
-                <div className="flex justify-between p-5 border-b rounded-t">
-                  <h3 className={`${color?.text} text-xl font-semibold`}>
-                    {actionEnlargeImage.image_title}
-                  </h3>
-                  <button type="button"
-                    onClick={() => setEnlargeImage(0)}
-                    className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="user-modal">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
-                  </button> </div>
-                <div> <img src={actionEnlargeImage.image_link} alt='pic_room' height={350} width={650} />
-                </div>
-              </div>
-            </div>
-          </div>
-                      </div>*/}
-                      
-    {/* New image enlarge */}
-<div id="enlarge" className={enlargeImage === 1 ? "block" : "hidden"}>
+
+
+        {/* New image enlarge */}
+        <div id="enlarge" className={enlargeImage === 1 ? "block" : "hidden"}>
           <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl   sm:inset-0 bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
             <div className="flex justify-start ml-2 mr-auto">
-      {/* //Left arrow symbol*/ }
-      
-              <svg  
+              {/* //Left arrow symbol*/}
+
+              <svg
                 className={indexImage <= 0 ? "hidden" : "block cursor-pointer"}
                 xmlns="http://www.w3.org/2000/svg"
                 height="32px"
                 viewBox="0 0 24 24"
                 width="28px"
-                onClick={() => { 
-                  
-                  setActionEnlargeImage(roomimages?.filter((i,idx) => idx === indexImage - 1)
-                  .map((j) => {
-                    return {
-                      image_id: j?.image_id,
-                      image_title: j?.image_title,
-                      idx: indexImage-1,
-                      image_description: j?.image_description,
-                      image_link: j?.image_link,
-                    };
-                  })?.[0]);
+                onClick={() => {
+
+                  setActionEnlargeImage(roomimages?.filter((i, idx) => idx === indexImage - 1)
+                    .map((j) => {
+                      return {
+                        image_id: j?.image_id,
+                        image_title: j?.image_title,
+                        idx: indexImage - 1,
+                        image_description: j?.image_description,
+                        image_link: j?.image_link,
+                      };
+                    })?.[0]);
                   setIndexImage(indexImage - 1);
-                 
+
                 }}
                 fill="#ffffff"
               >
                 <path d="M0 0h24v24H0V0z" fill="none" opacity=".87" />
                 <path d="M17.51 3.87L15.73 2.1 5.84 12l9.9 9.9 1.77-1.77L9.38 12l8.13-8.13z" />
               </svg>
-             
+
 
             </div>
 
             <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
               <div
                 className={` ${color.tableheader} rounded-lg shadow relative`}
-              >  
+              >
                 <div className="flex justify-between p-5 border-b rounded-t">
                   <h3 className={`text-xl ${color?.text} font-semibold`}>
                     {actionEnlargeImage?.image_title}
@@ -2640,15 +2608,15 @@ const allDelete = async () => {
                     className={` px-1 mr-1  hover:${color?.sidebar} ${color?.text}
                                          cursor-pointer ${color?.hover} rounded`}
                   >
-                    
+
                     <svg
                       className=" h-5  w-5 font-semibold "
                       fill="currentColor"
                       viewBox="0 0 20 20"
                       xmlns="http://www.w3.org/2000/svg"
-                      
+
                     >
-                    
+
                       <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path>
                       <path
                         fillRule="evenodd"
@@ -2657,8 +2625,8 @@ const allDelete = async () => {
                       ></path>
                     </svg>
                   </button>
-               
-                  
+
+
                   <button
                     type="button"
                     onClick={() => {
@@ -2668,13 +2636,13 @@ const allDelete = async () => {
                                      p-1.5 ml-auto inline-flex items-center`}
                     data-modal-toggle="user-modal"
                   >
-                   
+
                     <svg
                       className="w-5 h-5"
                       fill="currentColor"
                       viewBox="0 0 20 20"
                       xmlns="http://www.w3.org/2000/svg"
-                      
+
                     >
                       <path
                         fillRule="evenodd"
@@ -2689,7 +2657,7 @@ const allDelete = async () => {
                     src={actionEnlargeImage?.image_link}
                     alt="pic_room"
                     style={{ height: "350px", width: "650px" }}
-                  /> 
+                  />
                 </div>
               </div>
             </div>
@@ -2697,26 +2665,26 @@ const allDelete = async () => {
 
             {/*Right  button to change next image in carousal*/}
             <div className="flex justify-end mr-2 ml-auto">
-              
+
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className={
                   indexImage <= 0 ? "hidden" : "block cursor-pointer"}
-                
-                onClick={() => { 
-                  
-                  setActionEnlargeImage(roomimages?.filter((i,idx) => idx === indexImage + 1)
-                  .map((j) => {
-                    return {
-                      image_id: j?.image_id,
-                      image_title: j?.image_title,
-                      idx: indexImage+1,
-                      image_description: j?.image_description,
-                      image_link: j?.image_link,
-                    };
-                  })?.[0]);
+
+                onClick={() => {
+
+                  setActionEnlargeImage(roomimages?.filter((i, idx) => idx === indexImage + 1)
+                    .map((j) => {
+                      return {
+                        image_id: j?.image_id,
+                        image_title: j?.image_title,
+                        idx: indexImage + 1,
+                        image_description: j?.image_description,
+                        image_link: j?.image_link,
+                      };
+                    })?.[0]);
                   setIndexImage(indexImage + 1);
-                 
+
                 }}
                 enableBackground="new 0 0 24 24"
                 height="32px"
@@ -3043,5 +3011,4 @@ Room.getLayout = function PageLayout(page) {
     </>
   )
 }
-
 
