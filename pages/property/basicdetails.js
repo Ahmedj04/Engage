@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Title from "../../components/title";
-import objChecker from "lodash";
+import objChecker, { property } from "lodash";
 import Lineloader from "../../components/loaders/lineloader";
 import Sidebar from "../../components/Sidebar";
 import Header from "../../components/Header";
@@ -442,6 +442,7 @@ export default function BasicDetails() {
                   color={color}
                   req={true}
                   title={language?.propertyname}
+                  tooltip={true}
                 />
 
                 {/* logo */}
@@ -485,6 +486,7 @@ export default function BasicDetails() {
                   error={error?.property_brand}
                   color={color}
                   req={false}
+                  tooltip={true}
                 />
 
                 {/* Established date */}
@@ -506,8 +508,8 @@ export default function BasicDetails() {
                   visible={visible}
                   max={descriptionDate}
                   title={language?.establisheddate}
+                  tooltip={true}
                 />
-
                 {/*Star Rating*/}
                 <DropDown
                   label={language?.starrating}
@@ -522,6 +524,7 @@ export default function BasicDetails() {
                   error={error?.starrating}
                   color={color}
                   req={true}
+                  tooltip={true}
                   options={[
                     { value: 0, label: 0 },
                     { value: 1, label: 1 },
@@ -531,7 +534,6 @@ export default function BasicDetails() {
                     { value: 5, label: 5 },
                   ]}
                 />
-
                 {/* Description_title */}
                 <InputText
                   label={language?.descriptiontitle}
@@ -550,8 +552,8 @@ export default function BasicDetails() {
                   color={color}
                   req={true}
                   title={language?.descriptiontitle}
+                  tooltip={true}
                 />
-
                 {/*Description */}
                 <InputTextBox
                   label={language?.description}
@@ -569,8 +571,8 @@ export default function BasicDetails() {
                   error={error?.description_body}
                   color={color}
                   req={true}
+                  tooltip={true}
                 />
-
                 {/* Description date read only */}
                 <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
@@ -592,6 +594,7 @@ export default function BasicDetails() {
                         required
                         className={`shadow-sm ${color?.greybackground}  border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                         defaultValue={descriptionDate}
+                        
                       />
                     </div>
                   </div>

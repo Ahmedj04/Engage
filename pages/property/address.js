@@ -396,6 +396,7 @@ function Address() {
                 
                 {/* //streetaddress */}
                 <InputText
+                data-testid="streetaddress"
                   label={language?.streetaddress}
                   visible={visible}
                   defaultValue={address?.address_street_address}
@@ -411,6 +412,7 @@ function Address() {
                   error={error?.address_street_address}
                   color={color}
                   req={true}
+                  tooltip={true}
                 />
                 {/* <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
@@ -442,6 +444,7 @@ function Address() {
                 {/* Landmark */}
 
                 <InputText
+                data-testid="landmark"
                   label={language?.landmark}
                   visible={visible}
                   defaultValue={address?.address_landmark}
@@ -454,6 +457,7 @@ function Address() {
                   error={error?.address_landmark}
                   color={color}
                   req={true}
+                  tooltip={true}
                 />
                 {/* <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
@@ -485,6 +489,7 @@ function Address() {
 
                 {/* country */}
                 <DropDown
+                data-testid="country"
                   label={language?.country}
                   visible={visible}
                   defaultValue={country?.[i]?.country_name}
@@ -504,6 +509,7 @@ function Address() {
                   color={color}
                   req={true}
                   options={countries}
+                  tooltip={true}
                 />
 
                 {/* <div className="w-full lg:w-6/12 px-4">
@@ -544,6 +550,7 @@ function Address() {
                 </div> */}
                 {/* province */}
                 <DropDown
+                data-testid="province"
                   label={language?.province}
                   visible={visible}
                   defaultValue={
@@ -569,6 +576,7 @@ function Address() {
                   error={error?.propertycategory}
                   color={color}
                   req={true}
+                  tooltip={true}
                   options={states?.map((i) => ({
                     value: `${JSON.stringify(i)}`,
                     label: `${i?.name}`,
@@ -620,6 +628,7 @@ function Address() {
                 {/*CITY*/}
 
                 <DropDown
+                data-testid="city"
                   label={language?.city}
                   visible={visible}
                   defaultValue={
@@ -643,6 +652,7 @@ function Address() {
                   error={error?.propertycategory}
                   color={color}
                   req={true}
+                  tooltip={true}
                   options={cities?.map((i) => ({
                     value: `${JSON.stringify(i)}`,
                     label: `${i?.name}`,
@@ -690,6 +700,7 @@ function Address() {
                 </div> */}
                 {/* POSTAL CODE */}
                 <InputText
+                data-testid="postalcode"
                   label={language?.postalcode}
                   visible={visible}
                   defaultValue={
@@ -707,6 +718,7 @@ function Address() {
                   error={error?.address_zipcode}
                   color={color}
                   req={true}
+                  tooltip={true}
                 />
 
                 {/* <div className="w-full lg:w-6/12 px-4">
@@ -743,6 +755,7 @@ function Address() {
                 {/* Latitude */}
 
                 <InputText
+                data-testid="latitude"
                   label={language?.latitude}
                   visible={visible}
                   defaultValue={address?.address_latitude}
@@ -756,6 +769,7 @@ function Address() {
                   error={error?.address_latitude}
                   color={color}
                   req={true}
+                  tooltip={true}
                 />
                 {/* <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
@@ -788,6 +802,7 @@ function Address() {
                 {/* Longitude */}
 
                 <InputText
+                data-testid="longitude"
                   label={language?.longitude}
                   visible={visible}
                   defaultValue={address?.address_longitude}
@@ -801,6 +816,7 @@ function Address() {
                   error={error?.address_longitude}
                   color={color}
                   req={true}
+                  tooltip={true}
                 />
                 {/* <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
@@ -829,10 +845,10 @@ function Address() {
                       <p className="text-sm text-sm text-red-700 font-light">
                         {error?.address_longitude}</p></div>
                   </div>
-                </div> */}
-
+                </div> */} 
                 {/* PRECISION */}
                 <InputText
+                data-testid="precision"
                   label={`${language?.precision}(${language?.inmeters})`}
                   visible={visible}
                   defaultValue={address?.address_precision}
@@ -846,6 +862,7 @@ function Address() {
                   error={error?.address_precision}
                   color={color}
                   req={true}
+                  tooltip={true} 
                 />
                 {/* <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
