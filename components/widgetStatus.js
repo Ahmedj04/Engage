@@ -15,7 +15,7 @@ function WidgetStatus({ name, selected, color }) {
   return (
     <div data-testid='main'className="md:flex lg:flex w-full lg:w-full justify-center px-4" > 
     {name?.map((item, index) => { return (
-              <div data-testid={`child${index}`} className={`${index===0?`ml-2`:``} ${index===name.length-1?`mr-4`:``} ${name.length<4?`w-1/${name.length}`:`w-1/6`}`} key={index}> 
+              <div data-testid={`child${index}`} className={`${index===0?`ml-2`:``} ${index===name.length-1?`mr-4`:``} ${name.length<4?`lg:w-1/${name.length} md:w-1/${name.length}`:`lg:w-1/6 md:w-1/6`}`} key={index}> 
             <div className={`relative before:hidden before:lg:block before:absolute   
               before:h-[3px] before:top-0 before:bottom-0 before:mt-4 
               ${index===0 || (name.length)-1===index ?`before:w-[64%] ${index===0?`before:ml-36`:`before:mr-36`}`:`before:w-[200%]`}
