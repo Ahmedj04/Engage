@@ -1,4 +1,4 @@
-// WE Created scaffold for date description 
+// WE Created scaffold for date description for basic details
 // In this file we created a function DateInput with attributes color,label,req,initialValue,onChangeAction,error,visible,max
 // We applied the same css here present in BasicDetails for every Component & declared the attributes correctly with their specific values
 import React from 'react'
@@ -6,7 +6,7 @@ import LineLoader from '../loaders/lineloader'
 import info from '../../public/info.svg'
 import Image from 'next/image' 
 import Tooltip from "./Tooltip";
-function DateInput({color,label,req,initialValue,onChangeAction,error,visible,max,title}) {
+function DateInput({color,label,req,initialValue,onChangeAction,error,visible,max,title,tooltip}) {
   
   return (
     <div data-testid ="first" className="w-full lg:w-6/12 px-4">

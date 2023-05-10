@@ -91,7 +91,11 @@ function Room() {
     edit: 0,
     id: undefined
   })
-
+  // function to search image
+  const [searchedImages, setSearchedImages] = useState([{}]);
+  const [showSearchedImages, setShowSearchedImages] = useState(0);
+  const [editedDiscount, setEditedDiscount] = useState({})
+  const [editedModifications, setEditedModifications] = useState({})
   /* Function Multiple Delete*/
   function deleteMultiple() {
     const data = check?.map((item) => {
@@ -160,9 +164,7 @@ function Room() {
       });
   };
 
-  // function to search image
-  const [searchedImages, setSearchedImages] = useState([{}]);
-  const [showSearchedImages, setShowSearchedImages] = useState(0);
+
   const clearSearchField = () => {
     document.getElementById("imageSearchBox").reset();
   };
@@ -1133,6 +1135,100 @@ function Room() {
       setError(result)
     }
   }
+  // update discount function 
+  const updateDiscount = () => {
+    // url to be hit
+    const url = `/api/room_discount`;
+    // data formated as per api requirement 
+    let data = { "room_discounts": [editedDiscount] }
+    // network call to edit data
+    axios.put(url, data, {
+      header: { "content-type": "application/json" },
+    }).then((response) => {
+      // this block will execute on sucessfull completiion of network call 
+      setSpinner(0);
+      toast.success("API: Room Discount Updated Successfully!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      // to check if the discounts are more than one 
+      if (discount.length > 1) {
+        // filter out unedited discounts 
+        let uneditedDiscount = discount.filter(item => item.discount_id != editedDiscount.discount_id);
+        // save all discounts to state 
+        setDiscount([...uneditedDiscount, editedDiscount])
+      }
+      else {
+        setDiscount([editedDiscount])
+      }
+      // set edit back to initial values 
+      setEditRow({ edit: 0, id: undefined })
+    }).catch((error) => {
+      setSpinner(0);
+      toast.error("API: Room Discount Update Error!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    })
+  }
+
+   // update discount function 
+   const updateModification = () => {
+    // url to be hit
+    const url = `/api/room_rate_modification`;
+    // data formated as per api requirement 
+    let data = { "room_rate_modification": [editedModifications] }
+    // network call to edit data
+    axios.put(url, data, {
+      header: { "content-type": "application/json" },
+    }).then((response) => {
+      // this block will execute on sucessfull completiion of network call 
+      setSpinner(0);
+      toast.success("API: Room Rate Modification Updated Successfully!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      // to check if the discounts are more than one 
+      if (rateModification.length > 1) {
+        // filter out unedited discounts 
+        let uneditedModifications = rateModification.filter(item => item.modification_id != editedDiscount.modification_id);
+        // save all discounts to state 
+        setRateModification([...uneditedModifications, editedModifications])
+      }
+      else {
+        alert(JSON.stringify([editedModifications]))
+        setRateModification([editedModifications])
+      }
+      // set edit back to initial values 
+      setEditRow({ edit: 0, id: undefined })
+    }).catch((error) => {
+      setSpinner(0);
+      toast.error("API: Room Discount Update Error!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    })
+  }
 
   return (
     <>
@@ -1199,10 +1295,10 @@ function Room() {
 
           {/* Room Description */}
           <div id='0' className={disp === 0 ? 'block' : 'hidden'}>
-            
+
             <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
               {/* progress bar starts */}
-              <WidgetStatus name={[`Room Description`,`${language?.room} ${language?.services}`,`${language?.room} ${language?.gallery}`,`${language?.room} ${language?.rates}`,`Rate Discounts`,`Rate Modifications`]} selected={1} color={color}/>
+              <WidgetStatus name={[`Room Description`, `${language?.room} ${language?.services}`, `${language?.room} ${language?.gallery}`, `${language?.room} ${language?.rates}`, `Rate Discounts`, `Rate Modifications`]} selected={1} color={color} />
               {/* Progress bar ends */}
               <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  pb-2 font-bold`}>
                 {language?.room} {language?.description}
@@ -1225,8 +1321,9 @@ function Room() {
                       error={error?.room_name}
                       color={color}
                       req={true}
+                      tooltip={true}
                     />
-                    
+
                     {/* room type */}
                     <DropDown
                       label={`${language?.room} ${language?.type}`}
@@ -1250,7 +1347,7 @@ function Room() {
                         { value: "studio_room", label: "Studio Room" },
                       ]}
                     />
-                    
+
                     {/* room description */}
                     <InputText
                       label={`${language?.room} ${language?.description}`}
@@ -1265,7 +1362,7 @@ function Room() {
                       color={color}
                       req={true}
                     />
-                    
+
                     {/* room capacity */}
                     <InputText
                       label={`${language?.room} ${language?.capacity}`}
@@ -1280,7 +1377,7 @@ function Room() {
                       color={color}
                       req={true}
                     />
-                    
+
                     {/* max number of occupants */}
                     <InputText
                       label={`${language?.maximum} ${language?.number} ${language?.of} ${language?.occupants}`}
@@ -1295,7 +1392,7 @@ function Room() {
                       color={color}
                       req={true}
                     />
-                    
+
                     {/* minimum number of occupants */}
                     <InputText
                       label={`${language?.minimum} ${language?.number} ${language?.of} ${language?.occupants}`}
@@ -1310,7 +1407,7 @@ function Room() {
                       color={color}
                       req={true}
                     />
-                    
+
                     {/* Maximum age of occupants */}
                     <InputText
                       label={`${language?.maximum} ${language?.age} ${language?.of} ${language?.occupants}`}
@@ -1325,7 +1422,7 @@ function Room() {
                       color={color}
                       req={true}
                     />
-                    
+
                     {/* views room */}
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
@@ -1366,7 +1463,7 @@ function Room() {
                       color={color}
                       req={true}
                     />
-                    
+
                     {/* Room Breadth */}
 
                     <InputText
@@ -1382,7 +1479,7 @@ function Room() {
                       color={color}
                       req={true}
                     />
-                    
+
                     {/* Room Height */}
                     <InputText
                       label={`${language?.room} ${language?.height} (${language?.infeet})`}
@@ -1397,7 +1494,7 @@ function Room() {
                       color={color}
                       req={true}
                     />
-                    
+
                     {/* Room Area Read only */}
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
@@ -1453,7 +1550,7 @@ function Room() {
                         { value: "japanese_western", label: "Japanese Western" },
                       ]}
                     />
-                 
+
                     {/* Is Room Shared */}
                     <DropDown
                       label={language?.isroomshared}
@@ -1473,7 +1570,7 @@ function Room() {
 
                       ]}
                     />
-                 
+
                     {/* Is Room Outdoor Or Indoor */}
                     <DropDown
                       label={language?.isroom}
@@ -1550,7 +1647,9 @@ function Room() {
           {/* Multiple Bed */}
           <div id='4' className={disp === 4 ? 'block' : 'hidden'}>
             <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
-            <WidgetStatus name={[`Room Description`,`${language?.room} ${language?.services}`,`${language?.room} ${language?.gallery}`,`${language?.room} ${language?.rates}`,`Rate Discounts`,`Rate Modifications`]} selected={1} color={color}/>
+              <WidgetStatus name={[`Room Description`, `${language?.room} ${language?.services}`, `${language?.room} ${language?.gallery}`, `${language?.room} ${language?.rates}`, `Rate Discounts`, `Rate Modifications`]}
+                selected={1}
+                color={color} />
               <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  pb-2 font-bold`}>
                 {language?.room} {language?.description}
               </h6>
@@ -1577,7 +1676,7 @@ function Room() {
           {/* Single Bed */}
           <div id='5' className={disp === 5 ? 'block' : 'hidden'}>
             <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
-            <WidgetStatus name={[`Room Description`,`${language?.room} ${language?.services}`,`${language?.room} ${language?.gallery}`,`${language?.room} ${language?.rates}`,`Rate Discounts`,`Rate Modifications`]} selected={1} color={color}/>
+              <WidgetStatus name={[`Room Description`, `${language?.room} ${language?.services}`, `${language?.room} ${language?.gallery}`, `${language?.room} ${language?.rates}`, `Rate Discounts`, `Rate Modifications`]} selected={1} color={color} />
               <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  pb-2 font-bold`}>
                 {language?.room} {language?.description}
               </h6>
@@ -1659,8 +1758,8 @@ function Room() {
           {/* Room Services */}
           <div id='1' className={disp === 1 ? 'block' : 'hidden'}>
             <div className={`${color?.whitebackground} shadow rounded-lg mt-2 mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
-            
-            <WidgetStatus name={[`Room Description`,`${language?.room} ${language?.services}`,`${language?.room} ${language?.gallery}`,`${language?.room} ${language?.rates}`,`Rate Discounts`,`Rate Modifications`]} selected={2} color={color}/>
+
+              <WidgetStatus name={[`Room Description`, `${language?.room} ${language?.services}`, `${language?.room} ${language?.gallery}`, `${language?.room} ${language?.rates}`, `Rate Discounts`, `Rate Modifications`]} selected={2} color={color} />
 
               <h6 className={`${color?.text} text-xl flex leading-none pl-6 pt-2 font-bold  mb-8`}>
                 {language?.room} {language?.services}
@@ -1754,7 +1853,7 @@ function Room() {
           <div id='2' className={disp === 2 ? 'block' : 'hidden'}>
             <div className={`${color?.whitebackground} shadow-xl rounded-lg sm:p-6 xl:p-8  2xl:col-span-2 my-3`}>
 
-            <WidgetStatus name={[`Room Description`,`${language?.room} ${language?.services}`,`${language?.room} ${language?.gallery}`,`${language?.room} ${language?.rates}`,`Rate Discounts`,`Rate Modifications`]} selected={3} color={color}/>
+              <WidgetStatus name={[`Room Description`, `${language?.room} ${language?.services}`, `${language?.room} ${language?.gallery}`, `${language?.room} ${language?.rates}`, `Rate Discounts`, `Rate Modifications`]} selected={3} color={color} />
               <h6 className={`${color?.text} text-base  flex leading-none mb-2 mx-2 pt-2 font-semibold`}>
                 {language?.room}  {language?.gallery}
               </h6>
@@ -1963,7 +2062,7 @@ function Room() {
           <div id='3' className={disp === 3 ? 'block' : 'hidden'}>
             <div className={`${color?.whitebackground} shadow-xl rounded-lg  sm:p-6 xl:p-8  2xl:col-span-2`}>
               {/* widget progress starts */}
-              <WidgetStatus name={[`Room Description`,`${language?.room} ${language?.services}`,`${language?.room} ${language?.gallery}`,`${language?.room} ${language?.rates}`,`Rate Discounts`,`Rate Modifications`]} selected={4} color={color}/>{/* widget progress ends */}
+              <WidgetStatus name={[`Room Description`, `${language?.room} ${language?.services}`, `${language?.room} ${language?.gallery}`, `${language?.room} ${language?.rates}`, `Rate Discounts`, `Rate Modifications`]} selected={4} color={color} />{/* widget progress ends */}
 
               {/* page label starts */}
               <h6 className={`${color?.text} text-base  flex leading-none  pt-2 font-semibold`}>
@@ -2123,7 +2222,7 @@ function Room() {
           <div id='6' className={disp === 6 ? 'block' : 'hidden'}>
             <div className={`${color?.whitebackground} shadow-xl rounded-lg  sm:p-6 xl:p-8  2xl:col-span-2`}>
               {/* widget progress starts */}
-              <WidgetStatus name={[`Room Description`,`${language?.room} ${language?.services}`,`${language?.room} ${language?.gallery}`,`${language?.room} ${language?.rates}`,`Rate Discounts`,`Rate Modifications`]} selected={5} color={color}/>
+              <WidgetStatus name={[`Room Description`, `${language?.room} ${language?.services}`, `${language?.room} ${language?.gallery}`, `${language?.room} ${language?.rates}`, `Rate Discounts`, `Rate Modifications`]} selected={5} color={color} />
               {/* widget progress ends */}
 
               {/* page label starts */}
@@ -2147,7 +2246,7 @@ function Room() {
                     <div className="overflow-x-auto">
                       <div className="align-middle inline-block min-w-full">
                         <div className="shadow overflow-hidden">
-                          <table className="table data table-fixed lg:min-w-full divide-y divide-gray-200 min-w-screen" id="climateTable">
+                          <table className="table data table-fixed lg:min-w-full divide-y divide-gray-200 min-w-screen" id="discountTable">
                             <thead className={` ${color?.tableheader} `}>
                               <tr>
                                 {/* checkbox */}
@@ -2157,8 +2256,8 @@ function Room() {
                                       checked={allCheck === 1 || false}
                                       name="allSelect"
                                       onChange={(e) => {
-                                        // setAllCheck(allCheck === 1 ? 0 : 1);
-                                        // allCheckbox(e);
+                                        setAllCheck(allCheck === 1 ? 0 : 1);
+                                        //  allCheckbox(e);
                                       }}
 
                                       className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
@@ -2206,20 +2305,20 @@ function Room() {
                                         <input type="date"
                                           className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
                                           defaultValue={dis?.date_from}
-                                        // onChange={(e) => setEditSeason({ ...editSeason, season_name: e.target.value })} 
+                                          onChange={(e) => setEditedDiscount({ ...editedDiscount, date_from: e.target.value })}
                                         />
                                       </td>
 
                                       <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
                                         <input type="date" className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
                                           defaultValue={dis?.date_to}
-                                        // onChange={(e) => setEditSeason({ ...editSeason, period: e.target.value })} 
+                                          onChange={(e) => setEditedDiscount({ ...editedDiscount, date_to: e.target.value })}
                                         />
 
                                       </td>
                                       <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
                                         <select className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
-                                        // onChange={(e) => setEditSeason({ ...editSeason, max_temp: e.target.value })} 
+                                          onChange={(e) => setEditedDiscount({ ...editedDiscount, discount_type: e.target.value })}
                                         >
                                           <option value="Flat">Flat</option>
                                           <option value="percentage">Percentage</option>
@@ -2228,7 +2327,7 @@ function Room() {
 
                                       <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
                                         <select className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
-                                        // onChange={(e) => setEditSeason({ ...editSeason, max_temp: e.target.value })} 
+                                          onChange={(e) => setEditedDiscount({ ...editedDiscount, discount_on: e.target.value })}
                                         >
                                           <option value="Per Person">Per Person</option>
                                           <option value="Per Group">Per Group</option>
@@ -2236,9 +2335,9 @@ function Room() {
                                       </td>
 
                                       <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
-                                        <input type="date" className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
-                                          defaultValue={dis?.date_to}
-                                        // onChange={(e) => setEditSeason({ ...editSeason, period: e.target.value })} 
+                                        <input type="text" className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
+                                          defaultValue={dis?.discount}
+                                          onChange={(e) => setEditedDiscount({ ...editedDiscount, discount: e.target.value })}
                                         />
 
                                       </td>
@@ -2246,14 +2345,15 @@ function Room() {
                                       <td>
                                         <button
                                           onClick={() => {
-                                            alert("edit clicked");
+                                            alert(JSON.stringify(editedDiscount));
+                                            updateDiscount();
                                           }}
                                           className={`bg-gradient-to-r mt-1 bg-green-600 hover:bg-green-700 mr-2 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}>
 
                                           Save</button>
                                         <button className={`bg-gradient-to-r my-1 bg-gray-400 hover:${color?.greybackground}0 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}
                                           onClick={() => {
-                                            // setEditAccomodation({});
+                                            setEditedDiscount({});
                                             setEditRow({ edit: 0, id: undefined })
                                           }}
                                         >
@@ -2302,7 +2402,7 @@ function Room() {
                                       <td>
                                         <button className="bg-gradient-to-r mt-1 mr-2 bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
                                           onClick={() => {
-                                            // setEditAccomodation(stay);
+                                            setEditedDiscount(dis);
                                             setEditRow({ edit: 1, id: index })
                                           }}
                                         >
@@ -2340,11 +2440,11 @@ function Room() {
             </div>
           </div>
 
-          {/* Room Rates Discount */}
+          {/* Room Rates Modifications */}
           <div id='7' className={disp === 7 ? 'block' : 'hidden'}>
             <div className={`${color?.whitebackground} shadow-xl rounded-lg  sm:p-6 xl:p-8  2xl:col-span-2`}>
               {/* widget progress starts */}
-              <WidgetStatus name={[`Room Description`,`${language?.room} ${language?.services}`,`${language?.room} ${language?.gallery}`,`${language?.room} ${language?.rates}`,`Rate Discounts`,`Rate Modifications`]} selected={6} color={color}/>
+              <WidgetStatus name={[`Room Description`, `${language?.room} ${language?.services}`, `${language?.room} ${language?.gallery}`, `${language?.room} ${language?.rates}`, `Rate Discounts`, `Rate Modifications`]} selected={6} color={color} />
               {/* widget progress ends */}
 
               {/* page label starts */}
@@ -2425,7 +2525,7 @@ function Room() {
                                         <input type="date"
                                           className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
                                           defaultValue={mod?.date_from}
-                                        // onChange={(e) => setEditSeason({ ...editSeason, season_name: e.target.value })} 
+                                        onChange={(e) => setEditedModifications({ ...editedModifications, date_from: e.target.value })} 
                                         />
                                       </td>
 
@@ -2433,43 +2533,43 @@ function Room() {
                                       <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
                                         <input type="date" className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
                                           defaultValue={mod?.date_to}
-                                        // onChange={(e) => setEditSeason({ ...editSeason, period: e.target.value })} 
+                                          onChange={(e) => setEditedModifications({ ...editedModifications, date_to: e.target.value })} 
                                         />
 
                                       </td>
-                                      
-                                      
+
+
                                       {/* orginal rate */}
                                       <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
                                         <input type="text" className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
                                           defaultValue={mod?.orginal_rate}
-                                        // onChange={(e) => setEditSeason({ ...editSeason, period: e.target.value })} 
+                                          onChange={(e) => setEditedModifications({ ...editedModifications, orginal_rate: e.target.value })} 
                                         />
 
                                       </td>
-                                       
-                                        
+
+
                                       {/* modified rate */}
                                       <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
                                         <input type="text" className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
                                           defaultValue={mod?.modified_rate}
-                                        // onChange={(e) => setEditSeason({ ...editSeason, period: e.target.value })} 
+                                          onChange={(e) => setEditedModifications({ ...editedModifications, modified_rate: e.target.value })} 
                                         />
 
                                       </td>
 
-                                       {/* buttons */}
+                                      {/* buttons */}
                                       <td>
                                         <button
                                           onClick={() => {
-                                            alert("edit clicked");
+                                            updateModification();
                                           }}
                                           className={`bg-gradient-to-r mt-1 bg-green-600 hover:bg-green-700 mr-2 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}>
 
                                           Save</button>
                                         <button className={`bg-gradient-to-r my-1 bg-gray-400 hover:${color?.greybackground}0 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}
                                           onClick={() => {
-                                            // setEditAccomodation({});
+                                            setEditedModifications({});
                                             setEditRow({ edit: 0, id: undefined })
                                           }}
                                         >
@@ -2510,11 +2610,11 @@ function Room() {
                                       <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
                                         {mod?.modified_rate}
                                       </td>
-                                      
+
                                       <td>
                                         <button className="bg-gradient-to-r mt-1 mr-2 bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
                                           onClick={() => {
-                                            // setEditAccomodation(stay);
+                                            setEditedModifications(mod);
                                             setEditRow({ edit: 1, id: index })
                                           }}
                                         >
