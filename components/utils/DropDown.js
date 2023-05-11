@@ -12,6 +12,7 @@ const DropDown = ({
   color,
   req,
   options = [],
+  error,
   title,
   tooltip
 }) => {
@@ -58,6 +59,13 @@ const DropDown = ({
             })}
           </select>
         </div>
+        <p
+            data-testid="Error"
+            title={error}
+            className="text-sm text-sm text-red-700 font-light"
+          >
+            {error}
+          </p>
       </div>
     </div>
   );

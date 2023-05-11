@@ -17,6 +17,7 @@ import Button from '../../../components/Button';
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
+import roomRateModificationValidation from '../../../components/validation/room/roomRateModificationValidation';
 
 var language;
 var currentProperty;
@@ -32,6 +33,7 @@ function RoomRateModification() {
     const [mode, setMode] = useState()
     const [property_name, setProperty_name] = useState('')
     const [visible, setVisible] = useState(0)
+    const [error,setError]=useState([{}])
     // runs first in the code
     useEffect(() => {
         const resp = InitialActions({ setColor, setMode })
@@ -73,7 +75,8 @@ function RoomRateModification() {
     }
 
     function addModification() {
-        alert(JSON.stringify(modification))
+        let result = roomRateModificationValidation(modification);
+        if(result=== true){
         let url = '/api/room_rate_modification';
         axios.post(url, modification, { header: { "content-type": "application/json" } })
             .then((response) => {
@@ -101,7 +104,10 @@ function RoomRateModification() {
                     progress: undefined,
                 });
             })
-
+        }
+        else{
+            setError(result)
+        }
 
     }
     return (
@@ -222,6 +228,7 @@ function RoomRateModification() {
                                         }
                                         }
                                         req={true}
+                                        error={error[index]?.date_from}
                                     />
 
                                     {/* Date To */}
@@ -234,6 +241,7 @@ function RoomRateModification() {
                                         }
                                         }
                                         req={true}
+                                        error={error[index]?.date_to}
                                     />
 
                                     {/*Orginal Rate*/}
@@ -245,6 +253,7 @@ function RoomRateModification() {
                                         }
                                         color={color}
                                         req={true}
+                                        error={error[index]?.orginal_rate}
                                     />
                                     {/*Modified Rate*/}
                                     <InputText
@@ -255,6 +264,7 @@ function RoomRateModification() {
                                         }
                                         color={color}
                                         req={true}
+                                        error={error[index]?.modified_rate}
                                     />
 
 

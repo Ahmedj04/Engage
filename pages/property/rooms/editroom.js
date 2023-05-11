@@ -29,6 +29,8 @@ import InputText from '../../../components/utils/InputText';
 import InputTextBox from '../../../components/utils/InputTextBox';
 import DropDown from '../../../components/utils/DropDown';
 import WidgetStatus from '../../../components/widgetStatus';
+import roomDiscountValidation from '../../../components/validation/room/roomDiscountValidation';
+import roomRateModificationValidation from '../../../components/validation/room/roomRateModificationValidation';
 var language;
 var currentProperty;
 var currentroom;
@@ -42,6 +44,7 @@ const logger = require("../../../services/logger");
 var currentLogged;
 var i = 0;
 let colorToggle;
+
 
 
 function Room() {
@@ -1137,6 +1140,8 @@ function Room() {
   }
   // update discount function 
   const updateDiscount = () => {
+    let val = roomDiscountValidation([editedDiscount])
+   if(val === true){
     // url to be hit
     const url = `/api/room_discount`;
     // data formated as per api requirement 
@@ -1181,9 +1186,23 @@ function Room() {
       });
     })
   }
+  else{
+    toast.error(`APP: ${JSON.stringify(val)}`, {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  }
+  }
 
    // update discount function 
    const updateModification = () => {
+    let result = roomRateModificationValidation([editedModifications])  
+    if(result=== true){
     // url to be hit
     const url = `/api/room_rate_modification`;
     // data formated as per api requirement 
@@ -1211,8 +1230,7 @@ function Room() {
         setRateModification([...uneditedModifications, editedModifications])
       }
       else {
-        alert(JSON.stringify([editedModifications]))
-        setRateModification([editedModifications])
+       setRateModification([editedModifications])
       }
       // set edit back to initial values 
       setEditRow({ edit: 0, id: undefined })
@@ -1227,7 +1245,18 @@ function Room() {
         draggable: true,
         progress: undefined,
       });
-    })
+    })}
+    else{
+      toast.error(`APP: ${JSON.stringify(result)}`, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
   }
 
   return (
@@ -2345,8 +2374,7 @@ function Room() {
                                       <td>
                                         <button
                                           onClick={() => {
-                                            alert(JSON.stringify(editedDiscount));
-                                            updateDiscount();
+                                           updateDiscount();
                                           }}
                                           className={`bg-gradient-to-r mt-1 bg-green-600 hover:bg-green-700 mr-2 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}>
 

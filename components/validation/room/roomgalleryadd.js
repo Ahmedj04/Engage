@@ -1,6 +1,5 @@
 const validateRoomGallery = (all_data) => {
-  alert(JSON.stringify(all_data))
-   var error = [];
+  var error = [];
     for (let count = 0; count < all_data.length; count++) {
       error.push({})
     }
@@ -47,7 +46,6 @@ const validateRoomGallery = (all_data) => {
     })
   
     for (let value in flag) {
-  
       if (flag[value] === false) {
         final_flag = false;
         break;
