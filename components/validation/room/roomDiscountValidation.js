@@ -30,7 +30,7 @@ const roomDiscountValidation = (all_data) => {
         }
         // is data present checking end
         // validating dates 
-        if((largerDate(data?.discount_from,data?.discount_to) === data?.discount_from || false)){
+        if((largerDate(data?.date_from,data?.date_to) === data?.date_from || false)){
             flag.push(false)
             error[index].date_from= "APP: The date-from must be less than date-to."
             error[index].date_to= "APP: The date-from must be less than date-to."

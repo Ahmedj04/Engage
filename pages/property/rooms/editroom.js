@@ -97,6 +97,8 @@ function Room() {
   // function to search image
   const [searchedImages, setSearchedImages] = useState([{}]);
   const [showSearchedImages, setShowSearchedImages] = useState(0);
+  const [del, setDel] = useState(0);
+  const [id, setId] = useState(-1);
   const [editedDiscount, setEditedDiscount] = useState({})
   const [editedModifications, setEditedModifications] = useState({})
   /* Function Multiple Delete*/
@@ -1141,122 +1143,196 @@ function Room() {
   // update discount function 
   const updateDiscount = () => {
     let val = roomDiscountValidation([editedDiscount])
-   if(val === true){
-    // url to be hit
-    const url = `/api/room_discount`;
-    // data formated as per api requirement 
-    let data = { "room_discounts": [editedDiscount] }
-    // network call to edit data
-    axios.put(url, data, {
-      header: { "content-type": "application/json" },
-    }).then((response) => {
-      // this block will execute on sucessfull completiion of network call 
-      setSpinner(0);
-      toast.success("API: Room Discount Updated Successfully!", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-      // to check if the discounts are more than one 
-      if (discount.length > 1) {
-        // filter out unedited discounts 
-        let uneditedDiscount = discount.filter(item => item.discount_id != editedDiscount.discount_id);
-        // save all discounts to state 
-        setDiscount([...uneditedDiscount, editedDiscount])
-      }
-      else {
-        setDiscount([editedDiscount])
-      }
-      // set edit back to initial values 
-      setEditRow({ edit: 0, id: undefined })
-    }).catch((error) => {
-      setSpinner(0);
-      toast.error("API: Room Discount Update Error!", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    })
-  }
-  else{
-    toast.error(`APP: ${JSON.stringify(val)}`, {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-  }
+    if (val === true) {
+      // url to be hit
+      const url = `/api/room_discount`;
+      // data formated as per api requirement 
+      let data = { "room_discounts": [editedDiscount] }
+      // network call to edit data
+      axios.put(url, data, {
+        header: { "content-type": "application/json" },
+      }).then((response) => {
+        // this block will execute on sucessfull completiion of network call 
+        setSpinner(0);
+        toast.success("API: Room Discount Updated Successfully!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        // to check if the discounts are more than one 
+        if (discount.length > 1) {
+          // filter out unedited discounts 
+          let uneditedDiscount = discount.filter(item => item.discount_id != editedDiscount.discount_id);
+          // save all discounts to state 
+          setDiscount([...uneditedDiscount, editedDiscount])
+        }
+        else {
+          setDiscount([editedDiscount])
+        }
+        // set edit back to initial values 
+        setEditRow({ edit: 0, id: undefined })
+      }).catch((error) => {
+        setSpinner(0);
+        toast.error("API: Room Discount Update Error!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      })
+    }
+    else {
+      //find errors for the value being edited
+      let errors = Object.values(val[0]);
+      // for every error we print toast 
+      errors.map((res) => {
+        return (
+          toast.error(`${res}`, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          })
+        )
+      })
+    }
   }
 
-   // update discount function 
-   const updateModification = () => {
-    let result = roomRateModificationValidation([editedModifications])  
-    if(result=== true){
-    // url to be hit
-    const url = `/api/room_rate_modification`;
-    // data formated as per api requirement 
-    let data = { "room_rate_modification": [editedModifications] }
-    // network call to edit data
-    axios.put(url, data, {
-      header: { "content-type": "application/json" },
-    }).then((response) => {
-      // this block will execute on sucessfull completiion of network call 
-      setSpinner(0);
-      toast.success("API: Room Rate Modification Updated Successfully!", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-      // to check if the discounts are more than one 
-      if (rateModification.length > 1) {
-        // filter out unedited discounts 
-        let uneditedModifications = rateModification.filter(item => item.modification_id != editedDiscount.modification_id);
-        // save all discounts to state 
-        setRateModification([...uneditedModifications, editedModifications])
-      }
-      else {
-       setRateModification([editedModifications])
-      }
-      // set edit back to initial values 
-      setEditRow({ edit: 0, id: undefined })
-    }).catch((error) => {
-      setSpinner(0);
-      toast.error("API: Room Discount Update Error!", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    })}
-    else{
-      toast.error(`APP: ${JSON.stringify(result)}`, {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+  // update discount function 
+  const updateModification = () => {
+    let result = roomRateModificationValidation([editedModifications])
+    if (result === true) {
+      // url to be hit
+      const url = `/api/room_rate_modification`;
+      // data formated as per api requirement 
+      let data = { "room_rate_modification": [editedModifications] }
+      // network call to edit data
+      axios.put(url, data, {
+        header: { "content-type": "application/json" },
+      }).then((response) => {
+        // this block will execute on sucessfull completiion of network call 
+        setSpinner(0);
+        toast.success("API: Room Rate Modification Updated Successfully!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        // to check if the discounts are more than one 
+        if (rateModification.length > 1) {
+          // filter out unedited discounts 
+          let uneditedModifications = rateModification.filter(item => item.modification_id != editedDiscount.modification_id);
+          // save all discounts to state 
+          setRateModification([...uneditedModifications, editedModifications])
+        }
+        else {
+          setRateModification([editedModifications])
+        }
+        // set edit back to initial values 
+        setEditRow({ edit: 0, id: undefined })
+      }).catch((error) => {
+        setSpinner(0);
+        toast.error("API: Room Discount Update Error!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      })
     }
+    else {
+      //find errors for the value being edited
+      let errors = Object.values(result[0]);
+      // for every error we print toast 
+      errors.map((res) => {
+        return (
+          toast.error(`${res}`, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          })
+        )
+      })
+    }
+  }
+
+  // delete modifications
+  function deleteModification(mod) {
+    const url = `/api/room_modification/${mod?.modification_id}`;
+    alert(url)
+    axios.delete(url).then((response) => {
+      toast.success("API:Modification delete success.", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      let undeleted = rateModification.filter((m) => m.modification_id != mod?.modification_id);
+      setRateModification(undeleted)
+    }).catch((error) => {
+      toast.error("API: Modification delete error.", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+
+    });
+  }
+  // delete discount
+  function deleteDiscount(dis) {
+    const url = `/api/room_discount/${dis.discount_id}`;
+    alert(url)
+    axios.delete(url).then((response) => {
+      toast.success("API:Discount delete success.", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      let undeleted = discount.filter((m) => m.discount_id != dis.discount_id);
+      setDiscount(undeleted)
+    }).catch((error) => {
+      toast.error("API: Discount delete error.", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+
+    });
   }
 
   return (
@@ -2374,7 +2450,7 @@ function Room() {
                                       <td>
                                         <button
                                           onClick={() => {
-                                           updateDiscount();
+                                            updateDiscount();
                                           }}
                                           className={`bg-gradient-to-r mt-1 bg-green-600 hover:bg-green-700 mr-2 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}>
 
@@ -2427,21 +2503,38 @@ function Room() {
                                         {dis?.discount}
                                       </td>
 
+                                    {(del == 1 && id ===index)?
                                       <td>
-                                        <button className="bg-gradient-to-r mt-1 mr-2 bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-                                          onClick={() => {
-                                            setEditedDiscount(dis);
-                                            setEditRow({ edit: 1, id: index })
+                                        <button
+                                          className="lg:mr-2 bg-gradient-to-r my-1 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                           onClick={() => { deleteDiscount(dis) }} 
+                                        >Yes,Delete</button>
+                                        <button className={`bg-gradient-to-r my-1 bg-gray-400 hover:${color?.greybackground}0 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}
+                                          onClick={(e) => {
+                                            setDel(0)
+                                            setId(undefined)
                                           }}
+                                        >
+
+                                          Cancel</button>
+                                      </td> :<td>
+                                        <button className="bg-gradient-to-r mt-1 mr-2 bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                         onClick={() => {
+                                          setEditedDiscount(dis);
+                                          setEditRow({ edit: 1, id: index })
+                                        }}
                                         >
 
                                           Edit</button>
                                         <button className="bg-gradient-to-r my-1 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-                                        // onClick={() => { deleteSeason(season) }} 
+                                          onClick={(e) => {
+                                            setDel(1);
+                                            setId(index);
+                                          }}
                                         >
 
                                           Delete</button>
-                                      </td>
+                                      </td> }
                                     </tr>}
                                 </>
                                 )
@@ -2553,7 +2646,7 @@ function Room() {
                                         <input type="date"
                                           className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
                                           defaultValue={mod?.date_from}
-                                        onChange={(e) => setEditedModifications({ ...editedModifications, date_from: e.target.value })} 
+                                          onChange={(e) => setEditedModifications({ ...editedModifications, date_from: e.target.value })}
                                         />
                                       </td>
 
@@ -2561,7 +2654,7 @@ function Room() {
                                       <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
                                         <input type="date" className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
                                           defaultValue={mod?.date_to}
-                                          onChange={(e) => setEditedModifications({ ...editedModifications, date_to: e.target.value })} 
+                                          onChange={(e) => setEditedModifications({ ...editedModifications, date_to: e.target.value })}
                                         />
 
                                       </td>
@@ -2571,7 +2664,7 @@ function Room() {
                                       <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
                                         <input type="text" className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
                                           defaultValue={mod?.orginal_rate}
-                                          onChange={(e) => setEditedModifications({ ...editedModifications, orginal_rate: e.target.value })} 
+                                          onChange={(e) => setEditedModifications({ ...editedModifications, orginal_rate: e.target.value })}
                                         />
 
                                       </td>
@@ -2581,7 +2674,7 @@ function Room() {
                                       <td className={`p-4 whitespace-nowrap text-base font-normal capitalize ${color?.text}`}>
                                         <input type="text" className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-24 p-2.5`}
                                           defaultValue={mod?.modified_rate}
-                                          onChange={(e) => setEditedModifications({ ...editedModifications, modified_rate: e.target.value })} 
+                                          onChange={(e) => setEditedModifications({ ...editedModifications, modified_rate: e.target.value })}
                                         />
 
                                       </td>
@@ -2639,21 +2732,41 @@ function Room() {
                                         {mod?.modified_rate}
                                       </td>
 
-                                      <td>
+
+                                      {(del == 1 && id ===index)? 
+                                       <td>
+                                         <button
+                                           className="lg:mr-2 bg-gradient-to-r my-1 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                           onClick={() => { deleteModification(mod) }}
+                                         >Yes,Delete</button>
+                                         <button className={`bg-gradient-to-r my-1 bg-gray-400 hover:${color?.greybackground}0 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}
+                                           onClick={(e) => {
+                                             setDel(0);
+                                            setId(undefined);
+                                           }}
+                                         >
+
+                                           Cancel</button>
+                                       </td>
+                                      :<td>
                                         <button className="bg-gradient-to-r mt-1 mr-2 bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-                                          onClick={() => {
-                                            setEditedModifications(mod);
-                                            setEditRow({ edit: 1, id: index })
-                                          }}
+                                         onClick={() => {
+                                          setEditedModifications(mod);
+                                          setEditRow({ edit: 1, id: index })
+                                        }}
                                         >
 
                                           Edit</button>
                                         <button className="bg-gradient-to-r my-1 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-                                        // onClick={() => { deleteSeason(season) }} 
+                                          onClick={(e) => {
+                                            setDel(1);
+                                            setId(index);
+                                          }}
                                         >
 
                                           Delete</button>
-                                      </td>
+                                      </td>}
+
                                     </tr>}
                                 </>
                                 )
