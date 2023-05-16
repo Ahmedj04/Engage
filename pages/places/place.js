@@ -109,7 +109,7 @@ const Place = () => {
         let infoTemp = extraInfo.filter(info => info?.info_id != editInfo?.info_id)
         let newInfo = [...infoTemp, editInfo]
         if (!objChecker.isEqual(extraInfo, newInfo)) {
-            let temp=editInfo
+            let temp = editInfo
             delete temp.isChecked
             let data = {
                 "data": temp
@@ -133,56 +133,56 @@ const Place = () => {
 
     }
     //edit season
-function editSeasonDetails() {
-if (!objChecker.isEqual(orginalSeason, editSeason)) {
-const tempData = editSeason
-delete tempData.place
-let data = {
-"data": tempData
-}
+    function editSeasonDetails() {
+        if (!objChecker.isEqual(orginalSeason, editSeason)) {
+            const tempData = editSeason
+            delete tempData.place
+            let data = {
+                "data": tempData
+            }
 
-let url = `/api2/season`;
-axios.put(url, data, {
-headers:{
-"x-hasura-admin-secret": process.env.NEXT_PUBLIC_PASS
-}
-}).then(()=>{
-let otherSeasons = seasons.filter(i => i.season_id != editSeason.season_id)
-setSeasons([...otherSeasons, editSeason]);
-setEditSeason({});
-setEditRow({ edit: 0, id: undefined });
-alert("API: Season Updated Sucessfully");
-}).catch(() => { alert("Some Error Happened"); })
-}
-else{
-setEditSeason({});
-setEditRow({ edit: 0, id: undefined });
-alert("NO Change In Data");
-}
-}
-//add season
-function addSeasonDetails() {
-let places_id = localStorage.getItem('places_id');
-delete newSeason.isChecked
-let data = {
-"data":  {
-...newSeason,
-"external_link": `${places_id}`
-}
-}
-let url = `/api2/season/`;
-axios.post(url, data, {
-headers: {
-"x-hasura-admin-secret": process.env.NEXT_PUBLIC_PASS
-}
-}).then((response) => {  
-setSeasons([...seasons, response?.data?.insert_place_seasons_one])
-document.getElementById("newSeason").reset();
-setAddSeason(0);
-alert("API: Season Added Sucessfully");
-}).catch(() => { alert("Some Error Happened In Add Seasons"); })
-setNewSeason({ ...newSeason, 'isChecked': false })  
-}
+            let url = `/api2/season`;
+            axios.put(url, data, {
+                headers: {
+                    "x-hasura-admin-secret": process.env.NEXT_PUBLIC_PASS
+                }
+            }).then(() => {
+                let otherSeasons = seasons.filter(i => i.season_id != editSeason.season_id)
+                setSeasons([...otherSeasons, editSeason]);
+                setEditSeason({});
+                setEditRow({ edit: 0, id: undefined });
+                alert("API: Season Updated Sucessfully");
+            }).catch(() => { alert("Some Error Happened"); })
+        }
+        else {
+            setEditSeason({});
+            setEditRow({ edit: 0, id: undefined });
+            alert("NO Change In Data");
+        }
+    }
+    //add season
+    function addSeasonDetails() {
+        let places_id = localStorage.getItem('places_id');
+        delete newSeason.isChecked
+        let data = {
+            "data": {
+                ...newSeason,
+                "external_link": `${places_id}`
+            }
+        }
+        let url = `/api2/season/`;
+        axios.post(url, data, {
+            headers: {
+                "x-hasura-admin-secret": process.env.NEXT_PUBLIC_PASS
+            }
+        }).then((response) => {
+            setSeasons([...seasons, response?.data?.insert_place_seasons_one])
+            document.getElementById("newSeason").reset();
+            setAddSeason(0);
+            alert("API: Season Added Sucessfully");
+        }).catch(() => { alert("Some Error Happened In Add Seasons"); })
+        setNewSeason({ ...newSeason, 'isChecked': false })
+    }
     //remove milestone
     function removeMileStone(itemMile, idx) {
         //network call to delete milestone after sucess do below task
@@ -210,27 +210,27 @@ setNewSeason({ ...newSeason, 'isChecked': false })
     }
     //delete season
     function deleteSeason(season) {
-       let url= `/api2/season/${season?.season_id}`;
-            axios.delete(url, {
-                headers: {
-                    "x-hasura-admin-secret": process.env.NEXT_PUBLIC_PASS
-                }
-            }).then(() => {
-               let remainingSeasons = seasons.filter(i => i.season_id != season.season_id)
-        setSeasons(remainingSeasons);
-         alert("API: Season Deleted Sucessfully");
-            }).catch(() => { alert("Some Error Happened"); })
-            
-       
+        let url = `/api2/season/${season?.season_id}`;
+        axios.delete(url, {
+            headers: {
+                "x-hasura-admin-secret": process.env.NEXT_PUBLIC_PASS
+            }
+        }).then(() => {
+            let remainingSeasons = seasons.filter(i => i.season_id != season.season_id)
+            setSeasons(remainingSeasons);
+            alert("API: Season Deleted Sucessfully");
+        }).catch(() => { alert("Some Error Happened"); })
+
+
         //network call
-        
+
     }
     //add info
     function infoAdd() {
-       
+
         let places_id = localStorage.getItem('places_id');
         let data = {
-            "data":  {
+            "data": {
                 "type": "PLACE",
                 "key": `${newInfo?.key}`,
                 "external_link": `${places_id}`,
@@ -244,7 +244,7 @@ setNewSeason({ ...newSeason, 'isChecked': false })
             }
         }).then((response) => {
             response?.data?.insert_additional_info_one
-            setExtraInfo([...extraInfo,response?.data?.insert_additional_info_one])
+            setExtraInfo([...extraInfo, response?.data?.insert_additional_info_one])
             document.getElementById("newInfo").reset();
             setShowNewInfo(0);
             alert("API: Additional Info Added Sucessfully");
@@ -480,7 +480,7 @@ setNewSeason({ ...newSeason, 'isChecked': false })
 
     //delete info
     function deleteInfo(e, infoRow) {
-        let url= `/api2/places/addInfo/${infoRow?.info_id}`;
+        let url = `/api2/places/addInfo/${infoRow?.info_id}`;
         axios.delete(url, {
             headers: {
                 "x-hasura-admin-secret": process.env.NEXT_PUBLIC_PASS
@@ -490,7 +490,7 @@ setNewSeason({ ...newSeason, 'isChecked': false })
             setExtraInfo(remainingInfo);
             alert("API: Additional Info Deleted Sucessfully");
         }).catch(() => { alert("Some Error Happened"); })
-        
+
     }
     //delete attractions
     function deleteAttractions() {
@@ -829,7 +829,7 @@ setNewSeason({ ...newSeason, 'isChecked': false })
                                     </div>
                                 </div>
 
-                {/* place languages */}
+                                {/* place languages */}
                                 <div className="w-full lg:w-6/12 px-4">
                                     <div className="relative w-full mb-3">
                                         <label className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -1149,46 +1149,46 @@ setNewSeason({ ...newSeason, 'isChecked': false })
 
                                                                     {season?.unit}
                                                                 </td>
-                                                                {delClimate==0?<td>
-                       {/*       EDIT & DELETE          */}
-                                           
-<button className="bg-gradient-to-r mt-1 mr-2 bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-onClick={() => {
-setOrginalSeason(season)
-setEditSeason(season);
-setEditRow({ edit: 1, id: index })
-}}
->
-Edit</button>
-<button className="bg-gradient-to-r my-1 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-onClick={(e) => {
-setDelClimate(1)
-    }}
-    >
+                                                                {delClimate == 0 ? <td>
+                                                                    {/*       EDIT & DELETE          */}
 
-    Delete</button>
-     </td>:
-    <td>
-    <button
-    className="lg:mr-2 bg-gradient-to-r my-1 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-    onClick={() => {
-    deleteSeason(season)
-     }}
-    >Yes,Delete</button>
-    <button className={`bg-gradient-to-r my-1 bg-gray-400 hover:${color?.greybackground}0 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}
-    onClick={(e) => {
-    setDelClimate(0)
-    }}
-    >Cancel</button>
-    </td>}
-    </tr>}
-    </>
-    )
-    })}
+                                                                    <button className="bg-gradient-to-r mt-1 mr-2 bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                                                        onClick={() => {
+                                                                            setOrginalSeason(season)
+                                                                            setEditSeason(season);
+                                                                            setEditRow({ edit: 1, id: index })
+                                                                        }}
+                                                                    >
+                                                                        Edit</button>
+                                                                    <button className="bg-gradient-to-r my-1 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                                                        onClick={(e) => {
+                                                                            setDelClimate(1)
+                                                                        }}
+                                                                    >
 
-    </tbody>
-    </table>
-    </div></div></div></div>
+                                                                        Delete</button>
+                                                                </td> :
+                                                                    <td>
+                                                                        <button
+                                                                            className="lg:mr-2 bg-gradient-to-r my-1 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                                                            onClick={() => {
+                                                                                deleteSeason(season)
+                                                                            }}
+                                                                        >Yes,Delete</button>
+                                                                        <button className={`bg-gradient-to-r my-1 bg-gray-400 hover:${color?.greybackground}0 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}
+                                                                            onClick={(e) => {
+                                                                                setDelClimate(0)
+                                                                            }}
+                                                                        >Cancel</button>
+                                                                    </td>}
+                                                            </tr>}
+                                                    </>
+                                                    )
+                                                })}
+
+                                            </tbody>
+                                        </table>
+                                    </div></div></div></div>
                         {/* button div */}
                         <div className='flex justify-end mt-2 '>
                             <button className="mr-4 bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
@@ -1382,7 +1382,7 @@ setDelClimate(1)
                                                                         {row?.value}
                                                                     </td>
 
-                                                                    {delInf==0?<td>
+                                                                    {delInf == 0 ? <td>
                                                                         <button className="bg-gradient-to-r mt-1 mr-2 bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
                                                                             onClick={() => {
                                                                                 setEditInfo(row);
@@ -1398,24 +1398,24 @@ setDelClimate(1)
                                                                         >
 
                                                                             Delete</button>
-                                                                    </td>:
-                                                                    <td>
-                                                                    <button
-                                                                    className="lg:mr-2 bg-gradient-to-r my-1 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-                                                                        onClick={() => {
-                                                                            deleteInfo(e, row);
-                                                                        }}
-                                                                    >Yes,Delete</button>
-                                                                    <button className={`bg-gradient-to-r my-1 bg-gray-400 hover:${color?.greybackground}0 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}
-                                                                        onClick={(e) => {
-                                                                            setDelInf(0)
-                                                                        }}
-                                                                    >
+                                                                    </td> :
+                                                                        <td>
+                                                                            <button
+                                                                                className="lg:mr-2 bg-gradient-to-r my-1 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                                                                onClick={() => {
+                                                                                    deleteInfo(e, row);
+                                                                                }}
+                                                                            >Yes,Delete</button>
+                                                                            <button className={`bg-gradient-to-r my-1 bg-gray-400 hover:${color?.greybackground}0 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}
+                                                                                onClick={(e) => {
+                                                                                    setDelInf(0)
+                                                                                }}
+                                                                            >
 
-                                                                        Cancel</button>
-                                                                </td>}
-                                                                    
-                                                                    
+                                                                                Cancel</button>
+                                                                        </td>}
+
+
                                                                 </tr>}
                                                         </>
 
@@ -1684,8 +1684,6 @@ setDelClimate(1)
                 </div>
                 {/*attraction  milestone  */}
                 <div id='3' className={disp === 3 ? 'block' : 'hidden'}>
-
-
                     <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
                         {/* progress bar */}
                         <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
@@ -1911,7 +1909,6 @@ setDelClimate(1)
                         </div>
 
                     </div>
-
                 </div>
 
                 {/* Modal milestone */}

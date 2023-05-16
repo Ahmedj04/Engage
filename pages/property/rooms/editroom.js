@@ -31,12 +31,15 @@ import DropDown from '../../../components/utils/DropDown';
 import WidgetStatus from '../../../components/widgetStatus';
 import roomDiscountValidation from '../../../components/validation/room/roomDiscountValidation';
 import roomRateModificationValidation from '../../../components/validation/room/roomRateModificationValidation';
+import searchFunction from '../../../components/searchFunction';
 var language;
 var currentProperty;
 var currentroom;
 var room;
 var viewsData;
 let check = [];
+let checkDiscount = [];
+let checkModification = [];
 var resView = [];
 var currency;
 import Router from 'next/router'
@@ -101,6 +104,7 @@ function Room() {
   const [id, setId] = useState(-1);
   const [editedDiscount, setEditedDiscount] = useState({})
   const [editedModifications, setEditedModifications] = useState({})
+  const [selectAllDiscounts,setSelectAllDiscounts]=useState(0)
   /* Function Multiple Delete*/
   function deleteMultiple() {
     const data = check?.map((item) => {
@@ -215,8 +219,8 @@ function Room() {
         setAllRoomDetails(response.data);
         setRoomDetails(response.data);
         setFinalView(response?.data?.views);
-        setDiscount(response?.data?.discounts)
-        setRateModification(response?.data?.room_rate_modifications)
+        setDiscount(response?.data?.discounts.map(i => ({ ...i, "isChecked": false }))) //added checked as undefined 
+        setRateModification(response?.data?.room_rate_modifications.map(i => ({ ...i, "isChecked": false })))  //added checked as undefined 
         if (response.data?.room_type == 'Single') {
           setBedDetails(response.data.beds?.[i])
         }
@@ -962,7 +966,7 @@ function Room() {
     setdeleteImage(1);
   };
 
-
+//delete multiple imges
   function deleteMultiple() {
     const data = check?.map((item) => {
       return { image_id: item, property_id: currentProperty?.property_id };
@@ -1003,6 +1007,7 @@ function Room() {
       });
   }
 
+ 
   /* Function to edit single bed */
   const submitBedUpdate = () => {
     const current = new Date();
@@ -1279,7 +1284,7 @@ function Room() {
   // delete modifications
   function deleteModification(mod) {
     const url = `/api/room_modification/${mod?.modification_id}`;
-    alert(url)
+    
     axios.delete(url).then((response) => {
       toast.success("API:Modification delete success.", {
         position: "top-center",
@@ -1308,7 +1313,7 @@ function Room() {
   // delete discount
   function deleteDiscount(dis) {
     const url = `/api/room_discount/${dis.discount_id}`;
-    alert(url)
+    
     axios.delete(url).then((response) => {
       toast.success("API:Discount delete success.", {
         position: "top-center",
@@ -1334,7 +1339,90 @@ function Room() {
 
     });
   }
+  const [selectedDiscounts, setSelectedDiscount] = useState([])
+  function handleCheckboxDiscount(e, item) {
+    const { name, checked } = e.target;
+    let tempattr;
+    if (item.isChecked === false) {
+      tempattr = discount.map((item) =>
+        item.discount_id === name ? { ...item, isChecked: 'checked' } : item
+      );
+    }
 
+    else {
+      tempattr = discount.map((item) =>
+        item.discount_id === name ? { ...item, isChecked: false } : item
+      );
+    }
+    setDiscount(tempattr);
+
+    checkDiscount = tempattr
+      .filter((i) => i.isChecked === 'checked')
+      .map((j) => {
+        return j.discount_id;
+      });
+
+  }
+//delete selected discounts
+  function deleteMultipleDiscount() {
+    if (checkDiscount.length > 0) {
+      const tempData = checkDiscount.map((item) => ({ "discount_id": item }))
+      const data = { "room_discount": tempData };
+      const url = `/api/deleteall/room_discount`
+      axios.post(url, data, {
+        headers: {
+          "content-type": "application/json"
+        }
+      }).then((resp) => {
+        toast.success("Selected Discounts Deleted", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        let undeleted=discount.filter((dis)=>dis?.isChecked!='checked');
+        setDiscount(undeleted);
+      }).catch((err) => {
+        toast.error("Selected Discounts Deleting Failed", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      })
+    } else {
+      toast.warn("No Discounts Selected", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  }
+//set all discounts
+  function setAllDiscount(){
+  if(selectAllDiscounts===0){
+    let checkedDiscounts = discount.map(dis => ({...dis,isChecked:'checked'}));
+  setDiscount(checkedDiscounts);   
+  checkedDiscounts.map((dis)=>checkDiscount.push(dis?.discount_id))
+  }
+  else{
+    let checkedDiscounts = discount.map(dis => ({...dis,isChecked:false}));
+  setDiscount(checkedDiscounts);  
+  checkDiscount=[];
+  }
+  setSelectAllDiscounts(selectAllDiscounts===0?1:0)
+  
+ }
   return (
     <>
       <Title name={`Engage | Edit Room`} />
@@ -2337,15 +2425,49 @@ function Room() {
               {/* page label ends */}
               <div className="pt-6">
                 <div className=" md:px-2 mx-auto w-full">
-                  {/* add discount and modification buttons start */}
-                  <div className='flex justify-end mx-auto mb-2'>
-                    <button className="mx-2 bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex  
-                             font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-                      onClick={() => { localStorage.setItem("RoomId", currentroom); Router.push('./roomdiscount'); }}>
-                      Add Discount</button>
+                  <div className="sm:flex">
+                    <div className=" sm:flex items-center sm:divide-x sm:divide-gray-100 mb-3 sm:mb-0">
+                      {/* search form */}
+                      <form className="lg:pr-3" action="#" method="GET">
+                        <label htmlFor="users-search" className="sr-only">Search</label>
+                        <div className="mt-1 relative lg:w-64 xl:w-96">
+                          <input type="text" name="email" id="roomDiscount" onKeyUp={() => searchFunction('roomDiscount', 'discountTable')}
+                            className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} placeholder='Search'>
+                          </input>
+                        </div>
+                      </form>
+                      {/* search form end */}
+                      {/* icons start */}
+                      <div className="flex space-x-1 pl-0 sm:pl-2 mt-3 sm:mt-0">
+                        <span className={`${color?.textgray} hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}>
+                          <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd"></path></svg>
+                        </span>
 
+                        <button onClick={() => { deleteMultipleDiscount() }} data-tooltip="Delete" aria-label="Delete" className={`${color?.textgray} hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}>
+                          <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd"></path></svg>
+                        </button>
+
+                        <span className={`${color?.textgray} hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}>
+                          <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd"></path></svg>
+                        </span>
+                        <span className={`${color?.textgray} hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}>
+                          <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg>
+                        </span>
+
+                      </div>
+                      {/* icons end*/}
+                      {/* add discount and modification buttons start */}
+
+                      <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150 lg:ml-72 xl:ml-80 md:ml-64"
+                        onClick={() => { localStorage.setItem("RoomId", currentroom); Router.push('./roomdiscount'); }}>
+                        Add Discount</button>
+
+
+                      {/* add discount and modification buttons ends */}
+
+                    </div>
                   </div>
-                  {/* add discount and modification buttons ends */}
+
                   {/* table */}
                   <div className="flex flex-col mt-8 lg:-mr-20 sm:mr-0 w-full  relative">
                     <div className="overflow-x-auto">
@@ -2358,11 +2480,11 @@ function Room() {
                                 <th scope="col" className="p-4">
                                   <div className="flex items-center">
                                     <input id="checkbox-all" aria-describedby="checkbox-1" type="checkbox"
-                                      checked={allCheck === 1 || false}
+                                      checked={selectAllDiscounts === 1 || false}
                                       name="allSelect"
                                       onChange={(e) => {
-                                        setAllCheck(allCheck === 1 ? 0 : 1);
-                                        //  allCheckbox(e);
+                                        setAllDiscount()
+                                        
                                       }}
 
                                       className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
@@ -2397,11 +2519,12 @@ function Room() {
                                             id={dis?.discount_id}
                                             tooltip
                                             disabled
-                                            title="Click here to delete image."
+                                            title="Click here to delete discount."
                                             name={dis?.discount_id}
                                             checked={dis?.isChecked || false}
                                             aria-describedby="checkbox-1"
-                                            className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                                            className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded"
+                                          />
                                           <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                                         </span>
                                       </td>
@@ -2472,12 +2595,11 @@ function Room() {
                                             type="checkbox"
                                             id={dis?.discount_id}
                                             tooltip
-                                            title="Click here to delete image."
+                                            title="Click here to delete discount."
                                             name={dis?.discount_id}
-                                            checked={dis.isChecked || false}
+                                            checked={dis?.isChecked || false}
                                             onChange={(e) => {
-
-                                              handlecheckbox(e, season);
+                                              handleCheckboxDiscount(e, dis);
                                             }}
                                             aria-describedby="checkbox-1"
                                             className="bg-gray-50 border-gray-300 text-cyan-600  focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
@@ -2503,38 +2625,38 @@ function Room() {
                                         {dis?.discount}
                                       </td>
 
-                                    {(del == 1 && id ===index)?
-                                      <td>
-                                        <button
-                                          className="lg:mr-2 bg-gradient-to-r my-1 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-                                           onClick={() => { deleteDiscount(dis) }} 
-                                        >Yes,Delete</button>
-                                        <button className={`bg-gradient-to-r my-1 bg-gray-400 hover:${color?.greybackground}0 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}
-                                          onClick={(e) => {
-                                            setDel(0)
-                                            setId(undefined)
-                                          }}
-                                        >
+                                      {(del == 1 && id === index) ?
+                                        <td>
+                                          <button
+                                            className="lg:mr-2 bg-gradient-to-r my-1 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                            onClick={() => { deleteDiscount(dis) }}
+                                          >Yes,Delete</button>
+                                          <button className={`bg-gradient-to-r my-1 bg-gray-400 hover:${color?.greybackground}0 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}
+                                            onClick={(e) => {
+                                              setDel(0)
+                                              setId(undefined)
+                                            }}
+                                          >
 
-                                          Cancel</button>
-                                      </td> :<td>
-                                        <button className="bg-gradient-to-r mt-1 mr-2 bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-                                         onClick={() => {
-                                          setEditedDiscount(dis);
-                                          setEditRow({ edit: 1, id: index })
-                                        }}
-                                        >
+                                            Cancel</button>
+                                        </td> : <td>
+                                          <button className="bg-gradient-to-r mt-1 mr-2 bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                            onClick={() => {
+                                              setEditedDiscount(dis);
+                                              setEditRow({ edit: 1, id: index })
+                                            }}
+                                          >
 
-                                          Edit</button>
-                                        <button className="bg-gradient-to-r my-1 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-                                          onClick={(e) => {
-                                            setDel(1);
-                                            setId(index);
-                                          }}
-                                        >
+                                            Edit</button>
+                                          <button className="bg-gradient-to-r my-1 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                            onClick={(e) => {
+                                              setDel(1);
+                                              setId(index);
+                                            }}
+                                          >
 
-                                          Delete</button>
-                                      </td> }
+                                            Delete</button>
+                                        </td>}
                                     </tr>}
                                 </>
                                 )
@@ -2626,6 +2748,7 @@ function Room() {
                                 return (<>
                                   {(editRow?.edit === 1 && editRow?.id === index) ?
                                     <tr key={index}>
+                                      {/* check box disabled while editing */}
                                       <td className="p-4 w-4">
                                         <span className="flex items-center">
                                           <input
@@ -2733,39 +2856,39 @@ function Room() {
                                       </td>
 
 
-                                      {(del == 1 && id ===index)? 
-                                       <td>
-                                         <button
-                                           className="lg:mr-2 bg-gradient-to-r my-1 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-                                           onClick={() => { deleteModification(mod) }}
-                                         >Yes,Delete</button>
-                                         <button className={`bg-gradient-to-r my-1 bg-gray-400 hover:${color?.greybackground}0 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}
-                                           onClick={(e) => {
-                                             setDel(0);
-                                            setId(undefined);
-                                           }}
-                                         >
+                                      {(del == 1 && id === index) ?
+                                        <td>
+                                          <button
+                                            className="lg:mr-2 bg-gradient-to-r my-1 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                            onClick={() => { deleteModification(mod) }}
+                                          >Yes,Delete</button>
+                                          <button className={`bg-gradient-to-r my-1 bg-gray-400 hover:${color?.greybackground}0 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150`}
+                                            onClick={(e) => {
+                                              setDel(0);
+                                              setId(undefined);
+                                            }}
+                                          >
 
-                                           Cancel</button>
-                                       </td>
-                                      :<td>
-                                        <button className="bg-gradient-to-r mt-1 mr-2 bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-                                         onClick={() => {
-                                          setEditedModifications(mod);
-                                          setEditRow({ edit: 1, id: index })
-                                        }}
-                                        >
+                                            Cancel</button>
+                                        </td>
+                                        : <td>
+                                          <button className="bg-gradient-to-r mt-1 mr-2 bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                            onClick={() => {
+                                              setEditedModifications(mod);
+                                              setEditRow({ edit: 1, id: index })
+                                            }}
+                                          >
 
-                                          Edit</button>
-                                        <button className="bg-gradient-to-r my-1 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-                                          onClick={(e) => {
-                                            setDel(1);
-                                            setId(index);
-                                          }}
-                                        >
+                                            Edit</button>
+                                          <button className="bg-gradient-to-r my-1 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                            onClick={(e) => {
+                                              setDel(1);
+                                              setId(index);
+                                            }}
+                                          >
 
-                                          Delete</button>
-                                      </td>}
+                                            Delete</button>
+                                        </td>}
 
                                     </tr>}
                                 </>
