@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGridPlugin from '@fullcalendar/timegrid';
+// import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
+// import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
 
 const RoomPriceCalendar = () => {
     const [events, setEvents] = useState([])
