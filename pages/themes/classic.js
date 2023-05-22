@@ -435,7 +435,7 @@ function Classic(args) {
                                                       {resource?.room_facilities?.map((item, index) => {
                                                          return (
                                                             <span className='text-gray-700' key={index}>
-                                                             
+                                                             {/* &#10004 is code for tick mark  */}
                                                                <span>&#10004;
                                                                   {item?.service_name} </span></span>)
                                                       })}

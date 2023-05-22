@@ -17,8 +17,6 @@ import Multiselect from 'multiselect-react-dropdown';
 import GlobalData from '../../components/GlobalData'
 import Gallery from '../../components/gallery';
 import searchFunction from '../../components/searchFunction';
-
-
 let colorToggle;
 let language;
 let currentProperty;
@@ -281,27 +279,12 @@ const Place = () => {
             setPlace(response?.data?.places[0]);
             setEditedPlace(response?.data?.places[0]);
             console.log(response?.data?.places[0]);
-            // let tempInfo = []
-            // response?.data?.places[0].additional_information.map((add_inf, id) => { tempInfo.push({ ...add_inf, 'isChecked': false }) })
-            // setExtraInfo(tempInfo)
-            // setCategories(response?.data?.places[0].place_category)
-
-            // //setLanguages(response?.data?.places[0].place_languages)
-
+           
             setLanguages(response?.data?.places[0].languages_spoken?.map(lang => GlobalData.LanguageData.filter(i => i.language_name === lang.language)).flat().map(i => ({ "language_name": i.language_name })));
             setEditedLanguages(response?.data?.places[0].languages_spoken?.map(lang => GlobalData.LanguageData.filter(i => i.language_name === lang.language)).flat().map(i => ({ "language_name": i.language_name })));
             setSelectedCategory(response?.data?.places[0].categories)
             setEditedCat(response?.data?.places[0].categories)
 
-            // let tempSeason = []
-            // response?.data?.places[0].place_seasons.map((season, id) => { tempSeason.push({ ...season, 'isChecked': false }) })
-            // setSeasons(tempSeason)
-            // let images = []
-            // response?.data?.places[0].images.map((image, id) => { images.push({ ...image, 'image_idx': id, 'isChecked': false }) })
-            // setPlaceImage(images)
-            // let att = []
-            // response?.data?.places[0].attractions.map((attraction, id) => { att.push({ ...attraction, 'isChecked': false }) })
-            // setPlaceAttractions(att)
             setVisible(1);
         }).catch((err) => {
             alert("error");

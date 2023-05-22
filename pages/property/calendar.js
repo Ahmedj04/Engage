@@ -118,8 +118,14 @@ function CalendarView() {
   const localizer = momentLocalizer(moment)
   const events = [
     {
-      start: new Date(`2023/04/08 13:00:00 +5:30`),
-      end: new Date(`2023/04/08 16:30:00 +5:30`),
+      start: new Date(`2023/05/19 13:00:00 +5:30`),
+      end: new Date(`2023/05/19 16:30:00 +5:30`),
+      title: 'Standar Room - Rs 1000 per night',
+      allDay: true
+    },
+    {
+      start: new Date(`2023/05/19 13:00:00 +5:30`),
+      end: new Date(`2023/05/19 16:30:00 +5:30`),
       title: 'Standar Room - Rs 1000 per night',
       allDay: true
     },{
@@ -156,7 +162,7 @@ function CalendarView() {
 
   return (
     <div className='flex'>
-      <div className='w-1/6 h-screen bg-gray-200 border border-2 border-blue-500'>
+      {/* <div className='w-1/6 h-screen bg-gray-200 border border-2 border-blue-500'>
         
         <div className='h-1/6 border border-black mt-16'>
           <ul>
@@ -206,14 +212,15 @@ function CalendarView() {
             <li>Suite</li>
           </ul>
         </div>
-      </div>
-      <div className='w-5/6 h-screen '>
+      </div> */}
+      <div className='w-screen h-screen '>
       <Calendar
         localizer={localizer}
         events={events}
         startAccessor="start"
         endAccessor="end"
         style={{ height:'100vh' }}
+
       />
       </div>
     </div>

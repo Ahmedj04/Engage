@@ -46,7 +46,7 @@ function InputText({
             className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
             defaultValue={defaultValue}
             required
-            onChange={(e) => onChangeAction(e)}
+            onChange={(e) =>onChangeAction(e)}
           />
           <p
             data-testid="Error"

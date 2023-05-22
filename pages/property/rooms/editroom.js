@@ -496,9 +496,7 @@ function Room() {
     }
   }, []);
 
-
-
-  /* Function to add images*/
+/* Function to add images*/
   const submitAddImage = () => {
     if (actionImage.length !== 0) {
       const imagedata = [{
@@ -1649,7 +1647,7 @@ function Room() {
                       label={`${language?.room} ${language?.description}`}
                       visible={visible}
                       defaultValue={allRoomDetails?.room_description}
-                      onChange={
+                      onChangeAction={
                         (e) => (
                           setAllRoomDetails({ ...allRoomDetails, room_description: e.target.value }, setFlag(1))
                         )
@@ -2577,7 +2575,7 @@ function Room() {
                       <div className="align-middle inline-block min-w-full">
                         <div className="shadow overflow-hidden">
                           <table className="table data table-fixed lg:min-w-full divide-y divide-gray-200 min-w-screen" id="discountTable">
-                            <thead className={` ${color?.tableheader} `}>
+                            <thead  >
                               <tr>
                                 {/* checkbox */}
                                 <th scope="col" className="p-4">
