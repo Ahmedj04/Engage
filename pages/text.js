@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import FullCalendar from '@fullcalendar/react/main.css';
-import dayGridPlugin from '@fullcalendar/daygrid/main.css';
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
 // import timeGridPlugin from '@fullcalendar/timegrid';
-import interactionPlugin from '@fullcalendar/interaction/main.css';
+import interactionPlugin from '@fullcalendar/interaction';
 // import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
 import roomPrice from '../components/devlopmentjson/roomPrice.json';
 let i = 0;
