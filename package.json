@@ -16,6 +16,7 @@
     "test": "jest --watch --detectOpenHandles --coverage"
   },
   "dependencies": {
+    "@fullcalendar/core": "^6.1.7",
     "@fullcalendar/daygrid": "^6.1.7",
     "@fullcalendar/interaction": "^6.1.7",
     "@fullcalendar/react": "^6.1.7",
