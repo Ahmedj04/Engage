@@ -3,9 +3,9 @@ import RoomPriceCalendar from './text';
 
 const RoomPricePage = () => {
   return (
-    <div className='flex justify-center items-center flex-col gap-4'>
+    <div className='h-5/6'>
       <h1>Room Prices</h1>
-      <div className='w-1/2 h-1/2'>
+      <div>
         <RoomPriceCalendar />
       </div>
     </div>
