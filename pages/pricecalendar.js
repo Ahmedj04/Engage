@@ -1,5 +1,5 @@
 import React from 'react';
-import RoomPriceCalendar from './text';
+import RoomPriceCalendar from '../components/CalendarView';
 
 const RoomPricePage = () => {
   return (

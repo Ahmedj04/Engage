@@ -4,7 +4,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 // import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 // import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
-import roomPrice from '../components/devlopmentjson/roomPrice.json';
+import roomPrice from './devlopmentjson/roomPrice.json';
 let i = 0;
 const RoomPriceCalendar = () => {
     const [events, setEvents] = useState([])
@@ -23,7 +23,6 @@ const RoomPriceCalendar = () => {
     }, [])
     function changeRoom(e) {
         let newRoom = roomPrice?.rates?.filter(item => item.room_id === e.target.value)[0]
-        alert(JSON.stringify(newRoom))
         setEvents(newRoom?.day_price)
         setSelectedRoom({ "room_name": newRoom.room_name, "room_id": newRoom.room_id })
 
