@@ -11,6 +11,7 @@ const ColorToggler = (newColor,setColor) => {
       localStorage.setItem("colorToggle", false)
     }
     else if (newColor === 'dark') {
+      console.log(typeof setColor)
       setColor(colorFile?.dark)
       localStorage.setItem("colorToggle", true)
     }

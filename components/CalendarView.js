@@ -6,7 +6,8 @@ import interactionPlugin from '@fullcalendar/interaction';
 // import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
 import roomPrice from './devlopmentjson/roomPrice.json';
 let i = 0;
-const RoomPriceCalendar = () => {
+let lang;
+const RoomPriceCalendar = ({ color, language }) => {
     const [events, setEvents] = useState([])
     const [rooms, setRooms] = useState([])
     const [selectedRoom, setSelectedRoom] = useState([])
@@ -19,6 +20,7 @@ const RoomPriceCalendar = () => {
             setRooms(roomPrice.rates.map(item => ({ "room_id": item.room_id, "room_name": item.room_name })))
             setSelectedRoom({ "room_name": roomPrice?.rates[0].room_name, "room_id": roomPrice?.rates[0].room_id })
             setEvents(roomPrice?.rates[0].day_price)
+            lang = localStorage.getItem('Language') != undefined ? localStorage.getItem('Language') : 'en'
         })()
     }, [])
     function changeRoom(e) {
@@ -47,11 +49,13 @@ const RoomPriceCalendar = () => {
     }
 
     return (
-        <div>
+        <div className='h-full'>
             <div className='flex gap-2 justify-content items-center'>
-                <label className="mt-4 block mb-2 text-sm font-bold text-gray-900 dark:text-white">Select Room</label>
-                <select
-                    className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/4 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+                {/* <label htmlFor='roomList' className="text-sm font-medium ${color?.text} block mb-2">
+                    Select Room</label> */}
+                <select id='roomList'
+                    className={`shadow-sm ${color?.greybackground} capitalize border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5 mb-4`}
+                    // className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/4 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
                     onChange={(e) => changeRoom(e)}>
                     <option value={selectedRoom?.room_id}>{selectedRoom?.room_name}</option>
                     {rooms.map((room, idx) => {
@@ -61,12 +65,17 @@ const RoomPriceCalendar = () => {
                     })}
                 </select>
             </div>
+            
             <FullCalendar
                 plugins={[dayGridPlugin, interactionPlugin]}
                 initialView="dayGridMonth"
                 weekends={true}
                 events={events}
                 dateClick={(event) => handleDateClick(event)}
+                eventColor='#0891B4'
+                eventDisplay='block'
+                locale={lang}
+
             />
 
             {/* Tailwind CSS Modal */}
@@ -112,6 +121,8 @@ const RoomPriceCalendar = () => {
                     </div>
                 </div>
             )}
+
+            
         </div>
     );
 };
