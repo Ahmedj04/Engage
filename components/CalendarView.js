@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import InputText from './utils/InputText';
+import Button from './Button';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 // import timeGridPlugin from '@fullcalendar/timegrid';
@@ -35,7 +37,7 @@ const RoomPriceCalendar = ({ color, language }) => {
         console.log(JSON.stringify(event));
     }
 
-    const closeModal = () => {
+    const updateRate = () => {
         setModalVisible(false);
     };
     function setNewValue(e) {
@@ -65,7 +67,7 @@ const RoomPriceCalendar = ({ color, language }) => {
                     })}
                 </select>
             </div>
-            
+
             <FullCalendar
                 plugins={[dayGridPlugin, interactionPlugin]}
                 initialView="dayGridMonth"
@@ -79,51 +81,65 @@ const RoomPriceCalendar = ({ color, language }) => {
             />
 
             {/* Tailwind CSS Modal */}
-            {modalVisible && (
-                <div className="fixed z-10 inset-0 overflow-y-auto">
-                    <div className="flex items-end justify-center pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                        <div
-                            className="fixed inset-0 transition-opacity"
-                            aria-hidden="true"
-                            onClick={closeModal}
-                        >
-                            <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-                        </div>
+            {modalVisible===true? 
+                <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
+                    <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
+                        <div className={`${color?.whitebackground} rounded-lg shadow relative`}>
 
-                        <div
-                            className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6"
-                            role="dialog"
-                            aria-modal="true"
-                            aria-labelledby="modal-headline"
-                        >
-                            <div>
-                                <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-headline">
-                                    Date Selected
+                            <div className="flex items-start justify-between pl-5 pt-5 pr-5 pb-1 border-b rounded-t mb-2">
+                                <h3 className={`${color?.text} text-xl font-semibold`}>
+                                    Edit Rate of {selectedRoom?.room_name} for {selectedDate}
                                 </h3>
-                                <div className="mt-2">
-                                    <p className="text-sm text-gray-500">
-                                        Date: {selectedDate}
-                                    </p>
-                                </div>
-                            </div>
-                            <input type="text" onChange={(e) => setNewValue(e)}
-                                defaultValue={events?.filter(i => i.date == selectedDate)[0]?.title} />
-                            <div className="mt-5 sm:mt-6">
                                 <button
                                     type="button"
-                                    className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm"
-                                    onClick={closeModal}
+                                    onClick={() => {
+                                        document.getElementById('rate').reset();
+                                        setModalVisible(false);
+                                    }}
+                                    className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
                                 >
-                                    Close
+                                    <svg
+                                        className="w-5 h-5"
+                                        fill="currentColor"
+                                        viewBox="0 0 20 20"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <path
+                                            fillRule="evenodd"
+                                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                            clipRule="evenodd"
+                                        ></path>
+                                    </svg>
                                 </button>
                             </div>
+
+                            <form id='rate'>
+                                <InputText
+                                    label={`${selectedRoom?.room_name} Rate`}
+                                    visible={1}
+                                    defaultValue={events?.filter(i => i.date == selectedDate)[0]?.title}
+                                    onChangeAction={(e) => setNewValue(e)}
+                                    color={color}
+                                    req={true}
+                                    title={`enter new rate of room for ${selectedDate}`}
+                                    tooltip={true}
+                                />
+
+                            </form>
+
+
+                            <div className="items-center p-4 border-t border-gray-200 rounded-b">
+                     <Button Primary={language?.Update} onClick={() => {updateRate()}} />
+                     
+                            </div>
+
+                            
                         </div>
                     </div>
-                </div>
-            )}
-
-            
-        </div>
+                </div>:undefined
+            }
+                 
+        </div >
     );
 };
 
