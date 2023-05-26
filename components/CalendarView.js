@@ -19,9 +19,29 @@ const RoomPriceCalendar = ({ color, language }) => {
 
     useEffect(() => {
         (function initialData() {
-            setRooms(roomPrice.rates.map(item => ({ "room_id": item.room_id, "room_name": item.room_name })))
-            setSelectedRoom({ "room_name": roomPrice?.rates[0].room_name, "room_id": roomPrice?.rates[0].room_id })
-            setEvents(roomPrice?.rates[0].day_price)
+            // setRooms(roomPrice.rates.map(item => ({ "room_id": item.room_id, "room_name": item.room_name })))
+            // setSelectedRoom({ "room_name": roomPrice?.rates[0].room_name, "room_id": roomPrice?.rates[0].room_id })
+             let room_ids=roomPrice?.rates.map((rate)=>{
+                    return rate?.room_id
+             })
+             const uniqueArray = [...new Set(room_ids)];
+              //set is data type in js like array but has unique ele
+             //aasign unique color for unique rooms
+              let keycolors=uniqueArray.map((item)=>
+             {return(
+                {[item]:`#${Math.floor(Math.random() * (999999 - 111111 + 1)) + 111111}`}
+                )})
+            //    convert color array to object
+                const mergedColors = Object.assign({}, ...keycolors);
+               
+            //object with color information
+             let final=roomPrice?.rates.map((rate)=>{
+                let color=mergedColors[rate.room_id]
+                return(
+                    { ...rate,"color":`${color}`}
+                )
+             })
+            setEvents(final)
             lang = localStorage.getItem('Language') != undefined ? localStorage.getItem('Language') : 'en'
         })()
     }, [])
@@ -32,7 +52,7 @@ const RoomPriceCalendar = ({ color, language }) => {
 
     }
     const handleDateClick = (event) => { // bind with an arrow function
-        setSelectedDate(event.dateStr);
+       setSelectedDate(event.dateStr);
         setModalVisible(true);
         console.log(JSON.stringify(event));
     }
@@ -77,6 +97,7 @@ const RoomPriceCalendar = ({ color, language }) => {
                 eventColor='#0891B4'
                 eventDisplay='block'
                 locale={lang}
+                eventClick={(e)=>{console.log(e.jsEvent)}}
 
             />
 
