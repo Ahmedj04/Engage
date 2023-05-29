@@ -6,7 +6,7 @@ import Title from "../components/title";
 import axios from "axios";
 import { InitialActions, ColorToggler } from '../components/initalActions';
 import { english, french, arabic } from "../components/Languages/Languages";
-import roomdiscount from './property/rooms/roomdiscount';
+
 
 var currentLogged;
 let colorToggle;

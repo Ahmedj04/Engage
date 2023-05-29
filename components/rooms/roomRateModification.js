@@ -28,7 +28,7 @@ var i = 0;
 let colorToggle;
 
 
-function RoomRateModification() {
+function RoomRateModification({room_id}) {
     const [color, setColor] = useState({})
     const [mode, setMode] = useState()
     const [property_name, setProperty_name] = useState('')
@@ -173,7 +173,7 @@ function RoomRateModification() {
                                         visible={1}
                                         onChangeAction={(e) => {
                                             onModificationChange(e, index, "date_from");
-                                            let v = { "target": { "value": currentroom } };
+                                            let v = { "target": { "value": room_id } };
                                             onModificationChange(v, index, "room_id");
 
                                         }

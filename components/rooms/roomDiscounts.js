@@ -27,7 +27,7 @@ var i = 0;
 let colorToggle;
 
 
-function RoomDiscounts() {
+function RoomDiscounts({room_id}) {
     const [color, setColor] = useState({})
     const [mode, setMode] = useState()
     const [property_name, setProperty_name] = useState('')
@@ -176,7 +176,7 @@ function RoomDiscounts() {
                                             visible={1}
                                             onChangeAction={(e) => {
                                                 onDiscountChange(e, index, `date_from`);
-                                                let v = { "target": { "value": currentroom } }
+                                                let v = { "target": { "value": room_id } }
                                                 onDiscountChange(v, index, `room_id`)
                                             }
                                             }
@@ -252,10 +252,10 @@ function RoomDiscounts() {
                     </form>
 
                     {/* button starts */}
-                    <div className='flex justify-end'>
+                    <div className='flex justify-end mr-2'>
                         <Button
                             Primary={language?.Submit}
-                            onClick={() =>{alert('hii'); addDiscount()}}
+                            onClick={() =>{addDiscount()}}
                         />
                     </div>
                     {/* buttons end */}
