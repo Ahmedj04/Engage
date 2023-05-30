@@ -10,10 +10,12 @@ import roomPrice from './devlopmentjson/roomPrice.json';
 import randomColor from 'randomcolor';
 import RoomDiscounts from './rooms/roomDiscounts';
 import RoomRateModification from './rooms/roomRateModification';
+import Multiselect from 'multiselect-react-dropdown';
 let i = 0;
 let lang;
 const RoomPriceCalendar = ({ color, language }) => {
     const [events, setEvents] = useState([])
+    const [allRoomRates,setAllRoomRates]=useState([])
     const [rooms, setRooms] = useState([])
     const [selectedRoom, setSelectedRoom] = useState([])
     const [modalVisible, setModalVisible] = useState(false);
@@ -21,12 +23,15 @@ const RoomPriceCalendar = ({ color, language }) => {
     const [title, setTitle] = useState('');
     const [editUI, setEditUI] = useState('none')
     const [roomColors, setRoomColors] = useState([])
+    const [globalRoomData,setGlobalRoomData]=useState([])
 
 
     useEffect(() => {
         (function initialData() {
-            // setRooms(roomPrice.rates.map(item => ({ "room_id": item.room_id, "room_name": item.room_name })))
-            // setSelectedRoom({ "room_name": roomPrice?.rates[0].room_name, "room_id": roomPrice?.rates[0].room_id })
+            // creates an array of object and from that array duplicates are rempved using set
+            let uniqueListOfRooms=Array.from(new Set(roomPrice?.rates?.map(item => ({ "room_id": item.room_id, "room_name": item.room_name })).map(JSON.stringify)), JSON.parse);
+            setRooms(uniqueListOfRooms);
+            setAllRoomRates(uniqueListOfRooms)
             let room_ids = roomPrice?.rates.map((rate) => {
                 return rate?.room_id
             })
@@ -45,30 +50,43 @@ const RoomPriceCalendar = ({ color, language }) => {
                 )
             })
 
-            
+
             //    convert color array to object
             const mergedColors = Object.assign({}, ...keycolors);
             setRoomColors(mergedColors)
             //object with color information
-            let final = roomPrice?.rates.map((rate,id) => {
+            let final = roomPrice?.rates.map((rate, id) => {
                 let color = mergedColors[rate.room_id]
                 return (
-                    { ...rate, "color": `${color}`,"id":id }
+                    { ...rate, "color": `${color}`, "id": id }
                 )
             })
+            console.log(JSON.stringify(final))
             setEvents(final)
+            setGlobalRoomData(final)
             lang = localStorage.getItem('Language') != undefined ? localStorage.getItem('Language') : 'en'
         })()
     }, [])
-    function changeRoom(e) {
-        let newRoom = roomPrice?.rates?.filter(item => item.room_id === e.target.value)[0]
-        setEvents(newRoom?.day_price)
-        setSelectedRoom({ "room_name": newRoom.room_name, "room_id": newRoom.room_id })
-}
-    
+
+
+
+    function removeRoom(selectedList, removedItem) {
+       let remainingRooms = events?.filter(item => item.room_id != removedItem.room_id)
+        setEvents(remainingRooms)
+        setAllRoomRates(selectedList)
+    }
+
+    function addRoom(selectedList, selectedItem) {
+        alert("selected item "+JSON.stringify(selectedItem))
+        let addingRooms = globalRoomData?.filter(item => item.room_id === selectedItem.room_id)
+        alert(JSON.stringify([...events,...addingRooms]))
+        setEvents([...events,...addingRooms])
+        //  setAllRoomRates([...selectedList,a)
+     }
+
     const handleDateClick = (event) => { // bind with an arrow function
-        setSelectedRoom({...event?.extendedProps,"id":event.id})
-        setSelectedDate({"date":event.start,"visibleDate":`${event.start.getDate()}-${event.start.getMonth() + 1}-${event.start.getFullYear()}`});
+        setSelectedRoom({ ...event?.extendedProps, "id": event.id })
+        setSelectedDate({ "date": event.start, "visibleDate": `${event.start.getDate()}-${event.start.getMonth() + 1}-${event.start.getFullYear()}` });
         setModalVisible(true);
         setTitle(event?.title);
         console.log(JSON.stringify(event));
@@ -78,26 +96,18 @@ const RoomPriceCalendar = ({ color, language }) => {
         setModalVisible(false);
     };
     function setNewValue(e) {
-        //  alert(new Date(tempDate).toISOString().slice(0, 10))
+
         let k = {
             "title": e.target.value,
             "date": selectedDate.date,
             "room_id": selectedRoom.room_id,
             "room_name": selectedRoom.room_name,
-            "id":selectedRoom.id,
-            "color":roomColors[selectedRoom.room_id]
+            "id": selectedRoom.id,
+            "color": roomColors[selectedRoom.room_id]
         };
-       let unchangedvalue = events?.filter(i => (i.id != selectedRoom.id))
-       let final=[...unchangedvalue, k]
-    //    let final = roomPrice?.rates.map((rate,id) => {
-    //     let color = roomColors[rate.room_id]
-    //     return (
-    //         { ...rate, "color": `${color}`,"id":id }
-    //     )
-    // })
-    setEvents(final)
-    //    setEvents([...unchangedvalue, k])
-
+        let unchangedvalue = events?.filter(i => (i.id != selectedRoom.id))
+        let final = [...unchangedvalue, k]
+        setEvents(final)
     }
 
     return (
@@ -105,17 +115,40 @@ const RoomPriceCalendar = ({ color, language }) => {
             <div className='flex gap-2 justify-content items-center'>
                 {/* <label htmlFor='roomList' className="text-sm font-medium ${color?.text} block mb-2">
                     Select Room</label> */}
-                <select id='roomList'
+                     <Multiselect
+                            className={` shadow-sm ${color?.greybackground} ${color?.text} mb-3 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full
+                       `}
+                            isObject={true}
+                            options={rooms}
+                            onRemove={(selectedList, removedItem) => { removeRoom(selectedList, removedItem) }}
+                            onSelect={(selectedList, selectedItem) => {addRoom(selectedList, selectedItem) }}
+                            selectedValues={allRoomRates}
+                            displayValue="room_name"
+                            style={{
+                                chips: {
+                                    background: '#0891b2',
+                                    'font-size': '0.875 rem'
+                                },
+                                searchBox: {
+                                    border: 'none',
+                                    'border-bottom': 'none',
+                                    'border-radius': '0px'
+                                }
+                            }}
+
+                          />
+                         
+                {/* <select id='roomList'
                     className={`shadow-sm ${color?.greybackground} capitalize border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5 mb-4`}
                     // className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/4 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
-                    onChange={(e) => changeRoom(e)}>
+                    onChange={(e) => removeRoom(e)}>
                     <option value={selectedRoom?.room_id}>{selectedRoom?.room_name}</option>
                     {rooms.map((room, idx) => {
                         return (
                             <option key={idx} value={room?.room_id}>{room?.room_name}</option>
                         )
                     })}
-                </select>
+                </select> */}
             </div>
 
             <FullCalendar
@@ -180,7 +213,7 @@ const RoomPriceCalendar = ({ color, language }) => {
                                     title={`enter new rate of room for ${selectedDate}`}
                                     tooltip={true}
                                 />
-                            {selectedRoom?.id}
+                                {selectedRoom?.id}
                             </form>
                             <select
                                 className={`shadow-sm ${color?.greybackground} capitalize border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-11/12 mx-4 p-2.5 mb-4`}
@@ -193,13 +226,13 @@ const RoomPriceCalendar = ({ color, language }) => {
                             {/* discount ui */}
                             {editUI === 'discount' ?
                                 <div>
-                                    <RoomDiscounts room_id={selectedRoom?.room_id}/>
+                                    <RoomDiscounts room_id={selectedRoom?.room_id} />
                                 </div>
                                 : undefined}
                             {/* modification ui */}
                             {editUI === 'modification' ?
                                 <div>
-                                    <RoomRateModification room_id={selectedRoom?.room_id}/>
+                                    <RoomRateModification room_id={selectedRoom?.room_id} />
                                 </div> : undefined}
 
 
