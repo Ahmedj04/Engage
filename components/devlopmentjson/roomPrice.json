@@ -1,8 +1,23 @@
 {
   "rates": [
     {
+      "room_id": "r00911",
+      "room_name": "Random Room1",
+      "title": "Random Room - 2000",
+      "date": "2023-05-01"
+    },{
+      "room_id": "r00912",
+      "room_name": "Random Room2",
+      "title": "Random Room - 2000",
+      "date": "2023-05-01"
+    },{
+      "room_id": "r00913",
+      "room_name": "Random Room 3",
+      "title": "Random Room - 2000",
+      "date": "2023-05-01"
+    },{
       "room_id": "r00910",
-      "room_name": "Random Room",
+      "room_name": "Random Room ",
       "title": "Random Room - 2000",
       "date": "2023-05-01"
     }, {

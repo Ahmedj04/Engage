@@ -15,7 +15,7 @@ let i = 0;
 let lang;
 const RoomPriceCalendar = ({ color, language }) => {
     const [events, setEvents] = useState([])
-    const [allRoomRates,setAllRoomRates]=useState([])
+    const [allRoomRates, setAllRoomRates] = useState([])
     const [rooms, setRooms] = useState([])
     const [selectedRoom, setSelectedRoom] = useState([])
     const [modalVisible, setModalVisible] = useState(false);
@@ -23,13 +23,12 @@ const RoomPriceCalendar = ({ color, language }) => {
     const [title, setTitle] = useState('');
     const [editUI, setEditUI] = useState('none')
     const [roomColors, setRoomColors] = useState([])
-    const [globalRoomData,setGlobalRoomData]=useState([])
-
-
+    const [globalRoomData, setGlobalRoomData] = useState([])
+    const [selectedColors, setSelectedColors] = useState([]);
     useEffect(() => {
         (function initialData() {
             // creates an array of object and from that array duplicates are rempved using set
-            let uniqueListOfRooms=Array.from(new Set(roomPrice?.rates?.map(item => ({ "room_id": item.room_id, "room_name": item.room_name })).map(JSON.stringify)), JSON.parse);
+            let uniqueListOfRooms = Array.from(new Set(roomPrice?.rates?.map(item => ({ "room_id": item.room_id, "room_name": item.room_name })).map(JSON.stringify)), JSON.parse);
             setRooms(uniqueListOfRooms);
             setAllRoomRates(uniqueListOfRooms)
             let room_ids = roomPrice?.rates.map((rate) => {
@@ -38,17 +37,43 @@ const RoomPriceCalendar = ({ color, language }) => {
             const uniqueArray = [...new Set(room_ids)];
             //set is data type in js like array but has unique ele
             //aasign unique color for unique rooms
+            let colorList=['#007d9a',
+                '#0b96ba',
+                '#00789e',
+                '#128cb7',
+                '#0082a9',
+                '#0a85b5',
+                '#006f8a',
+                '#0c94b6',
+                '#00758e',
+                '#0d99c2'];
+               
             let keycolors = uniqueArray.map((item) => {
-                return (
-                    {
-                        [item]: `${randomColor({
-                            luminosity: 'bright',
-                            hue: 'random'
-                        })
-                            }`
-                    }
-                )
-            })
+                if (selectedColors.length === colorList.length) {
+                    // All colorList have been used, reset selectedColorList
+                    setSelectedColor([]);
+                  }
+              
+                  let randomColor = '';
+                  do {
+                    return (
+                        {
+                            // [item]: `${randomColor({
+                            //     luminosity: 'light',
+                            //     hue: 'random'
+                            // })
+                            //     }`
+    
+                            [item]: colorList[Math.floor(Math.random() * colorList.length)]
+    
+                        }
+                    )
+                  } while (selectedColors.includes(randomColor));
+                    setSelectedColors(prevColors => [...prevColors, randomColor]);
+            }
+              
+               
+            )
 
 
             //    convert color array to object
@@ -71,18 +96,15 @@ const RoomPriceCalendar = ({ color, language }) => {
 
 
     function removeRoom(selectedList, removedItem) {
-       let remainingRooms = events?.filter(item => item.room_id != removedItem.room_id)
+        let remainingRooms = events?.filter(item => item.room_id != removedItem.room_id)
         setEvents(remainingRooms)
         setAllRoomRates(selectedList)
     }
 
     function addRoom(selectedList, selectedItem) {
-        alert("selected item "+JSON.stringify(selectedItem))
         let addingRooms = globalRoomData?.filter(item => item.room_id === selectedItem.room_id)
-        alert(JSON.stringify([...events,...addingRooms]))
-        setEvents([...events,...addingRooms])
-        //  setAllRoomRates([...selectedList,a)
-     }
+        setEvents([...events, ...addingRooms])
+    }
 
     const handleDateClick = (event) => { // bind with an arrow function
         setSelectedRoom({ ...event?.extendedProps, "id": event.id })
@@ -115,29 +137,29 @@ const RoomPriceCalendar = ({ color, language }) => {
             <div className='flex gap-2 justify-content items-center'>
                 {/* <label htmlFor='roomList' className="text-sm font-medium ${color?.text} block mb-2">
                     Select Room</label> */}
-                     <Multiselect
-                            className={` shadow-sm ${color?.greybackground} ${color?.text} mb-3 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full
+                <Multiselect
+                    className={` shadow-sm ${color?.greybackground} ${color?.text} mb-3 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full
                        `}
-                            isObject={true}
-                            options={rooms}
-                            onRemove={(selectedList, removedItem) => { removeRoom(selectedList, removedItem) }}
-                            onSelect={(selectedList, selectedItem) => {addRoom(selectedList, selectedItem) }}
-                            selectedValues={allRoomRates}
-                            displayValue="room_name"
-                            style={{
-                                chips: {
-                                    background: '#0891b2',
-                                    'font-size': '0.875 rem'
-                                },
-                                searchBox: {
-                                    border: 'none',
-                                    'border-bottom': 'none',
-                                    'border-radius': '0px'
-                                }
-                            }}
+                    isObject={true}
+                    options={rooms}
+                    onRemove={(selectedList, removedItem) => { removeRoom(selectedList, removedItem) }}
+                    onSelect={(selectedList, selectedItem) => { addRoom(selectedList, selectedItem) }}
+                    selectedValues={allRoomRates}
+                    displayValue="room_name"
+                    style={{
+                        chips: {
+                            background: '#0891b2',
+                            'font-size': '0.875 rem'
+                        },
+                        searchBox: {
+                            border: 'none',
+                            'border-bottom': 'none',
+                            'border-radius': '0px'
+                        }
+                    }}
 
-                          />
-                         
+                />
+
                 {/* <select id='roomList'
                     className={`shadow-sm ${color?.greybackground} capitalize border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5 mb-4`}
                     // className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/4 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
