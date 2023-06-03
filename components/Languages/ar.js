@@ -855,7 +855,9 @@ AddPackage :{
   createuser:"إنشاء مستخدم",
   creatinguser:"إنشاء المستخدم",
   inactiveproperties:"قائمة الخصائص غير النشطة",
-  activeproperties:"قائمة الخصائص النشطة"
+  activeproperties:"قائمة الخصائص النشطة",
+  prices:"الأسعار"
+  
  
 
   };

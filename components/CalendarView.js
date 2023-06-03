@@ -135,8 +135,6 @@ const RoomPriceCalendar = ({ color, language }) => {
     return (
         <div className='h-full'>
             <div className='flex gap-2 justify-content items-center'>
-                {/* <label htmlFor='roomList' className="text-sm font-medium ${color?.text} block mb-2">
-                    Select Room</label> */}
                 <Multiselect
                     className={` shadow-sm ${color?.greybackground} ${color?.text} mb-3 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full
                        `}
@@ -160,17 +158,6 @@ const RoomPriceCalendar = ({ color, language }) => {
 
                 />
 
-                {/* <select id='roomList'
-                    className={`shadow-sm ${color?.greybackground} capitalize border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5 mb-4`}
-                    // className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/4 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
-                    onChange={(e) => removeRoom(e)}>
-                    <option value={selectedRoom?.room_id}>{selectedRoom?.room_name}</option>
-                    {rooms.map((room, idx) => {
-                        return (
-                            <option key={idx} value={room?.room_id}>{room?.room_name}</option>
-                        )
-                    })}
-                </select> */}
             </div>
 
             <FullCalendar
@@ -235,7 +222,7 @@ const RoomPriceCalendar = ({ color, language }) => {
                                     title={`enter new rate of room for ${selectedDate}`}
                                     tooltip={true}
                                 />
-                                {selectedRoom?.id}
+                          
                             </form>
                             <select
                                 className={`shadow-sm ${color?.greybackground} capitalize border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-11/12 mx-4 p-2.5 mb-4`}

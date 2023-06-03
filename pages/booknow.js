@@ -11,7 +11,7 @@ var currentLogged;
 let colorToggle;
 var language;
 let currentProperty;
-const RoomPricePage = () => {
+const BookNow = () => {
   const [color, setColor] = useState({});
   const [mode, setMode] = useState()
   const [property_name, setProperty_name] = useState('')
@@ -31,7 +31,7 @@ const RoomPricePage = () => {
 
   return (
     <>
-       <Title name={`Engage |  Rate Calendar`} />
+       <Title name={`Engage |  Book Now`} />
       <Header
         color={color}
         setColor={setColor}
@@ -48,10 +48,10 @@ const RoomPricePage = () => {
       />
 
       <div className={`${color?.greybackground} px-4 pt-24 pb-2 relative overflow-y-auto lg:ml-64`}>
-        <RoomPriceCalendar color={color} language={language} />
+        <h1>Book Now</h1>
       </div>
     </>
   );
 };
 
-export default RoomPricePage;
+export default BookNow;

@@ -783,7 +783,39 @@ inbox:'../../property/inbox'
    ></path>
  </svg>
 },
-
+"rateCalendarSide":{
+  dashboard:'./property/dashboard',
+  basicdetails:'./property/basicdetails',
+  address:'./property/address',
+  contact:'./property/contact',
+  reviews:'./property/reviews',
+  gallery:'./property/gallery',
+  services: './property/services',
+  propertysummary:'./property/propertysummary',
+  roombundle:'./property/allroombundles',
+  rooms:'./property/rooms',
+  packages:'./property/packages',
+  result:'./property/allresults',
+ propertysummary:'./property/propertysummary',
+ propertyxml:'./property/propertyxml',
+ roomsxml:'./property/roomsxml',
+ raterules:'./property/raterules',
+ additionalservices:'./property/property/additionalservices',
+ theme:'./property/theme',
+ pointofsale:'./property/pointofsales',
+ availability:'./property/availability',
+ inventory:'./property/inventories',
+ promotion:'./property/promotions',
+ modification:'./property/modifications',
+ extraguestcharge:'./property/extraguestcharges',
+ inbox:'./property/inbox',
+ places:'./places',
+ addons:'./itinerary/addons',
+ providers:'./itinerary/providers',
+ packages:'./itinerary/packages',
+ itineraries:'./itineraries',
+ roomsprices:'./pricecalendar'
+ },
 "Side":{
  dashboard:'./dashboard',
  basicdetails:'./basicdetails',
@@ -814,7 +846,8 @@ places:'../places',
 addons:'../itinerary/addons',
 providers:'../itinerary/providers',
 packages:'../itinerary/packages',
-itineraries:'../itineraries'
+itineraries:'../itineraries',
+roomsprices:'../pricecalendar'
 },
 "PlaceSide":{
  dashboard:'../property/dashboard',
@@ -846,7 +879,8 @@ places:'../places',
 addons:'../itinerary/addons',
 providers:'../itinerary/providers',
 packages:'../itinerary/packages',
-itineraries:'../../itineraries'
+itineraries:'../../itineraries',
+roomsprices:'../../pricecalendar'
 },
 
 
@@ -880,7 +914,8 @@ places:'../../places',
 addons:'../../itinerary/addons',
 providers:'../../itinerary/providers',
 packages:'../../itinerary/packages',
-itineraries:'../../itineraries'
+itineraries:'../../itineraries',
+roomsprices:'../../pricecalendar'
  },
  
  "Side2":{
@@ -912,7 +947,8 @@ inbox:'../../inbox',
 addons:'../../itinerary/addons',
 providers:'../itinerary/providers',
 packages:'../itinerary/packages',
-itineraries:'../../itineraries'
+itineraries:'../../itineraries',
+roomsprices:'../../pricecalendar'
  },
  "Foot":{
   termsandconditions:'./termsandconditions',
@@ -1121,7 +1157,8 @@ itineraries:'../../itineraries'
   createuser:"Create User",
   creatinguser:"Creating User",
   inactiveproperties:"List of Inactive Properties",
-  activeproperties:"List of Active Properties"
+  activeproperties:"List of Active Properties",
+  prices:"Prices"
   
   
 

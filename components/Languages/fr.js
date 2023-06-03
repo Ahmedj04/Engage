@@ -860,6 +860,7 @@ export default {
   createuser:"Créer un utilisateur",
   creatinguser:"Création d'un utilisateur",
   inactiveproperties:"Liste des propriétés inactives",
-  activeproperties:"Liste des propriétés actives"
+  activeproperties:"Liste des propriétés actives",
+  prices:"Des prix"
  
 };
