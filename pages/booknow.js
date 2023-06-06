@@ -6,6 +6,7 @@ import Title from "../components/title";
 import axios from "axios";
 import { InitialActions, ColorToggler } from '../components/initalActions';
 import { english, french, arabic } from "../components/Languages/Languages";
+import BookingForm from '../components/utils/BookingForm';
 
 var currentLogged;
 let colorToggle;
@@ -41,14 +42,15 @@ const BookNow = () => {
         mode={mode}
         setMode={setMode}
       />
-      <Sidebar
+      {/* <Sidebar
         color={color}
         Primary={english.rateCalendarSide}
         Type={currentLogged?.user_type}
-      />
+      /> */}
 
-      <div className={`${color?.greybackground} px-4 pt-24 pb-2 relative overflow-y-auto lg:ml-64`}>
-        <h1>Book Now</h1>
+      <div  className={`${color?.greybackground} px-4 pt-16 pb-2 relative overflow-y-auto`}
+      >
+        <BookingForm color={color}/>
       </div>
     </>
   );

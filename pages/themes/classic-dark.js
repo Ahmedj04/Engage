@@ -22,6 +22,8 @@ import "swiper/css/navigation";
 import SwiperCore,{ Autoplay, Pagination, Navigation } from "swiper";
 import Router, { useRouter } from "next/router";
 import LineLoader from '../../components/loaders/lineloader';
+import BookingForm from '../../components/utils/BookingForm';
+import Color from '../../components/colors/Color';
 var currentUser;
 var currentProperty;
 var currentLogged;
@@ -1080,9 +1082,9 @@ function  getSingleSection(state,name,section){
                   </div>
 
                </div>
-               {/* content  */}
+               {/* booking form content  */}
                <div className="tour-sidebar-dark bg-gray-900 border-0  border-lg">
-                  <div className="tour-receipt-dark">
+                  {/* <div className="tour-receipt-dark">
                      <div className="tour-receipt-head">
                         <div className="tour-amount">
                            <div className={visible === 0 ? 'block w-32' : 'hidden'}><SubHeading /></div>
@@ -1246,7 +1248,11 @@ function  getSingleSection(state,name,section){
                         </button>
                         <button className="tour-reserve">{language?.booknow}</button>
                      </div>
-                  </div>
+                  </div> */}
+
+
+
+                  <BookingForm color={Color?.dark}/>
                </div>
               
             </div>
