@@ -13,6 +13,7 @@ const logger = require("../../services/logger");
 import { ToastContainer, toast } from "react-toastify";
 import Classic from "../themes/classic";
 import ClassicDark from '../themes/classic-dark'
+import NewTheme from "../../components/NewTheme"
 import "react-toastify/dist/ReactToastify.css";
 var language;
 var currentUser;
@@ -323,6 +324,9 @@ function Theme() {
                     <li className={`block py-2 px-4 ${color?.sidebar} `}>
                       <button onClick={() => { setThemeName("Classic-Dark"); setThemes(!themes); changeTheme("Classic-Dark") }} >Classic-Dark</button>
                     </li>
+                    <li className={`block py-2 px-4 ${color?.sidebar} `}>
+                      <button onClick={() => { setThemeName("New-Theme"); setThemes(!themes); changeTheme("New-Theme") }} >New Theme</button>
+                    </li>
                   </ul>
                 </div></div>
             </div>
@@ -368,6 +372,13 @@ function Theme() {
             <ClassicDark language={language} allHotelDetails={allHotelDetails}
               allRooms={allRooms} allPackages={allPackages} services={services}
               phone={phone} email={email} /></div> : <div className="sticky"></div>}
+
+                {/* newTheme */}
+      {themeName === "New-Theme" ?
+        <div className="sticky">
+          <NewTheme language={language?.activeThemeLanguage} HotelDetails={allHotelDetails}
+            allRooms={allRooms} allPackages={allPackages} services={services}
+            phone={phone} email={email} /></div> : <div className="sticky"></div>}
 
 
       </div>

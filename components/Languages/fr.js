@@ -1,4 +1,5 @@
 export default {
+  activeThemeLanguage:"french",
   addons:"Compléments",
   providers:"Fournisseurs",
   places:"lieux",

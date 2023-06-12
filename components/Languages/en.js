@@ -1,4 +1,5 @@
 export default {
+  activeThemeLanguage:"english",
   addons:"Addons",
   providers:"Providers",
   places:"Places",

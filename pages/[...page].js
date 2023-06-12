@@ -8,6 +8,7 @@ import ar from "../components/Languages/ar"
 import { useRouter } from "next/router";
 import Classic from "./themes/classic";
 import ClassicDark from './themes/classic-dark'
+import NewTheme from "../components/NewTheme"
 const logger = require("../services/logger");
 var language;
 function Page({ data, room_data, package_data }) {
@@ -104,6 +105,12 @@ function Page({ data, room_data, package_data }) {
       {theme === "Classic-Dark" ?
         <div className="sticky">
           <ClassicDark language={language} allHotelDetails={allHotelDetails}
+            allRooms={allRooms} allPackages={allPackages} services={services}
+            phone={phone} email={email} /></div> : <div className="sticky"></div>}
+      {/* newTheme */}
+      {theme === "New-Theme" ?
+        <div className="sticky">
+          <NewTheme language={language.activeThemeLanguage} HotelDetails={allHotelDetails}
             allRooms={allRooms} allPackages={allPackages} services={services}
             phone={phone} email={email} /></div> : <div className="sticky"></div>}
     </>

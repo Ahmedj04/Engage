@@ -1,4 +1,5 @@
 export default {
+  activeThemeLanguage:"arabic",
   addons:"الإضافات",
   providers:"الموفرون",
   places:"أماكن",
