@@ -325,7 +325,7 @@ function Theme() {
                       <button onClick={() => { setThemeName("Classic-Dark"); setThemes(!themes); changeTheme("Classic-Dark") }} >Classic-Dark</button>
                     </li>
                     <li className={`block py-2 px-4 ${color?.sidebar} `}>
-                      <button onClick={() => { setThemeName("New-Theme"); setThemes(!themes); changeTheme("New-Theme") }} >New Theme</button>
+                      <button onClick={() => { setThemeName("New-Theme"); setThemes(!themes); changeTheme("New-Theme") }} >Modern</button>
                     </li>
                   </ul>
                 </div></div>
