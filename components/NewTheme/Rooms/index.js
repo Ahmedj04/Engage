@@ -8,11 +8,6 @@ function Rooms({ rooms, showRoom, setShowRoom, roomDetailLoader, lang }) {
 
     const [selectedRoom, setSelectedRoom] = useState([]);
 
-    //just for printing the value of state selectedRoom
-    useEffect(() => (
-        console.log(selectedRoom)
-    ), [selectedRoom]) //it will be called when ever there is any change in the state selectedRoom
-
     return (
         <section id='rooms' className="px-5 py-10">
 

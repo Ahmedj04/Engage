@@ -34,7 +34,7 @@ function Hotel({ language, HotelDetails,
     }, []);
 
     function getLanguage() {
-        console.log("the language passed is " + JSON.stringify(language))
+        
         if (language === null) {
             setLang(english)
         } else if (language === 'english') {
@@ -75,8 +75,7 @@ function Hotel({ language, HotelDetails,
                 hotelDetailLoader={hotelDetailLoader}
                 lang={lang}
             />
-
-            <Rooms
+         <Rooms
                 rooms={rooms}
                 showRoom={showRoom}
                 setShowRoom={setShowRoom}
