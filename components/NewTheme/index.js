@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import CloseIcon from '@mui/icons-material/Close';
 import Modal from './modal';
 import Footer from './Footer';
@@ -9,6 +8,8 @@ import Rooms from './Rooms';
 import About from './About';
 import Home from './Home';
 import { english, arabic, french } from '../Languages/NewTheme';
+import BookingForm from './Booking';
+import Color from '../colors/Color';
 function Hotel({ language, HotelDetails,
     allRooms, allPackages, services,
     phone, email }) {
@@ -27,13 +28,13 @@ function Hotel({ language, HotelDetails,
     const [lang, setLang] = useState(english);
 
     useEffect(() => {
-       getLanguage();
+        getLanguage();
         getHotelDetails();
         getRoomDetails();
     }, []);
 
     function getLanguage() {
-        console.log("the language passed is "+JSON.stringify(language))
+        console.log("the language passed is " + JSON.stringify(language))
         if (language === null) {
             setLang(english)
         } else if (language === 'english') {
@@ -67,13 +68,7 @@ function Hotel({ language, HotelDetails,
                 hotelDetailLoader={hotelDetailLoader}
             />
 
-            {/* <section className='z=1 absolute mx-20 top-52 justify-center'>
-                <div className="bg-white px-96">
-                    <div className="p-5"> 
 
-                    </div>
-                </div>
-            </section> */}
 
             <About
                 allHotelDetails={allHotelDetails}
@@ -112,6 +107,7 @@ function Hotel({ language, HotelDetails,
                 hotelDetailLoader={hotelDetailLoader}
             />
 
+
             <Footer
                 setShowModalPrivacy={setShowModalPrivacy}
                 setShowModalTC={setShowModalTC}
@@ -119,6 +115,10 @@ function Hotel({ language, HotelDetails,
                 hotelDetailLoader={hotelDetailLoader}
                 lang={lang}
             />
+            <div className='hidden lg:block lg:sticky lg:bottom-0'><BookingForm color={Color?.light} />
+            </div>
+
+
 
             {/* ------------------- modal view for footer-------------------------- */}
 
@@ -142,7 +142,7 @@ function Hotel({ language, HotelDetails,
 
             {menu === true ?
                 <React.Fragment>
-                    <div className='absolute inset-0 w-full h-72 md:h-80 bg-white opacity-75 rounded-bl-3xl rounded-br-3xl  md:rounded-br-full'>
+                    <div className='absolute inset-0 w-full h-72 md:h-80 bg-white opacity-75 rounded-bl-3xl rounded-br-3xl  md:rounded-br-full z-50'>
                         <i onClick={() => setMenu(false)} className='flex justify-end pt-5 pr-5 cursor-pointer hover:text-slate-500'><CloseIcon /></i>
                         <div className='text-center text-black pt-10 md:pt-12'>
                             <ul className='inline-block font-bold'>

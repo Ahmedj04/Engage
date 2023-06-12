@@ -5,7 +5,7 @@ import Loader from '../Loaders/Loader'
 
 function Home({ allHotelDetails, menu, setMenu, hotelDetailLoader, lang, setLang }) {
     return (
-        <section className="relative h-screen md:h-screen">
+        <section className="relative h-screen md:h-screen z-50">
             <div className="absolute inset-0">
                 {/* <div className="absolute inset-0 bg-[url('https://themewagon.github.io/sogo/images/slider-7.jpg')] bg-no-repeat bg-cover bg-center"></div> */}
                 <div className="absolute inset-0 bg-[url('/imghome.webp')] bg-no-repeat bg-cover bg-center"></div>
