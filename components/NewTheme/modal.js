@@ -2,8 +2,8 @@ import React from 'react'
 
 function Modal({ title, description, setShowModal }) {
     return (
-        <div className="overflow-x-hidden overflow-y-auto fixed top-0 left-0 right-0 backdrop-blur-3xl h-screen bg-black/30 md:inset-0 z-50 flex justify-center items-center sm:h-full">
-            <div className="relative w-full max-w-2xl px-4 h-auto md:h-auto">
+        <div className="overflow-x-hidden overflow-y-auto fixed top-0 left-0 right-0 backdrop-blur-3xl h-screen bg-black/30 md:inset-0 z-50 flex justify-center items-center ">
+            <div className="relative w-full max-w-2xl px-4 h-auto pt-20 md:pt-0 md:h-auto">
                 <div className='bg-white rounded-lg shadow relative'>
                     <div className="flex items-start justify-between p-5 border-b rounded-t">
                         <h3 className='text-black text-xl font-semibold'>{title}</h3>

@@ -40,7 +40,7 @@ function Home({ allHotelDetails, menu, setMenu, hotelDetailLoader, lang, setLang
                     </button>
                 </div>
 
-                <div className={showModalBooking === 1 ? 'block' : 'hidden'}>
+                <div className={showModalBooking === 1 ? 'block h-2' : 'hidden'}>
                     <Modal
                         title='Booking Form'
                         description={<BookingForm />}
