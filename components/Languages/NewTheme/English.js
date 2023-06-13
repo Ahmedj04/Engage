@@ -25,6 +25,7 @@ export default {
     address:"Address:",
     phone:"Phone",
     email:"Email",
+    poweredBy:"Powered By",
     allRightsReserved:"All Rights Reserved"
 
 }

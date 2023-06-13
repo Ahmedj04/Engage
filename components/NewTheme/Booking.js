@@ -88,8 +88,8 @@ function BookingForm({ color }) {
 
 
                     </div>
-                    <div className=' flex justify-center items-center'>
-                        <button className='bg-cyan-700 hover:bg-cyan-900 h-8 w-1/6 text-white border rounded-3xl border-none '>Search</button>
+                    <div className='flex justify-center items-center'>
+                        <button className='bg-cyan-700 hover:bg-cyan-900 h-8 w-2/6 md:w-1/6 text-white border rounded-2xl border-none '>Search</button>
                     </div>
                 </div>
 

@@ -10,6 +10,8 @@ import Home from './Home';
 import { english, arabic, french } from '../Languages/NewTheme';
 import BookingForm from './Booking';
 import Color from '../colors/Color';
+
+
 function Hotel({ language, HotelDetails,
     allRooms, allPackages, services,
     phone, email }) {
@@ -23,6 +25,7 @@ function Hotel({ language, HotelDetails,
     const [menu, setMenu] = useState(false);
     const [showModalTC, setShowModalTC] = useState(0);
     const [showModalPrivacy, setShowModalPrivacy] = useState(0);
+    const [showModalBooking, setShowModalBooking] = useState(0);
     const [hotelDetailLoader, setHotelDetailLoader] = useState(0);
     const [roomDetailLoader, setRoomDetailLoader] = useState(0);
     const [lang, setLang] = useState(english);
@@ -34,7 +37,7 @@ function Hotel({ language, HotelDetails,
     }, []);
 
     function getLanguage() {
-        
+
         if (language === null) {
             setLang(english)
         } else if (language === 'english') {
@@ -68,6 +71,17 @@ function Hotel({ language, HotelDetails,
                 hotelDetailLoader={hotelDetailLoader}
             />
 
+            {/* <button className='lg:hidden absolute fixed right-0 z-50 bg-white py-2 px-3 text-xs' style={{ top: '12%' }}
+                onClick={() => { setShowModalBooking(1) }}>BOOK NOW</button>
+            <div className={showModalBooking === 1 ? 'block' : 'hidden'}>
+                <Modal
+                    title='Booking Form'
+                    description={<BookingForm />}
+                    setShowModal={(e) => setShowModalBooking(e)}
+                />
+            </div> */}
+
+
 
 
             <About
@@ -75,7 +89,7 @@ function Hotel({ language, HotelDetails,
                 hotelDetailLoader={hotelDetailLoader}
                 lang={lang}
             />
-         <Rooms
+            <Rooms
                 rooms={rooms}
                 showRoom={showRoom}
                 setShowRoom={setShowRoom}
@@ -114,7 +128,9 @@ function Hotel({ language, HotelDetails,
                 hotelDetailLoader={hotelDetailLoader}
                 lang={lang}
             />
-            <div className='hidden lg:block lg:sticky lg:bottom-0'><BookingForm color={Color?.light} />
+
+            <div className='hidden lg:block lg:sticky lg:bottom-0'>
+                <BookingForm color={Color?.light} />
             </div>
 
 

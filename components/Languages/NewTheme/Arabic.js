@@ -25,7 +25,7 @@ export default {
     phone:"هاتف",
     email:"بريد إلكتروني",
     copyright:"حقوق النشر",
+    poweredBy:"مشغل بواسطة",
     allRightsReserved:"كل الحقوق محفوظة",
-
 
 }

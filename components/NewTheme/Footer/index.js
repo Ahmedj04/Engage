@@ -5,7 +5,6 @@ function Footer({ setShowModalPrivacy, setShowModalTC, allHotelDetails, hotelDet
     
     let date = new Date();
 
-
     return (
         <footer id="footer" className="bg-zinc-900 ">
             <div className='container px-5 py-10'>
@@ -53,9 +52,11 @@ function Footer({ setShowModalPrivacy, setShowModalTC, allHotelDetails, hotelDet
                     </div>
                 </div>
 
-                <div className='text-center text-gray-400 md:text-center lg:text-center'>
-                    <p>{lang?.copyright} &copy; {date.getFullYear()} {lang?.allRightsReserved}</p>
-                    <p></p>
+                <div className='flex justify-between text-center text-gray-400 md:text-center lg:text-center'>
+                    <p>{lang?.copyright} &copy; {date.getFullYear()} {lang?.poweredBy} Travel2Kashmir. {lang?.allRightsReserved}</p>
+                    <p>
+                        <span></span>
+                    </p>
                 </div>
 
             </div>
@@ -63,4 +64,4 @@ function Footer({ setShowModalPrivacy, setShowModalTC, allHotelDetails, hotelDet
     )
 }
 
-export default Footer
+export default Footer;

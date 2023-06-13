@@ -3,8 +3,8 @@ import Loader from '../Loaders/Loader'
 
 function About({allHotelDetails , hotelDetailLoader ,lang}) {
     return (
-        <section id='about' className="bg-slate-200 px-5 py-10 lg:py-24 2xl:px-40 z=0">
-            <div className="md:px-20 lg:flex lg:flex-row-reverse  lg:gap-20 xl:gap-10">
+        <section id='about' className="bg-slate-200 px-5 md:px-20 py-10 lg:py-24 2xl:px-40 z=0">
+            <div className="md:px-0 lg:flex lg:flex-row-reverse  lg:gap-20 xl:gap-10">
                 <div className="pb-20 relative">
                     {/* <img className='rounded-md' src="https://themewagon.github.io/sogo/images/slider-3.jpg" alt="image" ></img> */}
                     <img className='rounded-md' src="/aboutimg1.jpg" alt="image" ></img>

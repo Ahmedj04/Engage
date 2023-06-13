@@ -25,6 +25,7 @@ export default {
     phone:"Téléphone",
     email:"E-mail",
     copyright:"droits d'auteur",
+    poweredBy:"alimenté par",
     allRightsReserved:"Tous les droits sont réservés"
 
 
